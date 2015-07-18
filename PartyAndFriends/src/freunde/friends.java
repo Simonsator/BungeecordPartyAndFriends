@@ -58,7 +58,7 @@ public class friends extends Command {
 			if (language.equalsIgnoreCase("english")) {
 				player.sendMessage(new TextComponent(
 						"§8/§5friend list" + ChatColor.RESET + " §8- §7Lists §7all §7of §7your §7friends"));
-				player.sendMessage(new TextComponent("§8/§5friend §5msg §5[name §5of $5the §5friend] §5[message]"
+				player.sendMessage(new TextComponent("§8/§5friend §5msg §5[name §5of §5the §5friend] §5[message]"
 						+ ChatColor.RESET + " §8- §7send §7a §7friend §7a §7message"));
 				player.sendMessage(new TextComponent("§8/§5friend §5add §5[name §5of §5the §5player]" + ChatColor.RESET
 						+ " §8- §7Add §7a §7friend"));
