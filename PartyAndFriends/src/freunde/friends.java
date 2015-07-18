@@ -65,7 +65,7 @@ public class friends extends Command {
 				player.sendMessage(new TextComponent("§8/§5friend §5accept §5[name §5of §5the §5player]"
 						+ ChatColor.RESET + " §8- §7accept §7a §7friend request"));
 				player.sendMessage(new TextComponent("§8/§5friend §5deny §5[name §5of §5the §5player]" + ChatColor.RESET
-						+ " §8- §7deny §7a §7friendrequest"));
+						+ " §8- §7deny §7a §7friend §7request"));
 				player.sendMessage(new TextComponent("§8/§5friend §5remove §5[name §5of §5the §5friend]"
 						+ ChatColor.RESET + " §8- §7removes §7a §7friend"));
 				player.sendMessage(new TextComponent("§8/§5friend §5settings " + ChatColor.RESET

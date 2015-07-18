@@ -49,7 +49,7 @@ public class Join extends SubCommand {
 		}
 		if (PartyManager.getParty(pl) == null) {
 			if (language.equalsIgnoreCase("english")) {
-				p.sendMessage(new TextComponent(Party.prefix + "§ccThis §cplayer §chas §cno §cparty."));
+				p.sendMessage(new TextComponent(Party.prefix + "§cThis §cplayer §chas §cno §cparty."));
 			} else {
 				p.sendMessage(new TextComponent(Party.prefix + "§cDieser §cSpieler §chat §ckeine §cParty."));
 			}
