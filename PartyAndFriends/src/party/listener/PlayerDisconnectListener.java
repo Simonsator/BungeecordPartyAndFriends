@@ -19,9 +19,11 @@ import party.PlayerParty;
 
 public class PlayerDisconnectListener implements Listener {
 	private mySql verbindung;
+	private String language;
 
-	public PlayerDisconnectListener(mySql pVerbindung) {
+	public PlayerDisconnectListener(mySql pVerbindung, String languageOverGive) {
 		verbindung = pVerbindung;
+		language = languageOverGive;
 	}
 
 	@EventHandler
@@ -34,33 +36,48 @@ public class PlayerDisconnectListener implements Listener {
 				if (liste.size() > 1) {
 					ProxiedPlayer newLeader = liste.get(0);
 					for (ProxiedPlayer p : party.getPlayer()) {
-						p.sendMessage(new TextComponent(
-								Party.prefix
-										+ "§bDer §bLeader §bhat §bdas §bSpiel §bverlassen. §bDer §bneue §bLeader §bist §e"
-										+ newLeader.getName() + "§b."));
+						if (language.equalsIgnoreCase("english")) {
+							p.sendMessage(new TextComponent(Party.prefix
+									+ "§bThe §bLeader §bhas §bleft §bthe §Party. §bThe §bnew §bLeader §bis §e"
+									+ newLeader.getName() + "."));
+						} else {
+							p.sendMessage(new TextComponent(Party.prefix
+									+ "§bDer §bLeader §bhat §bdie §bParty §bverlassen. §bDer §bneue §bLeader §bist §e"
+									+ newLeader.getName() + "."));
+						}
 					}
 					party.setLeader(newLeader);
 					liste.remove(newLeader);
 					party.setPlayer(liste);
 				} else {
 					for (ProxiedPlayer p : party.getPlayer()) {
-						p.sendMessage(new TextComponent(
-								Party.prefix
-										+ "§bDer §bLeader §bhat §bdas §bSpiel §bverlassen. §bDamit §bwurde §bdie §bParty §baufgelöst."));
+						if (language.equalsIgnoreCase("english")) {
+							p.sendMessage(new TextComponent(Party.prefix
+									+ "§5The §5party §5was §5dissolved §5because §5of §5to §5less §5players."));
+						} else {
+							p.sendMessage(new TextComponent(Party.prefix
+									+ "§5Die §5Party §5wurde §5wegen §5zu §5wenig §5Mitgliedern §5aufgelöst."));
+						}
 					}
 					PartyManager.deleteParty(party);
 				}
 			} else {
 				party.removePlayer(player);
 				for (ProxiedPlayer p : party.getPlayer()) {
-					p.sendMessage(new TextComponent(Party.prefix
-							+ "§bDer §bSpieler §c" + player.getName()
-							+ " §bhat §bdie §bParty §bverlassen."));
+					if (language.equalsIgnoreCase("english")) {
+						p.sendMessage(new TextComponent(Party.prefix + "§bThe §bLeader §bhas §bleft §bthe §Party."));
+					} else {
+						p.sendMessage(
+								new TextComponent(Party.prefix + "§bDer §bLeader §bhat §bdie §bParty §bverlassen"));
+					}
 				}
-				party.getleader().sendMessage(
-						new TextComponent(Party.prefix + "§bDer §bSpieler §c"
-								+ player.getName()
-								+ " §bhat §bdie §bParty §bverlassen."));
+				if (language.equalsIgnoreCase("english")) {
+					party.getleader()
+							.sendMessage(new TextComponent(Party.prefix + "§bThe §bLeader §bhas §bleft §bthe §Party."));
+				} else {
+					party.getleader().sendMessage(
+							new TextComponent(Party.prefix + "§bDer §bLeader §bhat §bdie §bParty §bverlassen"));
+				}
 			}
 		}
 		ProxiedPlayer spieler = e.getPlayer();
@@ -73,25 +90,25 @@ public class PlayerDisconnectListener implements Listener {
 		int[] freundeArrayID = new int[0];
 		StringTokenizer st = new StringTokenizer(freundeAusgeben, "|");
 		while (st.hasMoreTokens()) {
-			Object newArray = Array.newInstance(freundeArrayID.getClass()
-					.getComponentType(), Array.getLength(freundeArrayID) + 1);
-			System.arraycopy(freundeArrayID, 0, newArray, 0,
-					Array.getLength(freundeArrayID));
+			Object newArray = Array.newInstance(freundeArrayID.getClass().getComponentType(),
+					Array.getLength(freundeArrayID) + 1);
+			System.arraycopy(freundeArrayID, 0, newArray, 0, Array.getLength(freundeArrayID));
 			freundeArrayID = (int[]) newArray;
-			freundeArrayID[Array.getLength(freundeArrayID) - 1] = Integer
-					.parseInt(st.nextToken());
+			freundeArrayID[Array.getLength(freundeArrayID) - 1] = Integer.parseInt(st.nextToken());
 		}
 		int i = 0;
 		String befreundeterSpieler;
 		while (freundeArrayID.length > i) {
-			befreundeterSpieler = verbindung
-					.getNameDesSpielers(freundeArrayID[i]);
-			ProxiedPlayer freundGeladen = BungeeCord.getInstance().getPlayer(
-					befreundeterSpieler);
+			befreundeterSpieler = verbindung.getNameDesSpielers(freundeArrayID[i]);
+			ProxiedPlayer freundGeladen = BungeeCord.getInstance().getPlayer(befreundeterSpieler);
 			if (freundGeladen != null) {
-				freundGeladen.sendMessage(new TextComponent("§8[§5§lFriends§8]"
-						+ ChatColor.RESET + " §7Der Freund §e"
-						+ nameDesSpielers + " §7ist §7nun §cOffline."));
+				if (language.equalsIgnoreCase("english")) {
+					freundGeladen.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
+							+ " §7Your friend §e" + nameDesSpielers + " §7is §7now §coffline."));
+				} else {
+					freundGeladen.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
+							+ " §7Der Freund §e" + nameDesSpielers + " §7ist §7nun §cOffline."));
+				}
 			}
 			i++;
 		}

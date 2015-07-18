@@ -1,8 +1,13 @@
 package party;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.SQLException;
+
 import freunde.friends;
 import freunde.joinEvent;
 import freunde.kommandos.msg;
@@ -26,11 +31,34 @@ public class Party extends Plugin {
 	private String passwort;
 	private String database;
 	public static mySql verbindung;
+	private boolean updateNotification;
+	private String friendsAliasMsg;
+	private String PartyAlias;
+	private String friendAlias;
+	private String joinAlias;
+	private String inviteAlias;
+	private String kickAlias;
+	private String infoAlias;
+	private String leaveAlias;
+	private String chatAlias;
+	private String leaderAlias;
+	private String acceptAlias;
+	private String addAlias;
+	private String denyAlias;
+	private String settingsAlias;
+	private String jumpAlias;
+	private String listAlias;
+	private String removeAlias;
+	private String language;
 
 	@Override
 	public void onDisable() {
 		verbindung.close();
-		System.out.println(prefix + "PartyAndFriends wurde deaktiviert!");
+		if (language.equalsIgnoreCase("english")) {
+			System.out.println(prefix + "PartyAndFriends was disabled!");
+		} else {
+			System.out.println(prefix + "PartyAndFriends wurde deaktiviert!");
+		}
 	}
 
 	@Override
@@ -48,22 +76,76 @@ public class Party extends Plugin {
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
-		BungeeCord.getInstance().getPluginManager()
-				.registerCommand(this, new PartyCommand(verbindung));
-		BungeeCord
-				.getInstance()
-				.getPluginManager()
-				.registerListener(this,
-						new PlayerDisconnectListener(verbindung));
-		BungeeCord.getInstance().getPluginManager()
-				.registerListener(this, new ServerSwitshListener());
-		getProxy().getPluginManager().registerCommand(this,
-				new friends(verbindung));
-		BungeeCord.getInstance().getPluginManager()
-				.registerListener(this, new joinEvent(verbindung));
-		getProxy().getPluginManager()
-				.registerCommand(this, new msg(verbindung));
-		System.out.println(prefix + "PartyAndFriends wurde aktiviert!");
+		try {
+			verbindung.datenbankImportieren();
+		} catch (SQLException e1) {
+			if (language.equalsIgnoreCase("english")) {
+				System.out.println(prefix + "The database couldn´t be imported.");
+			} else {
+				System.out.println(prefix + "Die Datenbank konnte nicht importiert werden.");
+			}
+			e1.printStackTrace();
+		}
+		BungeeCord.getInstance().getPluginManager().registerCommand(this, new PartyCommand(verbindung, PartyAlias,
+				joinAlias, inviteAlias, kickAlias, infoAlias, leaveAlias, chatAlias, leaderAlias, language));
+		BungeeCord.getInstance().getPluginManager().registerListener(this,
+				new PlayerDisconnectListener(verbindung, language));
+		BungeeCord.getInstance().getPluginManager().registerListener(this, new ServerSwitshListener(language));
+		getProxy().getPluginManager().registerCommand(this, new friends(verbindung, friendAlias, friendsAliasMsg,
+				acceptAlias, addAlias, denyAlias, settingsAlias, jumpAlias, listAlias, removeAlias, language));
+		BungeeCord.getInstance().getPluginManager().registerListener(this, new joinEvent(verbindung, language));
+		getProxy().getPluginManager().registerCommand(this, new msg(verbindung, friendsAliasMsg, language));
+		String localVersion = getDescription().getVersion();
+		if (updateNotification) {
+			try {
+				HttpURLConnection con = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php")
+						.openConnection();
+				con.setDoOutput(true);
+				con.setRequestMethod("POST");
+				con.getOutputStream()
+						.write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=9531")
+								.getBytes("UTF-8"));
+				String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+				if (localVersion.equalsIgnoreCase(version)) {
+
+				} else {
+					if (language.equalsIgnoreCase("english")) {
+						System.out.println(prefix + "For the plugin PartyAndFriends is an update available");
+					} else {
+						System.out.println(prefix + "Für das Plugin PartyAndFriends ist ein Update verfügbar");
+					}
+				}
+				if (language.equalsIgnoreCase("english")) {
+					System.out.println(
+							prefix + "Simonsators PartyAndFriends v." + localVersion + " was enabled successfully");
+				} else {
+					System.out.println(
+							prefix + "Simonsators PartyAndFriends v." + localVersion + " wurde erfolgreich aktiviert");
+				}
+			} catch (IOException e) {
+				if (language.equalsIgnoreCase("english")) {
+					System.out.println(prefix + "It occurred an error while searching for updates");
+				} else {
+					System.out.println(prefix + "Es ist ein Fehler beim suchen nach updates aufgetreten");
+				}
+				e.printStackTrace();
+			}
+		} else {
+			if (language.equalsIgnoreCase("english")) {
+				System.out.println(
+						prefix + "Simonsators PartyAndFriends v." + localVersion + " was enabled successfully");
+				System.out.println(prefix + "Update Notification is disabled");
+			} else {
+				System.out.println(
+						prefix + "Simonsators PartyAndFriends v." + localVersion + " wurde erfolgreich aktiviert");
+				System.out.println(prefix + "Update Notification ist deaktiviert");
+			}
+		}
+		if (language.equalsIgnoreCase("english")) {
+			System.out.println(prefix + "PartyAndFriends was enabled successfully!");
+		} else {
+			System.out.println(prefix + "PartyAndFriends wurde aktiviert!");
+		}
 	}
 
 	public static Party getInstance() {
@@ -80,21 +162,129 @@ public class Party extends Plugin {
 			file.createNewFile();
 			jetztErstellt = true;
 		}
-		Configuration config = ConfigurationProvider.getProvider(
-				YamlConfiguration.class).load(file);
+		Configuration config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
 		if (jetztErstellt == true) {
 			config.set("host", "localhost");
 			config.set("port", 3306);
 			config.set("username", "root");
-			config.set("passwort", "passwort");
+			config.set("passwort", "password");
 			config.set("database", "freunde");
-			ConfigurationProvider.getProvider(YamlConfiguration.class).save(
-					config, file);
+			config.set("language", "english");
+			config.set("updateNotification", false);
+			config.set("PartyAlias", "party");
+			config.set("friendsAlias", "friend");
+			config.set("friendsAliasMsg", "chat");
+			config.set("joinAlias", "join");
+			config.set("inviteAlias", "invite");
+			config.set("kickAlias", "kick");
+			config.set("infoAlias", "info");
+			config.set("leaveAlias", "leave");
+			config.set("chatAlias", "chat");
+			config.set("leaderAlias", "leader");
+			config.set("acceptAlias", "accept");
+			config.set("addAlias", "add");
+			config.set("denyAlias", "deny");
+			config.set("settingsAlias", "settings");
+			config.set("jumpAlias", "jump");
+			config.set("listAlias", "list");
+			config.set("removeAlias", "remove");
 		}
 		host = config.getString("host");
+		if (host.equals("")) {
+			config.set("host", "localhost");
+		}
 		port = config.getInt("port");
+		if (port == 0) {
+			config.set("port", 3306);
+		}
 		username = config.getString("username");
+		if (username.equals("")) {
+			config.set("username", "root");
+		}
 		passwort = config.getString("passwort");
+		if (username.equals("")) {
+			config.set("passwort", "password");
+		}
 		database = config.getString("database");
+		if (database.equals("")) {
+			config.set("database", "freunde");
+		}
+		language = config.getString("language");
+		if (language.equals("")) {
+			config.set("language", "english");
+		}
+		updateNotification = config.getBoolean("updateNotification");
+		if (updateNotification == false) {
+			config.set("updateNotification", false);
+		}
+		friendsAliasMsg = config.getString("friendsAliasMsg");
+		if (friendsAliasMsg.equals("")) {
+			config.set("friendsAliasMsg", "chat");
+		}
+		PartyAlias = config.getString("PartyAlias");
+		if (PartyAlias.equals("")) {
+			config.set("PartyAlias", "partys");
+		}
+		joinAlias = config.getString("joinAlias");
+		if (joinAlias.equals("")) {
+			config.set("joinAlias", "join");
+		}
+		inviteAlias = config.getString("inviteAlias");
+		if (inviteAlias.equals("")) {
+			config.set("inviteAlias", "invite");
+		}
+		kickAlias = config.getString("kickAlias");
+		if (kickAlias.equals("")) {
+			config.set("kickAlias", "kick");
+		}
+		infoAlias = config.getString("infoAlias");
+		if (infoAlias.equals("")) {
+			config.set("infoAlias", "info");
+		}
+		leaveAlias = config.getString("leaveAlias");
+		if (leaveAlias.equals("")) {
+			config.set("leaveAlias", "leave");
+		}
+		chatAlias = config.getString("chatAlias");
+		if (chatAlias.equals("")) {
+			config.set("chatAlias", "chat");
+		}
+		leaderAlias = config.getString("leaderAlias");
+		if (leaderAlias.equals("")) {
+			config.set("leaderAlias", "newLeader");
+		}
+		acceptAlias = config.getString("acceptAlias");
+		if (acceptAlias.equals("")) {
+			config.set("acceptAlias", "accept");
+		}
+		addAlias = config.getString("addAlias");
+		if (acceptAlias.equals("")) {
+			config.set("addAlias", "add");
+		}
+		denyAlias = config.getString("denyAlias");
+		if (denyAlias.equals("")) {
+			config.set("denyAlias", "deny");
+		}
+		settingsAlias = config.getString("settingsAlias");
+		if (settingsAlias.equals("")) {
+			config.set("settingsAlias", "settings");
+		}
+		jumpAlias = config.getString("jumpAlias");
+		if (jumpAlias.equals("")) {
+			config.set("jumpAlias", "jump");
+		}
+		listAlias = config.getString("listAlias");
+		if (listAlias.equals("")) {
+			config.set("listAlias", "list");
+		}
+		removeAlias = config.getString("removeAlias");
+		if (removeAlias.equals("")) {
+			config.set("removeAlias", "remove");
+		}
+		friendAlias = config.getString("friendsAlias");
+		if (friendAlias.equals("")) {
+			config.set("friendsAlias", "friend");
+		}
+		ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, file);
 	}
 }

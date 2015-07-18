@@ -10,6 +10,12 @@ import party.PartyManager;
 import party.PlayerParty;
 
 public class ServerSwitshListener implements Listener {
+	private String language;
+
+	public ServerSwitshListener(String languageOverGive) {
+		language = languageOverGive;
+	}
+
 	@EventHandler
 	public void onServerSwitch(ServerSwitchEvent e) {
 		ProxiedPlayer player = e.getPlayer();
@@ -18,13 +24,16 @@ public class ServerSwitshListener implements Listener {
 			if (party.isleader(player)) {
 				for (ProxiedPlayer p : party.getPlayer()) {
 					p.connect(party.getServerInfo());
-					p.sendMessage(new TextComponent(Party.prefix
-							+ "§bDie §bParty §bhat §bden §bServer §e"
-							+ party.getServerInfo().getName() + " §bbetreten."));
+					if (language.equalsIgnoreCase("english")) {
+						p.sendMessage(new TextComponent(Party.prefix + "§bThe §bparty §bhas §bjoinend §bthe §bServer §e"
+								+ party.getServerInfo().getName() + "§b."));
+					} else {
+						p.sendMessage(new TextComponent(Party.prefix + "§bDie §bParty §bhat §bden §bServer §e"
+								+ party.getServerInfo().getName() + " §bbetreten."));
+					}
 				}
-				player.sendMessage(new TextComponent(Party.prefix
-						+ "§bDie §bParty §bhat §bden §bServer §e"
-						+ party.getServerInfo().getName() + " §bbetreten."));
+				player.sendMessage(new TextComponent(Party.prefix + "§bThe §bparty §bhas §bjoinend §bthe §bServer §e"
+						+ party.getServerInfo().getName() + "§b."));
 			}
 		}
 	}

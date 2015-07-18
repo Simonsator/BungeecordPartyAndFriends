@@ -10,8 +10,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class deny {
 
-	public static void ablehnen(ProxiedPlayer player, String[] args,
-			mySql verbindung) throws SQLException {
+	public static void ablehnen(ProxiedPlayer player, String[] args, mySql verbindung, String language)
+			throws SQLException {
 		if (args.length == 2) {
 
 			int idAbfrage = verbindung.getIDByPlayerName(args[1]);
@@ -21,13 +21,11 @@ public class deny {
 			int[] anfragenID = new int[0];
 			StringTokenizer st = new StringTokenizer(zuTrennen, "|");
 			while (st.hasMoreTokens()) {
-				Object newArray = Array.newInstance(anfragenID.getClass()
-						.getComponentType(), Array.getLength(anfragenID) + 1);
-				System.arraycopy(anfragenID, 0, newArray, 0,
-						Array.getLength(anfragenID));
+				Object newArray = Array.newInstance(anfragenID.getClass().getComponentType(),
+						Array.getLength(anfragenID) + 1);
+				System.arraycopy(anfragenID, 0, newArray, 0, Array.getLength(anfragenID));
 				anfragenID = (int[]) newArray;
-				anfragenID[Array.getLength(anfragenID) - 1] = Integer
-						.parseInt(st.nextToken());
+				anfragenID[Array.getLength(anfragenID) - 1] = Integer.parseInt(st.nextToken());
 			}
 			boolean gefunden = false;
 			int i = 0;
@@ -39,29 +37,47 @@ public class deny {
 			}
 			if (gefunden == true) {
 				verbindung.spielerAblehnen(idSender, idAbfrage);
-				player.sendMessage(new TextComponent("§8[§5§lFriends§8]"
-						+ ChatColor.RESET + " §7Du hast die Anfrage von §e"
-						+ args[1] + " §7abglehnt"));
+				if (language.equalsIgnoreCase("english")) {
+					player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
+							+ " §7You have deny the friend request of §e" + args[1] + "."));
+				} else {
+					player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
+							+ " §7Du hast die Anfrage von §e" + args[1] + " §7abglehnt"));
+				}
 			} else {
-				player.sendMessage(new TextComponent("§8[§5§lFriends§8]"
-						+ ChatColor.RESET + "§7Du hast von §e" + args[1]
-						+ "§7 keine §7Freundschaftsanfrage §7erhalten"));
+				if (language.equalsIgnoreCase("english")) {
+					player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
+							+ "§7You didn´t recive a §7friend §7request §7from §e" + args[1] + "§7."));
+				} else {
+					player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET + "§7Du hast von §e"
+							+ args[1] + "§7 keine §7Freundschaftsanfrage §7erhalten"));
+				}
 			}
 		} else {
 			if (args.length < 2) {
-				player.sendMessage(new TextComponent("§8[§5§lFriends§8]"
-						+ ChatColor.RESET + "§7 Du musst einen Spieler angeben"));
-				player.sendMessage(new TextComponent(
-						"§8/§5friends §5deny §5[Name §5des §5Spielers]"
-								+ ChatColor.RESET
-								+ " §8- §7Lehnt eine §7Freundschaftsanfrage §7ab"));
+				if (language.equalsIgnoreCase("english")) {
+					player.sendMessage(
+							new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET + "§7 You need to give a player"));
+					player.sendMessage(new TextComponent("§8/§5friend §5deny §5[name §5of §5the §5player]"
+							+ ChatColor.RESET + " §8- §7deny §7a §7friendrequest"));
+				} else {
+					player.sendMessage(new TextComponent(
+							"§8[§5§lFriends§8]" + ChatColor.RESET + "§7 Du musst einen Spieler angeben"));
+					player.sendMessage(new TextComponent("§8/§5friends §5deny §5[Name §5des §5Spielers]"
+							+ ChatColor.RESET + " §8- §7Lehnt eine §7Freundschaftsanfrage §7ab"));
+				}
 			} else {
-				player.sendMessage(new TextComponent("§8[§5§lFriends§8]"
-						+ ChatColor.RESET + "§7 Zu viele Argumente"));
-				player.sendMessage(new TextComponent(
-						"§8/§5friends §5deny §5[Name §5des §5Spielers]"
-								+ ChatColor.RESET
-								+ " §8- §7Lehnt eine §7Freundschaftsanfrage §7ab"));
+				if (language.equalsIgnoreCase("english")) {
+					player.sendMessage(
+							new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET + "§7 Too many arguments"));
+					player.sendMessage(new TextComponent("§8/§5friend §5deny §5[name §5of §5the §5player]"
+							+ ChatColor.RESET + " §8- §7deny §7a §7friendrequest"));
+				} else {
+					player.sendMessage(
+							new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET + "§7 Zu viele Argumente"));
+					player.sendMessage(new TextComponent("§8/§5friends §5deny §5[Name §5des §5Spielers]"
+							+ ChatColor.RESET + " §8- §7Lehnt eine §7Freundschaftsanfrage §7ab"));
+				}
 			}
 		}
 	}

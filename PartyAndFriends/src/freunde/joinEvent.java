@@ -16,9 +16,11 @@ import net.md_5.bungee.event.EventHandler;
 public class joinEvent implements Listener {
 	spielerUUID infoplatz = new spielerUUID();
 	mySql verbindung;
+	String language;
 
-	public joinEvent(mySql pVerbindung) {
+	public joinEvent(mySql pVerbindung, String languageOvergive) {
 		verbindung = pVerbindung;
+		language = languageOvergive;
 	}
 
 	@EventHandler
@@ -52,27 +54,25 @@ public class joinEvent implements Listener {
 			int[] freundeArrayID = new int[0];
 			StringTokenizer st = new StringTokenizer(freundeAusgeben, "|");
 			while (st.hasMoreTokens()) {
-				Object newArray = Array.newInstance(freundeArrayID.getClass()
-						.getComponentType(),
+				Object newArray = Array.newInstance(freundeArrayID.getClass().getComponentType(),
 						Array.getLength(freundeArrayID) + 1);
-				System.arraycopy(freundeArrayID, 0, newArray, 0,
-						Array.getLength(freundeArrayID));
+				System.arraycopy(freundeArrayID, 0, newArray, 0, Array.getLength(freundeArrayID));
 				freundeArrayID = (int[]) newArray;
-				freundeArrayID[Array.getLength(freundeArrayID) - 1] = Integer
-						.parseInt(st.nextToken());
+				freundeArrayID[Array.getLength(freundeArrayID) - 1] = Integer.parseInt(st.nextToken());
 			}
 			int i = 0;
 			String befreundeterSpieler;
 			while (freundeArrayID.length > i) {
-				befreundeterSpieler = verbindung
-						.getNameDesSpielers(freundeArrayID[i]);
-				ProxiedPlayer freundGeladen = BungeeCord.getInstance()
-						.getPlayer(befreundeterSpieler);
+				befreundeterSpieler = verbindung.getNameDesSpielers(freundeArrayID[i]);
+				ProxiedPlayer freundGeladen = BungeeCord.getInstance().getPlayer(befreundeterSpieler);
 				if (freundGeladen != null) {
-					freundGeladen.sendMessage(new TextComponent(
-							"§8[§5§lFriends§8]" + ChatColor.RESET
-									+ " §7Der Freund §e" + nameDesSpielers
-									+ "§7 ist §7nun §aOnline."));
+					if (language.equalsIgnoreCase("english")) {
+						freundGeladen.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
+								+ " §7The friend §e" + nameDesSpielers + "§7 is §7now §aonline."));
+					} else {
+						freundGeladen.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
+								+ " §7Der Freund §e" + nameDesSpielers + "§7 ist §7nun §aOnline."));
+					}
 				}
 				i++;
 			}
@@ -81,17 +81,16 @@ public class joinEvent implements Listener {
 			StringTokenizer stnnnn = new StringTokenizer(anfragen, "|");
 			String Inhalt = "";
 			while (stnnnn.hasMoreTokens()) {
-				Inhalt = Inhalt
-						+ " §e"
-						+ verbindung.getNameDesSpielers(Integer.parseInt(stnnnn
-								.nextToken())) + "§7,";
+				Inhalt = Inhalt + " §e" + verbindung.getNameDesSpielers(Integer.parseInt(stnnnn.nextToken())) + "§7,";
 			}
 			String Inhaltb = Inhalt.substring(0, Inhalt.length() - 1);
-			spieler.sendMessage(new TextComponent(
-					"§8[§5§lFriends§8]"
-							+ ChatColor.RESET
-							+ " §7Freundschaftsanfragen §7stehen §7von §7den §7folgenden §7Spielern §7aus:"
-							+ Inhaltb));
+			if (language.equalsIgnoreCase("english")) {
+				spieler.sendMessage(new TextComponent(
+						"§8[§5§lFriends§8]" + ChatColor.RESET + " §7You §7have §7friend §7requests §7from:" + Inhaltb));
+			} else {
+				spieler.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
+						+ " §7Freundschaftsanfragen §7stehen §7von §7den §7folgenden §7Spielern §7aus:" + Inhaltb));
+			}
 		}
 	}
 }

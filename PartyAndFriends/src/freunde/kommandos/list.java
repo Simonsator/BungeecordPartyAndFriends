@@ -11,36 +11,35 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class list {
-	public static void auflisten(ProxiedPlayer p, String[] args,
-			mySql verbindung) throws SQLException {
+	public static void auflisten(ProxiedPlayer p, String[] args, mySql verbindung, String language)
+			throws SQLException {
 		String uuid = p.getUniqueId() + "";
 		String freundeAusgeben;
 		freundeAusgeben = verbindung.freundeAusgeben(uuid);
 		if (freundeAusgeben.equals("")) {
-			p.sendMessage(new TextComponent("§8[§5§lFriends§8]"
-					+ ChatColor.RESET
-					+ " §7Du hast noch keine Freunde hinzugefügt."));
+			if (language.equalsIgnoreCase("english")) {
+				p.sendMessage(new TextComponent(
+						"§8[§5§lFriends§8]" + ChatColor.RESET + " §7Till now, §7you don´t §7have §7added §7friends."));
+			} else {
+				p.sendMessage(new TextComponent(
+						"§8[§5§lFriends§8]" + ChatColor.RESET + " §7Du hast noch keine Freunde hinzugefügt."));
+			}
 		} else {
 			int[] freundeArrayID = new int[0];
 			StringTokenizer st = new StringTokenizer(freundeAusgeben, "|");
 			while (st.hasMoreTokens()) {
-				Object newArray = Array.newInstance(freundeArrayID.getClass()
-						.getComponentType(),
+				Object newArray = Array.newInstance(freundeArrayID.getClass().getComponentType(),
 						Array.getLength(freundeArrayID) + 1);
-				System.arraycopy(freundeArrayID, 0, newArray, 0,
-						Array.getLength(freundeArrayID));
+				System.arraycopy(freundeArrayID, 0, newArray, 0, Array.getLength(freundeArrayID));
 				freundeArrayID = (int[]) newArray;
-				freundeArrayID[Array.getLength(freundeArrayID) - 1] = Integer
-						.parseInt(st.nextToken());
+				freundeArrayID[Array.getLength(freundeArrayID) - 1] = Integer.parseInt(st.nextToken());
 			}
 			int i = 0;
 			String[] freundeName = new String[freundeArrayID.length];
 			String freundeZusammen = "";
 			while (freundeArrayID.length > i) {
-				freundeName[i] = verbindung
-						.getNameDesSpielers(freundeArrayID[i]);
-				ProxiedPlayer freundGeladen = BungeeCord.getInstance()
-						.getPlayer(freundeName[i]);
+				freundeName[i] = verbindung.getNameDesSpielers(freundeArrayID[i]);
+				ProxiedPlayer freundGeladen = BungeeCord.getInstance().getPlayer(freundeName[i]);
 				String zusatz;
 				ChatColor farbe;
 				if (freundGeladen == null) {
@@ -56,14 +55,17 @@ public class list {
 				} else {
 					komma = " ";
 				}
-				freundeZusammen = freundeZusammen + komma + farbe
-						+ verbindung.getNameDesSpielers(freundeArrayID[i])
+				freundeZusammen = freundeZusammen + komma + farbe + verbindung.getNameDesSpielers(freundeArrayID[i])
 						+ zusatz + "§7";
 				i++;
 			}
-			p.sendMessage(new TextComponent("§8[§5§lFriends§8]"
-					+ ChatColor.RESET + " §7Dies §7sind §7deine §7Freunde:"
-					+ freundeZusammen));
+			if (language.equalsIgnoreCase("english")) {
+				p.sendMessage(new TextComponent(
+						"§8[§5§lFriends§8]" + ChatColor.RESET + " §7This §7are §7your §7friends:" + freundeZusammen));
+			} else {
+				p.sendMessage(new TextComponent(
+						"§8[§5§lFriends§8]" + ChatColor.RESET + " §7Dies §7sind §7deine §7Freunde:" + freundeZusammen));
+			}
 		}
 	}
 }
