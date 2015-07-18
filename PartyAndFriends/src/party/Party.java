@@ -1,13 +1,8 @@
 package party;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.sql.SQLException;
-
 import freunde.friends;
 import freunde.joinEvent;
 import freunde.kommandos.msg;
@@ -31,7 +26,6 @@ public class Party extends Plugin {
 	private String passwort;
 	private String database;
 	public static mySql verbindung;
-	private boolean updateNotification;
 
 	@Override
 	public void onDisable() {
@@ -54,43 +48,21 @@ public class Party extends Plugin {
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
-		try {
-			verbindung.datenbankImportieren();
-		} catch (SQLException e1) {
-			System.out.println(prefix+"Die Datenbank konnte nicht importiert werden.");
-			e1.printStackTrace();
-		}
-		BungeeCord.getInstance().getPluginManager().registerCommand(this, new PartyCommand(verbindung));
-		BungeeCord.getInstance().getPluginManager().registerListener(this, new PlayerDisconnectListener(verbindung));
-		BungeeCord.getInstance().getPluginManager().registerListener(this, new ServerSwitshListener());
-		getProxy().getPluginManager().registerCommand(this, new friends(verbindung));
-		BungeeCord.getInstance().getPluginManager().registerListener(this, new joinEvent(verbindung));
-		getProxy().getPluginManager().registerCommand(this, new msg(verbindung));
-		String localVersion = getDescription().getVersion();
-		if (updateNotification) {
-			try {
-				HttpURLConnection con = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php")
-						.openConnection();
-				con.setDoOutput(true);
-				con.setRequestMethod("POST");
-				con.getOutputStream()
-						.write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=9531")
-								.getBytes("UTF-8"));
-				String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
-				if (localVersion.equalsIgnoreCase(version)) {
-
-				} else {
-					System.out.println(prefix + "For the plugin PartyAndFriends is an update available");
-				}
-				System.out.println(prefix + "Simonsators PartyAndFriends v." + localVersion + " wurde erfolgreich aktiviert");
-			} catch (IOException e) {
-				System.out.println(prefix + "Es ist ein Fehler beim suchen nach updates aufgetreten");
-				e.printStackTrace();
-			}
-		} else {
-			System.out.println(prefix + "Simonsators PartyAndFriends v." + localVersion + " wurde erfolgreich aktiviert");
-			System.out.println(prefix + "Update Notification ist deaktiviert");
-		}
+		BungeeCord.getInstance().getPluginManager()
+				.registerCommand(this, new PartyCommand(verbindung));
+		BungeeCord
+				.getInstance()
+				.getPluginManager()
+				.registerListener(this,
+						new PlayerDisconnectListener(verbindung));
+		BungeeCord.getInstance().getPluginManager()
+				.registerListener(this, new ServerSwitshListener());
+		getProxy().getPluginManager().registerCommand(this,
+				new friends(verbindung));
+		BungeeCord.getInstance().getPluginManager()
+				.registerListener(this, new joinEvent(verbindung));
+		getProxy().getPluginManager()
+				.registerCommand(this, new msg(verbindung));
 		System.out.println(prefix + "PartyAndFriends wurde aktiviert!");
 	}
 
@@ -108,21 +80,21 @@ public class Party extends Plugin {
 			file.createNewFile();
 			jetztErstellt = true;
 		}
-		Configuration config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
+		Configuration config = ConfigurationProvider.getProvider(
+				YamlConfiguration.class).load(file);
 		if (jetztErstellt == true) {
 			config.set("host", "localhost");
 			config.set("port", 3306);
 			config.set("username", "root");
 			config.set("passwort", "passwort");
 			config.set("database", "freunde");
-			config.set("updateNotification", false);
-			ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, file);
+			ConfigurationProvider.getProvider(YamlConfiguration.class).save(
+					config, file);
 		}
 		host = config.getString("host");
 		port = config.getInt("port");
 		username = config.getString("username");
 		passwort = config.getString("passwort");
 		database = config.getString("database");
-		updateNotification = config.getBoolean("updateNotification");
 	}
 }
