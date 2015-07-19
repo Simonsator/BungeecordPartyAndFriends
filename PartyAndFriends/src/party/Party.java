@@ -17,6 +17,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import party.command.P;
 import party.command.PartyCommand;
 import party.listener.PlayerDisconnectListener;
 import party.listener.ServerSwitshListener;
@@ -52,6 +53,7 @@ public class Party extends Plugin {
 	private String language;
 	private String friendPermission;
 	private String partyPermission;
+	private String partyChatShortAlias;
 
 	@Override
 	public void onDisable() {
@@ -91,6 +93,8 @@ public class Party extends Plugin {
 		BungeeCord.getInstance().getPluginManager().registerCommand(this,
 				new PartyCommand(verbindung, partyPermission, PartyAlias, joinAlias, inviteAlias, kickAlias, infoAlias,
 						leaveAlias, chatAlias, leaderAlias, language));
+		BungeeCord.getInstance().getPluginManager().registerCommand(this,
+				new P(partyChatShortAlias, language, partyPermission));
 		BungeeCord.getInstance().getPluginManager().registerListener(this,
 				new PlayerDisconnectListener(verbindung, language));
 		BungeeCord.getInstance().getPluginManager().registerListener(this, new ServerSwitshListener(language));
@@ -195,6 +199,7 @@ public class Party extends Plugin {
 			config.set("jumpAlias", "jump");
 			config.set("listAlias", "list");
 			config.set("removeAlias", "remove");
+			config.set("partyChatShortAlias", "p");
 		}
 		host = config.getString("host");
 		if (host.equals("")) {
@@ -299,6 +304,10 @@ public class Party extends Plugin {
 		friendAlias = config.getString("friendsAlias");
 		if (friendAlias.equals("")) {
 			config.set("friendsAlias", "friend");
+		}
+		partyChatShortAlias = config.getString("partyChatShortAlias");
+		if (partyChatShortAlias.equals("")) {
+			config.set("partyChatShortAlias", "p");
 		}
 		ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, file);
 	}

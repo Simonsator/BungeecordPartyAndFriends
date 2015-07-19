@@ -34,6 +34,16 @@ public class Chat extends SubCommand {
 					p.sendMessage(new TextComponent(chatPrefix + "§5Du musst eine Nachricht eingeben"));
 				}
 			}
+		} else {
+			if (language.equalsIgnoreCase("english")) {
+				p.sendMessage(new TextComponent(chatPrefix + "§5You need to be in a party"));
+			} else {
+				if (language.equalsIgnoreCase("own")) {
+
+				} else {
+					p.sendMessage(new TextComponent(chatPrefix + "§5Du musst in einer Party sein"));
+				}
+			}
 		}
 	}
 }

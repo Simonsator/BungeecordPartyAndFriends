@@ -73,14 +73,14 @@ public class PlayerParty {
 		return this.leader.getServer().getInfo();
 	}
 
-	public void invite(final ProxiedPlayer player, String language) {
+	public void invite(final ProxiedPlayer player, final String language) {
 		invite.add(player);
 		String zuschreiben = "";
 		String value = "";
 		if (language.equalsIgnoreCase("english")) {
 			player.sendMessage(new TextComponent(
 					Party.prefix + "§5You §5were §5invited §5to §5the §5party §5of §6" + leader.getName() + "§5!"));
-			zuschreiben = Party.prefix + "§5Join §5the §5party §5by §5using §5the §5command §6/Party join "
+			zuschreiben = Party.prefix + "§5Join §5the §5party §5by §5using §5the §5command §6/Party §6join §6"
 					+ leader.getName() + "!";
 			value = "Click here to join the party";
 		} else {

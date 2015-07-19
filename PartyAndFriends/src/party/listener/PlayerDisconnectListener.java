@@ -38,7 +38,7 @@ public class PlayerDisconnectListener implements Listener {
 					for (ProxiedPlayer p : party.getPlayer()) {
 						if (language.equalsIgnoreCase("english")) {
 							p.sendMessage(new TextComponent(Party.prefix
-									+ "§bThe §bLeader §bhas §bleft §bthe §Party. §bThe §bnew §bLeader §bis §e"
+									+ "§bThe §bLeader §bhas §bleft §bthe §bParty. §bThe §bnew §bLeader §bis §e"
 									+ newLeader.getName() + "."));
 						} else {
 							p.sendMessage(new TextComponent(Party.prefix
@@ -65,18 +65,30 @@ public class PlayerDisconnectListener implements Listener {
 				party.removePlayer(player);
 				for (ProxiedPlayer p : party.getPlayer()) {
 					if (language.equalsIgnoreCase("english")) {
-						p.sendMessage(new TextComponent(Party.prefix + "§bThe §bLeader §bhas §bleft §bthe §Party."));
+						p.sendMessage(new TextComponent(Party.prefix + "§bThe §bplayer §e" + player.getDisplayName()
+								+ " §bhas §bleft §bthe §bParty."));
 					} else {
-						p.sendMessage(
-								new TextComponent(Party.prefix + "§bDer §bLeader §bhat §bdie §bParty §bverlassen"));
+						p.sendMessage(new TextComponent(Party.prefix + "§bDer §bSpieler §e" + player.getDisplayName()
+								+ " §bhat §bdie §bParty §bverlassen"));
 					}
 				}
+
 				if (language.equalsIgnoreCase("english")) {
-					party.getleader()
-							.sendMessage(new TextComponent(Party.prefix + "§bThe §bLeader §bhas §bleft §bthe §Party."));
+					party.getleader().sendMessage(new TextComponent(Party.prefix + "§bThe §bplayer §e"
+							+ player.getDisplayName() + " §bhas §bleft §bthe §bParty."));
 				} else {
-					party.getleader().sendMessage(
-							new TextComponent(Party.prefix + "§bDer §bLeader §bhat §bdie §bParty §bverlassen"));
+					party.getleader().sendMessage(new TextComponent(Party.prefix + "§bDer §bSpieler §e"
+							+ player.getDisplayName() + " §bhat §bdie §bParty §bverlassen"));
+				}
+				List<ProxiedPlayer> liste = party.getPlayer();
+				if (liste.size() == 0) {
+					if (language.equalsIgnoreCase("english")) {
+						party.getleader().sendMessage(new TextComponent(Party.prefix
+								+ "§5The §5party §5was §5dissolved §5because §5of §5to §5less §5players."));
+					} else {
+						party.getleader().sendMessage(new TextComponent(Party.prefix
+								+ "§5Die §5Party §5wurde §5wegen §5zu §5wenig §5Mitgliedern §5aufgelöst."));
+					}
 				}
 			}
 		}
