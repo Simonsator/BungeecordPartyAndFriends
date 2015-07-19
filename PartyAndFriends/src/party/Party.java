@@ -50,6 +50,8 @@ public class Party extends Plugin {
 	private String listAlias;
 	private String removeAlias;
 	private String language;
+	private String friendPermission;
+	private String partyPermission;
 
 	@Override
 	public void onDisable() {
@@ -86,13 +88,15 @@ public class Party extends Plugin {
 			}
 			e1.printStackTrace();
 		}
-		BungeeCord.getInstance().getPluginManager().registerCommand(this, new PartyCommand(verbindung, PartyAlias,
-				joinAlias, inviteAlias, kickAlias, infoAlias, leaveAlias, chatAlias, leaderAlias, language));
+		BungeeCord.getInstance().getPluginManager().registerCommand(this,
+				new PartyCommand(verbindung, partyPermission, PartyAlias, joinAlias, inviteAlias, kickAlias, infoAlias,
+						leaveAlias, chatAlias, leaderAlias, language));
 		BungeeCord.getInstance().getPluginManager().registerListener(this,
 				new PlayerDisconnectListener(verbindung, language));
 		BungeeCord.getInstance().getPluginManager().registerListener(this, new ServerSwitshListener(language));
-		getProxy().getPluginManager().registerCommand(this, new friends(verbindung, friendAlias, friendsAliasMsg,
-				acceptAlias, addAlias, denyAlias, settingsAlias, jumpAlias, listAlias, removeAlias, language));
+		getProxy().getPluginManager().registerCommand(this,
+				new friends(verbindung, friendPermission, friendAlias, friendsAliasMsg, acceptAlias, addAlias,
+						denyAlias, settingsAlias, jumpAlias, listAlias, removeAlias, language));
 		BungeeCord.getInstance().getPluginManager().registerListener(this, new joinEvent(verbindung, language));
 		getProxy().getPluginManager().registerCommand(this, new msg(verbindung, friendsAliasMsg, language));
 		String localVersion = getDescription().getVersion();
@@ -171,6 +175,9 @@ public class Party extends Plugin {
 			config.set("database", "freunde");
 			config.set("language", "english");
 			config.set("updateNotification", false);
+			config.set("spigotHasInstalledPartyAndFriendsGUI", false);
+			config.set("friendPermission", "");
+			config.set("partyPermission", "");
 			config.set("PartyAlias", "party");
 			config.set("friendsAlias", "friend");
 			config.set("friendsAliasMsg", "chat");
@@ -216,6 +223,14 @@ public class Party extends Plugin {
 		updateNotification = config.getBoolean("updateNotification");
 		if (updateNotification == false) {
 			config.set("updateNotification", false);
+		}
+		friendPermission = config.getString("friendPermission");
+		if (friendPermission.equalsIgnoreCase("")) {
+			config.set("friendPermission", "");
+		}
+		partyPermission = config.getString("partyPermission");
+		if (partyPermission.equals("")) {
+			config.set("partyPermission", "");
 		}
 		friendsAliasMsg = config.getString("friendsAliasMsg");
 		if (friendsAliasMsg.equals("")) {

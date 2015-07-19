@@ -41,6 +41,17 @@ public class Invite extends SubCommand {
 			}
 			return;
 		}
+		ProxiedPlayer pl = BungeeCord.getInstance().getPlayer(args[0]);
+		if (pl == null)
+
+		{
+			if (language.equalsIgnoreCase("english")) {
+				p.sendMessage(new TextComponent(Party.prefix + "§cThis §cplayer §cis §cnot §conline."));
+			} else {
+				p.sendMessage(new TextComponent(Party.prefix + "§cDieser §cSpieler §cist §cnicht §conline."));
+			}
+			return;
+		}
 		try {
 			if (verbindung.erlaubtPartyAnfragen(args[0]) == false) {
 				if (language.equalsIgnoreCase("english")) {
@@ -60,17 +71,6 @@ public class Invite extends SubCommand {
 			e.printStackTrace();
 		}
 
-		ProxiedPlayer pl = BungeeCord.getInstance().getPlayer(args[0]);
-		if (pl == null)
-
-		{
-			if (language.equalsIgnoreCase("english")) {
-				p.sendMessage(new TextComponent(Party.prefix + "§cThis §cplayer §cis §cnot §conline."));
-			} else {
-				p.sendMessage(new TextComponent(Party.prefix + "§cDieser §cSpieler §cist §cnicht §conline."));
-			}
-			return;
-		}
 		if (pl.equals(p))
 
 		{

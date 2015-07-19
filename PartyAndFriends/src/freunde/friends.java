@@ -29,10 +29,10 @@ public class friends extends Command {
 	private String friendsAliasMsgc;
 	private String language;
 
-	public friends(mySql pVerbindung, String friendAllias, String friendsAliasMsg, String acceptAlias, String addAlias,
-			String denyAlias, String settingsAlias, String jumpAlias, String listAlias, String removeAlias,
-			String languageOvergive) {
-		super("friend", null, new String[] { "friends", friendAllias });
+	public friends(mySql pVerbindung, String friendsPermission, String friendAllias, String friendsAliasMsg,
+			String acceptAlias, String addAlias, String denyAlias, String settingsAlias, String jumpAlias,
+			String listAlias, String removeAlias, String languageOvergive) {
+		super("friend", friendsPermission, new String[] { "friends", friendAllias });
 		verbindung = pVerbindung;
 		friendsAliasMsgc = friendsAliasMsg;
 		acceptAliasc = acceptAlias;
