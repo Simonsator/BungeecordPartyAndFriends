@@ -127,6 +127,14 @@ public class PlayerParty {
 		}, 60, TimeUnit.SECONDS);
 	}
 
+	public int inviteListSize() {
+		return invite.size();
+	}
+
+	public boolean containsPlayer(ProxiedPlayer player) {
+		return invite.contains(player);
+	}
+
 	public void setLeader(ProxiedPlayer player) {
 		leader = player;
 	}

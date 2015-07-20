@@ -127,7 +127,7 @@ public class add {
 						String command = "/friends accept " + args[1];
 						jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'"
 								+ command
-								+ "'},'hoverEvent':{'action':'show_text','value':'Click here to accept the friendship request'}}";
+								+ "'},'hoverEvent':{'action':'show_text','value':'§aClick here to accept the friendship request'}}";
 					} else {
 						player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET + " §7Der Spieler §e"
 								+ args[1] + " §7hat §7dir §7schon §7eine §7Freundschaftsanfrage §7gesendet."));
@@ -136,7 +136,7 @@ public class add {
 						String command = "/friends accept " + args[1];
 						jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'"
 								+ command
-								+ "'},'hoverEvent':{'action':'show_text','value':'Hier klicken um die Freundschaftsanfrage anzunehmen'}}";
+								+ "'},'hoverEvent':{'action':'show_text','value':'§aHier klicken um die Freundschaftsanfrage anzunehmen'}}";
 					}
 					player.unsafe().sendPacket(new Chat(jsoncode));
 					return;
@@ -163,7 +163,7 @@ public class add {
 					String zuschreiben = "§7 Accept the friend request with /friends accept §e" + senderName + " §7.";
 					String command = "/friends accept " + senderName;
 					jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'" + command
-							+ "'},'hoverEvent':{'action':'show_text','value':'Click here to accept the friend request'}}";
+							+ "'},'hoverEvent':{'action':'show_text','value':'§aClick here to accept the friend request'}}";
 				} else {
 					empfaenger.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
 							+ "§7 Du hast eine Freundschafftsanfrage von §e" + senderName + " §7erhalten"));
@@ -171,7 +171,7 @@ public class add {
 							+ " §7an.";
 					String command = "/friends accept " + senderName;
 					jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'" + command
-							+ "'},'hoverEvent':{'action':'show_text','value':'Hier klicken um die Freundschaftsanfrage anzunehmen'}}";
+							+ "'},'hoverEvent':{'action':'show_text','value':'§aHier klicken um die Freundschaftsanfrage anzunehmen'}}";
 				}
 				empfaenger.unsafe().sendPacket(new Chat(jsoncode));
 			}

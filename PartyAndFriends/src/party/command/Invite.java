@@ -11,13 +11,15 @@ import party.PartyManager;
 import party.PlayerParty;
 
 public class Invite extends SubCommand {
-	mySql verbindung;
+	private mySql verbindung;
 	private String language;
+	private int maxPlayersInParty;
 
-	public Invite(mySql verbindungl, String inviteAllias, String languageOverGive) {
+	public Invite(mySql verbindungl, String inviteAllias, String languageOverGive, int maxPlayersInPartyOverGive) {
 		super("Lade §7einen §7Spieler §7in §7deine §7Party §7ein", "<Name>", new String[] { "invite", inviteAllias });
 		verbindung = verbindungl;
 		language = languageOverGive;
+		maxPlayersInParty = maxPlayersInPartyOverGive;
 	}
 
 	public void onCommand(ProxiedPlayer p, String[] args) {
@@ -93,6 +95,28 @@ public class Invite extends SubCommand {
 						Party.prefix + "§cDieser §cDer §cSpieler §cist §cbereits §cin §ceiner §cParty."));
 			}
 			return;
+		}
+		if (party.containsPlayer(pl)) {
+			if (language.equalsIgnoreCase("english")) {
+				p.sendMessage(new TextComponent(Party.prefix + "§cThe §cplayer §e" + pl.getDisplayName()
+						+ "§cis §calready §cinvited §cinto §cyour §cparty."));
+			} else {
+				p.sendMessage(new TextComponent(Party.prefix + "§cDer §cSpieler §e" + pl.getDisplayName()
+						+ " §cist §cschon §cin §cdie §cParty §ceingeladen."));
+			}
+			return;
+		}
+		if (maxPlayersInParty > 1) {
+			if (maxPlayersInParty < party.getPlayer().size() + party.inviteListSize() + 2) {
+				if (language.equalsIgnoreCase("english")) {
+					p.sendMessage(new TextComponent(
+							Party.prefix + "§cThe §cMax §csize §cof §ca §cparty §cis §c" + maxPlayersInParty + "§c."));
+				} else {
+					p.sendMessage(new TextComponent(Party.prefix
+							+ "§cDie §cMaximale §cgröße §cfür §ceine §cParty §cist §c" + maxPlayersInParty));
+				}
+				return;
+			}
 		}
 
 		party.invite(pl, language);

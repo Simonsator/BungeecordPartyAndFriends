@@ -4,6 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import party.Party;
 import party.PartyManager;
 import party.PlayerParty;
 
@@ -20,6 +21,14 @@ public class P extends Command {
 
 	@Override
 	public void execute(CommandSender arg0, String[] args) {
+		if (!(arg0 instanceof ProxiedPlayer)) {
+			if (language.equalsIgnoreCase("english")) {
+				arg0.sendMessage(new TextComponent(Party.prefix + "You need to be a player!"));
+			} else {
+				arg0.sendMessage(new TextComponent(Party.prefix + "Du must ein Spieler sein!"));
+			}
+			return;
+		}
 		ProxiedPlayer p = (ProxiedPlayer) arg0;
 		if (args.length == 0) {
 			if (language.equalsIgnoreCase("english")) {

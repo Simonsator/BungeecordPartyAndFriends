@@ -54,6 +54,8 @@ public class Party extends Plugin {
 	private String friendPermission;
 	private String partyPermission;
 	private String partyChatShortAlias;
+	private Boolean disableP;
+	private int MaxPlayersInParty;
 
 	@Override
 	public void onDisable() {
@@ -92,9 +94,11 @@ public class Party extends Plugin {
 		}
 		BungeeCord.getInstance().getPluginManager().registerCommand(this,
 				new PartyCommand(verbindung, partyPermission, PartyAlias, joinAlias, inviteAlias, kickAlias, infoAlias,
-						leaveAlias, chatAlias, leaderAlias, language));
-		BungeeCord.getInstance().getPluginManager().registerCommand(this,
-				new P(partyChatShortAlias, language, partyPermission));
+						leaveAlias, chatAlias, leaderAlias, language, MaxPlayersInParty));
+		if (disableP == false) {
+			BungeeCord.getInstance().getPluginManager().registerCommand(this,
+					new P(partyChatShortAlias, language, partyPermission));
+		}
 		BungeeCord.getInstance().getPluginManager().registerListener(this,
 				new PlayerDisconnectListener(verbindung, language));
 		BungeeCord.getInstance().getPluginManager().registerListener(this, new ServerSwitshListener(language));
@@ -165,149 +169,129 @@ public class Party extends Plugin {
 			getDataFolder().mkdir();
 		}
 		File file = new File(getDataFolder().getPath(), "config.yml");
-		boolean jetztErstellt = false;
 		if (!file.exists()) {
 			file.createNewFile();
-			jetztErstellt = true;
 		}
 		Configuration config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
-		if (jetztErstellt == true) {
-			config.set("host", "localhost");
-			config.set("port", 3306);
-			config.set("username", "root");
-			config.set("passwort", "password");
-			config.set("database", "freunde");
-			config.set("language", "english");
-			config.set("updateNotification", false);
-			config.set("spigotHasInstalledPartyAndFriendsGUI", false);
-			config.set("friendPermission", "");
-			config.set("partyPermission", "");
-			config.set("PartyAlias", "party");
-			config.set("friendsAlias", "friend");
-			config.set("friendsAliasMsg", "chat");
-			config.set("joinAlias", "join");
-			config.set("inviteAlias", "invite");
-			config.set("kickAlias", "kick");
-			config.set("infoAlias", "info");
-			config.set("leaveAlias", "leave");
-			config.set("chatAlias", "chat");
-			config.set("leaderAlias", "leader");
-			config.set("acceptAlias", "accept");
-			config.set("addAlias", "add");
-			config.set("denyAlias", "deny");
-			config.set("settingsAlias", "settings");
-			config.set("jumpAlias", "jump");
-			config.set("listAlias", "list");
-			config.set("removeAlias", "remove");
-			config.set("partyChatShortAlias", "p");
-		}
-		host = config.getString("host");
+		host = config.getString("MySQL.Host");
 		if (host.equals("")) {
-			config.set("host", "localhost");
+			config.set("MySQL.Host", "localhost");
 		}
-		port = config.getInt("port");
+		port = config.getInt("MySQL.Port");
 		if (port == 0) {
-			config.set("port", 3306);
+			config.set("MySQL.Port", 3306);
 		}
-		username = config.getString("username");
+		username = config.getString("MySQL.Username");
 		if (username.equals("")) {
-			config.set("username", "root");
+			config.set("MySQL.Username", "root");
 		}
-		passwort = config.getString("passwort");
+		passwort = config.getString("MySQL.Password");
 		if (username.equals("")) {
-			config.set("passwort", "password");
+			config.set("MySQL.Password", "Password");
 		}
-		database = config.getString("database");
+		database = config.getString("MySQL.Database");
 		if (database.equals("")) {
-			config.set("database", "freunde");
+			config.set("MySQL.Database", "freunde");
 		}
-		language = config.getString("language");
+		language = config.getString("General.Language");
 		if (language.equals("")) {
-			config.set("language", "english");
+			config.set("General.Language", "english");
 		}
-		updateNotification = config.getBoolean("updateNotification");
+		updateNotification = config.getBoolean("General.UpdateNotification");
 		if (updateNotification == false) {
-			config.set("updateNotification", false);
+			config.set("General.UpdateNotification", true);
 		}
-		friendPermission = config.getString("friendPermission");
+		String version = config.getString("General.Version");
+		if (!version.equals(getDescription().getVersion())) {
+			config.set("General.Version", getDescription().getVersion());
+		}
+		disableP = config.getBoolean("General.DisableCommandP");
+		if (disableP == false) {
+			config.set("General.DisableCommandP", false);
+		}
+		MaxPlayersInParty = config.getInt("General.MaxPlayersInParty");
+		if (MaxPlayersInParty == 0) {
+			config.set("General.MaxPlayersInParty", 0);
+		}
+		friendPermission = config.getString("Permissions.FriendPermission");
 		if (friendPermission.equalsIgnoreCase("")) {
-			config.set("friendPermission", "");
+			config.set("Permissions.FriendPermission", "");
 		}
-		partyPermission = config.getString("partyPermission");
+		partyPermission = config.getString("Permissions.PartyPermission");
 		if (partyPermission.equals("")) {
-			config.set("partyPermission", "");
+			config.set("Permissions.PartyPermission", "");
 		}
-		friendsAliasMsg = config.getString("friendsAliasMsg");
+		friendsAliasMsg = config.getString("Aliases.FriendsAliasMsg");
 		if (friendsAliasMsg.equals("")) {
-			config.set("friendsAliasMsg", "chat");
+			config.set("Aliases.FriendsAliasMsg", "msg");
 		}
-		PartyAlias = config.getString("PartyAlias");
+		PartyAlias = config.getString("Aliases.PartyAlias");
 		if (PartyAlias.equals("")) {
-			config.set("PartyAlias", "partys");
+			config.set("Aliases.PartyAlias", "party");
 		}
-		joinAlias = config.getString("joinAlias");
+		joinAlias = config.getString("Aliases.JoinAlias");
 		if (joinAlias.equals("")) {
-			config.set("joinAlias", "join");
+			config.set("Aliases.JoinAlias", "join");
 		}
-		inviteAlias = config.getString("inviteAlias");
+		inviteAlias = config.getString("Aliases.InviteAlias");
 		if (inviteAlias.equals("")) {
-			config.set("inviteAlias", "invite");
+			config.set("Aliases.InviteAlias", "invite");
 		}
-		kickAlias = config.getString("kickAlias");
+		kickAlias = config.getString("Aliases.KickAlias");
 		if (kickAlias.equals("")) {
-			config.set("kickAlias", "kick");
+			config.set("Aliases.KickAlias", "kick");
 		}
-		infoAlias = config.getString("infoAlias");
+		infoAlias = config.getString("Aliases.InfoAlias");
 		if (infoAlias.equals("")) {
-			config.set("infoAlias", "info");
+			config.set("Aliases.InfoAlias", "info");
 		}
-		leaveAlias = config.getString("leaveAlias");
+		leaveAlias = config.getString("Aliases.leaveAlias");
 		if (leaveAlias.equals("")) {
-			config.set("leaveAlias", "leave");
+			config.set("Aliases.leaveAlias", "leave");
 		}
-		chatAlias = config.getString("chatAlias");
+		chatAlias = config.getString("Aliases.ChatAlias");
 		if (chatAlias.equals("")) {
-			config.set("chatAlias", "chat");
+			config.set("Aliases.ChatAlias", "chat");
 		}
-		leaderAlias = config.getString("leaderAlias");
+		leaderAlias = config.getString("Aliases.LeaderAlias");
 		if (leaderAlias.equals("")) {
-			config.set("leaderAlias", "newLeader");
+			config.set("Aliases.LeaderAlias", "leader");
 		}
-		acceptAlias = config.getString("acceptAlias");
+		acceptAlias = config.getString("Aliases.AcceptAlias");
 		if (acceptAlias.equals("")) {
-			config.set("acceptAlias", "accept");
+			config.set("Aliases.AcceptAlias", "accept");
 		}
-		addAlias = config.getString("addAlias");
+		addAlias = config.getString("Aliases.AddAlias");
 		if (acceptAlias.equals("")) {
-			config.set("addAlias", "add");
+			config.set("Aliases.AddAlias", "add");
 		}
-		denyAlias = config.getString("denyAlias");
+		denyAlias = config.getString("Aliases.DenyAlias");
 		if (denyAlias.equals("")) {
-			config.set("denyAlias", "deny");
+			config.set("Aliases.denyAlias", "deny");
 		}
-		settingsAlias = config.getString("settingsAlias");
+		settingsAlias = config.getString("Aliases.SettingsAlias");
 		if (settingsAlias.equals("")) {
-			config.set("settingsAlias", "settings");
+			config.set("Aliases.SettingsAlias", "settings");
 		}
-		jumpAlias = config.getString("jumpAlias");
+		jumpAlias = config.getString("Aliases.JumpAlias");
 		if (jumpAlias.equals("")) {
-			config.set("jumpAlias", "jump");
+			config.set("Aliases.JumpAlias", "jump");
 		}
-		listAlias = config.getString("listAlias");
+		listAlias = config.getString("Aliases.ListAlias");
 		if (listAlias.equals("")) {
-			config.set("listAlias", "list");
+			config.set("Aliases.ListAlias", "list");
 		}
-		removeAlias = config.getString("removeAlias");
+		removeAlias = config.getString("Aliases.RemoveAlias");
 		if (removeAlias.equals("")) {
-			config.set("removeAlias", "remove");
+			config.set("Aliases.RemoveAlias", "remove");
 		}
-		friendAlias = config.getString("friendsAlias");
+		friendAlias = config.getString("Aliases.FriendsAlias");
 		if (friendAlias.equals("")) {
-			config.set("friendsAlias", "friend");
+			config.set("Aliases.FriendsAlias", "friend");
 		}
-		partyChatShortAlias = config.getString("partyChatShortAlias");
+		partyChatShortAlias = config.getString("Aliases.PartyChatShortAlias");
 		if (partyChatShortAlias.equals("")) {
-			config.set("partyChatShortAlias", "p");
+			config.set("Aliases.PartyChatShortAlias", "p");
 		}
 		ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, file);
 	}

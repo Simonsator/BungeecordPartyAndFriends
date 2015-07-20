@@ -23,12 +23,12 @@ public class PartyCommand extends Command {
 
 	public PartyCommand(mySql verbindung, String partyPermission, String allias, String joinAllias, String inviteAllias,
 			String kickAllias, String infoAllias, String leaveAllias, String chatAllias, String leaderAllias,
-			String languageOverGive) {
+			String languageOverGive, int maxPlayersInParty) {
 		super("Party", partyPermission, allias);
 		language = languageOverGive;
 		cmds = new ArrayList<SubCommand>();
 		cmds.add(new Join(joinAllias, languageOverGive));
-		cmds.add(new Invite(verbindung, inviteAllias, languageOverGive));
+		cmds.add(new Invite(verbindung, inviteAllias, languageOverGive, maxPlayersInParty));
 		cmds.add(new Kick(kickAllias, languageOverGive));
 		cmds.add(new Info(infoAllias, languageOverGive));
 		cmds.add(new Leave(leaveAllias, languageOverGive));
