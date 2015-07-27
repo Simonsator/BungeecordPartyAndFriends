@@ -289,7 +289,7 @@ public class mySql {
 	}
 
 	public int einstellungenSetzen(ProxiedPlayer player, int typ) throws SQLException {
-		int playerID = getIDByPlayerName(player.getDisplayName());
+		int playerID = getIDByPlayerName(player.getName());
 		int neuerWert = 0;
 		if (typ == 0) {
 			resultSet = statement.executeQuery("select einstellungPartyNurFreunde from " + database

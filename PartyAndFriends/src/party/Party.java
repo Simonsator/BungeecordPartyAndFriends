@@ -7,12 +7,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
-
 import freunde.friends;
 import freunde.joinEvent;
 import freunde.kommandos.msg;
 import mySql.mySql;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -22,7 +22,7 @@ import party.command.PartyCommand;
 import party.listener.PlayerDisconnectListener;
 import party.listener.ServerSwitshListener;
 
-public class Party extends Plugin {
+public class Party extends Plugin implements Listener {
 
 	public static String prefix = "§7[§5Party§7] ";
 	private static Party instance;
@@ -56,6 +56,9 @@ public class Party extends Plugin {
 	private String partyChatShortAlias;
 	private Boolean disableP;
 	private int MaxPlayersInParty;
+	private boolean disableMsg;
+	private friends freunde;
+	private PartyCommand KommandoParty;
 
 	@Override
 	public void onDisable() {
@@ -92,9 +95,9 @@ public class Party extends Plugin {
 			}
 			e1.printStackTrace();
 		}
-		BungeeCord.getInstance().getPluginManager().registerCommand(this,
-				new PartyCommand(verbindung, partyPermission, PartyAlias, joinAlias, inviteAlias, kickAlias, infoAlias,
-						leaveAlias, chatAlias, leaderAlias, language, MaxPlayersInParty));
+		KommandoParty = new PartyCommand(verbindung, partyPermission, PartyAlias, joinAlias, inviteAlias, kickAlias,
+				infoAlias, leaveAlias, chatAlias, leaderAlias, language, MaxPlayersInParty);
+		BungeeCord.getInstance().getPluginManager().registerCommand(this, KommandoParty);
 		if (disableP == false) {
 			BungeeCord.getInstance().getPluginManager().registerCommand(this,
 					new P(partyChatShortAlias, language, partyPermission));
@@ -102,11 +105,13 @@ public class Party extends Plugin {
 		BungeeCord.getInstance().getPluginManager().registerListener(this,
 				new PlayerDisconnectListener(verbindung, language));
 		BungeeCord.getInstance().getPluginManager().registerListener(this, new ServerSwitshListener(language));
-		getProxy().getPluginManager().registerCommand(this,
-				new friends(verbindung, friendPermission, friendAlias, friendsAliasMsg, acceptAlias, addAlias,
-						denyAlias, settingsAlias, jumpAlias, listAlias, removeAlias, language));
+		freunde = new friends(verbindung, friendPermission, friendAlias, friendsAliasMsg, acceptAlias, addAlias,
+				denyAlias, settingsAlias, jumpAlias, listAlias, removeAlias, language);
+		getProxy().getPluginManager().registerCommand(this, freunde);
 		BungeeCord.getInstance().getPluginManager().registerListener(this, new joinEvent(verbindung, language));
-		getProxy().getPluginManager().registerCommand(this, new msg(verbindung, friendsAliasMsg, language));
+		if (disableMsg == false) {
+			getProxy().getPluginManager().registerCommand(this, new msg(verbindung, friendsAliasMsg, language));
+		}
 		String localVersion = getDescription().getVersion();
 		if (updateNotification) {
 			try {
@@ -115,7 +120,7 @@ public class Party extends Plugin {
 				con.setDoOutput(true);
 				con.setRequestMethod("POST");
 				con.getOutputStream()
-						.write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=9531")
+						.write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=10123")
 								.getBytes("UTF-8"));
 				String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
 				if (localVersion.equalsIgnoreCase(version)) {
@@ -197,6 +202,13 @@ public class Party extends Plugin {
 		if (language.equals("")) {
 			config.set("General.Language", "english");
 		}
+		Boolean ownLanguage = config.getBoolean("General.UseOwnLanguageFile");
+		if (ownLanguage == false) {
+			config.set("General.UseOwnLanguageFile", "false");
+		}
+		if (ownLanguage) {
+			language = "own";
+		}
 		updateNotification = config.getBoolean("General.UpdateNotification");
 		if (updateNotification == false) {
 			config.set("General.UpdateNotification", true);
@@ -208,6 +220,10 @@ public class Party extends Plugin {
 		disableP = config.getBoolean("General.DisableCommandP");
 		if (disableP == false) {
 			config.set("General.DisableCommandP", false);
+		}
+		disableMsg = config.getBoolean("General.disableMsg");
+		if (disableMsg == false) {
+			config.set("General.DisableMsg", false);
 		}
 		MaxPlayersInParty = config.getInt("General.MaxPlayersInParty");
 		if (MaxPlayersInParty == 0) {
@@ -294,5 +310,20 @@ public class Party extends Plugin {
 			config.set("Aliases.PartyChatShortAlias", "p");
 		}
 		ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, file);
+	}
+
+	public void ladeMessageYML() throws IOException {
+		File file = new File(getDataFolder().getPath(), "Messages.yml");
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		Configuration messagesYml = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
+		if (messagesYml.getString("General.LanguageName").equals("")) {
+			messagesYml.set("General.LanguageName", "Own");
+		}
+		if (messagesYml.getString("Party.CommandNotFound").equals("")) {
+			messagesYml.set("Party.Error.CommandNotFound", "§cThis command doesn´t exist!");
+		}
+		ConfigurationProvider.getProvider(YamlConfiguration.class).save(messagesYml, file);
 	}
 }

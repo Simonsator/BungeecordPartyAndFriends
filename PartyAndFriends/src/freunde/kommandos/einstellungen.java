@@ -26,7 +26,7 @@ public class einstellungen {
 				} else {
 					if (language.equalsIgnoreCase("english")) {
 						player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
-								+ " §7Now §7you §7can §7get §7invited §aonly §7by §7by your friends §7into §7their §7Party."));
+								+ " §7Now §7you §7can §7get §7invited §conly §7by §7by your friends §7into §7their §7Party."));
 					} else {
 						player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
 								+ " §7Du §7kannst §7jetzt §cnur §7noch §7von §7deinen §7Freunden §7in §7eine §7Party §7eingeladen §7werden"));

@@ -58,7 +58,7 @@ public class nachricht {
 				if (language.equalsIgnoreCase("english")) {
 					player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
 							+ " §7You §7need §7to §7give §7a §7player §7and §7a §7message."));
-					player.sendMessage(new TextComponent("§8/§5friend §5msg §5[name §5of $5the §5friend] §5[message]"
+					player.sendMessage(new TextComponent("§8/§5friend §5msg §5[name §5of §5the §5friend] §5[message]"
 							+ ChatColor.RESET + " §8- §7send §7a §7friend §7a §7message"));
 				} else {
 					player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET

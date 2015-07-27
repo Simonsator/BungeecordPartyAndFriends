@@ -47,7 +47,7 @@ public class remove {
 			} else {
 				if (language.equalsIgnoreCase("english")) {
 					player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET + " §7The Player §e"
-							+ args[0] + " §7is §7not §7online §7or §7you §7bare §7not §7a §7friend §7of §7him"));
+							+ args[1] + " §7is §7not §7online §7or §7you §7are §7not §7a §7friend §7of §7him"));
 				} else {
 					player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
 							+ " §7Du §7bist §7nicht §7mit §e" + args[1] + " §7befreundet"));

@@ -70,7 +70,7 @@ public class friends extends Command {
 						+ ChatColor.RESET + " §8- §7removes §7a §7friend"));
 				player.sendMessage(new TextComponent("§8/§5friend §5settings " + ChatColor.RESET
 						+ "§8- §7settings §7of §7the §7party- §7und §7friendsystem"));
-				player.sendMessage(new TextComponent("§8/§5friend §5jump [name of the §7friend]" + ChatColor.RESET
+				player.sendMessage(new TextComponent("§8/§5friend §5jump [name of the §5friend]" + ChatColor.RESET
 						+ "§8- §7Jump §7to §7a §7friend"));
 
 			} else {
