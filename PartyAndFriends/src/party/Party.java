@@ -59,6 +59,7 @@ public class Party extends Plugin implements Listener {
 	private boolean disableMsg;
 	private friends freunde;
 	private PartyCommand KommandoParty;
+	private String NoPlayerLimitForPartysPermission;
 
 	@Override
 	public void onDisable() {
@@ -96,7 +97,8 @@ public class Party extends Plugin implements Listener {
 			e1.printStackTrace();
 		}
 		KommandoParty = new PartyCommand(verbindung, partyPermission, PartyAlias, joinAlias, inviteAlias, kickAlias,
-				infoAlias, leaveAlias, chatAlias, leaderAlias, language, MaxPlayersInParty);
+				infoAlias, leaveAlias, chatAlias, leaderAlias, language, MaxPlayersInParty,
+				NoPlayerLimitForPartysPermission, this);
 		BungeeCord.getInstance().getPluginManager().registerCommand(this, KommandoParty);
 		if (disableP == false) {
 			BungeeCord.getInstance().getPluginManager().registerCommand(this,
@@ -208,6 +210,7 @@ public class Party extends Plugin implements Listener {
 		}
 		if (ownLanguage) {
 			language = "own";
+			ladeMessageYML();
 		}
 		updateNotification = config.getBoolean("General.UpdateNotification");
 		if (updateNotification == false) {
@@ -236,6 +239,10 @@ public class Party extends Plugin implements Listener {
 		partyPermission = config.getString("Permissions.PartyPermission");
 		if (partyPermission.equals("")) {
 			config.set("Permissions.PartyPermission", "");
+		}
+		NoPlayerLimitForPartysPermission = config.getString("Permissions.NoPlayerLimitForPartys");
+		if (NoPlayerLimitForPartysPermission.equals("")) {
+			config.set("Permissions.NoPlayerLimitForPartys", "");
 		}
 		friendsAliasMsg = config.getString("Aliases.FriendsAliasMsg");
 		if (friendsAliasMsg.equals("")) {
@@ -321,8 +328,34 @@ public class Party extends Plugin implements Listener {
 		if (messagesYml.getString("General.LanguageName").equals("")) {
 			messagesYml.set("General.LanguageName", "Own");
 		}
-		if (messagesYml.getString("Party.CommandNotFound").equals("")) {
+		if (messagesYml.getString("Party.Error.CommandNotFound").equals("")) {
 			messagesYml.set("Party.Error.CommandNotFound", "§cThis command doesn´t exist!");
+		}
+		if (messagesYml.getString("Party.CommandUsage.Join").equals("")) {
+			messagesYml.set("Party.CommandUsage.Join", "§8/§5Party " + "join <Name>" + " §8- §7Join §7a §7party");
+		}
+		if (messagesYml.getString("Party.CommandUsage.Invite").equals("")) {
+			messagesYml.set("Party.CommandUsage.Invite",
+					"§8/§5Party " + "list" + " §8- §7List §7all §7players §7who §7are §7in §7the §7party");
+		}
+		if (messagesYml.getString("Party.CommandUsage.List").equals("")) {
+			messagesYml.set("Party.CommandUsage.List",
+					"§8/§5Party " + "list" + " §8- §7List §7all §7players §7who §7are §7in §7the §7party");
+		}
+		if (messagesYml.getString("Party.CommandUsage.Chat").equals("")) {
+			messagesYml.set("Party.CommandUsage.Chat",
+					"§8/§5Party " + "chat" + " §8- §7List §7all §7players §7who §7are §7in §7the §7party");
+		}
+		if (messagesYml.getString("Party.CommandUsage.Leave").equals("")) {
+			messagesYml.set("Party.CommandUsage.Leave", "§8/§5Party " + "leave" + " §8- §7Leave the party");
+		}
+		if (messagesYml.getString("Party.CommandUsage.Kick").equals("")) {
+			messagesYml.set("Party.CommandUsage.Kick",
+					"§8/§5Party " + "kick <player>" + " §8- §7Kicks §7a §7player §7out §7of §7the §7party");
+		}
+		if (messagesYml.getString("Party.CommandUsage.Leader").equals("")) {
+			messagesYml.set("Party.CommandUsage.Leader", "§8/§5Party " + "leader §5<player>"
+					+ " §8- §7Makes §7another §7player §7to §7the §7party §7leader");
 		}
 		ConfigurationProvider.getProvider(YamlConfiguration.class).save(messagesYml, file);
 	}

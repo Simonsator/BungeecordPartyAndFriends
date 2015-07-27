@@ -14,12 +14,15 @@ public class Invite extends SubCommand {
 	private mySql verbindung;
 	private String language;
 	private int maxPlayersInParty;
+	private String noPlayerLimitForPartysPermission;
 
-	public Invite(mySql verbindungl, String inviteAllias, String languageOverGive, int maxPlayersInPartyOverGive) {
+	public Invite(mySql verbindungl, String inviteAllias, String languageOverGive, int maxPlayersInPartyOverGive,
+			String pNoPlayerLimitForPartysPermission) {
 		super("Lade §7einen §7Spieler §7in §7deine §7Party §7ein", "<Name>", new String[] { "invite", inviteAllias });
 		verbindung = verbindungl;
 		language = languageOverGive;
 		maxPlayersInParty = maxPlayersInPartyOverGive;
+		noPlayerLimitForPartysPermission = pNoPlayerLimitForPartysPermission;
 	}
 
 	public void onCommand(ProxiedPlayer p, String[] args) {
@@ -106,16 +109,18 @@ public class Invite extends SubCommand {
 			}
 			return;
 		}
-		if (maxPlayersInParty > 1) {
-			if (maxPlayersInParty < party.getPlayer().size() + party.inviteListSize() + 2) {
-				if (language.equalsIgnoreCase("english")) {
-					p.sendMessage(new TextComponent(
-							Party.prefix + "§cThe §cMax §csize §cof §ca §cparty §cis §c" + maxPlayersInParty + "§c."));
-				} else {
-					p.sendMessage(new TextComponent(Party.prefix
-							+ "§cDie §cMaximale §cgröße §cfür §ceine §cParty §cist §c" + maxPlayersInParty));
+		if (!p.hasPermission(noPlayerLimitForPartysPermission)) {
+			if (maxPlayersInParty > 1) {
+				if (maxPlayersInParty < party.getPlayer().size() + party.inviteListSize() + 2) {
+					if (language.equalsIgnoreCase("english")) {
+						p.sendMessage(new TextComponent(Party.prefix + "§cThe §cMax §csize §cof §ca §cparty §cis §c"
+								+ maxPlayersInParty + "§c."));
+					} else {
+						p.sendMessage(new TextComponent(Party.prefix
+								+ "§cDie §cMaximale §cgröße §cfür §ceine §cParty §cist §c" + maxPlayersInParty));
+					}
+					return;
 				}
-				return;
 			}
 		}
 

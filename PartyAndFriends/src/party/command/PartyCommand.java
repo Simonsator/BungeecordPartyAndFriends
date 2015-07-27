@@ -1,5 +1,7 @@
 package party.command;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +13,9 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
 import party.Party;
 import party.PartyManager;
 import party.PlayerParty;
@@ -18,17 +23,19 @@ import party.PlayerParty;
 public class PartyCommand extends Command {
 
 	private List<SubCommand> cmds;
-
+	private Party main;
 	private String language;
 
 	public PartyCommand(mySql verbindung, String partyPermission, String allias, String joinAllias, String inviteAllias,
 			String kickAllias, String infoAllias, String leaveAllias, String chatAllias, String leaderAllias,
-			String languageOverGive, int maxPlayersInParty) {
+			String languageOverGive, int maxPlayersInParty, String noPlayerLimitForPartysPermission, Party party) {
 		super("Party", partyPermission, allias);
 		language = languageOverGive;
+		main = party;
 		cmds = new ArrayList<SubCommand>();
 		cmds.add(new Join(joinAllias, languageOverGive));
-		cmds.add(new Invite(verbindung, inviteAllias, languageOverGive, maxPlayersInParty));
+		cmds.add(new Invite(verbindung, inviteAllias, languageOverGive, maxPlayersInParty,
+				noPlayerLimitForPartysPermission));
 		cmds.add(new Kick(kickAllias, languageOverGive));
 		cmds.add(new Info(infoAllias, languageOverGive));
 		cmds.add(new Leave(leaveAllias, languageOverGive));
@@ -45,6 +52,13 @@ public class PartyCommand extends Command {
 				sender.sendMessage(new TextComponent(Party.prefix + "Du must ein Spieler sein!"));
 			}
 			return;
+		}
+		File file = new File(main.getDataFolder().getPath(), "Messages.yml");
+		Configuration messagesYml = null;
+		try {
+			messagesYml = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		ProxiedPlayer player = (ProxiedPlayer) sender;
 		if (args.length == 0) {
@@ -69,21 +83,35 @@ public class PartyCommand extends Command {
 					}
 				}
 			} else {
-				player.sendMessage(new TextComponent("§8/§5Party " + "join <Name>" + " §8- §7Trete einer Party bei"));
-				player.sendMessage(new TextComponent(
-						"§8/§5Party " + "invite <Name>" + " §8- §7Lade §7einen §7Spieler §7in §7deine §7Party §7ein"));
-				if (party != null) {
+				if (language.equalsIgnoreCase("own")) {
+					player.sendMessage(new TextComponent(messagesYml.getString("Party.CommandUsage.Join")));
+					player.sendMessage(new TextComponent(messagesYml.getString("Party.CommandUsage.Invite")));
+					if (party != null) {
+						player.sendMessage(new TextComponent(messagesYml.getString("Party.CommandUsage.List")));
+						player.sendMessage(new TextComponent(messagesYml.getString("Party.CommandUsage.Chat")));
+						player.sendMessage(new TextComponent(messagesYml.getString("Party.CommandUsage.Leave")));
+						if (party.isleader(player)) {
+							player.sendMessage(new TextComponent(messagesYml.getString("Party.CommandUsage.Kick")));
+						}
+					}
+				} else {
 					player.sendMessage(
-							new TextComponent("§8/§5Party " + "list" + " §8- §7Listet alle Spieler in der Party auf"));
-					player.sendMessage(new TextComponent("§8/§5Party " + "chat <Nachricht>"
-							+ " §8- §7Sendet allen Spieler in der Party §7eine §7Nachicht"));
-					player.sendMessage(new TextComponent("§8/§5Party " + "leave" + " §8- §7Verlässt die Party"));
-					if (party.isleader(player)) {
+							new TextComponent("§8/§5Party " + "join <Name>" + " §8- §7Trete einer Party bei"));
+					player.sendMessage(new TextComponent("§8/§5Party " + "invite <Name>"
+							+ " §8- §7Lade §7einen §7Spieler §7in §7deine §7Party §7ein"));
+					if (party != null) {
 						player.sendMessage(new TextComponent(
-								"§8/§5Party " + "kick <Spieler>" + " §8- §7Kickt einen Spieler aus der Party"));
-						player.sendMessage(new TextComponent("§8/§5Party " + "leader §5<Spieler>"
-								+ " §8- §7Macht einen anderen Spieler zum Leiter"));
+								"§8/§5Party " + "list" + " §8- §7Listet alle Spieler in der Party auf"));
+						player.sendMessage(new TextComponent("§8/§5Party " + "chat <Nachricht>"
+								+ " §8- §7Sendet allen Spieler in der Party §7eine §7Nachicht"));
+						player.sendMessage(new TextComponent("§8/§5Party " + "leave" + " §8- §7Verlässt die Party"));
+						if (party.isleader(player)) {
+							player.sendMessage(new TextComponent(
+									"§8/§5Party " + "kick <Spieler>" + " §8- §7Kickt einen Spieler aus der Party"));
+							player.sendMessage(new TextComponent("§8/§5Party " + "leader §5<Spieler>"
+									+ " §8- §7Macht einen anderen Spieler zum Leiter"));
 
+						}
 					}
 				}
 			}
@@ -96,6 +124,9 @@ public class PartyCommand extends Command {
 			if (language.equalsIgnoreCase("english")) {
 				player.sendMessage(new TextComponent(Party.prefix + "§cThis command doesn´t exist!"));
 			} else {
+				if (language.equalsIgnoreCase("own")) {
+					player.sendMessage(new TextComponent(messagesYml.getString("Party.Error.CommandNotFound")));
+				}
 				player.sendMessage(new TextComponent(Party.prefix + "§cDieser Befehl Existiert nicht!"));
 			}
 			return;
