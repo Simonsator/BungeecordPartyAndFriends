@@ -193,7 +193,7 @@ public class Party extends Plugin implements Listener {
 			config.set("MySQL.Username", "root");
 		}
 		passwort = config.getString("MySQL.Password");
-		if (username.equals("")) {
+		if (passwort.equals("")) {
 			config.set("MySQL.Password", "Password");
 		}
 		database = config.getString("MySQL.Database");
@@ -204,30 +204,33 @@ public class Party extends Plugin implements Listener {
 		if (language.equals("")) {
 			config.set("General.Language", "english");
 		}
-		Boolean ownLanguage = config.getBoolean("General.UseOwnLanguageFile");
-		if (ownLanguage == false) {
+		String ownLanguage = config.getString("General.UseOwnLanguageFile");
+		if (ownLanguage.equals("")) {
 			config.set("General.UseOwnLanguageFile", "false");
 		}
-		if (ownLanguage) {
+		if (config.getString("General.UseOwnLanguageFile").equalsIgnoreCase("true")) {
 			language = "own";
 			ladeMessageYML();
 		}
-		updateNotification = config.getBoolean("General.UpdateNotification");
-		if (updateNotification == false) {
-			config.set("General.UpdateNotification", true);
+		String updateNotificationS = config.getString("General.UpdateNotification");
+		if (updateNotificationS.equals("")) {
+			config.set("General.UpdateNotification", "true");
 		}
+		updateNotification = config.getString("General.UpdateNotification").equalsIgnoreCase("true");
 		String version = config.getString("General.Version");
 		if (!version.equals(getDescription().getVersion())) {
 			config.set("General.Version", getDescription().getVersion());
 		}
-		disableP = config.getBoolean("General.DisableCommandP");
-		if (disableP == false) {
-			config.set("General.DisableCommandP", false);
+		String disablePs = config.getString("General.DisableCommandP");
+		if (disablePs.equals("")) {
+			config.set("General.DisableCommandP", "false");
 		}
-		disableMsg = config.getBoolean("General.disableMsg");
-		if (disableMsg == false) {
-			config.set("General.DisableMsg", false);
+		disableP = config.getString("General.DisableCommandP").equals("true");
+		String disableMsgs = config.getString("General.disableMsg");
+		if (disableMsgs.equals("")) {
+			config.set("General.DisableMsg", "false");
 		}
+		disableMsg = config.getString("General.disableMsg").equalsIgnoreCase("true");
 		MaxPlayersInParty = config.getInt("General.MaxPlayersInParty");
 		if (MaxPlayersInParty == 0) {
 			config.set("General.MaxPlayersInParty", 0);
@@ -328,6 +331,10 @@ public class Party extends Plugin implements Listener {
 		if (messagesYml.getString("General.LanguageName").equals("")) {
 			messagesYml.set("General.LanguageName", "Own");
 		}
+		if (messagesYml.getString("Party.General.PartyPrefix").equals("")) {
+			messagesYml.set("Party.General.PartyPrefix", "§7[§5Party§7] ");
+		}
+		prefix = messagesYml.getString("Party.General.PartyPrefix");
 		if (messagesYml.getString("Party.Error.CommandNotFound").equals("")) {
 			messagesYml.set("Party.Error.CommandNotFound", "§cThis command doesn´t exist!");
 		}
@@ -336,7 +343,7 @@ public class Party extends Plugin implements Listener {
 		}
 		if (messagesYml.getString("Party.CommandUsage.Invite").equals("")) {
 			messagesYml.set("Party.CommandUsage.Invite",
-					"§8/§5Party " + "list" + " §8- §7List §7all §7players §7who §7are §7in §7the §7party");
+					"§8/§5Party " + "invite <player>" + " §8- §7Invite §7a §7player §7into §7your §7Party");
 		}
 		if (messagesYml.getString("Party.CommandUsage.List").equals("")) {
 			messagesYml.set("Party.CommandUsage.List",
@@ -344,7 +351,7 @@ public class Party extends Plugin implements Listener {
 		}
 		if (messagesYml.getString("Party.CommandUsage.Chat").equals("")) {
 			messagesYml.set("Party.CommandUsage.Chat",
-					"§8/§5Party " + "chat" + " §8- §7List §7all §7players §7who §7are §7in §7the §7party");
+					"§8/§5Party " + "chat <message>" + " §8- §7Send §7all §7players §7in §7the §7party §7a §7message");
 		}
 		if (messagesYml.getString("Party.CommandUsage.Leave").equals("")) {
 			messagesYml.set("Party.CommandUsage.Leave", "§8/§5Party " + "leave" + " §8- §7Leave the party");
@@ -356,6 +363,21 @@ public class Party extends Plugin implements Listener {
 		if (messagesYml.getString("Party.CommandUsage.Leader").equals("")) {
 			messagesYml.set("Party.CommandUsage.Leader", "§8/§5Party " + "leader §5<player>"
 					+ " §8- §7Makes §7another §7player §7to §7the §7party §7leader");
+		}
+		if (messagesYml.getString("Party.Command.Chat.Prefix").equals("")) {
+			messagesYml.set("Party.Command.Chat.Prefix", "§7[§5PartyChat§7] ");
+		}
+		if (messagesYml.getString("Party.Command.Chat.ContentColor").equals("")) {
+			messagesYml.set("Party.Command.Chat.ContentColor", "§7");
+		}
+		if (messagesYml.getString("Party.Command.Chat.PartyChatOutput").equals("")) {
+			messagesYml.set("Party.Command.Chat.PartyChatOutput", "§e[SENDERNAME]§5:[MESSAGE_CONTENT]");
+		}
+		if (messagesYml.getString("Party.Command.Chat.ErrorNoMessage").equals("")) {
+			messagesYml.set("Party.Command.Chat.ErrorNoMessage", "§5You need to give a message");
+		}
+		if (messagesYml.getString("Party.Command.Chat.ErrorNoParty").equals("")) {
+			messagesYml.set("Party.Command.Chat.ErrorNoParty", "§5You need to be in a party");
 		}
 		ConfigurationProvider.getProvider(YamlConfiguration.class).save(messagesYml, file);
 	}

@@ -39,7 +39,7 @@ public class PartyCommand extends Command {
 		cmds.add(new Kick(kickAllias, languageOverGive));
 		cmds.add(new Info(infoAllias, languageOverGive));
 		cmds.add(new Leave(leaveAllias, languageOverGive));
-		cmds.add(new Chat(chatAllias, languageOverGive));
+		cmds.add(new Chat(chatAllias, languageOverGive, main));
 		cmds.add(new Leader(leaderAllias, languageOverGive));
 	}
 

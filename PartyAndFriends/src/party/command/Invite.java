@@ -70,7 +70,7 @@ public class Invite extends SubCommand {
 			return;
 		}
 		try {
-			if (verbindung.erlaubtPartyAnfragen(args[0]) == false) {
+			if (verbindung.erlaubtPartyAnfragen(args[0]) == false && verbindung.istBefreundetMit(p, pl) == false) {
 				if (language.equalsIgnoreCase("english")) {
 					p.sendMessage(new TextComponent(
 							Party.prefix + "§cYou §ccan´t §cinvite §cthis §cplayer §cinto §cyour §cParty."));

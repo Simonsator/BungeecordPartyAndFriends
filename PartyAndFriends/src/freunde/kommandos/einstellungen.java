@@ -92,34 +92,51 @@ public class einstellungen {
 					+ "'},'hoverEvent':{'action':'show_text','value':'Hier klicken um die Einstellung zu ändern.'}}";
 		}
 		player.unsafe().sendPacket(new Chat(jsoncode));
+		String zuschreibenNeu = "";
+		String jsonCodeNeu = "";
+		String commandNeu = "";
 		player.sendMessage(new TextComponent("§8§m-----------------------------------------------"));
 		if (abgefragteEinstellung[1] == 0) {
 			if (language.equalsIgnoreCase("english")) {
 				player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
 						+ " §7At §7the moment §7you §7can §7get §7invited §7by §aevery §7player §7into §7his §7Party."));
+				zuschreibenNeu = "§8[§5§lFriends§8]" + ChatColor.RESET
+						+ " §7Change §7this §7setting §7with §6/friend §6settings §6Party";
+				commandNeu = "/friends settings party";
+				jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
+						+ commandNeu
+						+ "'},'hoverEvent':{'action':'show_text','value':'Click here to change this setting.'}}";
 			} else {
 				player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
 						+ " §7Momentan §7können §7dir §7Party §7Einladungen §7von §ajedem §7gesendet §7werden §7gesendet §7werden"));
+				zuschreibenNeu = "§8[§5§lFriends§8]" + ChatColor.RESET
+						+ " §7Ändere §7diese §7Einstellung §7mit §6/friend §6settings §6Party";
+				commandNeu = "/friends settings party";
+				jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
+						+ commandNeu
+						+ "'},'hoverEvent':{'action':'show_text','value':'Hier klicken um die Einstellung zu ändern.'}}";
 			}
 		} else {
 			if (language.equalsIgnoreCase("english")) {
 				player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
 						+ " §7At §7the moment §7you §7can §7get §7invited §aonly §7by §7by your friends §7into §7their §7Party."));
-				zuschreiben = "§8[§5§lFriends§8]" + ChatColor.RESET
+				zuschreibenNeu = "§8[§5§lFriends§8]" + ChatColor.RESET
 						+ " §7Change §7this §7setting §7with §6/friend §6settings §6Party";
-				command = "/friends settings party";
-				jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'" + command
+				commandNeu = "/friends settings party";
+				jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
+						+ commandNeu
 						+ "'},'hoverEvent':{'action':'show_text','value':'Click here to change this setting.'}}";
 			} else {
 				player.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
 						+ " §7Momentan §7können §7dir §cnur §7Party §7Einladungen §7von §7Freunden §7gesendet §7werden"));
-				zuschreiben = "§8[§5§lFriends§8]" + ChatColor.RESET
+				zuschreibenNeu = "§8[§5§lFriends§8]" + ChatColor.RESET
 						+ " §7Ändere §7diese §7Einstellung §7mit §6/friend §6settings §6Party";
-				command = "/friends settings party";
-				jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'" + command
+				commandNeu = "/friends settings party";
+				jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
+						+ commandNeu
 						+ "'},'hoverEvent':{'action':'show_text','value':'Hier klicken um die Einstellung zu ändern.'}}";
 			}
 		}
-		player.unsafe().sendPacket(new Chat(jsoncode));
+		player.unsafe().sendPacket(new Chat(jsonCodeNeu));
 	}
 }
