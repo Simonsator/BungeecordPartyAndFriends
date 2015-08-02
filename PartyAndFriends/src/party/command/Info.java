@@ -8,10 +8,12 @@ import party.PlayerParty;
 
 public class Info extends SubCommand {
 	private String language;
+	private Party haupt;
 
-	public Info(String infoAllias, String languageOverGive) {
+	public Info(String infoAllias, String languageOverGive, Party main) {
 		super("Liste alle Spieler in deiner Party", "", new String[] { "list", infoAllias });
 		language = languageOverGive;
+		haupt = main;
 	}
 
 	public void onCommand(ProxiedPlayer p, String[] args) {
@@ -19,14 +21,24 @@ public class Info extends SubCommand {
 			if (language.equalsIgnoreCase("english")) {
 				p.sendMessage(new TextComponent(Party.prefix + "§cYou §care §cnot §cin §ca §cparty."));
 			} else {
-				p.sendMessage(new TextComponent(Party.prefix + "§cDu §cbist §cin §ckeiner §cParty."));
+				if (language.equalsIgnoreCase("own")) {
+					p.sendMessage(new TextComponent(haupt.messagesYml.getString("Party.Command.General.ErrorNoParty")));
+				} else {
+					p.sendMessage(new TextComponent(Party.prefix + "§cDu §cbist §cin §ckeiner §cParty."));
+				}
 			}
 			return;
 		}
 		PlayerParty party = PartyManager.getParty(p);
-
-		String leader = "§3Leader§7: §5" + party.getleader().getName();
-		String players = "§8Players§7: §b";
+		String leader = "";
+		String players = "";
+		if (language.equalsIgnoreCase("own")) {
+			leader = haupt.messagesYml.getString("Party.Command.Info.Leader");
+			players = haupt.messagesYml.getString("Party.Command.Info.Players");
+		} else {
+			leader = "§3Leader§7: §5" + party.getleader().getName();
+			players = "§8Players§7: §b";
+		}
 		if (!party.getPlayer().isEmpty()) {
 			for (ProxiedPlayer pp : party.getPlayer()) {
 				players = players + pp.getName() + "§7, §b";

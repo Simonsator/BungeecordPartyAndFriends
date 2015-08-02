@@ -60,6 +60,7 @@ public class Party extends Plugin implements Listener {
 	private friends freunde;
 	private PartyCommand KommandoParty;
 	private String NoPlayerLimitForPartysPermission;
+	public Configuration messagesYml;
 
 	@Override
 	public void onDisable() {
@@ -226,11 +227,11 @@ public class Party extends Plugin implements Listener {
 			config.set("General.DisableCommandP", "false");
 		}
 		disableP = config.getString("General.DisableCommandP").equals("true");
-		String disableMsgs = config.getString("General.disableMsg");
+		String disableMsgs = config.getString("General.DisableMsg");
 		if (disableMsgs.equals("")) {
 			config.set("General.DisableMsg", "false");
 		}
-		disableMsg = config.getString("General.disableMsg").equalsIgnoreCase("true");
+		disableMsg = config.getString("General.DisableMsg").equalsIgnoreCase("true");
 		MaxPlayersInParty = config.getInt("General.MaxPlayersInParty");
 		if (MaxPlayersInParty == 0) {
 			config.set("General.MaxPlayersInParty", 0);
@@ -327,7 +328,7 @@ public class Party extends Plugin implements Listener {
 		if (!file.exists()) {
 			file.createNewFile();
 		}
-		Configuration messagesYml = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
+		messagesYml = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
 		if (messagesYml.getString("General.LanguageName").equals("")) {
 			messagesYml.set("General.LanguageName", "Own");
 		}
@@ -364,6 +365,9 @@ public class Party extends Plugin implements Listener {
 			messagesYml.set("Party.CommandUsage.Leader", "§8/§5Party " + "leader §5<player>"
 					+ " §8- §7Makes §7another §7player §7to §7the §7party §7leader");
 		}
+		if (messagesYml.getString("Party.Command.General.ErrorNoParty").equals("")) {
+			messagesYml.set("Party.Command.General.ErrorNoParty", "§5You need to be in a party");
+		}
 		if (messagesYml.getString("Party.Command.Chat.Prefix").equals("")) {
 			messagesYml.set("Party.Command.Chat.Prefix", "§7[§5PartyChat§7] ");
 		}
@@ -376,8 +380,11 @@ public class Party extends Plugin implements Listener {
 		if (messagesYml.getString("Party.Command.Chat.ErrorNoMessage").equals("")) {
 			messagesYml.set("Party.Command.Chat.ErrorNoMessage", "§5You need to give a message");
 		}
-		if (messagesYml.getString("Party.Command.Chat.ErrorNoParty").equals("")) {
-			messagesYml.set("Party.Command.Chat.ErrorNoParty", "§5You need to be in a party");
+		if (messagesYml.getString("Party.Command.Info.Leader").equals("")) {
+			messagesYml.set("Party.Command.Info.Leader", "§3Leader§7: §5");
+		}
+		if (messagesYml.getString("Party.Command.Info.Players").equals("")) {
+			messagesYml.set("Party.Command.Info.Players", "§8Players§7: §b");
 		}
 		ConfigurationProvider.getProvider(YamlConfiguration.class).save(messagesYml, file);
 	}

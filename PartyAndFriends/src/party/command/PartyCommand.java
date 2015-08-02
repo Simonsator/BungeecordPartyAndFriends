@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
-
 import mySql.mySql;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -37,7 +36,7 @@ public class PartyCommand extends Command {
 		cmds.add(new Invite(verbindung, inviteAllias, languageOverGive, maxPlayersInParty,
 				noPlayerLimitForPartysPermission));
 		cmds.add(new Kick(kickAllias, languageOverGive));
-		cmds.add(new Info(infoAllias, languageOverGive));
+		cmds.add(new Info(infoAllias, languageOverGive, main));
 		cmds.add(new Leave(leaveAllias, languageOverGive));
 		cmds.add(new Chat(chatAllias, languageOverGive, main));
 		cmds.add(new Leader(leaderAllias, languageOverGive));
