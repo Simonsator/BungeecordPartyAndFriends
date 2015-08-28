@@ -1,6 +1,6 @@
 /**
  * @author Simonsator
- * @version 1.0.0
+ * @version 1.0.1
  */
 package partyAndFriends.mySQL;
 
@@ -18,7 +18,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
  * @author Simonsator
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class MySQL {
 	/**
@@ -63,6 +63,8 @@ public class MySQL {
 	 *             Will never happen, because it is integrated in Bungeecord
 	 * @throws SQLException
 	 *             Happens if the plugin can not connect to the MySQL Server
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public void verbinde(String pHost, String pUsername, String pPassword, int pPort, String pDatabase)
 			throws ClassNotFoundException, SQLException {
@@ -75,13 +77,14 @@ public class MySQL {
 	}
 
 	/**
-	 * Returns the connection if the connection is there and creates a
-	 * connection and returns it, if there is no connection.
+	 * Returns the connection if there is a connection or if not it creates a
+	 * connection and then it returns the connection.
 	 * 
-	 * @return Returns the connection if the connection is there and creates a
-	 *         connection and returns it, if there is no connection.
+	 * @return Returns the connection
+	 * @author Simonsator
+	 * @version 1.0.1
 	 */
-	public Connection connect() {
+	private Connection connect() {
 		try {
 			if (statement != null && connect != null) {
 				return connect;
@@ -97,17 +100,45 @@ public class MySQL {
 	}
 
 	/**
-	 * Imports the databases
+	 * Returns the statement if there is a statement or if not it creates a
+	 * connection and then it returns the statement.
+	 * 
+	 * @return Returns the statement
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
-	public void datenbankImportieren() {
+	private Statement statement() {
+		try {
+			if (statement != null && connect != null) {
+				return statement;
+			} else {
+				connect = DriverManager.getConnection(url);
+				statement = connect.createStatement();
+				return statement;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return statement;
+		}
+	}
+
+	/**
+	 * Imports the databases
+	 * 
+	 * @author Simonsator
+	 * @version 1.0.1
+	 */
+	private void datenbankImportieren() {
 		datenbankImportierenStandart();
 		datenbankImportierenHidePlayers();
 		datenbankImportierenNeueEinstellungen();
-		datenbankImportierenOfflineMessages();
 	}
 
 	/**
 	 * Imports the standard part of the database
+	 * 
+	 * @author Simonsator
+	 * @version 1.0.1
 	 */
 	private void datenbankImportierenStandart() {
 		try {
@@ -136,6 +167,9 @@ public class MySQL {
 
 	/**
 	 * Imports the HidePlayers column
+	 * 
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	private void datenbankImportierenHidePlayers() {
 		try {
@@ -149,6 +183,9 @@ public class MySQL {
 
 	/**
 	 * Imports the new settings columns
+	 * 
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	private void datenbankImportierenNeueEinstellungen() {
 		try {
@@ -162,20 +199,6 @@ public class MySQL {
 	}
 
 	/**
-	 * Imports the offlineMessages database
-	 */
-	private void datenbankImportierenOfflineMessages() {
-		try {
-			this.preparedStatement = this.connect()
-					.prepareStatement("CREATE TABLE `" + database + "`.`friends_messages` ("
-							+ "`Message` TEXT NOT NULL COMMENT ''," + "`Sender` INT NOT NULL COMMENT '',"
-							+ "`Reciver` INT NOT NULL COMMENT ''," + "`Date` BIGINT NULL);");
-			this.preparedStatement.executeUpdate();
-		} catch (SQLException e) {
-		}
-	}
-
-	/**
 	 * Returns the ID of a player
 	 * 
 	 * @param pUuid
@@ -183,9 +206,11 @@ public class MySQL {
 	 * @return Returns the ID of a player
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public int ID(String pUuid) throws SQLException {
-		resultSet = statement
+		resultSet = statement()
 				.executeQuery("select ID from " + database + ".freunde WHERE UUID='" + pUuid + "' LIMIT 1");
 		if (resultSet.next()) {
 			return resultSet.getInt("ID");
@@ -202,9 +227,11 @@ public class MySQL {
 	 * @return Returns the ID of a player
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public int getIDByPlayerName(String pName) throws SQLException {
-		resultSet = statement
+		resultSet = statement()
 				.executeQuery("select ID from " + database + ".freunde WHERE SpielerName='" + pName + "' LIMIT 1");
 		if (resultSet.next()) {
 			return resultSet.getInt("ID");
@@ -220,6 +247,8 @@ public class MySQL {
 	 *            The player
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public void erstesmal(ProxiedPlayer spieler) throws SQLException {
 		this.preparedStatement = this.connect().prepareStatement(
@@ -244,11 +273,13 @@ public class MySQL {
 	 * @param uuid
 	 *            The UUID of the player
 	 * @return Returns the IDs of the friends of a player
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public String freundeAusgeben(String uuid) {
 		try {
 			int iD = ID(uuid);
-			resultSet = statement
+			resultSet = statement()
 					.executeQuery("select FreundeID from " + database + ".freunde WHERE ID='" + iD + "' LIMIT 1");
 			if (resultSet.next()) {
 				return resultSet.getString("FreundeID");
@@ -268,10 +299,12 @@ public class MySQL {
 	 * @return Returns the IDs of the friends of a player
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public String freundeAusgeben(int iD) throws SQLException {
 		try {
-			resultSet = statement
+			resultSet = statement()
 					.executeQuery("select FreundeID from " + database + ".freunde WHERE ID='" + iD + "' LIMIT 1");
 			if (resultSet.next()) {
 				return resultSet.getString("FreundeID");
@@ -291,9 +324,11 @@ public class MySQL {
 	 * @return Returns the name of a player
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public String getNameDesSpielers(int pID) throws SQLException {
-		resultSet = statement
+		resultSet = statement()
 				.executeQuery("select SpielerName from " + database + ".freunde WHERE ID='" + pID + "' LIMIT 1");
 		resultSet.next();
 		return resultSet.getString("SpielerName");
@@ -308,6 +343,8 @@ public class MySQL {
 	 *            New name of the player
 	 * @throws SQLException
 	 *             Throws an SQLException
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public void updateSpielerName(int id, String nameDesSpielers) throws SQLException {
 		this.preparedStatement = this.connect().prepareStatement("UPDATE " + this.database
@@ -323,9 +360,11 @@ public class MySQL {
 	 * @return Returns the IDs of the friends from a player
 	 * @throws SQLException
 	 *             Throws an SQLException
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public String getAnfragen(int id) throws SQLException {
-		resultSet = statement.executeQuery(
+		resultSet = statement().executeQuery(
 				"select FreundschaftsAnfragenID from " + database + ".freunde WHERE ID='" + id + "' LIMIT 1");
 		resultSet.next();
 		return resultSet.getString("FreundschaftsAnfragenID");
@@ -339,6 +378,8 @@ public class MySQL {
 	 * @return Returns an ArrayList, which contains the names of the friends
 	 * @throws SQLException
 	 *             Throws an SQLException
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public ArrayList<String> getAnfragenArrayList(int id) throws SQLException {
 		StringTokenizer st = new StringTokenizer(getAnfragen(id), "|");
@@ -359,6 +400,8 @@ public class MySQL {
 	 *            The new friend
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public void spielerHinzufuegen(int idSender, int idAbfrage) throws SQLException {
 		String freundeIDSenderbearbeiten = freundeAusgeben(idSender);
@@ -396,6 +439,8 @@ public class MySQL {
 	 *            The ID of the person who had send the friend request
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public void spielerAblehnen(int idSender, int idAbfrage) throws SQLException {
 		String anfragen = getAnfragen(idSender);
@@ -455,6 +500,8 @@ public class MySQL {
 	 *            If it´s the first passage or the second
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public void freundLoeschen(int idSender, int idAbfrage, int aufrufAnzahl) throws SQLException {
 		String anfragen = freundeAusgeben(idSender);
@@ -516,6 +563,8 @@ public class MySQL {
 	 *            The ID of the player, which gets the friend request
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public void sendFreundschaftsAnfrage(int idSender, int idAbfrage) throws SQLException {
 		String schonBekommeneAnfragen = getAnfragen(idAbfrage);
@@ -540,13 +589,15 @@ public class MySQL {
 	 * @return Returns the new worth
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public int einstellungenSetzen(ProxiedPlayer player, int typ) throws SQLException {
 		int playerID = getIDByPlayerName(player.getName());
 		int neuerWert = 0;
 		switch (typ) {
 		case 0: {
-			resultSet = statement.executeQuery("select einstellungPartyNurFreunde from " + database
+			resultSet = statement().executeQuery("select einstellungPartyNurFreunde from " + database
 					+ ".freunde WHERE ID='" + playerID + "' LIMIT 1");
 			resultSet.next();
 			int momentanerWert = resultSet.getInt("einstellungPartyNurFreunde");
@@ -560,7 +611,7 @@ public class MySQL {
 			break;
 		}
 		case 1: {
-			resultSet = statement.executeQuery(
+			resultSet = statement().executeQuery(
 					"select einstellungAkzeptieren from " + database + ".freunde WHERE ID='" + playerID + "' LIMIT 1");
 			resultSet.next();
 			int momentanerWert = resultSet.getInt("einstellungAkzeptieren");
@@ -573,7 +624,7 @@ public class MySQL {
 			break;
 		}
 		case 2: {
-			resultSet = statement.executeQuery(
+			resultSet = statement().executeQuery(
 					"select EinstellungSendMessages from " + database + ".freunde WHERE ID='" + playerID + "' LIMIT 1");
 			resultSet.next();
 			int momentanerWert = resultSet.getInt("EinstellungSendMessages");
@@ -586,7 +637,7 @@ public class MySQL {
 			break;
 		}
 		case 3: {
-			resultSet = statement.executeQuery(
+			resultSet = statement().executeQuery(
 					"select EinstellungImmerOffline from " + database + ".freunde WHERE ID='" + playerID + "' LIMIT 1");
 			resultSet.next();
 			int momentanerWert = resultSet.getInt("EinstellungImmerOffline");
@@ -599,7 +650,7 @@ public class MySQL {
 			break;
 		}
 		case 4: {
-			resultSet = statement.executeQuery(
+			resultSet = statement().executeQuery(
 					"select EinstellungJump from " + database + ".freunde WHERE ID='" + playerID + "' LIMIT 1");
 			resultSet.next();
 			int momentanerWert = resultSet.getInt("EinstellungJump");
@@ -623,10 +674,12 @@ public class MySQL {
 	 * @return Returns the worth of the settings
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public int[] einstellungenAbfragen(ProxiedPlayer player) throws SQLException {
 		int playerID = getIDByPlayerName(player.getDisplayName());
-		resultSet = statement.executeQuery(
+		resultSet = statement().executeQuery(
 				"select einstellungAkzeptieren from " + database + ".freunde WHERE ID='" + playerID + "' LIMIT 1");
 		int[] feld = new int[5];
 		if (resultSet.next()) {
@@ -634,28 +687,28 @@ public class MySQL {
 		} else {
 			feld[0] = 1;
 		}
-		resultSet = statement.executeQuery(
+		resultSet = statement().executeQuery(
 				"select einstellungPartyNurFreunde from " + database + ".freunde WHERE ID='" + playerID + "' LIMIT 1");
 		if (resultSet.next()) {
 			feld[1] = resultSet.getInt("einstellungPartyNurFreunde");
 		} else {
 			feld[1] = 0;
 		}
-		resultSet = statement.executeQuery(
+		resultSet = statement().executeQuery(
 				"select EinstellungSendMessages from " + database + ".freunde WHERE ID='" + playerID + "' LIMIT 1");
 		if (resultSet.next()) {
 			feld[2] = resultSet.getInt("EinstellungSendMessages");
 		} else {
 			feld[2] = 0;
 		}
-		resultSet = statement.executeQuery(
+		resultSet = statement().executeQuery(
 				"select EinstellungImmerOffline from " + database + ".freunde WHERE ID='" + playerID + "' LIMIT 1");
 		if (resultSet.next()) {
 			feld[3] = resultSet.getInt("EinstellungImmerOffline");
 		} else {
 			feld[3] = 0;
 		}
-		resultSet = statement.executeQuery(
+		resultSet = statement().executeQuery(
 				"select EinstellungJump from " + database + ".freunde WHERE ID='" + playerID + "' LIMIT 1");
 		if (resultSet.next()) {
 			feld[4] = resultSet.getInt("EinstellungJump");
@@ -676,6 +729,8 @@ public class MySQL {
 	 *         false
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public boolean istBefreundetMit(ProxiedPlayer player, ProxiedPlayer angeschrieben) throws SQLException {
 		int idSender = getIDByPlayerName(player.getName());
@@ -700,6 +755,8 @@ public class MySQL {
 	 * @return Returns The IDs of the friends of the sender
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public int[] getFreundeArray(int idSender) throws SQLException {
 		String zuTrennen = freundeAusgeben(idSender);
@@ -722,9 +779,11 @@ public class MySQL {
 	 *         false
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public boolean erlaubtAnfragen(int idAbfrage) throws SQLException {
-		resultSet = statement.executeQuery(
+		resultSet = statement().executeQuery(
 				"select einstellungAkzeptieren from " + database + ".freunde WHERE ID='" + idAbfrage + "' LIMIT 1");
 		resultSet.next();
 		if (resultSet.getInt("einstellungAkzeptieren") == 0) {
@@ -743,10 +802,12 @@ public class MySQL {
 	 *         false
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public boolean erlaubtPartyAnfragen(String spielerName) throws SQLException {
 		int idAbfrage = getIDByPlayerName(spielerName);
-		resultSet = statement.executeQuery(
+		resultSet = statement().executeQuery(
 				"select einstellungPartyNurFreunde from " + database + ".freunde WHERE ID='" + idAbfrage + "' LIMIT 1");
 		resultSet.next();
 		if (resultSet.getInt("einstellungPartyNurFreunde") == 0) {
@@ -758,6 +819,9 @@ public class MySQL {
 
 	/**
 	 * Closes the MySQL connection.
+	 * 
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public void close() {
 		try {
@@ -785,9 +849,11 @@ public class MySQL {
 	 * @return Returns the HidePlayers settings worth
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public int getEinstellungHidePlayers(int playerID) throws SQLException {
-		resultSet = statement.executeQuery(
+		resultSet = statement().executeQuery(
 				"select EinstellungHidePlayers from " + database + ".freunde WHERE ID='" + playerID + "' LIMIT 1");
 		if (resultSet.next()) {
 			return resultSet.getInt("EinstellungHidePlayers");
@@ -803,6 +869,8 @@ public class MySQL {
 	 *            Name of the player
 	 * @param neuerWert
 	 *            The new worth of the HidePlayers setting
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public void setEinstellungVersteckte(String spielerNameSender, int neuerWert) {
 		try {
@@ -816,92 +884,6 @@ public class MySQL {
 	}
 
 	/**
-	 * Saves an offline message in MySQL
-	 * 
-	 * @param idSender
-	 *            Sender of the message
-	 * @param idReceiver
-	 *            Receiver of the message
-	 * @param Message
-	 *            The message, that should be send
-	 */
-	public void offlineMessage(int idSender, int idReceiver, String Message) {
-		String messageProtectet = protectAgainstMySQLInjection(Message);
-		int time = (int) (System.currentTimeMillis() / 1000L);
-		try {
-			this.preparedStatement = this.connect()
-					.prepareStatement("insert into  " + this.database + ".friends_messages	 values (?, ?, ?, ?)");
-			this.preparedStatement.setInt(2, idSender);
-			this.preparedStatement.setInt(3, idReceiver);
-			this.preparedStatement.setString(1, messageProtectet);
-			this.preparedStatement.setInt(4, time);
-			this.preparedStatement.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Make data save against MySQL injection
-	 * 
-	 * @param data
-	 *            The data which should be make safe against MySQL injection
-	 * @return Returns a version of the over given data which can not be used
-	 *         for a MySQL injection
-	 */
-	private String protectAgainstMySQLInjection(String data) {
-		data = data.replace("\"", "$%§%$§[ANFUEHRUNGSZEICHEN]$%§%$§");
-		data = data.replace("'", "$%§%$§[EINSTRICH]$%§%$§");
-		data = data.replace("´", "$%§%$§[EINQUERSTRICH]$%§%$§");
-		data = data.replace("--", "$%§%$§[KOMMENTAR]$%§%$§");
-		return data;
-	}
-
-	/**
-	 * Encrypt data which was protected against MySQL injection
-	 * 
-	 * @param data
-	 *            Data which should be encrypt
-	 * @return Returns encrypted data which was protected against MySQL
-	 *         injection
-	 */
-	private String EncryptProtectionAgainstMySQLInjection(String data) {
-		data = data.replace("$%§%$§[ANFUEHRUNGSZEICHEN]$%§%$§", "\"");
-		data = data.replace("$%§%$§[EINSTRICH]$%§%$§", "'");
-		data = data.replace("$%§%$§[EINQUERSTRICH]$%§%$§", "´");
-		data = data.replace("$%§%$§[KOMMENTAR]$%§%$§", "--");
-		return data;
-	}
-
-	/**
-	 * Get and delete offline messages
-	 * 
-	 * @param player
-	 *            The player who receive the offline messages
-	 * @return Returns the offline messages and the senders
-	 */
-	public ArrayList<String[]> getOfflineMessages(ProxiedPlayer player) {
-		ArrayList<String[]> offlineMessages = new ArrayList<String[]>();
-		String[] messageAndSender = new String[2];
-		try {
-			resultSet = statement.executeQuery("SELECT Message, Sender FROM " + database
-					+ ".friends_messages WHERE Reciver='" + getIDByPlayerName(player.getName()) + "'");
-			while (resultSet.next()) {
-				messageAndSender[1] = EncryptProtectionAgainstMySQLInjection(resultSet.getString(1));
-				messageAndSender[0] = getNameDesSpielers(resultSet.getInt(2));
-				offlineMessages.add(messageAndSender);
-			}
-			preparedStatement = connect().prepareStatement("DELETE FROM " + database
-					+ ".friends_messages WHERE Reciver = '" + getIDByPlayerName(player.getName()) + "'");
-			preparedStatement.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return offlineMessages;
-	}
-
-	/**
 	 * Checks if somebody is a friend of someone others
 	 * 
 	 * @param name
@@ -912,6 +894,8 @@ public class MySQL {
 	 *         false
 	 * @throws SQLException
 	 *             Can throw a {@link SQLException}
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public boolean istBefreundetMit(String name, String string) throws SQLException {
 		int idSender = getIDByPlayerName(name);

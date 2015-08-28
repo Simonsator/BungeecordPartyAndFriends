@@ -63,7 +63,7 @@ public class accept {
 						if (Main.main.language.equalsIgnoreCase("own")) {
 							befreundet.sendMessage(new TextComponent(Main.main.friendsPrefix
 									+ Main.main.messagesYml.getString("Friends.Command.Accept.NowFriends")
-											.replace("[PLAYER]", befreundet.getDisplayName())));
+											.replace("[PLAYER]", player.getDisplayName())));
 							befreundet.sendMessage(new TextComponent(Main.main.friendsPrefix
 									+ Main.main.messagesYml.getString("Friends.General.PlayerIsNowOnline")
 											.replace("[PLAYER]", player.getDisplayName())));

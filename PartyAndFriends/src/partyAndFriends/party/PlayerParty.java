@@ -8,8 +8,8 @@
 package partyAndFriends.party;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -32,11 +32,11 @@ public class PlayerParty {
 	/**
 	 * The "normal" players which are in the party
 	 */
-	private List<ProxiedPlayer> players;
+	private ArrayList<ProxiedPlayer> players;
 	/**
 	 * The players who are invited into this party
 	 */
-	private List<ProxiedPlayer> invite;
+	private ArrayList<ProxiedPlayer> invite;
 
 	/**
 	 * Initials a new party
@@ -74,26 +74,20 @@ public class PlayerParty {
 	 * @version 1.0.0
 	 * @return Returns the "normal" players who are in the party.
 	 */
-	public List<ProxiedPlayer> getPlayer() {
-		while (players.contains(leader)) {
-			players.remove(leader);
-		}
+	public ArrayList<ProxiedPlayer> getPlayer() {
 		return this.players;
 	}
 
 	/**
-	 * Sets the list of the "normal" players
+	 * Sets the ArrayList of the "normal" players
 	 * 
 	 * @author Simonsator
 	 * @version 1.0.0
 	 * @param liste
-	 *            The list of the "normal" players
+	 *            The ArrayList of the "normal" players
 	 */
-	public void setPlayer(List<ProxiedPlayer> liste) {
+	public void setPlayer(ArrayList<ProxiedPlayer> liste) {
 		players = liste;
-		while (players.contains(leader)) {
-			players.remove(leader);
-		}
 	}
 
 	/**
@@ -119,9 +113,6 @@ public class PlayerParty {
 	 *         player is not in the party.
 	 */
 	public boolean isinParty(ProxiedPlayer player) {
-		while (players.contains(leader)) {
-			players.remove(leader);
-		}
 		if (getAllPlayersInParty().contains(player)) {
 			return true;
 		} else {
@@ -143,9 +134,6 @@ public class PlayerParty {
 		if (!players.contains(player) && invite.contains(player)) {
 			players.add(player);
 			invite.remove(player);
-			while (players.contains(leader)) {
-				players.remove(leader);
-			}
 			return true;
 		} else {
 			return false;
@@ -162,9 +150,6 @@ public class PlayerParty {
 	 */
 	public boolean removePlayer(ProxiedPlayer player) {
 		if (players.contains(player)) {
-			while (players.contains(leader)) {
-				players.remove(leader);
-			}
 			players.remove(player);
 			return true;
 		} else {
@@ -192,9 +177,6 @@ public class PlayerParty {
 	 *            The player
 	 */
 	public void invite(final ProxiedPlayer player) {
-		while (players.contains(leader)) {
-			players.remove(leader);
-		}
 		invite.add(player);
 		String zuschreiben = "";
 		String value = "";
@@ -257,7 +239,7 @@ public class PlayerParty {
 						}
 					}
 					PlayerParty party = PartyManager.getParty(leader);
-					List<ProxiedPlayer> liste = party.getPlayer();
+					ArrayList<ProxiedPlayer> liste = party.getPlayer();
 					if (liste.size() == 0) {
 						if (Main.main.language.equalsIgnoreCase("english")) {
 							leader.sendMessage(new TextComponent(partyAndFriends.main.Main.main.partyPrefix
@@ -287,9 +269,6 @@ public class PlayerParty {
 	 * @return Returns the size of the invitation list
 	 */
 	public int inviteListSize() {
-		while (players.contains(leader)) {
-			players.remove(leader);
-		}
 		return invite.size();
 	}
 
@@ -303,9 +282,6 @@ public class PlayerParty {
 	 *         the player is not invited.
 	 */
 	public boolean containsPlayer(ProxiedPlayer player) {
-		while (players.contains(leader)) {
-			players.remove(leader);
-		}
 		return invite.contains(player);
 	}
 
@@ -324,11 +300,10 @@ public class PlayerParty {
 	 * 
 	 * @return Returns all players in this party.
 	 */
-	public List<ProxiedPlayer> getAllPlayersInParty() {
-		while (players.contains(leader)) {
-			players.remove(leader);
-		}
-		List<ProxiedPlayer> allPlayers = players;
+	public ArrayList<ProxiedPlayer> getAllPlayersInParty() {
+		ArrayList<ProxiedPlayer> allPlayers = new ArrayList<ProxiedPlayer>();
+		for (ProxiedPlayer uebertragen : players)
+			allPlayers.add(uebertragen);
 		allPlayers.add(leader);
 		return allPlayers;
 	}
@@ -338,7 +313,7 @@ public class PlayerParty {
 	 * 
 	 * @return Returns all invited players
 	 */
-	public List<ProxiedPlayer> getInvitedPlayers() {
+	public ArrayList<ProxiedPlayer> getInvitedPlayers() {
 		return invite;
 	}
 
@@ -346,9 +321,9 @@ public class PlayerParty {
 	 * Set the invite list
 	 * 
 	 * @param inviteList
-	 *            The list that should be set
+	 *            The ArrayList that should be set
 	 */
-	public void setInviteList(List<ProxiedPlayer> inviteList) {
+	public void setInviteList(ArrayList<ProxiedPlayer> inviteList) {
 		invite = inviteList;
 	}
 }

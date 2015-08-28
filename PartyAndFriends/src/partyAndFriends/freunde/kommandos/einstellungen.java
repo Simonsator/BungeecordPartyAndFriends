@@ -97,99 +97,6 @@ public class einstellungen {
 				}
 				return;
 			}
-			if (args[1].equalsIgnoreCase("offline")) {
-				int wertJetzt = Main.main.verbindung.einstellungenSetzen(player, 3);
-				if (wertJetzt == 0) {
-					if (Main.main.language.equalsIgnoreCase("english")) {
-						player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-								+ " §7Now §7you §7will §7be §7shown §7as §aonline"));
-					} else {
-						if (Main.main.language.equalsIgnoreCase("own")) {
-							player.sendMessage(new TextComponent(Main.main.friendsPrefix
-									+ Main.main.messagesYml.getString("Friends.Command.Settings.NowYouWillBeShowAsOnline")));
-						} else {
-							player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-									+ " §7Du §7wirst §7nun §7als §7online §7angezeigt"));
-						}
-					}
-				} else {
-					if (Main.main.language.equalsIgnoreCase("english")) {
-						player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-								+ " §7Now §7you §7will §7be §7shown §7as §coffline"));
-					} else {
-						if (Main.main.language.equalsIgnoreCase("own")) {
-							player.sendMessage(new TextComponent(Main.main.friendsPrefix + Main.main.messagesYml
-									.getString("Friends.Command.Settings.NowYouWilBeShownAsOffline")));
-						} else {
-							player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-									+ " §7Du §7wirst §7nun §7als §coffline §7angezeigt"));
-						}
-					}
-				}
-				return;
-			}
-			if (args[1].equalsIgnoreCase("messages")) {
-				int wertJetzt = Main.main.verbindung.einstellungenSetzen(player, 2);
-				if (wertJetzt == 1) {
-					if (Main.main.language.equalsIgnoreCase("english")) {
-						player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-								+ " §7Now §7you §7are §cnot §7gone §7recive §7messages §7anymore"));
-					} else {
-						if (Main.main.language.equalsIgnoreCase("own")) {
-							player.sendMessage(new TextComponent(Main.main.friendsPrefix
-									+ Main.main.messagesYml.getString("Friends.Command.Settings.NowNoMessages")));
-						} else {
-							player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-									+ " §7Du §7kannst §7jetzt §ckeine §7Nachrichten §7mehr §7erhalten"));
-						}
-					}
-				} else {
-					if (Main.main.language.equalsIgnoreCase("english")) {
-						player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-								+ " §7Now §7you §7are §agone §7recive §7message §7from §7everyone"));
-					} else {
-						if (Main.main.language.equalsIgnoreCase("own")) {
-							player.sendMessage(new TextComponent(Main.main.friendsPrefix
-									+ Main.main.messagesYml.getString("Friends.Command.Settings.NowMessages")));
-						} else {
-							player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-									+ " §7Du §7kannst §7jetzt §7von §ajedem §7Nachrichten §7erhalten"));
-						}
-					}
-				}
-				return;
-			}
-			if (args[1].equalsIgnoreCase("jump")) {
-				int wertJetzt = Main.main.verbindung.einstellungenSetzen(player, 4);
-				if (wertJetzt == 0) {
-					if (Main.main.language.equalsIgnoreCase("english")) {
-						player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-								+ " §7Now §7your §7friends §7can §ajump §7to §7you"));
-					} else {
-						if (Main.main.language.equalsIgnoreCase("own")) {
-							player.sendMessage(new TextComponent(Main.main.friendsPrefix
-									+ Main.main.messagesYml.getString("Friends.Command.Settings.NowYourFriendsCanJump")));
-						} else {
-							player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-									+ " §7Freunde §7können §7jetzt §7zu §7dir §aspringen"));
-						}
-					}
-				} else {
-					if (Main.main.language.equalsIgnoreCase("english")) {
-						player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-								+ " §7Now §7your §7friends §7can §cnot §7jump §7to §7you"));
-					} else {
-						if (Main.main.language.equalsIgnoreCase("own")) {
-							player.sendMessage(new TextComponent(Main.main.friendsPrefix
-									+ Main.main.messagesYml.getString("Friends.Command.Settings.NowYourFriendsCanNotJump")));
-						} else {
-							player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-									+ " §7Freunde §7können §7jetzt §cnicht §7zu §7dir §7springen"));
-						}
-					}
-				}
-				return;
-			}
 		}
 		int[] abgefragteEinstellung = Main.main.verbindung.einstellungenAbfragen(player);
 		if (abgefragteEinstellung[0] == 0) {
@@ -246,11 +153,16 @@ public class einstellungen {
 		String zuschreibenNeu = "";
 		String jsonCodeNeu = "";
 		String commandNeu = "/friends settings party";
-		player.sendMessage(new TextComponent("§8§m-----------------------------------------------"));
+		if (Main.main.language.equalsIgnoreCase("own")) {
+			player.sendMessage(
+					new TextComponent(Main.main.messagesYml.getString("Friends.Command.Settings.SplitLine")));
+		} else {
+			player.sendMessage(new TextComponent("§8§m-----------------------------------------------"));
+		}
 		if (abgefragteEinstellung[1] == 0) {
 			if (Main.main.language.equalsIgnoreCase("english")) {
-				player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
-						+ " §7At §7the moment §7you §7can §7get §7invited §7by §aevery §7player §7into §7his §7Party."));
+				player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET + Main.main.messagesYml
+						.getString("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty")));
 				zuschreibenNeu = Main.main.friendsPrefix + ChatColor.RESET
 						+ " §7Change §7this §7setting §7with §6/friend §6settings §6Party";
 				jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
@@ -264,7 +176,8 @@ public class einstellungen {
 							+ Main.main.messagesYml.getString("Friends.Command.Settings.ChangeThisSettingWithParty");
 					jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
 							+ commandNeu + "'},'hoverEvent':{'action':'show_text','value':'"
-							+ Main.main.messagesYml.getString("Friends.Command.Settings.ChangeThisSettingsHover") + "'}}";
+							+ Main.main.messagesYml.getString("Friends.Command.Settings.ChangeThisSettingsHover")
+							+ "'}}";
 				} else {
 					player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
 							+ " §7Momentan §7können §7dir §7Party §7Einladungen §7von §ajedem §7gesendet §7werden §7gesendet §7werden"));
@@ -288,13 +201,15 @@ public class einstellungen {
 						+ "'},'hoverEvent':{'action':'show_text','value':'Click here to change this setting.'}}";
 			} else {
 				if (Main.main.language.equalsIgnoreCase("own")) {
-					player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET + Main.main.messagesYml
-							.getString("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty")));
+					player.sendMessage(new TextComponent(
+							Main.main.friendsPrefix + ChatColor.RESET + Main.main.messagesYml.getString(
+									"Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty")));
 					zuschreibenNeu = Main.main.friendsPrefix + ChatColor.RESET
 							+ Main.main.messagesYml.getString("Friends.Command.Settings.ChangeThisSettingWithParty");
 					jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
 							+ commandNeu + "'},'hoverEvent':{'action':'show_text','value':'"
-							+ Main.main.messagesYml.getString("Friends.Command.Settings.ChangeThisSettingsHover") + "'}}";
+							+ Main.main.messagesYml.getString("Friends.Command.Settings.ChangeThisSettingsHover")
+							+ "'}}";
 				} else {
 					player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET
 							+ " §7Momentan §7können §7dir §cnur §7Party §7Einladungen §7von §7Freunden §7gesendet §7werden"));

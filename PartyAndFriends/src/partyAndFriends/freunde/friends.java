@@ -23,6 +23,7 @@ import partyAndFriends.freunde.kommandos.list;
 import partyAndFriends.freunde.kommandos.message;
 import partyAndFriends.freunde.kommandos.remove;
 import partyAndFriends.main.Main;
+import partyAndFriends.utilities.Config;
 import partyAndFriends.utilities.ContainsIgnoreCase;
 import partyAndFriends.utilities.MessagesYML;
 import partyAndFriends.utilities.StringToArrayList;
@@ -56,7 +57,7 @@ public class friends extends Command {
 		subCommandAlias.add(StringToArrayList.stringToArrayList(Main.main.config.getString("Aliases.DenyAlias")));
 		subCommandAlias.add(StringToArrayList.stringToArrayList(Main.main.config.getString("Aliases.RemoveAlias")));
 		subCommandAlias.add(StringToArrayList.stringToArrayList(Main.main.config.getString("Aliases.SettingsAlias")));
-		subCommandAlias.add(StringToArrayList.stringToArrayList(Main.main.config.getString("Aliases.jump")));
+		subCommandAlias.add(StringToArrayList.stringToArrayList(Main.main.config.getString("Aliases.JumpAlias")));
 	}
 
 	/**
@@ -72,19 +73,22 @@ public class friends extends Command {
 	@Override
 	public void execute(CommandSender commandSender, String[] args) {
 		if (!(commandSender instanceof ProxiedPlayer)) {
-			if (Main.main.language.equalsIgnoreCase("english")) {
-				commandSender.sendMessage(new TextComponent(Main.main.friendsPrefix + "You need to be a player!"));
-			} else {
-				if (Main.main.language.equalsIgnoreCase("own")) {
-					try {
-						Main.main.messagesYml = MessagesYML.ladeMessages();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					commandSender.sendMessage(new TextComponent(Main.main.friendsPrefix + "Config reloaded!"));
-				} else {
-					commandSender.sendMessage(new TextComponent(Main.main.friendsPrefix + "Du must ein Spieler sein!"));
+			if (Main.main.language.equalsIgnoreCase("own")) {
+				try {
+					Main.main.config = Config.ladeConfig();
+					Main.main.messagesYml = MessagesYML.ladeMessages();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
+				commandSender
+						.sendMessage(new TextComponent(Main.main.friendsPrefix + "Config and MessagesYML reloaded!"));
+			} else {
+				try {
+					Main.main.config = Config.ladeConfig();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				commandSender.sendMessage(new TextComponent(Main.main.friendsPrefix + "Config reloaded"));
 			}
 			return;
 		}
@@ -140,11 +144,11 @@ public class friends extends Command {
 						player.sendMessage(
 								new TextComponent(Main.main.messagesYml.getString("Friends.CommandUsage.Settings")));
 					}
-					player.sendMessage(new TextComponent(Main.main.messagesYml.getString("Friends.CommandUsage.Jump")));
 					if (!Main.main.config.getString("General.DisableCommand.Friends.Jump").equalsIgnoreCase("true")) {
 						player.sendMessage(
-								new TextComponent(Main.main.messagesYml.getString("Friends.General.HelpEnd")));
+								new TextComponent(Main.main.messagesYml.getString("Friends.CommandUsage.Jump")));
 					}
+					player.sendMessage(new TextComponent(Main.main.messagesYml.getString("Friends.General.HelpEnd")));
 				} else {
 					player.sendMessage(new TextComponent(
 							"§8§m-------------------" + ChatColor.RESET + "§8[§5§lFriends§8]§m-------------------"));

@@ -7,7 +7,6 @@
 package partyAndFriends.party;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -24,7 +23,7 @@ public class PartyManager {
 	 * @author Simonsator
 	 * @version 1.0.0
 	 */
-	private static List<PlayerParty> partys = new ArrayList<PlayerParty>();
+	private static ArrayList<PlayerParty> partys = new ArrayList<PlayerParty>();
 
 	/**
 	 * Returns the party in which a player is
@@ -41,7 +40,6 @@ public class PartyManager {
 			if (party.isinParty(player)) {
 				return party;
 			}
-
 		}
 		return null;
 	}
@@ -55,40 +53,10 @@ public class PartyManager {
 	 *            The player
 	 * @return Returns true if the party was created or false if not
 	 */
-	public static boolean createParty(ProxiedPlayer player) {
-		if (getParty(player) == null) {
-			partys.add(new PlayerParty(player));
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Deletes the party of the player, if he is in a party and is the leader of
-	 * this party
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
-	 * @param player
-	 *            The player
-	 * @return Returns true if the party was deleted or false if the party was
-	 *         not deleted
-	 */
-	public static boolean deleteParty(ProxiedPlayer player) {
-		if (getParty(player) != null) {
-			if (getParty(player).isleader(player)) {
-				for (ProxiedPlayer p : getParty(player).getPlayer()) {
-					getParty(player).removePlayer(p);
-				}
-				partys.remove(getParty(player));
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
+	public static PlayerParty createParty(ProxiedPlayer player) {
+		PlayerParty party = new PlayerParty(player);
+		partys.add(party);
+		return party;
 	}
 
 	/**

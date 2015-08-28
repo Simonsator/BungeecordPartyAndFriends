@@ -144,7 +144,7 @@ public class Config {
 			config.set("Aliases.AddAlias", "add");
 		}
 		if (config.getString("Aliases.DenyAlias").equals("")) {
-			config.set("Aliases.denyAlias", "deny");
+			config.set("Aliases.DenyAlias", "deny");
 		}
 		if (config.getString("Aliases.SettingsAlias").equals("")) {
 			config.set("Aliases.SettingsAlias", "settings");

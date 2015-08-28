@@ -11,15 +11,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.config.Configuration;
 import partyAndFriends.main.Main;
 import partyAndFriends.party.PartyManager;
 import partyAndFriends.party.PlayerParty;
+import partyAndFriends.utilities.Config;
 import partyAndFriends.utilities.MessagesYML;
 
 /**
@@ -38,7 +39,9 @@ public class PartyCommand extends Command {
 	 * Initials the object
 	 * 
 	 * @param allias
-	 *            The alias for the commadn
+	 *            The alias for the command
+	 * @author Simonsator
+	 * @version 1.0.0
 	 */
 	public PartyCommand(String[] allias) {
 		super("Party", Main.main.config.getString("Permissions.PartyPermission"), allias);
@@ -73,23 +76,24 @@ public class PartyCommand extends Command {
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		if (!(sender instanceof ProxiedPlayer)) {
-			if (Main.main.language.equalsIgnoreCase("english")) {
-				sender.sendMessage(new TextComponent(Main.main.partyPrefix + "You need to be a player!"));
-			} else {
-				if (Main.main.language.equalsIgnoreCase("own")) {
-					try {
-						Main.main.messagesYml = MessagesYML.ladeMessages();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					sender.sendMessage(new TextComponent(Main.main.partyPrefix + "Config reloaded!"));
-				} else {
-					sender.sendMessage(new TextComponent(Main.main.partyPrefix + "Du must ein Spieler sein!"));
+			if (Main.main.language.equalsIgnoreCase("own")) {
+				try {
+					Main.main.config = Config.ladeConfig();
+					Main.main.messagesYml = MessagesYML.ladeMessages();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
+				sender.sendMessage(new TextComponent(Main.main.partyPrefix + "Config and MessagesYML reloaded!"));
+			} else {
+				try {
+					Main.main.config = Config.ladeConfig();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				sender.sendMessage(new TextComponent(Main.main.partyPrefix + "Config reloaded"));
 			}
 			return;
 		}
-		Configuration messagesYml = Main.main.messagesYml;
 		ProxiedPlayer player = (ProxiedPlayer) sender;
 		if (args.length == 0) {
 			PlayerParty party = PartyManager.getParty(player);
@@ -125,29 +129,33 @@ public class PartyCommand extends Command {
 			} else {
 				if (Main.main.language.equalsIgnoreCase("own")) {
 					player.sendMessage(new TextComponent(Main.main.messagesYml.getString("Party.General.HelpBegin")));
-					player.sendMessage(new TextComponent(messagesYml.getString("Party.CommandUsage.Join")));
-					player.sendMessage(new TextComponent(messagesYml.getString("Party.CommandUsage.Invite")));
+					player.sendMessage(new TextComponent(Main.main.messagesYml.getString("Party.CommandUsage.Join")));
+					player.sendMessage(new TextComponent(Main.main.messagesYml.getString("Party.CommandUsage.Invite")));
 					if (party != null) {
 						if (!Main.main.config.getString("General.DisableCommand.Party.Info").equalsIgnoreCase("true")) {
-							player.sendMessage(new TextComponent(messagesYml.getString("Party.CommandUsage.List")));
+							player.sendMessage(
+									new TextComponent(Main.main.messagesYml.getString("Party.CommandUsage.List")));
 						}
 						if (!Main.main.config.getString("General.DisableCommand.Party.Chat").equalsIgnoreCase("true")) {
-							player.sendMessage(new TextComponent(messagesYml.getString("Party.CommandUsage.Chat")));
+							player.sendMessage(
+									new TextComponent(Main.main.messagesYml.getString("Party.CommandUsage.Chat")));
 						}
-						player.sendMessage(new TextComponent(messagesYml.getString("Party.CommandUsage.Leave")));
+						player.sendMessage(
+								new TextComponent(Main.main.messagesYml.getString("Party.CommandUsage.Leave")));
 						if (party.isleader(player)) {
 							if (!Main.main.config.getString("General.DisableCommand.Party.Kick")
 									.equalsIgnoreCase("true")) {
-								player.sendMessage(new TextComponent(messagesYml.getString("Party.CommandUsage.Kick")));
+								player.sendMessage(
+										new TextComponent(Main.main.messagesYml.getString("Party.CommandUsage.Kick")));
 							}
 							if (!Main.main.config.getString("General.DisableCommand.Party.Leader")
 									.equalsIgnoreCase("true")) {
-								player.sendMessage(
-										new TextComponent(messagesYml.getString("Party.CommandUsage.Leader")));
+								player.sendMessage(new TextComponent(
+										Main.main.messagesYml.getString("Party.CommandUsage.Leader")));
 							}
 						}
 					}
-					player.sendMessage(new TextComponent(messagesYml.getString("Party.General.HelpEnd")));
+					player.sendMessage(new TextComponent(Main.main.messagesYml.getString("Party.General.HelpEnd")));
 				} else {
 					player.sendMessage(new TextComponent(
 							"§8§m-------------------" + ChatColor.RESET + "§8[§5§lParty§8]§m-------------------"));
@@ -191,7 +199,7 @@ public class PartyCommand extends Command {
 			} else {
 				if (Main.main.language.equalsIgnoreCase("own")) {
 					player.sendMessage(new TextComponent(
-							Main.main.partyPrefix + messagesYml.getString("Party.Error.CommandNotFound")));
+							Main.main.partyPrefix + Main.main.messagesYml.getString("Party.Error.CommandNotFound")));
 				} else {
 					player.sendMessage(new TextComponent(Main.main.partyPrefix + "§cDieser Befehl Existiert nicht!"));
 				}

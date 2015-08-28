@@ -6,8 +6,8 @@
 package partyAndFriends.main.listener;
 
 import java.sql.SQLException;
-import java.util.List;
-import partyAndFriends.main.Main;
+import java.util.ArrayList;
+
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -15,6 +15,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import partyAndFriends.main.Main;
 import partyAndFriends.party.PartyManager;
 import partyAndFriends.party.PlayerParty;
 
@@ -44,7 +45,7 @@ public class PlayerDisconnectListener implements Listener {
 		if (PartyManager.getParty(player) != null) {
 			PlayerParty party = PartyManager.getParty(player);
 			if (party.isleader(player)) {
-				List<ProxiedPlayer> liste = party.getPlayer();
+				ArrayList<ProxiedPlayer> liste = party.getPlayer();
 				if (liste.size() > 1) {
 					ProxiedPlayer newLeader = liste.get(0);
 					for (ProxiedPlayer p : party.getPlayer()) {
@@ -116,7 +117,7 @@ public class PlayerDisconnectListener implements Listener {
 								+ player.getDisplayName() + " §bhat §bdie §bParty §bverlassen."));
 					}
 				}
-				List<ProxiedPlayer> liste = party.getPlayer();
+				ArrayList<ProxiedPlayer> liste = party.getPlayer();
 				if (liste.size() == 1) {
 					if (Main.main.language.equalsIgnoreCase("english")) {
 						party.getleader().sendMessage(new TextComponent(Main.main.partyPrefix
@@ -134,30 +135,33 @@ public class PlayerDisconnectListener implements Listener {
 				}
 			}
 		}
-		String freundeAusgeben = Main.main.verbindung.freundeAusgeben(player.getUniqueId() + "");
-		if (freundeAusgeben.equals("")) {
-			return;
-		}
-		int[] freundeArrayID = Main.main.verbindung
-				.getFreundeArray(Main.main.verbindung.getIDByPlayerName(player.getName()));
-		for (int i = 0; i < freundeArrayID.length; i++) {
-			String befreundeterSpieler = Main.main.verbindung.getNameDesSpielers(freundeArrayID[i]);
-			ProxiedPlayer freundGeladen = BungeeCord.getInstance().getPlayer(befreundeterSpieler);
-			if (freundGeladen != null) {
-				if (Main.main.language.equalsIgnoreCase("english")) {
-					freundGeladen.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
-							+ " §7Your friend §e" + player.getDisplayName() + " §7is §7now §coffline."));
-				} else {
-					if (Main.main.language.equalsIgnoreCase("own")) {
-						freundGeladen.sendMessage(new TextComponent(Main.main.friendsPrefix
-								+ Main.main.messagesYml.getString("Friends.General.PlayerIsNowOffline")
-										.replace("[PLAYER]", player.getDisplayName())));
-					} else {
+		try {
+			int[] freundeArrayID = Main.main.verbindung
+					.getFreundeArray(Main.main.verbindung.getIDByPlayerName(player.getName()));
+			if (freundeArrayID.length == 0) {
+				return;
+			}
+			for (int i = 0; i < freundeArrayID.length; i++) {
+				String befreundeterSpieler = Main.main.verbindung.getNameDesSpielers(freundeArrayID[i]);
+				ProxiedPlayer freundGeladen = BungeeCord.getInstance().getPlayer(befreundeterSpieler);
+				if (freundGeladen != null) {
+					if (Main.main.language.equalsIgnoreCase("english")) {
 						freundGeladen.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
-								+ " §7Der Freund §e" + player.getDisplayName() + " §7ist §7nun §cOffline."));
+								+ " §7Your friend §e" + player.getDisplayName() + " §7is §7now §coffline."));
+					} else {
+						if (Main.main.language.equalsIgnoreCase("own")) {
+							freundGeladen.sendMessage(new TextComponent(Main.main.friendsPrefix
+									+ Main.main.messagesYml.getString("Friends.General.PlayerIsNowOffline")
+											.replace("[PLAYER]", player.getDisplayName())));
+						} else {
+							freundGeladen.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET
+									+ " §7Der Freund §e" + player.getDisplayName() + " §7ist §7nun §cOffline."));
+						}
 					}
 				}
 			}
+		} catch (NullPointerException exceptionNull) {
+
 		}
 	}
 }

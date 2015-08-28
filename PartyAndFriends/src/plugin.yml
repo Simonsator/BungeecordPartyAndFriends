@@ -1,5 +1,5 @@
 name: PartyAndFriends
-version: 1.0.0 RC 2
+version: 1.0.0
 author: Simonsator
 main: partyAndFriends.main.Main
 description: A party and friends plugin

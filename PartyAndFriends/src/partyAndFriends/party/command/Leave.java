@@ -7,7 +7,7 @@
  */
 package partyAndFriends.party.command;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -57,13 +57,13 @@ public class Leave extends SubCommand {
 		}
 		PlayerParty party = PartyManager.getParty(p);
 		if (party.isleader(p)) {
-			List<ProxiedPlayer> liste = party.getPlayer();
+			ArrayList<ProxiedPlayer> liste = party.getPlayer();
 			if (liste.size() > 1) {
 				ProxiedPlayer newLeader = liste.get(0);
 				for (ProxiedPlayer pn : party.getPlayer()) {
 					if (Main.main.language.equalsIgnoreCase("english")) {
 						pn.sendMessage(new TextComponent(Main.main.partyPrefix
-								+ "§bThe §bLeader §bhas §bleft §bthe §Party. §bThe §bnew §bLeader §bis §e"
+								+ "§bThe §bLeader §bhas §bleft §bthe §bParty. §bThe §bnew §bLeader §bis §e"
 								+ newLeader.getDisplayName() + "."));
 					} else {
 						if (Main.main.language.equalsIgnoreCase("own")) {

@@ -7,7 +7,7 @@
  */
 package partyAndFriends.party.command;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -133,7 +133,7 @@ public class Leader extends SubCommand {
 			}
 			return;
 		}
-		List<ProxiedPlayer> liste = party.getPlayer();
+		ArrayList<ProxiedPlayer> liste = party.getPlayer();
 		liste.add(p);
 		liste.remove(player);
 		party.setPlayer(liste);

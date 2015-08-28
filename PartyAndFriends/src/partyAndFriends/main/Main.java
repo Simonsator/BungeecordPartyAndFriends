@@ -89,7 +89,7 @@ public class Main extends Plugin {
 			System.out.println("[PartyAndFriends]" + "PartyAndFriends was enabled successfully!");
 		} else {
 			if (language.equalsIgnoreCase("own")) {
-
+				System.out.println("[PartyAndFriends]" + "PartyAndFriends was enabled successfully!");
 			} else {
 				System.out.println("[PartyAndFriends]" + "PartyAndFriends wurde aktiviert!");
 			}

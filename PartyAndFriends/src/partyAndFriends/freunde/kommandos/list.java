@@ -82,7 +82,7 @@ public class list {
 					komma = "§7, ";
 				}
 				freundeZusammen = freundeZusammen + komma + farbe
-						+ main.verbindung.getNameDesSpielers(freundeArrayID[i]) + zusatz + "§7";
+						+ main.verbindung.getNameDesSpielers(freundeArrayID[i]) + zusatz;
 				i++;
 			}
 			if (main.language.equalsIgnoreCase("english")) {
@@ -90,8 +90,8 @@ public class list {
 						main.friendsPrefix + ChatColor.RESET + " §7This §7are §7your §7friends:" + freundeZusammen));
 			} else {
 				if (main.language.equalsIgnoreCase("own")) {
-					p.sendMessage(new TextComponent(
-							main.friendsPrefix + main.messagesYml.getString("Friends.Command.List.FriendsList")));
+					p.sendMessage(new TextComponent(main.friendsPrefix
+							+ main.messagesYml.getString("Friends.Command.List.FriendsList") + freundeZusammen));
 				} else {
 					p.sendMessage(new TextComponent(main.friendsPrefix + ChatColor.RESET
 							+ " §7Dies §7sind §7deine §7Freunde:" + freundeZusammen));

@@ -402,6 +402,10 @@ public class MessagesYML {
 			messagesYml.set("Friends.Command.Settings.AtTheMomentYouAreGoneReciveFriendRequests",
 					" §7At §7the moment §7you §7are §7gone §7recive §7friend §7requests §7from §aeveryone");
 		}
+		if (messagesYml.getString("Friends.Command.Settings.SplitLine").equals("")) {
+			messagesYml.set("Friends.Command.Settings.SplitLine",
+					"§8§m-----------------------------------------------");
+		}
 		if (messagesYml.getString("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty")
 				.equals("")) {
 			messagesYml.set("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty",

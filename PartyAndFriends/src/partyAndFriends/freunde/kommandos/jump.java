@@ -40,7 +40,7 @@ public class jump {
 			if (freund == null) {
 				if (Main.main.language.equalsIgnoreCase("english")) {
 					player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET + " §7The Player §e"
-							+ args[0] + " §7is §7not §7online §7or §7you §7bare §7not §7a §7friend §7of §7him"));
+							+ args[1] + " §7is §7not §7online §7or §7you §7bare §7not §7a §7friend §7of §7him"));
 				} else {
 					if (Main.main.language.equalsIgnoreCase("own")) {
 						player.sendMessage(new TextComponent(Main.main.friendsPrefix
@@ -103,11 +103,11 @@ public class jump {
 			} else {
 				if (Main.main.language.equalsIgnoreCase("english")) {
 					player.sendMessage(new TextComponent(Main.main.friendsPrefix + ChatColor.RESET + " §7The Player §e"
-							+ args[0] + " §7is §7not §7online §7or §7you §7bare §7not §7a §7friend §7of §7him"));
+							+ args[1] + " §7is §7not §7online §7or §7you §7bare §7not §7a §7friend §7of §7him"));
 				} else {
 					if (Main.main.language.equalsIgnoreCase("own")) {
 						player.sendMessage(new TextComponent(Main.main.friendsPrefix + Main.main.messagesYml
-								.getString("Friends.General.NotAFriendOfOrOffline").replace("[PLAYER]", args[0])));
+								.getString("Friends.General.NotAFriendOfOrOffline").replace("[PLAYER]", args[1])));
 					} else {
 						player.sendMessage(new TextComponent(Main.main.friendsPrefix + " §7Der Spieler §e" + args[1]
 								+ " §7ist §7nicht §7Online §7oder §7du §7bist §7nicht §7mit §7ihm §7befreundet"));
