@@ -1,0 +1,5 @@
+name: PartyAndFriends
+version: 1.0.7
+author: Simonsator
+main: partyAndFriends.main.Main
+description: A party and friends plugin
