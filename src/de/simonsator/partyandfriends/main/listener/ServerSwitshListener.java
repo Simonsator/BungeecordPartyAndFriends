@@ -1,0 +1,98 @@
+/**
+ * The class with the ServerSwitchEvent
+ * @author Simonsator
+ * @version 1.0.0
+ */
+package de.simonsator.partyandfriends.main.listener;
+
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+import de.simonsator.partyandfriends.main.Main;
+import de.simonsator.partyandfriends.party.PartyManager;
+import de.simonsator.partyandfriends.party.PlayerParty;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.ServerSwitchEvent;
+import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.event.EventHandler;
+
+/**
+ * The class with the ServerSwitchEvent
+ * 
+ * @author Simonsator
+ * @version 1.0.0
+ */
+public class ServerSwitshListener implements Listener {
+	/**
+	 * The list of the servers which the party will not join.
+	 */
+	private ArrayList<String> notJoinServers = new ArrayList<String>();
+
+	/**
+	 * Initials the object
+	 * 
+	 * @author Simonsator
+	 * @version 1.0.0
+	 */
+	public ServerSwitshListener() {
+		StringTokenizer st = new StringTokenizer(Main.getInstance().getConfig().getString("General.PartyDoNotJoinTheseServers"), "|");
+		while (st.hasMoreTokens()) {
+			notJoinServers.add(st.nextToken());
+		}
+	}
+
+	/**
+	 * Will be executed if a player switches the server
+	 * 
+	 * @author Simonsator
+	 * @version 1.0.0
+	 * @param e
+	 *            The ServerSwitchEvent event
+	 */
+	@EventHandler
+	public void onServerSwitch(ServerSwitchEvent e) {
+		ProxiedPlayer player = e.getPlayer();
+		if (PartyManager.getParty(player) != null) {
+			PlayerParty party = PartyManager.getParty(player);
+			if (party.isleader(player)) {
+				if (notJoinServers.contains(party.getServerInfo().getName())) {
+					return;
+				}
+				for (ProxiedPlayer p : party.getPlayer()) {
+					p.connect(party.getServerInfo());
+					if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
+						p.sendMessage(new TextComponent(
+								Main.getInstance().getPartyPrefix() + "§bThe §bparty §bhas §bjoined §bthe §bServer §e"
+										+ party.getServerInfo().getName() + "§b."));
+					} else {
+						if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
+							p.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
+									+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ServerSwitched")
+											.replace("[SERVER]", party.getServerInfo().getName())));
+						} else {
+							p.sendMessage(
+									new TextComponent(Main.getInstance().getPartyPrefix() + "§bDie §bParty §bhat §bden §bServer §e"
+											+ party.getServerInfo().getName() + " §bbetreten."));
+						}
+					}
+				}
+				if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
+					player.sendMessage(
+							new TextComponent(Main.getInstance().getPartyPrefix() + "§bThe §bparty §bhas §bjoined §bthe §bServer §e"
+									+ party.getServerInfo().getName() + "§b."));
+				} else {
+					if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
+						player.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
+								+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ServerSwitched")
+										.replace("[SERVER]", party.getServerInfo().getName())));
+					} else {
+						player.sendMessage(
+								new TextComponent(Main.getInstance().getPartyPrefix() + "§bDie §bParty §bhat §bden §bServer §e"
+										+ party.getServerInfo().getName() + " §bbetreten."));
+					}
+				}
+			}
+		}
+	}
+}
