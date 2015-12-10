@@ -13,7 +13,6 @@ import java.util.StringTokenizer;
 /**
  * This class converts a String to an ArrayList
  * 
- * @see partyAndFriends.utilities.StringToArray
  * @author Simonsator
  * @version 1.0.0
  */

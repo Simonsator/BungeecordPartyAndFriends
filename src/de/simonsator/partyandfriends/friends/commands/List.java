@@ -27,8 +27,6 @@ public class List {
 	 *            The sender
 	 * @param args
 	 *            The arguments
-	 * @param main
-	 *            The main class
 	 */
 	public static void list(ProxiedPlayer p, String[] args) {
 		int[] friendArrayID = Main.getInstance().getConnection()

@@ -5,7 +5,6 @@
  */
 package de.simonsator.partyandfriends.main.listener;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import de.simonsator.partyandfriends.main.Main;
@@ -36,8 +35,6 @@ public class PlayerDisconnectListener implements Listener {
 	 * @version 1.0.0
 	 * @param e
 	 *            The disconnect event
-	 * @throws SQLException
-	 *             Can throw a {@link SQLException}
 	 */
 	@EventHandler
 	public void onPlayerDisconnect(PlayerDisconnectEvent e) {

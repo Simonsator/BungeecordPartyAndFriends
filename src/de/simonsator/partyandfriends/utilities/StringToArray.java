@@ -12,7 +12,6 @@ import java.util.StringTokenizer;
 /**
  * This class converts a String to an Array
  * 
- * @see partyAndFriends.utilities.StringToArrayList
  * @author Simonsator
  * @version 1.0.0
  */
