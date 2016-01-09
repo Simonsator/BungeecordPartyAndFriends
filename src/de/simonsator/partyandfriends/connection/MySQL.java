@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import de.simonsator.partyandfriends.utilities.StringToArrayList;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
@@ -481,7 +482,7 @@ public class MySQL {
 			this.preparedStatement = this.connect().prepareStatement("UPDATE " + this.database
 					+ ".freunde set FreundeID='" + freundeIDAbfrageString + "' WHERE ID='" + idQuery + "' LIMIT 1");
 			this.preparedStatement.executeUpdate();
-			denyPlayer(idSender, idQuery);
+			denyRequest(idSender, idQuery);
 		} catch (SQLException e) {
 			try {
 				close();
@@ -503,55 +504,26 @@ public class MySQL {
 	 * @author Simonsator
 	 * @version 1.0.0
 	 */
-	public void denyPlayer(int idSender, int idQuery) {
-		try {
-			String toSplit = getRequests(idSender);
-			String friendRequestString = "";
-			if (!toSplit.equals(idQuery + "")) {
-				StringTokenizer st = new StringTokenizer(toSplit, "|");
-				int[] requestID = new int[st.countTokens()];
-				int n = 0;
-				while (st.hasMoreTokens()) {
-					requestID[n] = Integer.parseInt(st.nextToken());
-				}
-				boolean found = false;
-				int i = 0;
-				while (found != true && i < requestID.length) {
-					if (idQuery == requestID[i]) {
-						requestID[i] = -1;
-						found = true;
-					}
-					i++;
-				}
-				String together = "";
-				if (requestID[0] != -1) {
-					together = requestID[0] + "";
-				}
-				i = 1;
-				while (requestID.length > i) {
-					if (requestID[i] != -1 && requestID[i] != 0) {
-						if (together.equals("")) {
-							together = requestID[i] + "";
-						} else {
-							together = together + "|" + requestID[i];
-						}
-					}
-					i++;
-				}
-				friendRequestString = together;
+	public void denyRequest(int idSender, int idQuery) {
+		ArrayList<Integer> friendRequests = StringToArrayList.stringToIntegerArrayList(getRequests(idSender));
+		friendRequests.remove((Object) idQuery);
+		String friendRequestString = "";
+		for (int momFriendRequest : friendRequests) {
+			if (friendRequestString.equals("")) {
+				friendRequestString += momFriendRequest;
+			} else {
+				friendRequestString += "|" + momFriendRequest;
 			}
+		}
+		try {
 			this.preparedStatement = connect
-					.prepareStatement("UPDATE " + this.database + ".freunde set FreundschaftsAnfragenID='"
+					.prepareStatement("UPDATE " + this.database + ".freunde set FreundschaftsrequesterID='"
 							+ friendRequestString + "' WHERE ID='" + idSender + "' LIMIT 1");
 			this.preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			try {
-				close();
-				connectTo();
-				denyPlayer(idSender, idQuery);
-			} catch (ClassNotFoundException | SQLException e1) {
-				e1.printStackTrace();
-			}
+			close();
+			connect();
+			denyRequest(idSender, idQuery);
 		}
 	}
 
@@ -562,68 +534,33 @@ public class MySQL {
 	 *            The ID of the command sender
 	 * @param idQuery
 	 *            The ID of the friend, which should be deleted
-	 * @param aufrufAnzahl
+	 * @param n
 	 *            If it´s the first passage or the second
 	 * @author Simonsator
 	 * @version 1.0.0
 	 */
-	public void deleteFriend(int idSender, int idQuery, int aufrufAnzahl) {
-		try {
-			String request = getFriends(idSender);
-			String friendRequestString = "";
-			if (request.equals(idQuery + "")) {
+	public void deleteFriend(int idSender, int idQuery, int n) {
+		ArrayList<Integer> friends = StringToArrayList.stringToIntegerArrayList(getFriends(idSender));
+		friends.remove((Object) idQuery);
+		String friendsString = "";
+		for (int momFriend : friends) {
+			if (friendsString.equals("")) {
+				friendsString += momFriend;
 			} else {
-				String toSplit = getFriends(idSender);
-				StringTokenizer st = new StringTokenizer(toSplit, "|");
-				int[] requestID = new int[st.countTokens()];
-				int n = 0;
-				while (st.hasMoreTokens()) {
-					requestID[n] = Integer.parseInt(st.nextToken());
-					n++;
-				}
-				boolean found = false;
-				int i = 0;
-				while (found != true) {
-					if (idQuery == requestID[i]) {
-						requestID[i] = -1;
-						found = true;
-					}
-					i++;
-				}
-				String ersterWert = "";
-				if (requestID[0] != -1) {
-					ersterWert = requestID[0] + "";
-				}
-				String together = ersterWert;
-				i = 1;
-				while (requestID.length > i) {
-					if (requestID[i] == -1) {
-
-					} else {
-						if (together.equals("")) {
-							together = requestID[i] + "";
-						} else {
-							together = together + "|" + requestID[i];
-						}
-					}
-					i++;
-				}
-				friendRequestString = together;
+				friendsString += "|" + momFriend;
 			}
-			this.preparedStatement = this.connect().prepareStatement("UPDATE " + this.database
-					+ ".freunde set FreundeID='" + friendRequestString + "' WHERE ID='" + idSender + "' LIMIT 1");
+		}
+		if (n == 0) {
+			deleteFriend(idQuery, idSender, 1);
+		}
+		try {
+			this.preparedStatement = connect.prepareStatement("UPDATE " + this.database + ".freunde set FreundeID='"
+					+ friendsString + "' WHERE ID='" + idSender + "' LIMIT 1");
 			this.preparedStatement.executeUpdate();
-			if (aufrufAnzahl == 0) {
-				deleteFriend(idQuery, idSender, 1);
-			}
 		} catch (SQLException e) {
-			try {
-				close();
-				connectTo();
-				deleteFriend(idSender, idQuery, aufrufAnzahl);
-			} catch (ClassNotFoundException | SQLException e1) {
-				e1.printStackTrace();
-			}
+			close();
+			connect();
+			deleteFriend(idSender, idQuery, n);
 		}
 	}
 

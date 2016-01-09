@@ -33,7 +33,7 @@ public class Deny {
 			int idSender = Main.getInstance().getConnection().getIDByPlayerName(player.getName());
 			if (ContainsIgnoreCase
 					.containsIgnoreCase(Main.getInstance().getConnection().getRequestsAsArrayList(idSender), args[1])) {
-				Main.getInstance().getConnection().denyPlayer(idSender,
+				Main.getInstance().getConnection().denyRequest(idSender,
 						Main.getInstance().getConnection().getIDByPlayerName(args[1]));
 				if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 					player.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET

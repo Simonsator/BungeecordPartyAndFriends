@@ -36,4 +36,14 @@ public class StringToArrayList {
 		}
 		return stringList;
 	}
+
+	public static ArrayList<Integer> stringToIntegerArrayList(String string) {
+		StringTokenizer st = new StringTokenizer(string, "|");
+		int stLength = st.countTokens();
+		ArrayList<Integer> stringArray = new ArrayList<>();
+		for (int i = 0; i < stLength; i++) {
+			stringArray.add(Integer.parseInt(st.nextToken()));
+		}
+		return stringArray;
+	}
 }
