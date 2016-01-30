@@ -313,7 +313,7 @@ public class MessagesYML {
 		}
 		if (messagesYml.getString("Friends.Command.Add.FriendRequestFromreceiver").equals("")) {
 			messagesYml.set("Friends.Command.Add.FriendRequestFromreceiver",
-					" &7The player &e[PLAYER] &7has &7already &7send &7you &7a &7friend &7request.");
+					" &7The player &e[PLAYER] &7has &7already &7sent &7you &7a &7friend &7request.");
 		}
 		if (messagesYml.getString("Friends.Command.Add.FriendRequestreceived").equals("")) {
 			messagesYml.set("Friends.Command.Add.FriendRequestreceived",

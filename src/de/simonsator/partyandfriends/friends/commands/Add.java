@@ -106,7 +106,7 @@ public class Add {
 					if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 						player.sendMessage(new TextComponent(
 								Main.getInstance().getFriendsPrefix() + ChatColor.RESET + " §7The player §e" + args[1]
-										+ " §7has §7already §7send §7you §7a §7friend §7request."));
+										+ " §7has §7already §7sent §7you §7a §7friend §7request."));
 						String zuschreiben = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 								+ " §7Accept the friend request with §6/friend accept §6" + args[1] + "§7.";
 						jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'"

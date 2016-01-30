@@ -83,7 +83,7 @@ public class Main extends Plugin {
 		}
 		registerListeners();
 		registerCommands();
-		checkForUpdates();
+		// checkForUpdates();
 		if (getLanguage().equalsIgnoreCase("english")) {
 			System.out.println("[PartyAndFriends]" + "PartyAndFriends was enabled successfully!");
 		} else {
