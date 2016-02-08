@@ -517,7 +517,7 @@ public class MySQL {
 		}
 		try {
 			this.preparedStatement = connect
-					.prepareStatement("UPDATE " + this.database + ".freunde set FreundschaftsrequesterID='"
+					.prepareStatement("UPDATE " + this.database + ".freunde set FreundschaftsAnfragenID='"
 							+ friendRequestString + "' WHERE ID='" + idSender + "' LIMIT 1");
 			this.preparedStatement.executeUpdate();
 		} catch (SQLException e) {
