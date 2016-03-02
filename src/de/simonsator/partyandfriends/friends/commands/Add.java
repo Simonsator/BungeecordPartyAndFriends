@@ -102,41 +102,38 @@ public class Add {
 				if (ContainsIgnoreCase.containsIgnoreCase(
 						Main.getInstance().getConnection().getRequestsAsArrayList(idSender), args[1])) {
 					String command = "/friend accept " + args[1];
-					String jsoncode = "";
+					String toWrite;
+					String hover;
 					if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 						player.sendMessage(new TextComponent(
 								Main.getInstance().getFriendsPrefix() + ChatColor.RESET + " §7The player §e" + args[1]
 										+ " §7has §7already §7sent §7you §7a §7friend §7request."));
-						String zuschreiben = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
+						toWrite = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 								+ " §7Accept the friend request with §6/friend accept §6" + args[1] + "§7.";
-						jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'"
-								+ command
-								+ "'},'hoverEvent':{'action':'show_text','value':'§aClick here to accept the friendship request'}}";
+						hover = "§aClick here to accept the friendship request";
 					} else {
 						if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
 							player.sendMessage(
 									new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance()
 											.getMessagesYml().getString("Friends.Command.Add.FriendRequestFromreceiver")
 											.replace("[PLAYER]", args[1])));
-							String zuschreiben = Main.getInstance().getFriendsPrefix()
-									+ Main.getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")
-											.replace("[PLAYER]", args[1]);
-							String clickHere = Main.getInstance().getMessagesYml()
-									.getString("Friends.Command.Add.ClickHere");
-							jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'"
-									+ command + "'},'hoverEvent':{'action':'show_text','value':'" + clickHere + "'}}";
+							toWrite = Main.getInstance().getFriendsPrefix() + Main.getInstance().getMessagesYml()
+									.getString("Friends.Command.Add.HowToAccept").replace("[PLAYER]", args[1]);
+							hover = Main.getInstance().getMessagesYml().getString("Friends.Command.Add.ClickHere");
 						} else {
 							player.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 									+ " §7Der Spieler §e" + args[1]
 									+ " §7hat §7dir §7schon §7eine §7Freundschaftsanfrage §7gesendet."));
-							String zuschreiben = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
+							toWrite = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 									+ " §7Nimm sie mit §6/friend accept " + args[1] + " §7an";
-							jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'"
-									+ command
-									+ "'},'hoverEvent':{'action':'show_text','value':'§aHier klicken um die Freundschaftsanfrage anzunehmen'}}";
+							hover = "§aHier klicken um die Freundschaftsanfrage anzunehmen";
 						}
 					}
-					player.unsafe().sendPacket(new Chat(jsoncode));
+					player.unsafe()
+							.sendPacket(new Chat("{\"text\":\"" + toWrite
+									+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + command
+									+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
+									+ hover + "\"}]}}}"));
 					return;
 				}
 			}
@@ -158,40 +155,38 @@ public class Add {
 				return;
 			}
 			Main.getInstance().getConnection().sendFriendRequest(idSender, idRequest);
-			ProxiedPlayer empfaenger = BungeeCord.getInstance().getPlayer(args[1]);
-			if (empfaenger != null) {
-				String jsoncode = "";
+			ProxiedPlayer receiver = BungeeCord.getInstance().getPlayer(args[1]);
+			if (receiver != null) {
+				String toWrite;
+				String hover;
 				String command = "/friend accept " + player.getName();
 				if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
-					empfaenger.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET
+					receiver.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 							+ "§7 You have received a friend request from §e" + player.getDisplayName() + " §7."));
-					String zuschreiben = "§7 Accept the friend request with /friend accept §e" + player.getName()
-							+ " §7.";
-					jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'" + command
-							+ "'},'hoverEvent':{'action':'show_text','value':'§aClick here to accept the friend request'}}";
+					toWrite = "§7 Accept the friend request with /friend accept §e" + player.getName() + " §7.";
+					hover = "§aClick here to accept the friend request";
 				} else {
 					if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
-						empfaenger.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + Main
+						receiver.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + Main
 								.getInstance().getMessagesYml().getString("Friends.Command.Add.FriendRequestreceived")
 								.replace("[PLAYER]", player.getDisplayName())));
-						String zuschreiben = Main.getInstance().getFriendsPrefix() + Main.getInstance().getMessagesYml()
+						toWrite = Main.getInstance().getFriendsPrefix() + Main.getInstance().getMessagesYml()
 								.getString("Friends.Command.Add.HowToAccept").replace("[PLAYER]", player.getName());
-						String clickHere = Main.getInstance().getMessagesYml()
-								.getString("Friends.Command.Add.ClickHere");
-						jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'"
-								+ command + "'},'hoverEvent':{'action':'show_text','value':'" + clickHere + "'}}";
+						hover = Main.getInstance().getMessagesYml().getString("Friends.Command.Add.ClickHere");
 					} else {
-						empfaenger.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET
+						receiver.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 								+ "§7 Du hast eine Freundschaftsanfrage von §e" + player.getDisplayName()
 								+ " §7erhalten"));
-						String zuschreiben = "§7 Nimm die Freundschaftsanfrage mit /friend accept §e" + player.getName()
+						toWrite = "§7 Nimm die Freundschaftsanfrage mit /friend accept §e" + player.getName()
 								+ " §7an.";
-						jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'"
-								+ command
-								+ "'},'hoverEvent':{'action':'show_text','value':'§aHier klicken um die Freundschaftsanfrage anzunehmen'}}";
+						hover = "§aHier klicken um die Freundschaftsanfrage anzunehmen";
 					}
 				}
-				empfaenger.unsafe().sendPacket(new Chat(jsoncode));
+				receiver.unsafe()
+						.sendPacket(new Chat("{\"text\":\"" + toWrite
+								+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + command
+								+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
+								+ hover + "\"}]}}}"));
 			}
 			if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 				player.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET

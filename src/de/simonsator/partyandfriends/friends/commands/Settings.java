@@ -227,33 +227,31 @@ public class Settings {
 				}
 			}
 		}
-		String jsoncode = "";
-		String zuschreiben;
+		String toWrite;
 		String command = "/friends settings Freundschaftsanfragen";
+		String hover;
 		if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
-			zuschreiben = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
+			toWrite = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 					+ " §7Change §7this §7setting §7with §6/friend §6settings §6friendrequests";
-			jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'" + command
-					+ "'},'hoverEvent':{'action':'show_text','value':'Click here to change this setting.'}}";
+			hover = "Click here to change this setting.";
 		} else {
 			if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
-				zuschreiben = Main.getInstance().getMessagesYml()
+				toWrite = Main.getInstance().getMessagesYml()
 						.getString("Friends.Command.Settings.ChangeThisSettingWithFriendrequests");
-				jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'" + command
-						+ "'},'hoverEvent':{'action':'show_text','value':'" + Main.getInstance().getMessagesYml()
-								.getString("Friends.Command.Settings.ChangeThisSettingsHover")
-						+ "'}}";
+				hover = Main.getInstance().getMessagesYml()
+						.getString("Friends.Command.Settings.ChangeThisSettingsHover");
 			} else {
-				zuschreiben = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
+				toWrite = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 						+ " §7Ändere §7diese §7Einstellung §7mit §6/friend §6settings §6Freundschaftsanfragen";
-				jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'" + command
-						+ "'},'hoverEvent':{'action':'show_text','value':'Hier klicken um die Einstellung zu ändern.'}}";
+				hover = "Hier klicken um die Einstellung zu ändern.";
 			}
 		}
-		player.unsafe().sendPacket(new Chat(jsoncode));
-		String zuschreibenNeu = "";
-		String jsonCodeNeu = "";
-		String commandNeu = "/friends settings party";
+		player.unsafe()
+				.sendPacket(new Chat("{\"text\":\"" + toWrite
+						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + command
+						+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
+						+ hover + "\"}]}}}"));
+		command = "/friends settings party";
 		if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
 			player.sendMessage(new TextComponent(
 					Main.getInstance().getMessagesYml().getString("Friends.Command.Settings.SplitLine")));
@@ -264,65 +262,55 @@ public class Settings {
 			if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 				player.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 						+ " §7At §7the moment §7you §7can §7get §7invited §7by §aevery §7player §7into §7his §7Party."));
-				zuschreibenNeu = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
+				toWrite = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 						+ " §7Change §7this §7setting §7with §6/friend §6settings §6Party";
-				jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
-						+ commandNeu
-						+ "'},'hoverEvent':{'action':'show_text','value':'Click here to change this setting.'}}";
+				hover = "Click here to change this setting.";
 			} else {
 				if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
 					player.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 							+ Main.getInstance().getMessagesYml().getString(
 									"Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty")));
-					zuschreibenNeu = Main.getInstance().getFriendsPrefix() + ChatColor.RESET + Main.getInstance()
+					toWrite = Main.getInstance().getFriendsPrefix() + ChatColor.RESET + Main.getInstance()
 							.getMessagesYml().getString("Friends.Command.Settings.ChangeThisSettingWithParty");
-					jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
-							+ commandNeu + "'},'hoverEvent':{'action':'show_text','value':'" + Main.getInstance()
-									.getMessagesYml().getString("Friends.Command.Settings.ChangeThisSettingsHover")
-							+ "'}}";
+					hover = Main.getInstance().getMessagesYml()
+							.getString("Friends.Command.Settings.ChangeThisSettingsHover");
 				} else {
 					player.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 							+ " §7Momentan §7können §7dir §7Party §7Einladungen §7von §ajedem §7gesendet §7werden §7gesendet §7werden"));
-					zuschreibenNeu = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
+					toWrite = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 							+ " §7Ändere §7diese §7Einstellung §7mit §6/friend §6settings §6Party";
-					commandNeu = "/friends settings party";
-					jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
-							+ commandNeu
-							+ "'},'hoverEvent':{'action':'show_text','value':'Hier klicken um die Einstellung zu ändern.'}}";
+					hover = "Hier klicken um die Einstellung zu ändern.";
 				}
 			}
 		} else {
 			if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 				player.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 						+ " §7At §7the moment §7you §7can §7get §7invited §aonly §7by §7by your friends §7into §7their §7Party."));
-				zuschreibenNeu = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
+				toWrite = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 						+ " §7Change §7this §7setting §7with §6/friend §6settings §6Party";
-				commandNeu = "/friends settings party";
-				jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
-						+ commandNeu
-						+ "'},'hoverEvent':{'action':'show_text','value':'Click here to change this setting.'}}";
+				hover = "Click here to change this setting.";
 			} else {
 				if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
 					player.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 							+ Main.getInstance().getMessagesYml().getString(
 									"Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty")));
-					zuschreibenNeu = Main.getInstance().getFriendsPrefix() + ChatColor.RESET + Main.getInstance()
+					toWrite = Main.getInstance().getFriendsPrefix() + ChatColor.RESET + Main.getInstance()
 							.getMessagesYml().getString("Friends.Command.Settings.ChangeThisSettingWithParty");
-					jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
-							+ commandNeu + "'},'hoverEvent':{'action':'show_text','value':'" + Main.getInstance()
-									.getMessagesYml().getString("Friends.Command.Settings.ChangeThisSettingsHover")
-							+ "'}}";
+					hover = Main.getInstance().getMessagesYml()
+							.getString("Friends.Command.Settings.ChangeThisSettingsHover");
 				} else {
 					player.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 							+ " §7Momentan §7können §7dir §cnur §7Party §7Einladungen §7von §7Freunden §7gesendet §7werden"));
-					zuschreibenNeu = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
+					toWrite = Main.getInstance().getFriendsPrefix() + ChatColor.RESET
 							+ " §7Ändere §7diese §7Einstellung §7mit §6/friend §6settings §6Party";
-					jsonCodeNeu = "{'text':'" + zuschreibenNeu + "', 'clickEvent':{'action':'run_command','value':'"
-							+ commandNeu
-							+ "'},'hoverEvent':{'action':'show_text','value':'Hier klicken um die Einstellung zu ändern.'}}";
+					hover = "Hier klicken um die Einstellung zu ändern.";
 				}
 			}
 		}
-		player.unsafe().sendPacket(new Chat(jsonCodeNeu));
+		player.unsafe()
+				.sendPacket(new Chat("{\"text\":\"" + toWrite
+						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + command
+						+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
+						+ hover + "\"}]}}}"));
 	}
 }

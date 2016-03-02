@@ -180,35 +180,42 @@ public class PlayerParty {
 	 */
 	public void invite(final ProxiedPlayer player) {
 		invite.add(player);
-		String zuschreiben = "";
+		String toWrite = "";
 		String value = "";
 		if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
-			player.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
+			player.sendMessage(new TextComponent(de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
 					+ "§5You §5were §5invited §5to §5the §5party §5of §6" + leader.getDisplayName() + "§5!"));
-			zuschreiben = Main.getInstance().getPartyPrefix()
+			toWrite = de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
 					+ "§5Join §5the §5party §5by §5using §5the §5command §6/Party §6join §6" + leader.getName() + "!";
 			value = "Click here to join the party";
 		} else {
 			if (Main.getInstance().getLanguage().equals("own")) {
-				player.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-						+ Main.getInstance().getMessagesYml().getString("Party.Command.Invite.YouWereInvitedBY")
-								.replace("[PLAYER]", leader.getDisplayName())));
-				zuschreiben = Main.getInstance().getPartyPrefix() + Main.getInstance().getMessagesYml()
-						.getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE")
-						.replace("[PLAYER]", leader.getName());
-				value = Main.getInstance().getMessagesYml()
+				player.sendMessage(
+						new TextComponent(de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
+								+ de.simonsator.partyandfriends.main.Main.getInstance().getMessagesYml()
+										.getString("Party.Command.Invite.YouWereInvitedBY")
+										.replace("[PLAYER]", leader.getDisplayName())));
+				toWrite = de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
+						+ de.simonsator.partyandfriends.main.Main.getInstance().getMessagesYml()
+								.getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE")
+								.replace("[PLAYER]", leader.getName());
+				value = de.simonsator.partyandfriends.main.Main.getInstance().getMessagesYml()
 						.getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER");
 			} else {
-				player.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-						+ "§5Du §5wurdest §5in §5die §5Party §5von§6 " + leader.getDisplayName() + " §5eingeladen!"));
-				zuschreiben = Main.getInstance().getPartyPrefix() + "§5Tritt §5der §5Party §5mit §6/Party join "
-						+ leader.getName() + " §5bei!";
+				player.sendMessage(
+						new TextComponent(de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
+								+ "§5Du §5wurdest §5in §5die §5Party §5von§6 " + leader.getDisplayName()
+								+ " §5eingeladen!"));
+				toWrite = de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
+						+ "§5Tritt §5der §5Party §5mit §6/Party join " + leader.getName() + " §5bei!";
 				value = "Hier klicken um Party einladung anzunehmen";
 			}
 		}
 		String command = "/party join " + leader.getName();
-		String jsoncode = "{'text':'" + zuschreiben + "', 'clickEvent':{'action':'run_command','value':'" + command
-				+ "'},'hoverEvent':{'action':'show_text','value':'" + value + "'}}";
+		String jsoncode = "{\"text\":\"" + toWrite + "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\""
+				+ command
+				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
+				+ value + "\"}]}}}";
 		player.unsafe().sendPacket(new Chat(jsoncode));
 		final PlayerParty party = this;
 		BungeeCord.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {
@@ -220,24 +227,25 @@ public class PlayerParty {
 						player.sendMessage(new TextComponent(
 								Main.getInstance().getPartyPrefix() + "§5The invitation of the Party from §6"
 										+ leader.getDisplayName() + " §5is §5timed §5out!"));
-						leader.sendMessage(
-								new TextComponent(Main.getInstance().getPartyPrefix() + "§5The player§6 "
-										+ player.getDisplayName() + " §5has §5not §5accepted §5your §5invitation!"));
+						leader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + "§5The player§6 "
+								+ player.getDisplayName() + " §5has §5not §5accepted §5your §5invitation!"));
 					} else {
 						if (Main.getInstance().getLanguage().equals("own")) {
-							player.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-									+ Main.getInstance().getMessagesYml().getString("Party.Command.Invite.InvitationTimedOutInvited")
+							player.sendMessage(new TextComponent(
+									Main.getInstance().getPartyPrefix() + Main.getInstance().getMessagesYml()
+											.getString("Party.Command.Invite.InvitationTimedOutInvited")
 											.replace("[PLAYER]", leader.getDisplayName())));
-							leader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-									+ Main.getInstance().getMessagesYml().getString("Party.Command.Invite.InvitationTimedOutLeader")
+							leader.sendMessage(
+									new TextComponent(Main.getInstance().getPartyPrefix() + Main.getInstance()
+											.getMessagesYml().getString("Party.Command.Invite.InvitationTimedOutLeader")
 											.replace("[PLAYER]", player.getDisplayName())));
 						} else {
 							player.sendMessage(new TextComponent(
 									Main.getInstance().getPartyPrefix() + "§5Die Einladung in die Party von §6"
 											+ leader.getDisplayName() + " §5ist §5abgelaufen!"));
-							leader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-									+ "§5Der Spieler§6 " + player.getDisplayName()
-									+ " §5hat §5die §5Einladung §5nicht §5angenommen!"));
+							leader.sendMessage(new TextComponent(
+									Main.getInstance().getPartyPrefix() + "§5Der Spieler§6 " + player.getDisplayName()
+											+ " §5hat §5die §5Einladung §5nicht §5angenommen!"));
 						}
 					}
 					ArrayList<ProxiedPlayer> liste = party.getPlayer();
@@ -247,8 +255,8 @@ public class PlayerParty {
 									+ "§5The §5party §5was §5dissolved §5because §5of §5to §5less §5players."));
 						} else {
 							if (Main.getInstance().getLanguage().equals("own")) {
-								leader.sendMessage(new TextComponent(
-										Main.getInstance().getPartyPrefix() + Main.getInstance().getMessagesYml().getString(
+								leader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
+										+ Main.getInstance().getMessagesYml().getString(
 												"Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers")));
 							} else {
 								leader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()

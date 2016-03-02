@@ -171,6 +171,7 @@ public class Main extends Plugin {
 	 * @author Simonsator
 	 * @version 1.0.0
 	 */
+	@SuppressWarnings("unused")
 	private void checkForUpdates() {
 		String localVersion = getDescription().getVersion();
 		if (getConfig().getString("General.UpdateNotification").equalsIgnoreCase("true")) {
