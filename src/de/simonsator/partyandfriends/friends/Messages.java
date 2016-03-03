@@ -173,7 +173,7 @@ public class Messages {
 	 *            The sender of the command
 	 */
 	private static void nachrichtSenden(String[] args, int n, ProxiedPlayer wroteTo, ProxiedPlayer player) {
-		String content = message(args, n);
+		String content = toMessage(args, n);
 		if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
 			wroteTo.sendMessage(
 					new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance().getMessagesYml()
@@ -204,18 +204,18 @@ public class Messages {
 	 *            At which argument the while loob should start
 	 * @return Returns a styled message
 	 */
-	public static String message(String[] args, int n) {
-		String inhaltFarbe;
+	public static String toMessage(String[] args, int n) {
+		String contentColor;
 		if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
-			inhaltFarbe = Main.getInstance().getMessagesYml().getString("Friends.Command.MSG.ColorOfMessage");
+			contentColor = Main.getInstance().getMessagesYml().getString("Friends.Command.MSG.ColorOfMessage");
 		} else {
-			inhaltFarbe = " §7";
+			contentColor = " §7";
 		}
 		String content = "";
 		while (n < args.length) {
-			content = content + inhaltFarbe + args[n];
+			content = content + contentColor + args[n];
 			n++;
 		}
-		return inhaltFarbe + content;
+		return content;
 	}
 }
