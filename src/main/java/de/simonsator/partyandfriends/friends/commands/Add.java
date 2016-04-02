@@ -7,8 +7,8 @@ package de.simonsator.partyandfriends.friends.commands;
 
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.ContainsIgnoreCase;
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Chat;
@@ -155,7 +155,7 @@ public class Add {
 				return;
 			}
 			Main.getInstance().getConnection().sendFriendRequest(idSender, idRequest);
-			ProxiedPlayer receiver = BungeeCord.getInstance().getPlayer(args[1]);
+			ProxiedPlayer receiver = ProxyServer.getInstance().getPlayer(args[1]);
 			if (receiver != null) {
 				String toWrite;
 				String hover;

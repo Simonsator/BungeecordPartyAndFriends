@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -218,7 +218,7 @@ public class PlayerParty {
 				+ value + "\"}]}}}";
 		player.unsafe().sendPacket(new Chat(jsoncode));
 		final PlayerParty party = this;
-		BungeeCord.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {
+		ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {
 			@Override
 			public void run() {
 				if (invite.contains(player)) {

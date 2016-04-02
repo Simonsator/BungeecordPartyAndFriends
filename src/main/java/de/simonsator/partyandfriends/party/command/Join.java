@@ -11,7 +11,7 @@ import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.PartyManager;
 import de.simonsator.partyandfriends.party.PlayerParty;
 import de.simonsator.partyandfriends.utilities.StringToArray;
-import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -82,7 +82,7 @@ public class Join extends SubCommand {
 			}
 			return;
 		}
-		ProxiedPlayer pl = BungeeCord.getInstance().getPlayer(args[0]);
+		ProxiedPlayer pl = ProxyServer.getInstance().getPlayer(args[0]);
 		if (pl == null) {
 			if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 				p.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + "§cThis §cplayer §cis §cnot §conline."));

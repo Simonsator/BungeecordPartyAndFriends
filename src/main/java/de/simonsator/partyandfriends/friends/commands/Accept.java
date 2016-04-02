@@ -8,8 +8,8 @@ package de.simonsator.partyandfriends.friends.commands;
 
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.ContainsIgnoreCase;
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -50,7 +50,7 @@ public class Accept {
 								+ " §7Du bist jetzt mit §e" + args[1] + " §7befreundet"));
 					}
 				}
-				ProxiedPlayer friendOf = BungeeCord.getInstance().getPlayer(args[1]);
+				ProxiedPlayer friendOf = ProxyServer.getInstance().getPlayer(args[1]);
 				if (friendOf != null) {
 					if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 						friendOf.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + ChatColor.RESET

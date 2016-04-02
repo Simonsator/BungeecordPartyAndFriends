@@ -9,8 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -91,7 +91,7 @@ public class JoinEvent implements Listener {
 		if (keineFreunde == false) {
 			for (int i = 0; i < freundeArrayID.length; i++) {
 				String befreundeterSpieler = Main.getInstance().getConnection().getPlayerName(freundeArrayID[i]);
-				ProxiedPlayer freundGeladen = BungeeCord.getInstance().getPlayer(befreundeterSpieler);
+				ProxiedPlayer freundGeladen = ProxyServer.getInstance().getPlayer(befreundeterSpieler);
 				if (freundGeladen != null) {
 					if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 						freundGeladen.sendMessage(new TextComponent("§8[§5§lFriends§8]" + ChatColor.RESET

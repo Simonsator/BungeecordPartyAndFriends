@@ -23,7 +23,7 @@ import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.utilities.Config;
 import de.simonsator.partyandfriends.utilities.MessagesYML;
 import de.simonsator.partyandfriends.utilities.StringToArray;
-import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 
@@ -139,9 +139,9 @@ public class Main extends Plugin {
 	 * @version 1.0.0
 	 */
 	private void registerListeners() {
-		BungeeCord.getInstance().getPluginManager().registerListener(this, new PlayerDisconnectListener());
-		BungeeCord.getInstance().getPluginManager().registerListener(this, new ServerSwitshListener());
-		BungeeCord.getInstance().getPluginManager().registerListener(this, new JoinEvent());
+		ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerDisconnectListener());
+		ProxyServer.getInstance().getPluginManager().registerListener(this, new ServerSwitshListener());
+		ProxyServer.getInstance().getPluginManager().registerListener(this, new JoinEvent());
 	}
 
 	/**
@@ -151,10 +151,10 @@ public class Main extends Plugin {
 	 * @version 1.0.0
 	 */
 	private void registerCommands() {
-		BungeeCord.getInstance().getPluginManager().registerCommand(this,
+		ProxyServer.getInstance().getPluginManager().registerCommand(this,
 				new PartyCommand(StringToArray.stringToArray(getConfig().getString("Aliases.PartyAlias"))));
 		if (getConfig().getString("General.DisableCommandP").equals("true") == false) {
-			BungeeCord.getInstance().getPluginManager().registerCommand(this,
+			ProxyServer.getInstance().getPluginManager().registerCommand(this,
 					new P(StringToArray.stringToArray(getConfig().getString("Aliases.PartyChatShortAlias"))));
 		}
 		getProxy().getPluginManager().registerCommand(this,

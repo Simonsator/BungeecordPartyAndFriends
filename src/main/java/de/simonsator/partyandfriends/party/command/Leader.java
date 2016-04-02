@@ -13,7 +13,7 @@ import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.PartyManager;
 import de.simonsator.partyandfriends.party.PlayerParty;
 import de.simonsator.partyandfriends.utilities.StringToArray;
-import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -58,7 +58,7 @@ public class Leader extends SubCommand {
 			}
 			return;
 		}
-		ProxiedPlayer player = BungeeCord.getInstance().getPlayer(agrs[0]);
+		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(agrs[0]);
 		if (player == null) {
 			if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 				p.sendMessage(new TextComponent(

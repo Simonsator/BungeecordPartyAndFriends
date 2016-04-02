@@ -6,8 +6,8 @@
 package de.simonsator.partyandfriends.friends.commands;
 
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -50,7 +50,7 @@ public class List {
 			String freundeZusammen = "";
 			while (friendArrayID.length > i) {
 				freundeName[i] = Main.getInstance().getConnection().getPlayerName(friendArrayID[i]);
-				ProxiedPlayer freundGeladen = BungeeCord.getInstance().getPlayer(freundeName[i]);
+				ProxiedPlayer freundGeladen = ProxyServer.getInstance().getPlayer(freundeName[i]);
 				String zusatz;
 				String farbe;
 				if (freundGeladen == null) {
