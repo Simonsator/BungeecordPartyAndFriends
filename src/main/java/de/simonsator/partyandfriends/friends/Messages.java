@@ -7,8 +7,8 @@
 package de.simonsator.partyandfriends.friends;
 
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -94,7 +94,7 @@ public class Messages {
 					}
 					return;
 				}
-				ProxiedPlayer wroteTo = BungeeCord.getInstance().getPlayer(args[begin]);
+				ProxiedPlayer wroteTo = ProxyServer.getInstance().getPlayer(args[begin]);
 				if (wroteTo == null) {
 					if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 						player.sendMessage(new TextComponent(

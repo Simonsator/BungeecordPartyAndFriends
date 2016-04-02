@@ -6,8 +6,8 @@
 package de.simonsator.partyandfriends.friends.commands;
 
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -31,7 +31,7 @@ public class Jump {
 	 */
 	public static void jump(ProxiedPlayer player, String[] args) {
 		if (args.length > 1) {
-			ProxiedPlayer freund = BungeeCord.getInstance().getPlayer(args[1]);
+			ProxiedPlayer freund = ProxyServer.getInstance().getPlayer(args[1]);
 
 			if (freund == null) {
 				if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
