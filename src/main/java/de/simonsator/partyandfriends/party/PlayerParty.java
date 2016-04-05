@@ -249,7 +249,7 @@ public class PlayerParty {
 						}
 					}
 					ArrayList<ProxiedPlayer> liste = party.getPlayer();
-					if (liste.size() == 0) {
+					if (liste.isEmpty()) {
 						if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 							leader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
 									+ "§5The §5party §5was §5dissolved §5because §5of §5to §5less §5players."));

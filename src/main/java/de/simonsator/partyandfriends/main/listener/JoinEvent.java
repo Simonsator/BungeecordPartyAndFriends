@@ -74,7 +74,7 @@ public class JoinEvent implements Listener {
 		}
 		int[] freundeArrayID = Main.getInstance().getConnection().getFriendsAsArray(id);
 		ArrayList<String> anfragen = Main.getInstance().getConnection().getRequestsAsArrayList(id);
-		if (freundeArrayID.length == 0 && anfragen.size() == 0) {
+		if (freundeArrayID.length == 0 && anfragen.isEmpty()) {
 			return;
 		}
 		boolean keineFreunde = false;
@@ -82,7 +82,7 @@ public class JoinEvent implements Listener {
 			keineFreunde = true;
 		}
 		boolean keineAnfragen = false;
-		if (anfragen.size() == 0) {
+		if (anfragen.isEmpty()) {
 			keineAnfragen = true;
 		}
 		if (Main.getInstance().getConnection().querySettings(spieler)[3] == 1) {

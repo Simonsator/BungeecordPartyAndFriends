@@ -148,7 +148,7 @@ public class Leave extends SubCommand {
 				}
 			}
 			ArrayList<ProxiedPlayer> liste = party.getPlayer();
-			if (liste.size() == 0 && party.inviteListSize() == 0) {
+			if (liste.isEmpty() && party.inviteListSize() == 0) {
 				if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
 					party.getleader().sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
 							+ "§5The §5party §5was §5dissolved §5because §5of §5to §5less §5players."));
