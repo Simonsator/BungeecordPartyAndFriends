@@ -64,13 +64,12 @@ public class PartyManager {
 	 */
 	public static void deleteParty(PlayerParty party) {
 		if (party != null) {
-			for (int i = 0; i < party.getPlayer().size(); i++) {
-				if (party.getPlayer().get(i) != null) {
-					partys.remove(party.getPlayer().get(i));
-					party.getPlayer().remove(i);
+			for (int i = 0; i < party.getPlayers().size(); i++) {
+				if (party.getPlayers().get(i) != null) {
+					partys.remove(party.getPlayers().get(i));
 				}
 			}
-			partys.remove(party.getleader());
+			partys.remove(party.getLeader());
 		}
 	}
 

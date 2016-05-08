@@ -5,8 +5,7 @@
  */
 package de.simonsator.partyandfriends.main.listener;
 
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.util.List;
 
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.PartyManager;
@@ -27,7 +26,7 @@ public class ServerSwitshListener implements Listener {
 	/**
 	 * The list of the servers which the party will not join.
 	 */
-	private ArrayList<String> notJoinServers = new ArrayList<String>();
+	private List<String> notJoinServers;
 
 	/**
 	 * Initials the object
@@ -36,10 +35,7 @@ public class ServerSwitshListener implements Listener {
 	 * @version 1.0.0
 	 */
 	public ServerSwitshListener() {
-		StringTokenizer st = new StringTokenizer(Main.getInstance().getConfig().getString("General.PartyDoNotJoinTheseServers"), "|");
-		while (st.hasMoreTokens()) {
-			notJoinServers.add(st.nextToken());
-		}
+		notJoinServers = Main.getInstance().getConfig().getStringList("General.PartyDoNotJoinTheseServers");
 	}
 
 	/**
@@ -47,51 +43,23 @@ public class ServerSwitshListener implements Listener {
 	 * 
 	 * @author Simonsator
 	 * @version 1.0.0
-	 * @param e
+	 * @param pEvent
 	 *            The ServerSwitchEvent event
 	 */
 	@EventHandler
-	public void onServerSwitch(ServerSwitchEvent e) {
-		ProxiedPlayer player = e.getPlayer();
-		if (PartyManager.getParty(player) != null) {
-			PlayerParty party = PartyManager.getParty(player);
-			if (party.isleader(player)) {
-				if (notJoinServers.contains(party.getServerInfo().getName())) {
+	public void onServerSwitch(ServerSwitchEvent pEvent) {
+		ProxiedPlayer player = pEvent.getPlayer();
+		PlayerParty party = PartyManager.getParty(player);
+		if (party != null) {
+			if (party.isLeader(player)) {
+				if (notJoinServers.contains(party.getLeader().getServer().getInfo().getName())) {
 					return;
 				}
-				for (ProxiedPlayer p : party.getPlayer()) {
-					p.connect(party.getServerInfo());
-					if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
-						p.sendMessage(new TextComponent(
-								Main.getInstance().getPartyPrefix() + "§bThe §bparty §bhas §bjoined §bthe §bServer §e"
-										+ party.getServerInfo().getName() + "§b."));
-					} else {
-						if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
-							p.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-									+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ServerSwitched")
-											.replace("[SERVER]", party.getServerInfo().getName())));
-						} else {
-							p.sendMessage(
-									new TextComponent(Main.getInstance().getPartyPrefix() + "§bDie §bParty §bhat §bden §bServer §e"
-											+ party.getServerInfo().getName() + " §bbetreten."));
-						}
-					}
-				}
-				if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
-					player.sendMessage(
-							new TextComponent(Main.getInstance().getPartyPrefix() + "§bThe §bparty §bhas §bjoined §bthe §bServer §e"
-									+ party.getServerInfo().getName() + "§b."));
-				} else {
-					if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
-						player.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-								+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ServerSwitched")
-										.replace("[SERVER]", party.getServerInfo().getName())));
-					} else {
-						player.sendMessage(
-								new TextComponent(Main.getInstance().getPartyPrefix() + "§bDie §bParty §bhat §bden §bServer §e"
-										+ party.getServerInfo().getName() + " §bbetreten."));
-					}
-				}
+				for (ProxiedPlayer p : party.getPlayers())
+					p.connect(party.getLeader().getServer().getInfo());
+				party.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
+						+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ServerSwitched")
+								.replace("[SERVER]", party.getLeader().getServer().getInfo().getName())));
 			}
 		}
 	}
