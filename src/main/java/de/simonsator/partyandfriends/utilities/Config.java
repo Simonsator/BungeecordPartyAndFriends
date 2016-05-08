@@ -1,14 +1,8 @@
-/**
- * This class loads the config
- * 
- * @author Simonsator
- * @version 1.0.0
- */
 package de.simonsator.partyandfriends.utilities;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.util.ArrayList;
 
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.config.Configuration;
@@ -29,7 +23,7 @@ public class Config {
 	 * @version 1.0.0
 	 * @return Returns the config variable
 	 * @throws IOException
-	 *             Can throw a {@link SQLException}
+	 *             Can throw a {@link IOException}
 	 */
 	public static Configuration loadConfig() throws IOException {
 		if (!Main.getInstance().getDataFolder().exists()) {
@@ -53,7 +47,10 @@ public class Config {
 			config.set("MySQL.Password", "Password");
 		}
 		if (config.getString("MySQL.Database").equals("")) {
-			config.set("MySQL.Database", "freunde");
+			config.set("MySQL.Database", "friends");
+		}
+		if (config.getString("MySQL.TablePrefix").equals("")) {
+			config.set("MySQL.TablePrefix", "fr_");
 		}
 		if (config.getString("General.Language").equals("")) {
 			config.set("General.Language", "english");
@@ -62,17 +59,24 @@ public class Config {
 		if (ownLanguage.equals("")) {
 			config.set("General.UseOwnLanguageFile", "false");
 		}
-		if (config.getString("General.UpdateNotification").equals("")) {
-			config.set("General.UpdateNotification", "true");
+		if (config.getString("General.OfflineServer").equals("")) {
+			config.set("General.OfflineServer", "false");
 		}
-		if (config.getString("General.PartyDoNotJoinTheseServers").equalsIgnoreCase("")) {
-			config.set("General.PartyDoNotJoinTheseServers", "lobby1|lobby2");
+		if (config.getStringList("General.PartyDoNotJoinTheseServers").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("lobby");
+			list.add("lobby1");
+			list.add("lobby2");
+			config.set("General.PartyDoNotJoinTheseServers", list);
 		}
 		if (config.getString("General.DisableCommandP").equals("")) {
 			config.set("General.DisableCommandP", "false");
 		}
 		if (config.getString("General.DisableMsg").equals("")) {
 			config.set("General.DisableMsg", "false");
+		}
+		if (config.getString("General.DisableReply").equals("")) {
+			config.set("General.DisableReply", "false");
 		}
 		if (config.getInt("General.MaxPlayersInParty") == 0) {
 			config.set("General.MaxPlayersInParty", 0);
@@ -101,7 +105,7 @@ public class Config {
 		if (config.getString("General.DisableCommand.Party.Leader").equals("")) {
 			config.set("General.DisableCommand.Party.Leader", "false");
 		}
-		if (config.getString("Permissions.FriendPermission").equalsIgnoreCase("")) {
+		if (config.getString("Permissions.FriendPermission").equals("")) {
 			config.set("Permissions.FriendPermission", "");
 		}
 		if (config.getString("Permissions.PartyPermission").equals("")) {
@@ -110,59 +114,120 @@ public class Config {
 		if (config.getString("Permissions.NoPlayerLimitForPartys").equals("")) {
 			config.set("Permissions.NoPlayerLimitForPartys", "");
 		}
-		if (config.getString("Aliases.FriendsAliasMsg").equals("")) {
-			config.set("Aliases.FriendsAliasMsg", "msg|chat");
+		if (config.getString("GUI.ChangedHideModeMessage").equals("")) {
+			config.set("GUI.ChangedHideModeMessage", "true");
 		}
-		if (config.getString("Aliases.PartyAlias").equals("")) {
-			config.set("Aliases.PartyAlias", "party|party");
+		if (config.getList("CommandNames.Friends.TopCommands.Friend").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("friend");
+			list.add("friends");
+			config.set("CommandNames.Friends.TopCommands.Friend", list);
 		}
-		if (config.getString("Aliases.JoinAlias").equals("")) {
-			config.set("Aliases.JoinAlias", "join|j");
+		if (config.getList("CommandNames.Friends.Accept").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("accept");
+			config.set("CommandNames.Friends.Accept", list);
 		}
-		if (config.getString("Aliases.InviteAlias").equals("")) {
-			config.set("Aliases.InviteAlias", "invite|invite");
+		if (config.getList("CommandNames.Friends.Add").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("add");
+			config.set("CommandNames.Friends.Add", list);
 		}
-		if (config.getString("Aliases.KickAlias").equals("")) {
-			config.set("Aliases.KickAlias", "kick|k");
+		if (config.getList("CommandNames.Friends.Deny").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("deny");
+			config.set("CommandNames.Friends.Deny", list);
 		}
-		if (config.getString("Aliases.InfoAlias").equals("")) {
-			config.set("Aliases.InfoAlias", "info");
+		if (config.getList("CommandNames.Friends.Jump").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("jump");
+			config.set("CommandNames.Friends.Jump", list);
 		}
-		if (config.getString("Aliases.leaveAlias").equals("")) {
-			config.set("Aliases.leaveAlias", "leave|leave");
+		if (config.getList("CommandNames.Friends.List").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("list");
+			list.add("info");
+			config.set("CommandNames.Friends.List", list);
 		}
-		if (config.getString("Aliases.ChatAlias").equals("")) {
-			config.set("Aliases.ChatAlias", "chat|msg|message");
+		if (config.getList("CommandNames.Friends.Message").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("message");
+			list.add("msg");
+			config.set("CommandNames.Friends.Message", list);
 		}
-		if (config.getString("Aliases.LeaderAlias").equals("")) {
-			config.set("Aliases.LeaderAlias", "leader|setleader");
+		if (config.getList("CommandNames.Friends.Remove").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("remove");
+			config.set("CommandNames.Friends.Remove", list);
 		}
-		if (config.getString("Aliases.AcceptAlias").equals("")) {
-			config.set("Aliases.AcceptAlias", "accept");
+		if (config.getList("CommandNames.Friends.Settings").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("setting");
+			list.add("settings");
+			config.set("CommandNames.Friends.Settings", list);
 		}
-		if (config.getString("Aliases.AddAlias").equals("")) {
-			config.set("Aliases.AddAlias", "add");
+
+		if (config.getList("CommandNames.Friends.TopCommands.Reply").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("reply");
+			list.add("r");
+			config.set("CommandNames.Friends.TopCommands.Reply", list);
 		}
-		if (config.getString("Aliases.DenyAlias").equals("")) {
-			config.set("Aliases.DenyAlias", "deny");
+		if (config.getList("CommandNames.Friends.TopCommands.MSG").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("msg");
+			config.set("CommandNames.Friends.TopCommands.MSG", list);
 		}
-		if (config.getString("Aliases.SettingsAlias").equals("")) {
-			config.set("Aliases.SettingsAlias", "settings");
+		if (config.getList("CommandNames.Party.TopCommands.Party").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("party");
+			config.set("CommandNames.Party.TopCommands.Party", list);
 		}
-		if (config.getString("Aliases.JumpAlias").equals("")) {
-			config.set("Aliases.JumpAlias", "jump");
+		if (config.getList("CommandNames.Party.TopCommands.PartyChat").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("partychat");
+			list.add("p");
+			config.set("CommandNames.Party.TopCommands.PartyChat", list);
 		}
-		if (config.getString("Aliases.ListAlias").equals("")) {
-			config.set("Aliases.ListAlias", "list|l");
+		if (config.getList("CommandNames.Party.Join").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("join");
+			list.add("j");
+			config.set("CommandNames.Party.Join", list);
 		}
-		if (config.getString("Aliases.RemoveAlias").equals("")) {
-			config.set("Aliases.RemoveAlias", "remove");
+		if (config.getList("CommandNames.Party.Invite").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("invite");
+			config.set("CommandNames.Party.Invite", list);
 		}
-		if (config.getString("Aliases.FriendsAlias").equals("")) {
-			config.set("Aliases.FriendsAlias", "friend|friends");
+		if (config.getList("CommandNames.Party.Kick").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("kick");
+			list.add("k");
+			config.set("CommandNames.Party.Kick", list);
 		}
-		if (config.getString("Aliases.PartyChatShortAlias").equals("")) {
-			config.set("Aliases.PartyChatShortAlias", "p|pc|pmsg");
+		if (config.getList("CommandNames.Party.Info").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("info");
+			list.add("list");
+			config.set("CommandNames.Party.Info", list);
+		}
+		if (config.getList("CommandNames.Party.Leave").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("leave");
+			config.set("CommandNames.Party.Leave", list);
+		}
+		if (config.getList("CommandNames.Party.Chat").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("chat");
+			list.add("message");
+			list.add("msg");
+			config.set("CommandNames.Party.Chat", list);
+		}
+		if (config.getList("CommandNames.Party.Leader").isEmpty()) {
+			ArrayList<String> list = new ArrayList<>();
+			list.add("leader");
+			config.set("CommandNames.Party.Leader", list);
 		}
 		ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, file);
 		return config;

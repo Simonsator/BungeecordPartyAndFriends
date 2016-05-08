@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Chat;
 
@@ -21,7 +20,7 @@ import net.md_5.bungee.protocol.packet.Chat;
  * Objects of this class are the party, where a player is in
  * 
  * @author Simonsator
- * @version 1.0.1
+ * @version 2.0.0
  *
  */
 public class PlayerParty {
@@ -36,7 +35,7 @@ public class PlayerParty {
 	/**
 	 * The players who are invited into this party
 	 */
-	private ArrayList<ProxiedPlayer> invite;
+	private ArrayList<ProxiedPlayer> invited;
 
 	/**
 	 * Initials a new party
@@ -49,12 +48,12 @@ public class PlayerParty {
 	public PlayerParty(ProxiedPlayer leader) {
 		this.leader = leader;
 		this.players = new ArrayList<ProxiedPlayer>();
-		this.invite = new ArrayList<ProxiedPlayer>();
+		this.invited = new ArrayList<ProxiedPlayer>();
 	}
 
 	/**
-	 * Returns a true if the given player is the leader of this party, and it
-	 * will returns false if he is not the leader, of this party
+	 * Returns true if the given player is the leader of this party, and it will
+	 * returns false if he is not the leader, of this party
 	 * 
 	 * @author Simonsator
 	 * @version 1.0.0
@@ -63,42 +62,8 @@ public class PlayerParty {
 	 * @return Returns a true if the given player is the leader of this party,
 	 *         and it will returns false if he is not the leader, of this party
 	 */
-	public boolean isleader(ProxiedPlayer player) {
+	public boolean isLeader(ProxiedPlayer player) {
 		return this.leader == player;
-	}
-
-	/**
-	 * Returns the "normal" players who are in the party.
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
-	 * @return Returns the "normal" players who are in the party.
-	 */
-	public ArrayList<ProxiedPlayer> getPlayer() {
-		return this.players;
-	}
-
-	/**
-	 * Sets the ArrayList of the "normal" players
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
-	 * @param liste
-	 *            The ArrayList of the "normal" players
-	 */
-	public void setPlayer(ArrayList<ProxiedPlayer> liste) {
-		players = liste;
-	}
-
-	/**
-	 * Gets the leader of this party
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
-	 * @return Returns the party leader
-	 */
-	public ProxiedPlayer getleader() {
-		return this.leader;
 	}
 
 	/**
@@ -112,12 +77,58 @@ public class PlayerParty {
 	 * @return Returns true if the player is in the party. Returns false if the
 	 *         player is not in the party.
 	 */
-	public boolean isinParty(ProxiedPlayer player) {
-		if (getAllPlayersInParty().contains(player)) {
+	public boolean isInParty(ProxiedPlayer player) {
+		if (getAllPlayers().contains(player))
 			return true;
-		} else {
-			return false;
-		}
+		return false;
+	}
+
+	public boolean isNobodyInvited() {
+		return invited.isEmpty();
+	}
+
+	/**
+	 * Gets the leader of this party
+	 * 
+	 * @author Simonsator
+	 * @version 1.0.0
+	 * @return Returns the party leader
+	 */
+	public ProxiedPlayer getLeader() {
+		return this.leader;
+	}
+
+	/**
+	 * 
+	 * @return Returns all players in this party (inclusive the leader).
+	 */
+	public ArrayList<ProxiedPlayer> getAllPlayers() {
+		ArrayList<ProxiedPlayer> allPlayers = new ArrayList<>();
+		for (ProxiedPlayer player : players)
+			allPlayers.add(player);
+		if (leader != null)
+			allPlayers.add(leader);
+		return allPlayers;
+	}
+
+	/**
+	 * Returns the "normal" players who are in the party.
+	 * 
+	 * @author Simonsator
+	 * @version 1.0.0
+	 * @return Returns the "normal" players who are in the party.
+	 */
+	public ArrayList<ProxiedPlayer> getPlayers() {
+		return this.players;
+	}
+
+	/**
+	 * Returns all invited players.
+	 * 
+	 * @return Returns all invited players
+	 */
+	public ArrayList<ProxiedPlayer> getInvitedPlayers() {
+		return invited;
 	}
 
 	/**
@@ -125,49 +136,70 @@ public class PlayerParty {
 	 * 
 	 * @author Simonsator
 	 * @version 1.0.0
-	 * @param player
+	 * @param pPlayer
 	 *            The player
 	 * @return Returns true if the player was added to this party. Returns false
 	 *         if the player was not added to this party
 	 */
-	public boolean addPlayer(ProxiedPlayer player) {
-		if (!players.contains(player) && invite.contains(player)) {
-			players.add(player);
-			PartyManager.addPlayerToParty(player, this);
-			invite.remove(player);
+	public boolean addPlayer(ProxiedPlayer pPlayer) {
+		if (!players.contains(pPlayer) && invited.contains(pPlayer)) {
+			players.add(pPlayer);
+			PartyManager.addPlayerToParty(pPlayer, this);
+			invited.remove(pPlayer);
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Sets the party leader.
+	 * 
+	 * @param player
+	 *            The player
+	 */
+	public void setLeader(ProxiedPlayer player) {
+		leader = player;
+		PartyManager.addPlayerToParty(player, this);
+		players.remove(player);
 	}
 
 	/**
 	 * Removes a player from the party
 	 * 
-	 * @param player
+	 * @param pPlayer
 	 *            The player
-	 * @return Returns true if the player was removed from the party. Returns
-	 *         false if the player was not removed from the party.
 	 */
-	public boolean removePlayer(ProxiedPlayer player) {
-		if (players.contains(player)) {
-			players.remove(player);
-			PartyManager.removePlayerFromParty(player);
-			return true;
-		} else {
-			return false;
+	public void removePlayer(ProxiedPlayer pPlayer) {
+		removePlayerSilent(pPlayer);
+		sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
+				+ Main.getInstance().getMessagesYml().getString("Party.Command.General.PlayerHasLeftTheParty")
+						.replace("[PLAYER]", pPlayer.getDisplayName())));
+	}
+
+	public void removePlayerSilent(ProxiedPlayer pPlayer) {
+		players.remove(pPlayer);
+		PartyManager.removePlayerFromParty(pPlayer);
+	}
+
+	public void leaveParty(ProxiedPlayer pPlayer) {
+		removePlayer(pPlayer);
+		boolean needsNewLeader = needsNewLeader(pPlayer);
+		if (deleteParty())
+			return;
+		if (needsNewLeader) {
+			findNewLeader(pPlayer);
 		}
 	}
 
-	/**
-	 * Returns the Server info from the party on which the party is on
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
-	 * @return Returns the Server info from the party on which the party is on
-	 */
-	public ServerInfo getServerInfo() {
-		return this.leader.getServer().getInfo();
+	public void kickPlayer(ProxiedPlayer pPlayer) {
+		removePlayerSilent(pPlayer);
+		pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + Main.getInstance().getMessagesYml()
+				.getString("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer")));
+		this.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
+				+ Main.getInstance().getMessagesYml().getString("Party.Command.Kick.KickedPlayerOutOfThePartyOthers")
+						.replace("[PLAYER]", pPlayer.getDisplayName())));
+		deleteParty();
 	}
 
 	/**
@@ -179,95 +211,43 @@ public class PlayerParty {
 	 *            The player
 	 */
 	public void invite(final ProxiedPlayer player) {
-		invite.add(player);
-		String toWrite = "";
-		String value = "";
-		if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
-			player.sendMessage(new TextComponent(de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
-					+ "§5You §5were §5invited §5to §5the §5party §5of §6" + leader.getDisplayName() + "§5!"));
-			toWrite = de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
-					+ "§5Join §5the §5party §5by §5using §5the §5command §6/Party §6join §6" + leader.getName() + "!";
-			value = "Click here to join the party";
-		} else {
-			if (Main.getInstance().getLanguage().equals("own")) {
-				player.sendMessage(
-						new TextComponent(de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
-								+ de.simonsator.partyandfriends.main.Main.getInstance().getMessagesYml()
-										.getString("Party.Command.Invite.YouWereInvitedBY")
-										.replace("[PLAYER]", leader.getDisplayName())));
-				toWrite = de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
-						+ de.simonsator.partyandfriends.main.Main.getInstance().getMessagesYml()
-								.getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE")
-								.replace("[PLAYER]", leader.getName());
-				value = de.simonsator.partyandfriends.main.Main.getInstance().getMessagesYml()
-						.getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER");
-			} else {
-				player.sendMessage(
-						new TextComponent(de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
-								+ "§5Du §5wurdest §5in §5die §5Party §5von§6 " + leader.getDisplayName()
-								+ " §5eingeladen!"));
-				toWrite = de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
-						+ "§5Tritt §5der §5Party §5mit §6/Party join " + leader.getName() + " §5bei!";
-				value = "Hier klicken um Party einladung anzunehmen";
-			}
-		}
-		String command = "/party join " + leader.getName();
-		String jsoncode = "{\"text\":\"" + toWrite + "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\""
-				+ command
+		invited.add(player);
+		player.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + Main.getInstance().getMessagesYml()
+				.getString("Party.Command.Invite.YouWereInvitedBY").replace("[PLAYER]", leader.getDisplayName())));
+		player.unsafe().sendPacket(new Chat("{\"text\":\"" + Main.getInstance().getPartyPrefix()
+				+ Main.getInstance().getMessagesYml().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE")
+						.replace("[PLAYER]", leader.getName())
+				+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
+				+ Main.getInstance().getPartyCommand().getName() + " join " + leader.getName()
 				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-				+ value + "\"}]}}}";
-		player.unsafe().sendPacket(new Chat(jsoncode));
+				+ Main.getInstance().getMessagesYml().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER")
+				+ "\"}]}}}"));
 		final PlayerParty party = this;
 		ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {
 			@Override
 			public void run() {
-				if (invite.contains(player)) {
-					invite.remove(player);
-					if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
-						player.sendMessage(new TextComponent(
-								Main.getInstance().getPartyPrefix() + "§5The invitation of the Party from §6"
-										+ leader.getDisplayName() + " §5is §5timed §5out!"));
-						leader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + "§5The player§6 "
-								+ player.getDisplayName() + " §5has §5not §5accepted §5your §5invitation!"));
-					} else {
-						if (Main.getInstance().getLanguage().equals("own")) {
-							player.sendMessage(new TextComponent(
-									Main.getInstance().getPartyPrefix() + Main.getInstance().getMessagesYml()
-											.getString("Party.Command.Invite.InvitationTimedOutInvited")
-											.replace("[PLAYER]", leader.getDisplayName())));
-							leader.sendMessage(
-									new TextComponent(Main.getInstance().getPartyPrefix() + Main.getInstance()
-											.getMessagesYml().getString("Party.Command.Invite.InvitationTimedOutLeader")
-											.replace("[PLAYER]", player.getDisplayName())));
-						} else {
-							player.sendMessage(new TextComponent(
-									Main.getInstance().getPartyPrefix() + "§5Die Einladung in die Party von §6"
-											+ leader.getDisplayName() + " §5ist §5abgelaufen!"));
-							leader.sendMessage(new TextComponent(
-									Main.getInstance().getPartyPrefix() + "§5Der Spieler§6 " + player.getDisplayName()
-											+ " §5hat §5die §5Einladung §5nicht §5angenommen!"));
-						}
-					}
-					ArrayList<ProxiedPlayer> liste = party.getPlayer();
-					if (liste.isEmpty()) {
-						if (Main.getInstance().getLanguage().equalsIgnoreCase("english")) {
-							leader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-									+ "§5The §5party §5was §5dissolved §5because §5of §5to §5less §5players."));
-						} else {
-							if (Main.getInstance().getLanguage().equals("own")) {
-								leader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
+				if (invited.contains(player)) {
+					invited.remove(player);
+					player.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + Main.getInstance()
+							.getMessagesYml().getString("Party.Command.Invite.InvitationTimedOutInvited")
+							.replace("[PLAYER]", leader.getDisplayName())));
+					leader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + Main.getInstance()
+							.getMessagesYml().getString("Party.Command.Invite.InvitationTimedOutLeader")
+							.replace("[PLAYER]", player.getDisplayName())));
+					if (isPartyEmpty()) {
+						leader.sendMessage(
+								new TextComponent(de.simonsator.partyandfriends.main.Main.getInstance().getPartyPrefix()
 										+ Main.getInstance().getMessagesYml().getString(
 												"Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers")));
-							} else {
-								leader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-										+ "§5Die §5Party §5wurde §5wegen §5zu §5wenig §5Mitgliedern §5aufgelöst."));
-							}
-						}
 						PartyManager.deleteParty(party);
 					}
 				}
 			}
 		}, 60, TimeUnit.SECONDS);
+	}
+
+	private boolean isPartyEmpty() {
+		return players.isEmpty() && invited.isEmpty();
 	}
 
 	/**
@@ -277,8 +257,8 @@ public class PlayerParty {
 	 * @version 1.0.0
 	 * @return Returns the size of the invitation list
 	 */
-	public int inviteListSize() {
-		return invite.size();
+	public int getInviteListSize() {
+		return invited.size();
 	}
 
 	/**
@@ -290,49 +270,37 @@ public class PlayerParty {
 	 * @return Returns true if the player is already invited. Returns false if
 	 *         the player is not invited.
 	 */
-	public boolean containsPlayer(ProxiedPlayer player) {
-		return invite.contains(player);
+	public boolean isInvited(ProxiedPlayer player) {
+		return invited.contains(player);
 	}
 
-	/**
-	 * Sets the party leader.
-	 * 
-	 * @param player
-	 *            The player
-	 */
-	public void setLeader(ProxiedPlayer player) {
-		leader = player;
+	public void sendMessage(TextComponent pText) {
+		for (ProxiedPlayer player : getAllPlayers())
+			player.sendMessage(pText);
 	}
 
-	/**
-	 * Returns all players in this party.
-	 * 
-	 * @return Returns all players in this party.
-	 */
-	public ArrayList<ProxiedPlayer> getAllPlayersInParty() {
-		ArrayList<ProxiedPlayer> allPlayers = new ArrayList<ProxiedPlayer>();
-		for (ProxiedPlayer uebertragen : players)
-			allPlayers.add(uebertragen);
-		allPlayers.add(leader);
-		return allPlayers;
+	private boolean deleteParty() {
+		if (this.getAllPlayers().size() == 1) {
+			sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + Main.getInstance().getMessagesYml()
+					.getString("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers")));
+			PartyManager.deleteParty(this);
+			return true;
+		}
+		return false;
 	}
 
-	/**
-	 * Returns all invited players.
-	 * 
-	 * @return Returns all invited players
-	 */
-	public ArrayList<ProxiedPlayer> getInvitedPlayers() {
-		return invite;
+	private boolean needsNewLeader(ProxiedPlayer pPlayer) {
+		if (isLeader(pPlayer)) {
+			leader = null;
+			return true;
+		}
+		return false;
 	}
 
-	/**
-	 * Set the invite list
-	 * 
-	 * @param inviteList
-	 *            The ArrayList that should be set
-	 */
-	public void setInviteList(ArrayList<ProxiedPlayer> inviteList) {
-		invite = inviteList;
+	private void findNewLeader(ProxiedPlayer pPlayer) {
+		this.setLeader(players.get(0));
+		players.remove(players.get(0));
+		this.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + Main.getInstance().getMessagesYml()
+				.getString("Party.Command.Leave.NewLeaderIs").replace("[NEWLEADER]", leader.getDisplayName())));
 	}
 }
