@@ -70,7 +70,7 @@ public class Add extends FriendSubCommand {
 					.sendPacket(new Chat("{\"text\":\"" + Main.getInstance().getFriendsPrefix()
 							+ Main.getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")
 									.replace("[PLAYER]", pPlayer.getName())
-					+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\""
+					+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/"
 					+ Main.getInstance().getFriendsCommand().getName() + " accept " + pPlayer.getName()
 					+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
 					+ Main.getInstance().getMessagesYml().getString("Friends.Command.Add.ClickHere") + "\"}]}}}"));
