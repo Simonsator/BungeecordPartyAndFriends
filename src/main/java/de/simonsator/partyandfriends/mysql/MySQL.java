@@ -720,7 +720,7 @@ public class MySQL {
 	 *            The pass
 	 */
 	public void setLastPlayerWroteTo(int pPlayerID, int pLastWroteTo, int pI) {
-		removeLastPlayerWroteFrom(pPlayerID, pLastWroteTo);
+		removeLastPlayerWroteFrom(pPlayerID);
 		Connection con = connect();
 		PreparedStatement prepStmt = null;
 		try {
@@ -745,13 +745,12 @@ public class MySQL {
 			setLastPlayerWroteTo(pLastWroteTo, pPlayerID, 1);
 	}
 
-	private void removeLastPlayerWroteFrom(int pPlayerID, int pLastWroteTo) {
+	private void removeLastPlayerWroteFrom(int pPlayerID) {
 		Connection con = connect();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement(
-					"DELETE FROM `" + database + "`." + tablePrefix + "last_player_wrote_to WHERE player_id = '"
-							+ pPlayerID + "' AND written_to_id='" + pLastWroteTo + "' Limit 1");
+			prepStmt = con.prepareStatement("DELETE FROM `" + database + "`." + tablePrefix
+					+ "last_player_wrote_to WHERE player_id = '" + pPlayerID + "' Limit 1");
 			prepStmt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
