@@ -92,7 +92,7 @@ public class MSG extends Command {
 		ProxiedPlayer writtenTo = ProxyServer.getInstance().getPlayer(pQueryName);
 		if (isOffline(pPlayer, writtenTo, pPlayerID, pWrittenToID, args, n))
 			return;
-		sendMessage(toMessage(args, n), writtenTo, pPlayer, 0);
+		sendMessage(toMessage(args, n), writtenTo, pPlayer);
 		Main.getInstance().getConnection().setLastPlayerWroteTo(pPlayerID, pWrittenToID, 0);
 	}
 
@@ -121,7 +121,7 @@ public class MSG extends Command {
 		sendMessage(
 				pContent.replace(" ",
 						Main.getInstance().getMessagesYml().getString("Friends.Command.MSG.ColorOfMessage")),
-				pWrittenTo, pSenderName);
+				pWrittenTo, pSenderName, pWrittenTo.getDisplayName());
 	}
 
 	private static boolean playerExists(ProxiedPlayer pPlayer, int pPlayerID) {
@@ -173,16 +173,15 @@ public class MSG extends Command {
 	 * @param i
 	 *            The time the method is called
 	 */
-	private void sendMessage(String pContent, ProxiedPlayer pPlayer1, ProxiedPlayer pPlayer2, int i) {
-		sendMessage(pContent, pPlayer1, pPlayer2.getDisplayName());
-		if (i == 0)
-			sendMessage(pContent, pPlayer2, pPlayer1, 1);
+	private void sendMessage(String pContent, ProxiedPlayer pPlayer1, ProxiedPlayer pPlayer2) {
+		sendMessage(pContent, pPlayer1, pPlayer2.getDisplayName(), pPlayer1.getDisplayName());
+		sendMessage(pContent, pPlayer2, pPlayer2.getDisplayName(), pPlayer1.getDisplayName());
 	}
 
-	private void sendMessage(String pContent, ProxiedPlayer pReceiver, String pSenderName) {
+	private void sendMessage(String pContent, ProxiedPlayer pReceiver, String pSenderName, String pReceiverName) {
 		pReceiver.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance()
 				.getMessagesYml().getString("Friends.Command.MSG.SendedMessage").replace("[SENDER]", pSenderName)
-				.replace("[PLAYER]", pReceiver.getDisplayName()).replace("[CONTENT]", pContent)));
+				.replace("[PLAYER]", pReceiverName).replace("[CONTENT]", pContent)));
 	}
 
 	/**
