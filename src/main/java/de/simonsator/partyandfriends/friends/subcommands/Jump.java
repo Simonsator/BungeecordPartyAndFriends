@@ -5,8 +5,10 @@
  */
 package de.simonsator.partyandfriends.friends.subcommands;
 
+import de.simonsator.partyandfriends.api.friends.ServerConnector;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.main.Main;
+import de.simonsator.partyandfriends.utilities.StandartConnector;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -19,6 +21,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @version 1.0.0
  */
 public class Jump extends FriendSubCommand {
+	private static ServerConnector connector = new StandartConnector();
+
 	public Jump(String[] pCommands, int pPriority, String pHelp) {
 		super(pCommands, pPriority, pHelp);
 	}
@@ -39,7 +43,7 @@ public class Jump extends FriendSubCommand {
 			return;
 		if (!allowsJumps(pPlayer, friendID))
 			return;
-		pPlayer.connect(toJoin);
+		connector.connect(pPlayer, toJoin);
 		pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix()
 				+ Main.getInstance().getMessagesYml().getString("Friends.Command.Jump.JoinedTheServer")
 						.replace("[PLAYER]", friend.getDisplayName())));
@@ -74,5 +78,15 @@ public class Jump extends FriendSubCommand {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Sets the server connector, which will be used to join a server.
+	 * 
+	 * @param pConnector
+	 *            The connector
+	 */
+	public void setServerConnector(ServerConnector pConnector) {
+		connector = pConnector;
 	}
 }
