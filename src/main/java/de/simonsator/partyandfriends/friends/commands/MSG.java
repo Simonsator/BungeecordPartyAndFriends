@@ -170,8 +170,6 @@ public class MSG extends Command {
 	 *            The sender
 	 * @param pPlayer2
 	 *            The receiver
-	 * @param i
-	 *            The time the method is called
 	 */
 	private void sendMessage(String pContent, ProxiedPlayer pPlayer1, ProxiedPlayer pPlayer2) {
 		sendMessage(pContent, pPlayer1, pPlayer2.getDisplayName(), pPlayer1.getDisplayName());
