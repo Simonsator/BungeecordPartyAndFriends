@@ -761,12 +761,8 @@ public class MessagesYML {
 			messagesYml.set("Party.Command.Invite.MaxPlayersInPartyReached",
 					"&cDie &cMaximale &cgröße &cfür &ceine &cParty &cist &c[MAXPLAYERSINPARTY]");
 		}
-		if (messagesYml.getString("Party.Command.Invite.MaxPlayersInPartyReached").equals("")) {
-			messagesYml.set("Party.Command.Invite.MaxPlayersInPartyReached",
-					"&cDie &cMaximale &cgröße &cfür &ceine &cParty &cist &c[MAXPLAYERSINPARTY]");
-		}
-		if (messagesYml.getString("Party.Command.Invite.MaxPlayersInPartyReached").equals("")) {
-			messagesYml.set("Party.Command.Invite.MaxPlayersInPartyReached",
+		if (messagesYml.getString("Party.Command.Invite.InvitedPlayer").equals("")) {
+			messagesYml.set("Party.Command.Invite.InvitedPlayer",
 					"&bDu &bhast &6[PLAYER] &bin &bdeine &bParty &beingeladen.");
 		}
 		if (messagesYml.getString("Party.Command.Invite.InvitationTimedOutInvited").equals("")) {
