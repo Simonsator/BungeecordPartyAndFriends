@@ -86,7 +86,7 @@ public class Jump extends FriendSubCommand {
 	 * @param pConnector
 	 *            The connector
 	 */
-	public void setServerConnector(ServerConnector pConnector) {
+	public static void setServerConnector(ServerConnector pConnector) {
 		connector = pConnector;
 	}
 }

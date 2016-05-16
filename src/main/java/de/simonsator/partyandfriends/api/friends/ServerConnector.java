@@ -3,7 +3,7 @@ package de.simonsator.partyandfriends.api.friends;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public abstract class ServerConnector {
+public interface ServerConnector {
 
 	/**
 	 * Connects a player to a spigot server
