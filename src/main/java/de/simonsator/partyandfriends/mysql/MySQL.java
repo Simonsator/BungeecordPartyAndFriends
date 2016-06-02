@@ -27,6 +27,7 @@ public class MySQL {
 	 */
 	private String url;
 	private String tablePrefix;
+	private Connection connnection;
 
 	/**
 	 * Connects to the MySQL server
@@ -54,10 +55,21 @@ public class MySQL {
 		database = pDatabase;
 		tablePrefix = Main.getInstance().getConfig().getString("MySQL.TablePrefix");
 		importDatabase();
+		connnection = createConnection();
 		new Importer(this);
 	}
 
-	public Connection connect() {
+	public Connection getConnection() {
+		try {
+			if (connnection != null && connnection.isValid(20))
+				return connnection;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return createConnection();
+	}
+
+	private Connection createConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			return DriverManager.getConnection(url);
@@ -67,8 +79,16 @@ public class MySQL {
 		return null;
 	}
 
+	public void closeConnection() {
+		try {
+			if (connnection != null)
+				connnection.close();
+		} catch (SQLException e) {
+		}
+	}
+
 	public void importDatabase() {
-		Connection con = connect();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement("CREATE DATABASE IF NOT EXISTS " + database);
@@ -127,7 +147,7 @@ public class MySQL {
 	 * @version 1.0.0
 	 */
 	public int getPlayerID(UUID pUuid) {
-		Connection con = connect();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -163,7 +183,7 @@ public class MySQL {
 	 * @version 1.0.0
 	 */
 	public int getPlayerID(String pPlayerName) {
-		Connection con = connect();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -198,7 +218,7 @@ public class MySQL {
 	 * @version 1.0.0
 	 */
 	public void firstJoin(ProxiedPlayer pPlayer) {
-		Connection con = connect();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement(
@@ -240,7 +260,7 @@ public class MySQL {
 	 * @version 1.0.0
 	 */
 	public ArrayList<Integer> getFriends(int pPlayerID) {
-		Connection con = connect();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		ArrayList<Integer> list = new ArrayList<>();
@@ -282,7 +302,7 @@ public class MySQL {
 	 * @version 1.0.0
 	 */
 	public String getName(int pPlayerID) {
-		Connection con = connect();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -319,7 +339,7 @@ public class MySQL {
 	 * @version 1.0.0
 	 */
 	public void updatePlayerName(int pPlayerID, String pNewPlayerName) {
-		Connection con = connect();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement("UPDATE `" + database + "`." + tablePrefix + "players set player_name='"
@@ -340,7 +360,7 @@ public class MySQL {
 	}
 
 	public boolean hasRequestFrom(int pReceiver, int pRequester) {
-		Connection con = connect();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -376,7 +396,7 @@ public class MySQL {
 	 * @version 1.0.0
 	 */
 	public ArrayList<Integer> getRequests(int pPlayerID) {
-		Connection con = connect();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		ArrayList<Integer> requests = new ArrayList<>();
@@ -413,7 +433,7 @@ public class MySQL {
 	 * @version 1.0.0
 	 */
 	public void addFriend(int pIDRequester, int pIDReceiver) {
-		Connection con = connect();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement(
@@ -446,7 +466,7 @@ public class MySQL {
 	 * @version 1.0.0
 	 */
 	public void denyRequest(int pReceiverSender, int pRequesterID) {
-		Connection con = connect();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement(
@@ -478,7 +498,7 @@ public class MySQL {
 	 * @version 1.0.0
 	 */
 	public void deleteFriend(int pFriend1ID, int pFriend2ID) {
-		Connection con = connect();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement("DELETE FROM `" + database + "`." + tablePrefix
@@ -510,7 +530,7 @@ public class MySQL {
 	 * @version 1.0.0
 	 */
 	public void sendFriendRequest(int pSenderID, int pQueryID) {
-		Connection con = connect();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement(
@@ -571,7 +591,7 @@ public class MySQL {
 	}
 
 	public int getSettingsWorth(int pPlayerID, int pSettingsID) {
-		Connection con = connect();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -601,7 +621,7 @@ public class MySQL {
 	public void setSetting(int pPlayerID, int pSettingsID, int pNewWorth) {
 		removeSetting(pPlayerID, pSettingsID);
 		if (pNewWorth != 0) {
-			Connection con = connect();
+			Connection con = getConnection();
 			PreparedStatement prepStmt = null;
 			try {
 				prepStmt = con.prepareStatement(
@@ -626,7 +646,7 @@ public class MySQL {
 	}
 
 	public void removeSetting(int pPlayerID, int pSettingsID) {
-		Connection con = connect();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement("DELETE FROM  `" + database + "`." + tablePrefix
@@ -647,7 +667,7 @@ public class MySQL {
 	}
 
 	public boolean isAFriendOf(int pPlayerID1, int pPlayerID2) {
-		Connection con = connect();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -682,7 +702,7 @@ public class MySQL {
 	 * @return Returns the last player who wrote to the given player
 	 */
 	public int getLastPlayerWroteTo(int pID) {
-		Connection con = connect();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -721,7 +741,7 @@ public class MySQL {
 	 */
 	public void setLastPlayerWroteTo(int pPlayerID, int pLastWroteTo, int pI) {
 		removeLastPlayerWroteFrom(pPlayerID);
-		Connection con = connect();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement(
@@ -746,7 +766,7 @@ public class MySQL {
 	}
 
 	private void removeLastPlayerWroteFrom(int pPlayerID) {
-		Connection con = connect();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement("DELETE FROM `" + database + "`." + tablePrefix

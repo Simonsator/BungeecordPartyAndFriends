@@ -48,7 +48,7 @@ public class Importer {
 	}
 
 	private void dropOldTable() {
-		Connection con = connection.connect();
+		Connection con = connection.getConnection();
 		Statement stmt = null;
 		try {
 			stmt = con.createStatement();
@@ -74,7 +74,7 @@ public class Importer {
 	}
 
 	public int[] getRequests(int pID) {
-		Connection con = connection.connect();
+		Connection con = connection.getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -107,7 +107,7 @@ public class Importer {
 	}
 
 	private int getHideModeImport(int playerID) {
-		Connection con = connection.connect();
+		Connection con = connection.getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -134,7 +134,7 @@ public class Importer {
 	}
 
 	private int[] getSettings(int pPlayerID) {
-		Connection con = connection.connect();
+		Connection con = connection.getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -178,7 +178,7 @@ public class Importer {
 	}
 
 	private String getFriends(int pID) {
-		Connection con = connection.connect();
+		Connection con = connection.getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -222,7 +222,7 @@ public class Importer {
 	}
 
 	private ArrayList<PlayerCollection> importPlayers() {
-		Connection con = connection.connect();
+		Connection con = connection.getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		ArrayList<PlayerCollection> players = new ArrayList<>();
@@ -255,7 +255,7 @@ public class Importer {
 	}
 
 	private void createPlayerEntry(String pName, String pUUID, int pID) {
-		Connection con = connection.connect();
+		Connection con = connection.getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement("insert into  `" + database + "`."
@@ -285,7 +285,7 @@ public class Importer {
 	 * @version 1.0.0
 	 */
 	private void importTableHidePlayers() {
-		Connection con = connection.connect();
+		Connection con = connection.getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement("ALTER TABLE " + database
@@ -313,7 +313,7 @@ public class Importer {
 	 * @version 1.0.0
 	 */
 	private void importTableNewSettings() {
-		Connection con = connection.connect();
+		Connection con = connection.getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement("ALTER TABLE `" + database + "`.`freunde`\n"
