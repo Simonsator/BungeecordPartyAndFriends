@@ -121,8 +121,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {
@@ -160,8 +158,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (stmt != null)
 					stmt.close();
 				if (rs != null)
@@ -196,8 +192,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (stmt != null)
 					stmt.close();
 				if (rs != null)
@@ -236,8 +230,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {
@@ -279,8 +271,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (stmt != null)
 					stmt.close();
 				if (rs != null)
@@ -315,8 +305,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (stmt != null)
 					stmt.close();
 				if (rs != null)
@@ -349,8 +337,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {
@@ -373,8 +359,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (stmt != null)
 					stmt.close();
 				if (rs != null)
@@ -409,8 +393,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (stmt != null)
 					stmt.close();
 				if (rs != null)
@@ -445,8 +427,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {
@@ -477,8 +457,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {
@@ -509,8 +487,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {
@@ -542,8 +518,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {
@@ -605,8 +579,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (rs != null)
 					rs.close();
 				if (stmt != null)
@@ -634,8 +606,6 @@ public class MySQL {
 				e.printStackTrace();
 			} finally {
 				try {
-					if (con != null)
-						con.close();
 					if (prepStmt != null)
 						prepStmt.close();
 				} catch (SQLException e) {
@@ -656,8 +626,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {
@@ -681,8 +649,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (stmt != null)
 					stmt.close();
 				if (rs != null)
@@ -717,8 +683,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (stmt != null)
 					stmt.close();
 				if (rs != null)
@@ -753,8 +717,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {
@@ -776,8 +738,6 @@ public class MySQL {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {

@@ -58,8 +58,6 @@ public class Importer {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (stmt != null)
 					stmt.close();
 			} catch (SQLException e) {
@@ -86,8 +84,6 @@ public class Importer {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (stmt != null)
 					stmt.close();
 				if (rs != null)
@@ -120,8 +116,6 @@ public class Importer {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (rs != null)
 					rs.close();
 				if (stmt != null)
@@ -160,8 +154,6 @@ public class Importer {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (rs != null)
 					rs.close();
 				if (stmt != null)
@@ -193,8 +185,6 @@ public class Importer {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (stmt != null)
 					stmt.close();
 				if (rs != null)
@@ -241,8 +231,6 @@ public class Importer {
 
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (stmt != null)
 					stmt.close();
 				if (rs != null)
@@ -268,8 +256,6 @@ public class Importer {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {
@@ -295,8 +281,6 @@ public class Importer {
 
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {
@@ -324,8 +308,6 @@ public class Importer {
 		} catch (SQLException e) {
 		} finally {
 			try {
-				if (con != null)
-					con.close();
 				if (prepStmt != null)
 					prepStmt.close();
 			} catch (SQLException e) {

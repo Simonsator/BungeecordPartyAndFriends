@@ -47,14 +47,12 @@ public class JoinEvent implements Listener {
 		if (friends.isEmpty() && friendRequests.isEmpty()) {
 			return;
 		}
-		boolean noFriends = false;
-		if (friends.isEmpty())
-			noFriends = true;
+		boolean noFriends = friends.isEmpty();
 		if (!friendRequests.isEmpty())
 			deliverFriendRequests(pEvent, friendRequests);
 		if (Main.getInstance().getConnection().getSettingsWorth(id, 3) == 1)
 			noFriends = true;
-		if (noFriends == false)
+		if (!noFriends)
 			sendNowOnline(pEvent.getPlayer(), friends);
 	}
 
