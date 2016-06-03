@@ -61,16 +61,17 @@ public class MySQL {
 
 	public Connection getConnection() {
 		try {
-			if (connnection != null && connnection.isValid(20))
+			if (connnection != null && connnection.isValid(100))
 				return connnection;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return createConnection();
+		return connnection = createConnection();
 	}
 
 	private Connection createConnection() {
 		try {
+			closeConnection();
 			Class.forName("com.mysql.jdbc.Driver");
 			return DriverManager.getConnection(url);
 		} catch (ClassNotFoundException | SQLException e) {
