@@ -61,7 +61,7 @@ public class MySQL {
 
 	public Connection getConnection() {
 		try {
-			if (connnection != null && connnection.isValid(100))
+			if (connnection != null && connnection.isValid(30))
 				return connnection;
 		} catch (SQLException e) {
 			e.printStackTrace();
