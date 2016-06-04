@@ -52,9 +52,8 @@ public class ServerSwitshListener implements Listener {
 		PlayerParty party = PartyManager.getParty(player);
 		if (party != null) {
 			if (party.isLeader(player)) {
-				if (notJoinServers.contains(party.getLeader().getServer().getInfo().getName())) {
+				if (notJoinServers.contains(party.getLeader().getServer().getInfo().getName()))
 					return;
-				}
 				for (ProxiedPlayer p : party.getPlayers())
 					p.connect(party.getLeader().getServer().getInfo());
 				party.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
