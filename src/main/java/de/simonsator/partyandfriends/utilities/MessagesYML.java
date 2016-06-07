@@ -1153,6 +1153,8 @@ public class MessagesYML {
 				messagesYml.getString("Friends.GUI.Hide.ShowOnlyPeopleFromTheServer").replace('&', '§'));
 		messagesYml.set("Friends.GUI.Hide.ShowNobody",
 				messagesYml.getString("Friends.GUI.Hide.ShowNobody").replace('&', '§'));
+		messagesYml.set("Friends.Command.List.PlayerSplit",
+				messagesYml.getString("Friends.Command.List.PlayerSplit").replace('&', '§'));
 		return messagesYml;
 	}
 }
