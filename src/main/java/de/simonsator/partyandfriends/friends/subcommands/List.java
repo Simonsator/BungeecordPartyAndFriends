@@ -32,17 +32,16 @@ public class List extends FriendSubCommand {
 
 	private String getFriendsCombined(ArrayList<Integer> pFriends) {
 		String friendsCombined = "";
-		String[] friendNames = new String[pFriends.size()];
 		for (int i = 0; i < pFriends.size(); i++) {
-			friendNames[i] = Main.getInstance().getConnection().getName(pFriends.get(i));
-			ProxiedPlayer friendLoaded = ProxyServer.getInstance().getPlayer(friendNames[i]);
+			String friendName = Main.getInstance().getConnection().getName(pFriends.get(i));
+			ProxiedPlayer friendLoaded = ProxyServer.getInstance().getPlayer(friendName);
 			String additive;
 			String color;
 			if (friendLoaded == null || Main.getInstance().getConnection().getSettingsWorth(pFriends.get(i), 3) == 1) {
 				additive = Main.getInstance().getMessagesYml().getString("Friends.Command.List.OfflineTitle");
 				color = Main.getInstance().getMessagesYml().getString("Friends.Command.List.OfflineColor");
 			} else {
-				friendNames[i] = friendLoaded.getDisplayName();
+				friendName = friendLoaded.getDisplayName();
 				additive = Main.getInstance().getMessagesYml().getString("Friends.Command.List.OnlineTitle");
 				color = Main.getInstance().getMessagesYml().getString("Friends.Command.List.OnlineColor");
 			}
@@ -50,9 +49,7 @@ public class List extends FriendSubCommand {
 			if (i > 0) {
 				comma = Main.getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit");
 			}
-			friendsCombined = friendsCombined + comma + color
-					+ Main.getInstance().getConnection().getName(pFriends.get(i)) + additive;
-			i++;
+			friendsCombined += comma + color + friendName + additive;
 		}
 		return friendsCombined;
 	}
