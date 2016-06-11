@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
-			<version>1.10-SNAPSHOT</version>
+			<version>1.9-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
