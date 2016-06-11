@@ -3,8 +3,10 @@ package de.simonsator.partyandfriends.utilities;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 
 import de.simonsator.partyandfriends.main.Main;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
@@ -48,11 +50,11 @@ public class MessagesYML {
 		messagesYml = loadEnglishMessages(messagesYml);
 		if (pType.equalsIgnoreCase("own"))
 			ConfigurationProvider.getProvider(YamlConfiguration.class).save(messagesYml, file);
-		return replaceColorCodes(messagesYml);
+		process(messagesYml);
+		return messagesYml;
 	}
 
 	private static Configuration loadEnglishMessages(Configuration messagesYml) {
-
 		if (messagesYml.getString("Party.Error.CommandNotFound").equals("")) {
 			messagesYml.set("Party.Error.CommandNotFound", "&cThis command doesn't exist!");
 		}
@@ -901,260 +903,35 @@ public class MessagesYML {
 		return messagesYml;
 	}
 
-	private static Configuration replaceColorCodes(Configuration messagesYml) {
-		messagesYml.set("General.LanguageName", messagesYml.getString("General.LanguageName").replace("&", "§"));
-		messagesYml.set("Party.General.PartyPrefix",
-				messagesYml.getString("Party.General.PartyPrefix").replace("&", "§"));
-		messagesYml.set("Party.General.HelpBegin", messagesYml.getString("Party.General.HelpBegin").replace("&", "§"));
-		messagesYml.set("Party.General.HelpEnd", messagesYml.getString("Party.General.HelpEnd").replace("&", "§"));
-		messagesYml.set("Friends.CommandUsage.Settings",
-				messagesYml.getString("Friends.CommandUsage.Settings").replace("&", "§"));
-		messagesYml.set("Party.Error.CommandNotFound",
-				messagesYml.getString("Party.Error.CommandNotFound").replace("&", "§"));
-		messagesYml.set("Party.CommandUsage.Join", messagesYml.getString("Party.CommandUsage.Join").replace("&", "§"));
-		messagesYml.set("Party.CommandUsage.Invite",
-				messagesYml.getString("Party.CommandUsage.Invite").replace("&", "§"));
-		messagesYml.set("Party.CommandUsage.List", messagesYml.getString("Party.CommandUsage.List").replace("&", "§"));
-		messagesYml.set("Party.CommandUsage.Chat", messagesYml.getString("Party.CommandUsage.Chat").replace("&", "§"));
-		messagesYml.set("Party.CommandUsage.Leave",
-				messagesYml.getString("Party.CommandUsage.Leave").replace("&", "§"));
-		messagesYml.set("Party.CommandUsage.Kick", messagesYml.getString("Party.CommandUsage.Kick").replace("&", "§"));
-		messagesYml.set("Party.CommandUsage.Leader",
-				messagesYml.getString("Party.CommandUsage.Leader").replace("&", "§"));
-		messagesYml.set("Party.Command.General.ErrorNoParty",
-				messagesYml.getString("Party.Command.General.ErrorNoParty").replace("&", "§"));
-		messagesYml.set("Party.Command.General.ErrorNotPartyLeader",
-				messagesYml.getString("Party.Command.General.ErrorNotPartyLeader").replace("&", "§"));
-		messagesYml.set("Party.Command.General.ErrorGivenPlayerIsNotInTheParty",
-				messagesYml.getString("Party.Command.General.ErrorGivenPlayerIsNotInTheParty").replace("&", "§"));
-		messagesYml.set("Party.Command.General.ErrorNoPlayer",
-				messagesYml.getString("Party.Command.General.ErrorNoPlayer").replace("&", "§"));
-		messagesYml.set("Party.Command.General.ErrorPlayerNotOnline",
-				messagesYml.getString("Party.Command.General.ErrorPlayerNotOnline").replace("&", "§"));
-		messagesYml.set("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers",
-				messagesYml.getString("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers").replace("&", "§"));
-		messagesYml.set("Party.Command.General.PlayerHasLeftTheParty",
-				messagesYml.getString("Party.Command.General.PlayerHasLeftTheParty").replace("&", "§"));
-		messagesYml.set("Party.Command.General.ServerSwitched",
-				messagesYml.getString("Party.Command.General.ServerSwitched").replace("&", "§"));
-		messagesYml.set("Party.Command.Chat.Prefix",
-				messagesYml.getString("Party.Command.Chat.Prefix").replace("&", "§"));
-		messagesYml.set("Party.Command.Chat.ContentColor",
-				messagesYml.getString("Party.Command.Chat.ContentColor").replace("&", "§"));
-		messagesYml.set("Party.Command.Chat.PartyChatOutput",
-				messagesYml.getString("Party.Command.Chat.PartyChatOutput").replace("&", "§"));
-		messagesYml.set("Party.Command.Chat.ErrorNoMessage",
-				messagesYml.getString("Party.Command.Chat.ErrorNoMessage").replace("&", "§"));
-		messagesYml.set("Party.Command.Info.Leader",
-				messagesYml.getString("Party.Command.Info.Leader").replace("&", "§"));
-		messagesYml.set("Party.Command.Info.Players",
-				messagesYml.getString("Party.Command.Info.Players").replace("&", "§"));
-		messagesYml.set("Party.Command.Info.PlayersCut",
-				messagesYml.getString("Party.Command.Info.PlayersCut").replace("&", "§"));
-		messagesYml.set("Party.Command.Info.Empty",
-				messagesYml.getString("Party.Command.Info.Empty").replace("&", "§"));
-		messagesYml.set("Party.Command.Invite.GivenPlayerEqualsSender",
-				messagesYml.getString("Party.Command.Invite.GivenPlayerEqualsSender").replace("&", "§"));
-		messagesYml.set("Party.Command.Invite.CanNotInviteThisPlayer",
-				messagesYml.getString("Party.Command.Invite.CanNotInviteThisPlayer").replace("&", "§"));
-		messagesYml.set("Party.Command.Invite.AlreadyInAParty",
-				messagesYml.getString("Party.Command.Invite.AlreadyInAParty").replace("&", "§"));
-		messagesYml.set("Party.Command.Invite.AlreadyInYourParty",
-				messagesYml.getString("Party.Command.Invite.AlreadyInYourParty").replace("&", "§"));
-		messagesYml.set("Party.Command.Invite.MaxPlayersInPartyReached",
-				messagesYml.getString("Party.Command.Invite.MaxPlayersInPartyReached").replace("&", "§"));
-		messagesYml.set("Party.Command.Invite.InvitedPlayer",
-				messagesYml.getString("Party.Command.Invite.InvitedPlayer").replace("&", "§"));
-		messagesYml.set("Party.Command.Invite.YouWereInvitedBY",
-				messagesYml.getString("Party.Command.Invite.YouWereInvitedBY").replace("&", "§"));
-		messagesYml.set("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE",
-				messagesYml.getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE").replace("&", "§"));
-		messagesYml.set("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER",
-				messagesYml.getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER").replace("&", "§"));
-		messagesYml.set("Party.Command.Invite.InvitationTimedOutInvited",
-				messagesYml.getString("Party.Command.Invite.InvitationTimedOutInvited").replace("&", "§"));
-		messagesYml.set("Party.Command.Invite.InvitationTimedOutLeader",
-				messagesYml.getString("Party.Command.Invite.InvitationTimedOutLeader").replace("&", "§"));
-		messagesYml.set("Party.Command.Join.PlayerHasNoParty",
-				messagesYml.getString("Party.Command.Join.PlayerHasNoParty").replace("&", "§"));
-		messagesYml.set("Party.Command.Join.PlayerHasJoinend",
-				messagesYml.getString("Party.Command.Join.PlayerHasJoinend").replace("&", "§"));
-		messagesYml.set("Party.Command.Join.ErrorNoInvatation",
-				messagesYml.getString("Party.Command.Join.ErrorNoInvatation").replace("&", "§"));
-		messagesYml.set("Party.Command.Kick.KickedPlayerOutOfTheParty",
-				messagesYml.getString("Party.Command.Kick.KickedPlayerOutOfTheParty").replace("&", "§"));
-		messagesYml.set("Party.Command.Kick.KickedPlayerOutOfThePartyOthers",
-				messagesYml.getString("Party.Command.Kick.KickedPlayerOutOfThePartyOthers").replace("&", "§"));
-		messagesYml.set("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer",
-				messagesYml.getString("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer").replace("&", "§"));
-		messagesYml.set("Party.Command.Leader.SenderEqualsGivenPlayer",
-				messagesYml.getString("Party.Command.Leader.SenderEqualsGivenPlayer").replace("&", "§"));
-		messagesYml.set("Party.Command.Leader.NewLeaderIs",
-				messagesYml.getString("Party.Command.Leader.NewLeaderIs").replace("&", "§"));
-		messagesYml.set("Party.Command.Leave.NewLeaderIs",
-				messagesYml.getString("Party.Command.Leave.NewLeaderIs").replace("&", "§"));
-		messagesYml.set("Party.Command.Leave.YouLeftTheParty",
-				messagesYml.getString("Party.Command.Leave.YouLeftTheParty").replace("&", "§"));
-		messagesYml.set("Friends.General.Prefix", messagesYml.getString("Friends.General.Prefix").replace("&", "§"));
-		messagesYml.set("Friends.General.HelpBegin",
-				messagesYml.getString("Friends.General.HelpBegin").replace("&", "§"));
-		messagesYml.set("Friends.General.HelpEnd", messagesYml.getString("Friends.General.HelpEnd").replace("&", "§"));
-		messagesYml.set("Friends.General.CommandNotFound",
-				messagesYml.getString("Friends.General.CommandNotFound").replace("&", "§"));
-		messagesYml.set("Friends.General.PlayerIsOffline",
-				messagesYml.getString("Friends.General.PlayerIsOffline").replace("&", "§"));
-		messagesYml.set("Friends.General.NotAFriendOfOrOffline",
-				messagesYml.getString("Friends.General.NotAFriendOfOrOffline").replace("&", "§"));
-		messagesYml.set("Friends.General.NoFriendGiven",
-				messagesYml.getString("Friends.General.NoFriendGiven").replace("&", "§"));
-		messagesYml.set("Friends.General.NoPlayerGiven",
-				messagesYml.getString("Friends.General.NoPlayerGiven").replace("&", "§"));
-		messagesYml.set("Friends.General.TooManyArguments",
-				messagesYml.getString("Friends.General.TooManyArguments").replace("&", "§"));
-		messagesYml.set("Friends.General.PlayerIsNowOffline",
-				messagesYml.getString("Friends.General.PlayerIsNowOffline").replace("&", "§"));
-		messagesYml.set("Friends.General.PlayerIsNowOnline",
-				messagesYml.getString("Friends.General.PlayerIsNowOnline").replace("&", "§"));
-		messagesYml.set("Friends.General.RequestInfoOnJoin",
-				messagesYml.getString("Friends.General.RequestInfoOnJoin").replace("&", "§"));
-		messagesYml.set("Friends.General.RequestInfoOnJoinColor",
-				messagesYml.getString("Friends.General.RequestInfoOnJoinColor").replace("&", "§"));
-		messagesYml.set("Friends.General.RequestInfoOnJoinColorComma",
-				messagesYml.getString("Friends.General.RequestInfoOnJoinColorComma").replace("&", "§"));
-		messagesYml.set("Friends.General.DoesNotExist",
-				messagesYml.getString("Friends.General.DoesNotExist").replace("&", "§"));
-		messagesYml.set("Friends.CommandUsage.List",
-				messagesYml.getString("Friends.CommandUsage.List").replace("&", "§"));
-		messagesYml.set("Friends.CommandUsage.MSG",
-				messagesYml.getString("Friends.CommandUsage.MSG").replace("&", "§"));
-		messagesYml.set("Friends.CommandUsage.ADD",
-				messagesYml.getString("Friends.CommandUsage.ADD").replace("&", "§"));
-		messagesYml.set("Friends.CommandUsage.Accept",
-				messagesYml.getString("Friends.CommandUsage.Accept").replace("&", "§"));
-		messagesYml.set("Friends.CommandUsage.Deny",
-				messagesYml.getString("Friends.CommandUsage.Deny").replace("&", "§"));
-		messagesYml.set("Friends.CommandUsage.Remove",
-				messagesYml.getString("Friends.CommandUsage.Remove").replace("&", "§"));
-		messagesYml.set("Friends.CommandUsage.Jump",
-				messagesYml.getString("Friends.CommandUsage.Jump").replace("&", "§"));
-		messagesYml.set("Friends.Command.Accept.NowFriends",
-				messagesYml.getString("Friends.Command.Accept.NowFriends").replace("&", "§"));
-		messagesYml.set("Friends.Command.Accept.ErrorNoFriendShipInvitation",
-				messagesYml.getString("Friends.Command.Accept.ErrorNoFriendShipInvitation").replace("&", "§"));
-		messagesYml.set("Friends.Command.Accept.ErrorSenderEqualsReceiver",
-				messagesYml.getString("Friends.Command.Accept.ErrorSenderEqualsReceiver").replace("&", "§"));
-		messagesYml.set("Friends.Command.Accept.ErrorAlreadySend",
-				messagesYml.getString("Friends.Command.Accept.ErrorAlreadySend").replace("&", "§"));
-		messagesYml.set("Friends.Command.Add.SenderEqualsreceiver",
-				messagesYml.getString("Friends.Command.Add.SenderEqualsreceiver").replace("&", "§"));
-		messagesYml.set("Friends.Command.Add.FriendRequestFromreceiver",
-				messagesYml.getString("Friends.Command.Add.FriendRequestFromreceiver").replace("&", "§"));
-		messagesYml.set("Friends.Command.Add.FriendRequestreceived",
-				messagesYml.getString("Friends.Command.Add.FriendRequestreceived").replace("&", "§"));
-		messagesYml.set("Friends.Command.Add.ClickHere",
-				messagesYml.getString("Friends.Command.Add.ClickHere").replace("&", "§"));
-		messagesYml.set("Friends.Command.Add.SendedAFriendRequest",
-				messagesYml.getString("Friends.Command.Add.SendedAFriendRequest").replace("&", "§"));
-		messagesYml.set("Friends.Command.Add.CanNotSendThisPlayer",
-				messagesYml.getString("Friends.Command.Add.CanNotSendThisPlayer").replace("&", "§"));
-		messagesYml.set("Friends.Command.Add.HowToAccept",
-				messagesYml.getString("Friends.Command.Add.HowToAccept").replace("&", "§"));
-		messagesYml.set("Friends.Command.Add.AlreadyFriends",
-				messagesYml.getString("Friends.Command.Add.AlreadyFriends").replace("&", "§"));
-		messagesYml.set("Friends.Command.Deny.HasDenied",
-				messagesYml.getString("Friends.Command.Deny.HasDenied").replace("&", "§"));
-		messagesYml.set("Friends.Command.Deny.NoFriendRequest",
-				messagesYml.getString("Friends.Command.Deny.NoFriendRequest").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.NowYouCanGetInvitedByEveryone",
-				messagesYml.getString("Friends.Command.Settings.NowYouCanGetInvitedByEveryone").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.NowYouCanGetInvitedByFriends",
-				messagesYml.getString("Friends.Command.Settings.NowYouCanGetInvitedByFriends").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.NowYouAreNotGonereceiveFriendRequests", messagesYml
-				.getString("Friends.Command.Settings.NowYouAreNotGonereceiveFriendRequests").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.NowYouAreGonereceiveFriendRequests",
-				messagesYml.getString("Friends.Command.Settings.NowYouAreGonereceiveFriendRequests").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.NowYouAreNotGonereceiveMessages",
-				messagesYml.getString("Friends.Command.Settings.NowYouAreNotGonereceiveMessages").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.NowYouWillBeShowAsOnline",
-				messagesYml.getString("Friends.Command.Settings.NowYouWillBeShowAsOnline").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.NowYouWilBeShownAsOffline",
-				messagesYml.getString("Friends.Command.Settings.NowYouWilBeShownAsOffline").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.NowNoMessages",
-				messagesYml.getString("Friends.Command.Settings.NowNoMessages").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.NowMessages",
-				messagesYml.getString("Friends.Command.Settings.NowMessages").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.NowYourFriendsCanJump",
-				messagesYml.getString("Friends.Command.Settings.NowYourFriendsCanJump").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.NowYourFriendsCanNotJump",
-				messagesYml.getString("Friends.Command.Settings.NowYourFriendsCanNotJump").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.AtTheMomentYouAreNotGonereceiveFriendRequests", messagesYml
-				.getString("Friends.Command.Settings.AtTheMomentYouAreNotGonereceiveFriendRequests").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.AtTheMomentYouAreGonereceiveFriendRequests", messagesYml
-				.getString("Friends.Command.Settings.AtTheMomentYouAreGonereceiveFriendRequests").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.SplitLine",
-				messagesYml.getString("Friends.Command.Settings.SplitLine").replace("&", "§"));
-		messagesYml
-				.set("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty",
-						messagesYml
-								.getString(
-										"Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty")
-								.replace("&", "§"));
-		messagesYml
-				.set("Friends.Command.Settings.AtTheMomentYouCanNotGetInvitedByEverybodyIntoHisParty",
-						messagesYml
-								.getString(
-										"Friends.Command.Settings.AtTheMomentYouCanNotGetInvitedByEverybodyIntoHisParty")
-								.replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.ChangeThisSettingsHover",
-				messagesYml.getString("Friends.Command.Settings.ChangeThisSettingsHover").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.ChangeThisSettingWithFriendrequests", messagesYml
-				.getString("Friends.Command.Settings.ChangeThisSettingWithFriendrequests").replace("&", "§"));
-		messagesYml.set("Friends.Command.Settings.ChangeThisSettingWithParty",
-				messagesYml.getString("Friends.Command.Settings.ChangeThisSettingWithParty").replace("&", "§"));
-		messagesYml.set("Friends.Command.Jump.AlreadyOnTheServer",
-				messagesYml.getString("Friends.Command.Jump.AlreadyOnTheServer").replace("&", "§"));
-		messagesYml.set("Friends.Command.Jump.JoinedTheServer",
-				messagesYml.getString("Friends.Command.Jump.JoinedTheServer").replace("&", "§"));
-		messagesYml.set("Friends.Command.Jump.CanNotJump",
-				messagesYml.getString("Friends.Command.Jump.CanNotJump").replace("&", "§"));
-		messagesYml.set("Friends.Command.List.NoFriendsAdded",
-				messagesYml.getString("Friends.Command.List.NoFriendsAdded").replace("&", "§"));
-		messagesYml.set("Friends.Command.List.OfflineTitle",
-				messagesYml.getString("Friends.Command.List.OfflineTitle").replace("&", "§"));
-		messagesYml.set("Friends.Command.List.OfflineColor",
-				messagesYml.getString("Friends.Command.List.OfflineColor").replace("&", "§"));
-		messagesYml.set("Friends.Command.List.OnlineTitle",
-				messagesYml.getString("Friends.Command.List.OnlineTitle").replace("&", "§"));
-		messagesYml.set("Friends.Command.List.OnlineColor",
-				messagesYml.getString("Friends.Command.List.OnlineColor").replace("&", "§"));
-		messagesYml.set("Friends.Command.List.FriendsList",
-				messagesYml.getString("Friends.Command.List.FriendsList").replace("&", "§"));
-		messagesYml.set("Friends.Command.MSG.CanNotWriteToHim",
-				messagesYml.getString("Friends.Command.MSG.CanNotWriteToHim").replace("&", "§"));
-		messagesYml.set("Friends.Command.MSG.NoOneEverWroteToYou",
-				messagesYml.getString("Friends.Command.MSG.NoOneEverWroteToYou").replace("&", "§"));
-		messagesYml.set("Friends.Command.MSG.PlayerAndMessageMissing",
-				messagesYml.getString("Friends.Command.MSG.PlayerAndMessageMissing").replace("&", "§"));
-		messagesYml.set("Friends.Command.MSG.ColorOfMessage",
-				messagesYml.getString("Friends.Command.MSG.ColorOfMessage").replace("&", "§"));
-		messagesYml.set("Friends.Command.MSG.SendedMessage",
-				messagesYml.getString("Friends.Command.MSG.SendedMessage").replace("&", "§"));
-		messagesYml.set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin",
-				messagesYml.getString("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin").replace("&", "§"));
-		messagesYml.set("Friends.Command.Remove.Removed",
-				messagesYml.getString("Friends.Command.Remove.Removed").replace("&", "§"));
-		messagesYml.set("Friends.GUI.Hide.ShowAllPlayers",
-				messagesYml.getString("Friends.GUI.Hide.ShowAllPlayers").replace('&', '§'));
-		messagesYml.set("Friends.GUI.Hide.ShowOnlyFriendsAndPeopleFromTheServer",
-				messagesYml.getString("Friends.GUI.Hide.ShowOnlyFriendsAndPeopleFromTheServer").replace('&', '§'));
-		messagesYml.set("Friends.GUI.Hide.ShowOnlyFriends",
-				messagesYml.getString("Friends.GUI.Hide.ShowOnlyFriends").replace('&', '§'));
-		messagesYml.set("Friends.GUI.Hide.ShowOnlyPeopleFromTheServer",
-				messagesYml.getString("Friends.GUI.Hide.ShowOnlyPeopleFromTheServer").replace('&', '§'));
-		messagesYml.set("Friends.GUI.Hide.ShowNobody",
-				messagesYml.getString("Friends.GUI.Hide.ShowNobody").replace('&', '§'));
-		messagesYml.set("Friends.Command.List.PlayerSplit",
-				messagesYml.getString("Friends.Command.List.PlayerSplit").replace('&', '§'));
-		return messagesYml;
+	private static void process(Configuration pMessagesYML) {
+		for (String key : pMessagesYML.getKeys()) {
+			Object entry = pMessagesYML.get(key);
+			if (entry instanceof LinkedHashMap)
+				process(pMessagesYML.getSection(key));
+			else if (entry instanceof String) {
+				String stringEntry = (String) entry;
+				stringEntry = ChatColor.translateAlternateColorCodes('&', stringEntry);
+				stringEntry = fixColors(stringEntry);
+				pMessagesYML.set(key, ChatColor.translateAlternateColorCodes('&', stringEntry));
+			}
+		}
+	}
+
+	private static String fixColors(String pInput) {
+		String[] splited = pInput.split(" ");
+		String composite = "";
+		String colorCode = "";
+		for (String input : splited) {
+			if (!input.startsWith("§"))
+				input = colorCode + input;
+			int index = input.lastIndexOf('§');
+			if (index != -1)
+				if (input.length() > index)
+					colorCode = "§" + input.charAt(index + 1);
+			composite += " " + input;
+		}
+		if (composite.length() > 0)
+			composite = composite.substring(1);
+		return composite;
 	}
 }
