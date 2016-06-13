@@ -38,10 +38,10 @@ public class MessagesYML {
 			if (!file.exists()) {
 				file.createNewFile();
 			}
-			messagesYml = loadEnglishMessages(ConfigurationProvider.getProvider(YamlConfiguration.class).load(file));
+			messagesYml = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
 			break;
 		case "english":
-			messagesYml = loadEnglishMessages(new Configuration());
+			messagesYml = new Configuration();
 			break;
 		default:
 			messagesYml = loadGermanMessages(new Configuration());
