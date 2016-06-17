@@ -3,17 +3,15 @@ package de.simonsator.partyandfriends.party.subcommand;
 import de.simonsator.partyandfriends.api.party.PartyAPI;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.party.PartyManager;
-import de.simonsator.partyandfriends.party.PlayerParty;
+import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.party.playerpartys.PlayerParty;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
  * The class which will be executed on /party leave
- * 
+ *
  * @author Simonsator
  * @version 1.0.0
- *
  */
 public class Leave extends PartySubCommand {
 
@@ -23,16 +21,13 @@ public class Leave extends PartySubCommand {
 
 	/**
 	 * Will be executed on /party leave
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
-	 * @param pPlayer
-	 *            The player
-	 * @param args
-	 *            The arguments
+	 *
+	 * @param pPlayer The player
+	 * @param args    The arguments
 	 */
-	public void onCommand(ProxiedPlayer pPlayer, String[] args) {
-		PlayerParty party = PartyManager.getParty(pPlayer);
+	@Override
+	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
+		PlayerParty party = Main.getPartyManager().getParty(pPlayer);
 		if (!isInParty(pPlayer, party))
 			return;
 		party.leaveParty(pPlayer);
@@ -42,6 +37,6 @@ public class Leave extends PartySubCommand {
 
 	@Override
 	public boolean hasAccess(int pPermissionHeight) {
-		return pPermissionHeight <= PartyAPI.PARTY_MEMBER_PERMISSION_HEIGHT;
+		return pPermissionHeight >= PartyAPI.PARTY_MEMBER_PERMISSION_HEIGHT;
 	}
 }

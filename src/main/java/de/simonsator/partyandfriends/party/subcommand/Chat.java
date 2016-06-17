@@ -3,11 +3,12 @@ package de.simonsator.partyandfriends.party.subcommand;
 import de.simonsator.partyandfriends.api.party.PartyAPI;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import net.md_5.bungee.api.CommandSender;
 
 /**
  * The /party chat command
- * 
+ *
  * @author Simonsator
  * @version 1.0.0
  */
@@ -23,7 +24,7 @@ public class Chat extends PartySubCommand {
 	}
 
 	@Override
-	public void onCommand(ProxiedPlayer pPlayer, String[] args) {
-		Main.getInstance().getPartyChatCommand().execute(pPlayer, args);
+	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
+		Main.getInstance().getPartyChatCommand().execute((CommandSender) pPlayer, args);
 	}
 }

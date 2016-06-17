@@ -1,8 +1,5 @@
 package de.simonsator.partyandfriends.main;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.friends.commands.MSG;
 import de.simonsator.partyandfriends.friends.commands.Reply;
@@ -10,25 +7,37 @@ import de.simonsator.partyandfriends.main.listener.JoinEvent;
 import de.simonsator.partyandfriends.main.listener.PlayerDisconnectListener;
 import de.simonsator.partyandfriends.main.listener.ServerSwitshListener;
 import de.simonsator.partyandfriends.mysql.MySQL;
+import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManager;
+import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 import de.simonsator.partyandfriends.party.command.PartyChat;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
+import de.simonsator.partyandfriends.party.manager.LocalPartyManager;
+import de.simonsator.partyandfriends.party.manager.PartyManager;
 import de.simonsator.partyandfriends.utilities.Config;
 import de.simonsator.partyandfriends.utilities.MessagesYML;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 
+import java.io.IOException;
+
 /***
  * The main class
- * 
+ *
  * @author Simonsator
  * @version 1.0.0
  */
 public class Main extends Plugin {
 	/**
+	 * This object
+	 */
+	protected static Main instance;
+	private static PAFPlayerManager playerManager;
+	private static PartyManager partyManager;
+	/**
 	 * The connection to MySQL
 	 */
-	private MySQL connection;
+	protected MySQL connection;
 	/**
 	 * The configuration
 	 */
@@ -53,42 +62,50 @@ public class Main extends Plugin {
 	 * The party command object
 	 */
 	private PartyCommand partyCommand;
-	/**
-	 * This object
-	 */
-	private static Main instance;
 	private Friends friendCommand;
 	private MSG friendsMSGCommand;
 	private PartyChat partyChatCommand;
 
+	public static Main getInstance() {
+		return instance;
+	}
+
+	public static PartyManager getPartyManager() {
+		return partyManager;
+	}
+
+	public static PAFPlayerManager getPlayerManager() {
+		return playerManager;
+	}
+
 	/**
 	 * Will be execute on enable
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	@Override
 	public void onEnable() {
 		instance = (this);
 		loadConfiguration();
-		connection = (new MySQL());
-		try {
-			getConnection().firstConnect(getConfig().getString("MySQL.Host"), getConfig().getString("MySQL.Username"),
-					getConfig().getString("MySQL.Password"), getConfig().getInt("MySQL.Port"),
-					getConfig().getString("MySQL.Database"));
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+		connection = (new MySQL(getConfig().getString("MySQL.Host"), getConfig().getString("MySQL.Username"),
+				getConfig().getString("MySQL.Password"), getConfig().getInt("MySQL.Port"),
+				getConfig().getString("MySQL.Database"), getConfig().getString("MySQL.TablePrefix")));
+		switch ("MySQL") {
+			case "MySQL":
+				playerManager = new PAFPlayerManagerMySQL();
+				partyManager = new LocalPartyManager();
+				break;
 		}
 		registerListeners();
 		registerCommands();
-		System.out.println("[PartyAndFriends]" + "PartyAndFriends was enabled successfully!");
+	}
+
+	@Override
+	public void onDisable() {
+		Main.getPartyManager().deleteAllParties();
+		getConnection().closeConnection();
 	}
 
 	/**
 	 * Loads the configurations(config.yml and messages.yml)
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	public void loadConfiguration() {
 		try {
@@ -111,9 +128,6 @@ public class Main extends Plugin {
 
 	/**
 	 * Registers the listeners
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	private void registerListeners() {
 		ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerDisconnectListener());
@@ -123,9 +137,6 @@ public class Main extends Plugin {
 
 	/**
 	 * Registers the commands
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	private void registerCommands() {
 		partyCommand = (new PartyCommand(
@@ -139,10 +150,10 @@ public class Main extends Plugin {
 		getProxy().getPluginManager().registerCommand(this, friendCommand);
 		friendsMSGCommand = new MSG(
 				(getConfig().getStringList("CommandNames.Friends.TopCommands.MSG").toArray(new String[0])));
-		if (getConfig().getString("General.DisableMsg").equalsIgnoreCase("true") == false) {
+		if (!getConfig().getString("General.DisableMsg").equalsIgnoreCase("true")) {
 			getProxy().getPluginManager().registerCommand(this, friendsMSGCommand);
 		}
-		if (getConfig().getString("General.DisableReply").equalsIgnoreCase("true") == false) {
+		if (!getConfig().getString("General.DisableReply").equalsIgnoreCase("true")) {
 			getProxy().getPluginManager().registerCommand(this, new Reply(
 					(getConfig().getStringList("CommandNames.Friends.TopCommands.Reply").toArray(new String[0]))));
 		}
@@ -186,10 +197,6 @@ public class Main extends Plugin {
 
 	public String getPartyPrefix() {
 		return partyPrefix;
-	}
-
-	public static Main getInstance() {
-		return instance;
 	}
 
 }

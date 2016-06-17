@@ -1,94 +1,61 @@
 package de.simonsator.partyandfriends.mysql;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
+import de.simonsator.partyandfriends.utilities.OfflineMessage;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import static de.simonsator.partyandfriends.main.Main.getInstance;
+import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
 /**
  * @author Simonsator
  * @version 2.0.0
  */
-public class MySQL {
+public class MySQL extends SQLCommunication {
 
-	/**
-	 * The MySQL database
-	 */
-	private String database;
-	/**
-	 * The url of the SQL server
-	 */
-	private String url;
 	private String tablePrefix;
-	private Connection connnection;
 
 	/**
 	 * Connects to the MySQL server
-	 * 
-	 * @param pHost
-	 *            The MySQL host
-	 * @param pUsername
-	 *            The MySQL user
-	 * @param pPassword
-	 *            The MySQL password
-	 * @param pPort
-	 *            The port of the MySQL server
-	 * @param pDatabase
-	 *            The MySQL database
-	 * @throws ClassNotFoundException
-	 *             Will never happen, because it is integrated in Bungeecord
-	 * @throws SQLException
-	 *             Happens if the plugin cannot connect to the MySQL Server
-	 * @author Simonsator
-	 * @version 1.0.0
+	 *
+	 * @param pHost        The MySQL host
+	 * @param pUsername    The MySQL user
+	 * @param pPassword    The MySQL password
+	 * @param pPort        The port of the MySQL server
+	 * @param pDatabase    The MySQL database
+	 * @param pTablePrefix The prefix of the tables
 	 */
-	public void firstConnect(String pHost, String pUsername, String pPassword, int pPort, String pDatabase)
-			throws ClassNotFoundException, SQLException {
-		url = "jdbc:mysql://" + pHost + ":" + pPort + "/?user=" + pUsername + "&password=" + pPassword;
-		database = pDatabase;
-		tablePrefix = Main.getInstance().getConfig().getString("MySQL.TablePrefix");
+	public MySQL(String pHost, String pUsername, String pPassword, int pPort, String pDatabase, String pTablePrefix) {
+		super(pDatabase, "jdbc:mysql://" + pHost + ":" + pPort + "/?user=" + pUsername + "&password=" + pPassword);
+		this.tablePrefix = pTablePrefix;
 		importDatabase();
-		connnection = createConnection();
-		new Importer(this);
+		(new Importer(pDatabase, "jdbc:mysql://" + pHost + ":" + pPort + "/?user=" + pUsername + "&password=" + pPassword, this)).closeConnection();
+		closeConnection();
 	}
 
-	public Connection getConnection() {
+	public UUID getUUID(int pPlayerID) {
+		Connection con = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
 		try {
-			if (connnection != null && connnection.isValid(6))
-				return connnection;
+			rs = (stmt = con.createStatement()).executeQuery("select player_uuid from `" + database + "`." + tablePrefix
+					+ "players WHERE player_id='" + pPlayerID + "' LIMIT 1");
+			if (rs.next()) {
+				return UUID.fromString(rs.getString("player_uuid"));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		return connnection = createConnection();
-	}
-
-	private Connection createConnection() {
-		try {
-			closeConnection();
-			Class.forName("com.mysql.jdbc.Driver");
-			return DriverManager.getConnection(url);
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+		} finally {
+			close(rs, stmt);
 		}
 		return null;
 	}
 
-	public void closeConnection() {
-		try {
-			if (connnection != null)
-				connnection.close();
-		} catch (SQLException e) {
-		}
-	}
-
-	public void importDatabase() {
+	private void importDatabase() {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
@@ -128,22 +95,44 @@ public class MySQL {
 				e.printStackTrace();
 			}
 		}
+		importOfflineMessages();
+	}
+
+	/**
+	 * Imports the offlineMessages database
+	 */
+	private void importOfflineMessages() {
+		Connection con = getConnection();
+		PreparedStatement prepStmt = null;
+		try {
+			prepStmt = con.prepareStatement(
+					"CREATE TABLE IF NOT EXISTS `" + database + "`.`" + tablePrefix + "friends_messages` ("
+							+ "`Message` varchar(99) NOT NULL COMMENT ''," + "`Sender` INT(8) NOT NULL COMMENT '',"
+							+ "`Reciver` INT(8) NOT NULL COMMENT ''," + "`Date` int(10) NULL);");
+			prepStmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prepStmt != null)
+					prepStmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public int getPlayerID(ProxiedPlayer pPlayer) {
-		if (Main.getInstance().getConfig().getString("General.OfflineServer").equalsIgnoreCase("true"))
+		if (getInstance().getConfig().getString("General.OfflineServer").equalsIgnoreCase("true"))
 			return getPlayerID(pPlayer.getName());
 		return getPlayerID(pPlayer.getUniqueId());
 	}
 
 	/**
 	 * Returns the ID of a player
-	 * 
-	 * @param pUuid
-	 *            The UUID of the player
+	 *
+	 * @param pUuid The UUID of the player
 	 * @return Returns the ID of a player
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	public int getPlayerID(UUID pUuid) {
 		Connection con = getConnection();
@@ -158,26 +147,16 @@ public class MySQL {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return -1;
 	}
 
 	/**
 	 * Returns the ID of a player
-	 * 
-	 * @param pPlayerName
-	 *            Name of the player Returns the ID of a player
+	 *
+	 * @param pPlayerName Name of the player Returns the ID of a player
 	 * @return Returns the ID of a player
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	public int getPlayerID(String pPlayerName) {
 		Connection con = getConnection();
@@ -192,25 +171,15 @@ public class MySQL {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return -1;
 	}
 
 	/**
 	 * Will be executed if a player joins the first time on the server
-	 * 
-	 * @param pPlayer
-	 *            The player
-	 * @author Simonsator
-	 * @version 1.0.0
+	 *
+	 * @param pPlayer The player
 	 */
 	public void firstJoin(ProxiedPlayer pPlayer) {
 		Connection con = getConnection();
@@ -245,12 +214,9 @@ public class MySQL {
 
 	/**
 	 * Gives out the IDs of the friends of a player
-	 * 
-	 * @param pPlayerID
-	 *            The ID of the player
+	 *
+	 * @param pPlayerID The ID of the player
 	 * @return Returns the IDs of the friends of a player
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	public ArrayList<Integer> getFriends(int pPlayerID) {
 		Connection con = getConnection();
@@ -271,26 +237,16 @@ public class MySQL {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return list;
 	}
 
 	/**
 	 * Returns the name of a player
-	 * 
-	 * @param pPlayerID
-	 *            The ID of the player
+	 *
+	 * @param pPlayerID The ID of the player
 	 * @return Returns the name of a player
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	public String getName(int pPlayerID) {
 		Connection con = getConnection();
@@ -305,27 +261,16 @@ public class MySQL {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return "";
 	}
 
 	/**
 	 * Updates the name of a player
-	 * 
-	 * @param pPlayerID
-	 *            The ID of the player
-	 * @param pNewPlayerName
-	 *            New name of the player
-	 * @author Simonsator
-	 * @version 1.0.0
+	 *
+	 * @param pPlayerID      The ID of the player
+	 * @param pNewPlayerName New name of the player
 	 */
 	public void updatePlayerName(int pPlayerID, String pNewPlayerName) {
 		Connection con = getConnection();
@@ -359,26 +304,16 @@ public class MySQL {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return false;
 	}
 
 	/**
 	 * Returns the IDs of the friends from a player
-	 * 
-	 * @param pPlayerID
-	 *            The ID of the player
+	 *
+	 * @param pPlayerID The ID of the player
 	 * @return Returns the IDs of the friends from a player
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	public ArrayList<Integer> getRequests(int pPlayerID) {
 		Connection con = getConnection();
@@ -393,27 +328,16 @@ public class MySQL {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return requests;
 	}
 
 	/**
 	 * Adds a player to friends
-	 * 
-	 * @param pIDRequester
-	 *            The sender of the command
-	 * @param pIDReceiver
-	 *            The new friend
-	 * @author Simonsator
-	 * @version 1.0.0
+	 *
+	 * @param pIDRequester The sender of the command
+	 * @param pIDReceiver  The new friend
 	 */
 	public void addFriend(int pIDRequester, int pIDReceiver) {
 		Connection con = getConnection();
@@ -438,13 +362,9 @@ public class MySQL {
 
 	/**
 	 * Removes a friend request
-	 * 
-	 * @param pReceiverSender
-	 *            The ID of the command executer
-	 * @param pRequesterID
-	 *            The ID of the person who had send the friend request
-	 * @author Simonsator
-	 * @version 1.0.0
+	 *
+	 * @param pReceiverSender The ID of the command executer
+	 * @param pRequesterID    The ID of the person who had send the friend request
 	 */
 	public void denyRequest(int pReceiverSender, int pRequesterID) {
 		Connection con = getConnection();
@@ -468,13 +388,9 @@ public class MySQL {
 
 	/**
 	 * Deletes a friend
-	 * 
-	 * @param pFriend1ID
-	 *            The ID of the command sender
-	 * @param pFriend2ID
-	 *            The ID of the friend, which should be deleted
-	 * @author Simonsator
-	 * @version 1.0.0
+	 *
+	 * @param pFriend1ID The ID of the command sender
+	 * @param pFriend2ID The ID of the friend, which should be deleted
 	 */
 	public void deleteFriend(int pFriend1ID, int pFriend2ID) {
 		Connection con = getConnection();
@@ -498,13 +414,9 @@ public class MySQL {
 
 	/**
 	 * Send a friend request
-	 * 
-	 * @param pSenderID
-	 *            The ID of Sender of the friend request
-	 * @param pQueryID
-	 *            The ID of the player, which gets the friend request
-	 * @author Simonsator
-	 * @version 1.0.0
+	 *
+	 * @param pSenderID The ID of Sender of the friend request
+	 * @param pQueryID  The ID of the player, which gets the friend request
 	 */
 	public void sendFriendRequest(int pSenderID, int pQueryID) {
 		Connection con = getConnection();
@@ -529,14 +441,10 @@ public class MySQL {
 
 	/**
 	 * Sets a setting
-	 * 
-	 * @param pPlayer
-	 *            The player
-	 * @param pSettingsID
-	 *            The id of the setting
+	 *
+	 * @param pPlayer     The player
+	 * @param pSettingsID The ID of the setting
 	 * @return Returns the new worth
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	public int changeSettingsWorth(ProxiedPlayer pPlayer, int pSettingsID) {
 		int playerID = getPlayerID(pPlayer);
@@ -551,15 +459,11 @@ public class MySQL {
 
 	/**
 	 * Checks if somebody is a friend of someone others
-	 * 
-	 * @param pPlayer1
-	 *            The player
-	 * @param pPlayer2
-	 *            The other player
+	 *
+	 * @param pPlayer1 The player
+	 * @param pPlayer2 The other player
 	 * @return Returns if player one is a friend of player two true, otherwise
-	 *         false
-	 * @author Simonsator
-	 * @version 1.0.0
+	 * false
 	 */
 	public boolean isAFriendOf(ProxiedPlayer pPlayer1, ProxiedPlayer pPlayer2) {
 		return isAFriendOf(getPlayerID(pPlayer1), getPlayerID(pPlayer2));
@@ -579,14 +483,7 @@ public class MySQL {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return 0;
 	}
@@ -616,7 +513,7 @@ public class MySQL {
 		}
 	}
 
-	public void removeSetting(int pPlayerID, int pSettingsID) {
+	private void removeSetting(int pPlayerID, int pSettingsID) {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
@@ -635,6 +532,72 @@ public class MySQL {
 		}
 	}
 
+	/**
+	 * Saves an offline message in MySQL
+	 *
+	 * @param idSender   Sender of the message
+	 * @param idReceiver Receiver of the message
+	 * @param pMessage   The message, that should be send
+	 */
+	public void offlineMessage(int idSender, int idReceiver, String pMessage) {
+		Connection con = getConnection();
+		PreparedStatement prepStmt = null;
+		int time = (int) (System.currentTimeMillis() / 1000L);
+		try {
+			prepStmt = con.prepareStatement(
+					"insert into  " + this.database + "." + tablePrefix + "friends_messcages	 values (?, ?, ?, ?)");
+			prepStmt.setInt(2, idSender);
+			prepStmt.setInt(3, idReceiver);
+			prepStmt.setString(1, pMessage);
+			prepStmt.setInt(4, time);
+			prepStmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prepStmt != null)
+					prepStmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * Get and delete offline messages
+	 *
+	 * @param player The player who receive the offline messages
+	 * @return Returns the offline messages and the senders
+	 */
+	public ArrayList<OfflineMessage> getOfflineMessages(ProxiedPlayer player) {
+		Connection con = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		PreparedStatement prepStmt = null;
+		ArrayList<OfflineMessage> offlineMessages = new ArrayList<>();
+		try {
+			rs = (stmt = con.createStatement()).executeQuery("SELECT Message, Sender FROM " + database + "."
+					+ tablePrefix + "friends_messages WHERE Reciver='" + getPlayerID(player.getName()) + "'");
+			while (rs.next())
+				offlineMessages.add(new OfflineMessage(rs.getString(1), ((PAFPlayerManagerMySQL) getPlayerManager()).getPlayer(rs.getInt(2))));
+			prepStmt = con.prepareStatement("DELETE FROM " + database + "." + tablePrefix
+					+ "friends_messages WHERE Reciver = '" + getPlayerID(player.getName()) + "' Limit 1");
+			prepStmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prepStmt != null)
+					prepStmt.close();
+				close(rs, stmt);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return offlineMessages;
+	}
+
 	public boolean isAFriendOf(int pPlayerID1, int pPlayerID2) {
 		Connection con = getConnection();
 		Statement stmt = null;
@@ -649,23 +612,15 @@ public class MySQL {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return false;
 	}
 
 	/**
 	 * Returns the last player who wrote to the given player
-	 * 
-	 * @param pID
-	 *            The ID of the player
+	 *
+	 * @param pID The ID of the player
 	 * @return Returns the last player who wrote to the given player
 	 */
 	public int getLastPlayerWroteTo(int pID) {
@@ -683,26 +638,15 @@ public class MySQL {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return 0;
 	}
 
 	/**
-	 * 
-	 * @param pPlayerID
-	 *            The ID of the player
-	 * @param pLastWroteTo
-	 *            The ID of the player who wrote to
-	 * @param pI
-	 *            The pass
+	 * @param pPlayerID    The ID of the player
+	 * @param pLastWroteTo The ID of the player who wrote to
+	 * @param pI           The pass
 	 */
 	public void setLastPlayerWroteTo(int pPlayerID, int pLastWroteTo, int pI) {
 		removeLastPlayerWroteFrom(pPlayerID);
@@ -746,4 +690,6 @@ public class MySQL {
 			}
 		}
 	}
+
+
 }

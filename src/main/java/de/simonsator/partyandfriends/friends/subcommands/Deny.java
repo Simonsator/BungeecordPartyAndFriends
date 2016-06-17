@@ -1,37 +1,44 @@
 /**
  * The command deny
+ *
  * @author Simonsator
  * @version 1.0.0
  */
 package de.simonsator.partyandfriends.friends.subcommands;
 
 import de.simonsator.partyandfriends.api.friends.abstractcommands.RequestReactionsCommands;
-import de.simonsator.partyandfriends.main.Main;
+import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+
+import java.util.regex.Matcher;
+
+import static de.simonsator.partyandfriends.main.Main.getInstance;
+import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
+import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTERN;
 
 /**
  * The command deny
- * 
+ *
  * @author Simonsator
  * @version 1.0.0
  */
 public class Deny extends RequestReactionsCommands {
+
 	public Deny(String[] pCommands, int pPriority, String pHelp) {
 		super(pCommands, pPriority, pHelp);
 	}
 
 	@Override
-	public void onCommand(ProxiedPlayer pPlayer, String[] args) {
+	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
 		if (!isPlayerGiven(pPlayer, args))
 			return;
-		int idSender = Main.getInstance().getConnection().getPlayerID(pPlayer.getName());
-		int idQuery = Main.getInstance().getConnection().getPlayerID(args[1]);
-		if (hasNoRequest(pPlayer, args[1], idSender, idQuery))
+		PAFPlayer playerQuery = getPlayerManager().getPlayer(args[1]);
+		if (hasNoRequest(pPlayer, playerQuery))
 			return;
-		Main.getInstance().getConnection().denyRequest(idSender, idQuery);
-		pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance()
-				.getMessagesYml().getString("Friends.Command.Deny.HasDenied").replace("[PLAYER]", args[1])));
+		pPlayer.denyRequest(playerQuery);
+		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance()
+				.getMessagesYml().getString("Friends.Command.Deny.HasDenied")).replaceAll(Matcher.quoteReplacement(args[1]))));
 	}
 
 }

@@ -1,22 +1,23 @@
-/***
- * The command jump
- * @author Simonsator
- * @version 1.0.0
- */
 package de.simonsator.partyandfriends.friends.subcommands;
 
 import de.simonsator.partyandfriends.api.friends.ServerConnector;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
-import de.simonsator.partyandfriends.main.Main;
+import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.utilities.CompilePatter;
 import de.simonsator.partyandfriends.utilities.StandartConnector;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+import java.util.regex.Matcher;
+
+import static de.simonsator.partyandfriends.main.Main.getInstance;
+import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
+
 /***
  * The command jump
- * 
+ *
  * @author Simonsator
  * @version 1.0.0
  */
@@ -27,32 +28,54 @@ public class Jump extends FriendSubCommand {
 		super(pCommands, pPriority, pHelp);
 	}
 
-	@Override
-	public void onCommand(ProxiedPlayer pPlayer, String[] args) {
-		if (!isPlayerGiven(pPlayer, args))
-			return;
-		ProxiedPlayer friend = ProxyServer.getInstance().getPlayer(args[1]);
-		if (!isPlayerOnline(pPlayer, friend, args[1]))
-			return;
-		int friendID = Main.getInstance().getConnection().getPlayerID(friend.getName());
-		int playerID = Main.getInstance().getConnection().getPlayerID(pPlayer);
-		if (!isAFriendOf(pPlayer, args[1], friendID, playerID))
-			return;
-		ServerInfo toJoin = friend.getServer().getInfo();
-		if (isAlreadyOnServer(pPlayer, toJoin))
-			return;
-		if (!allowsJumps(pPlayer, friendID))
-			return;
-		connector.connect(pPlayer, toJoin);
-		pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix()
-				+ Main.getInstance().getMessagesYml().getString("Friends.Command.Jump.JoinedTheServer")
-						.replace("[PLAYER]", friend.getDisplayName())));
+	/**
+	 * Sets the server connector, which will be used to join a server.
+	 *
+	 * @param pConnector The connector
+	 */
+	public static void setServerConnector(ServerConnector pConnector) {
+		connector = pConnector;
 	}
 
-	private boolean allowsJumps(ProxiedPlayer pPlayer, int pQueryID) {
-		if (Main.getInstance().getConnection().getSettingsWorth(pQueryID, 4) == 1) {
-			pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix()
-					+ Main.getInstance().getMessagesYml().getString("Friends.Command.Jump.CanNotJump")));
+	@Override
+	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
+		if (!isPlayerGiven(pPlayer, args))
+			return;
+		PAFPlayer playerQuery = getPlayerManager().getPlayer(args[1]);
+		if (!isPlayerOnline(pPlayer, playerQuery))
+			return;
+		OnlinePAFPlayer friend = (OnlinePAFPlayer) playerQuery;
+		if (!isAFriendOf(pPlayer, friend))
+			return;
+		ServerInfo toJoin = friend.getServer();
+		if (!serverExists(pPlayer, toJoin))
+			return;
+		if (isAlreadyOnServer(pPlayer.getPlayer(), toJoin))
+			return;
+		if (!allowsJumps(pPlayer, friend))
+			return;
+		connector.connect(pPlayer.getPlayer(), toJoin);
+		pPlayer.sendMessage(
+				new TextComponent(
+						getInstance().getFriendsPrefix() + CompilePatter.PLAYERPATTERN
+								.matcher(getInstance().getMessagesYml()
+										.getString("Friends.Command.Jump.JoinedTheServer"))
+								.replaceAll(Matcher.quoteReplacement(friend.getDisplayName()))));
+	}
+
+	private boolean serverExists(OnlinePAFPlayer pPlayer, ServerInfo toJoin) {
+		if (toJoin != null)
+			return true;
+		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
+				+ getInstance().getMessagesYml().getString("Friends.Command.Jump.CanNotJump")));
+		pPlayer.sendMessage(new TextComponent(getHelp()));
+		return false;
+	}
+
+	private boolean allowsJumps(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pQueryPlayer) {
+		if (pQueryPlayer.getSettingsWorth(4) == 1) {
+			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
+					+ getInstance().getMessagesYml().getString("Friends.Command.Jump.CanNotJump")));
 			pPlayer.sendMessage(new TextComponent(getHelp()));
 			return false;
 		}
@@ -61,32 +84,22 @@ public class Jump extends FriendSubCommand {
 
 	private boolean isAlreadyOnServer(ProxiedPlayer pPlayer, ServerInfo pToJoin) {
 		if (pToJoin.equals(pPlayer.getServer().getInfo())) {
-			pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix()
-					+ Main.getInstance().getMessagesYml().getString("Friends.Command.Jump.AlreadyOnTheServer")));
+			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
+					+ getInstance().getMessagesYml().getString("Friends.Command.Jump.AlreadyOnTheServer")));
 			pPlayer.sendMessage(new TextComponent(getHelp()));
 			return true;
 		}
 		return false;
 	}
 
-	private boolean isPlayerOnline(ProxiedPlayer pSender, ProxiedPlayer pQueryPlayer, String pQueryPlayerName) {
-		if (pQueryPlayer == null) {
-			pSender.sendMessage(
-					new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance().getMessagesYml()
-							.getString("Friends.General.PlayerIsOffline").replace("[PLAYER]", pQueryPlayerName)));
+	private boolean isPlayerOnline(OnlinePAFPlayer pSender, PAFPlayer pQueryPlayer) {
+		if (!pQueryPlayer.isOnline()) {
+			pSender.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + CompilePatter.PLAYERPATTERN
+					.matcher(getInstance().getMessagesYml().getString("Friends.General.PlayerIsOffline"))
+					.replaceAll(Matcher.quoteReplacement(pQueryPlayer.getName()))));
 			pSender.sendMessage(new TextComponent(getHelp()));
 			return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Sets the server connector, which will be used to join a server.
-	 * 
-	 * @param pConnector
-	 *            The connector
-	 */
-	public static void setServerConnector(ServerConnector pConnector) {
-		connector = pConnector;
 	}
 }

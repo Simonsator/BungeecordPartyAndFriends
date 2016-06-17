@@ -1,87 +1,82 @@
-/**
- * The command add
- * @author Simonsator
- * @version 1.0.0
- */
 package de.simonsator.partyandfriends.friends.subcommands;
 
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
-import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.ProxyServer;
+import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Chat;
+
+import java.util.regex.Matcher;
+
+import static de.simonsator.partyandfriends.main.Main.getInstance;
+import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
+import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTERN;
 
 /**
  * The command add
- * 
+ *
  * @author Simonsator
  * @version 1.0.1
  */
 public class Add extends FriendSubCommand {
+
+
 	public Add(String[] pCommands, int pPriority, String pHelp) {
 		super(pCommands, pPriority, pHelp);
 	}
 
 	@Override
-	public void onCommand(ProxiedPlayer pPlayer, String[] args) {
+	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
 		if (!isPlayerGiven(pPlayer, args))
 			return;
 		if (givenPlayerEqualsSender(pPlayer, args[1]))
 			return;
-		int idQuery = Main.getInstance().getConnection().getPlayerID(args[1]);
-		if (!doesPlayerExist(pPlayer, idQuery, args[1]))
+		PAFPlayer playerQuery = getPlayerManager().getPlayer(args[1]);
+		if (!doesPlayerExist(pPlayer, playerQuery))
 			return;
-		int idSender = Main.getInstance().getConnection().getPlayerID(pPlayer.getName());
-		if (isAFriendOf(pPlayer, args[1], idSender, idQuery))
+		if (isAFriendOf(pPlayer, playerQuery))
 			return;
-		if (!hasNoRequestFrom(pPlayer, args[1], idSender, idQuery))
+		if (!hasNoRequestFrom(pPlayer, playerQuery))
 			return;
-		if ((Main.getInstance().getConnection().hasRequestFrom(idSender, idQuery))) {
+		if (pPlayer.hasRequestFrom(playerQuery)) {
 			pPlayer.sendMessage(
-					new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance().getMessagesYml()
-							.getString("Friends.Command.Add.FriendRequestFromreceiver").replace("[PLAYER]", args[1])));
-			pPlayer.unsafe()
-					.sendPacket(new Chat("{\"text\":\"" + Main.getInstance().getFriendsPrefix()
-							+ Main.getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept").replace(
-									"[PLAYER]", args[1])
+					new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
+							.getString("Friends.Command.Add.FriendRequestFromReceiver")).replaceAll(Matcher.quoteReplacement(args[1]))));
+			pPlayer
+					.sendPacket(new Chat("{\"text\":\"" + getInstance().getFriendsPrefix()
+							+ PLAYERPATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1]))
 							+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-							+ Main.getInstance().getFriendsCommand().getName() + " accept " + args[1]
+							+ getInstance().getFriendsCommand().getName() + " accept " + args[1]
 							+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-							+ Main.getInstance().getMessagesYml().getString("Friends.Command.Add.ClickHere")
+							+ getInstance().getMessagesYml().getString("Friends.Command.Add.ClickHere")
 							+ "\"}]}}}"));
 			return;
 		}
-		if (!allowsFriendRequests(pPlayer, args[1], idQuery))
+		if (!allowsFriendRequests(pPlayer, playerQuery))
 			return;
-		Main.getInstance().getConnection().sendFriendRequest(idSender, idQuery);
-		sendRequest(pPlayer, args[1]);
-		pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance()
-				.getMessagesYml().getString("Friends.Command.Add.SendedAFriendRequest").replace("[PLAYER]", args[1])));
+		playerQuery.sendFriendRequest(pPlayer);
+		sendRequest(pPlayer, playerQuery);
+		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance()
+				.getMessagesYml().getString("Friends.Command.Add.SentAFriendRequest")).replaceAll(Matcher.quoteReplacement(args[1]))));
 	}
 
-	private void sendRequest(ProxiedPlayer pPlayer, String pQueryName) {
-		ProxiedPlayer receiver = ProxyServer.getInstance().getPlayer(pQueryName);
-		if (receiver != null) {
-			receiver.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix()
-					+ Main.getInstance().getMessagesYml().getString("Friends.Command.Add.FriendRequestreceived")
-							.replace("[PLAYER]", pPlayer.getDisplayName())));
-			receiver.unsafe()
-					.sendPacket(new Chat("{\"text\":\"" + Main.getInstance().getFriendsPrefix()
-							+ Main.getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")
-									.replace("[PLAYER]", pPlayer.getName())
-					+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/"
-					+ Main.getInstance().getFriendsCommand().getName() + " accept " + pPlayer.getName()
-					+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-					+ Main.getInstance().getMessagesYml().getString("Friends.Command.Add.ClickHere") + "\"}]}}}"));
-		}
+	private void sendRequest(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
+		pPlayerQuery.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
+				+ PLAYERPATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.FriendRequestReceived")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
+		pPlayerQuery
+				.sendPacket(new Chat("{\"text\":\"" + getInstance().getFriendsPrefix()
+						+ PLAYERPATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(pPlayer.getName()))
+						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/"
+						+ getInstance().getFriendsCommand().getName() + " accept " + pPlayer.getName()
+						+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
+						+ getInstance().getMessagesYml().getString("Friends.Command.Add.ClickHere") + "\"}]}}}"));
 	}
 
-	private boolean hasNoRequestFrom(ProxiedPlayer pPlayer, String pQueryPlayer, int pIDSender, int pIDQuery) {
-		if ((Main.getInstance().getConnection().getRequests(pIDQuery).contains(pIDSender))) {
+	private boolean hasNoRequestFrom(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
+		if (pQueryPlayer.hasRequestFrom(pPlayer)) {
 			pPlayer.sendMessage(
-					new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance().getMessagesYml()
-							.getString("Friends.Command.Accept.ErrorAlreadySend").replace("[PLAYER]", pQueryPlayer)));
+					new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
+							.getString("Friends.Command.Accept.ErrorAlreadySend")).replaceAll(Matcher.quoteReplacement(pQueryPlayer.getName()))));
 			pPlayer.sendMessage(new TextComponent(getHelp()));
 			return false;
 		}
@@ -89,20 +84,20 @@ public class Add extends FriendSubCommand {
 	}
 
 	@Override
-	protected boolean isAFriendOf(ProxiedPlayer pPlayer, String pGivenPlayer, int pIDSender, int pIDQuery) {
-		if (Main.getInstance().getConnection().isAFriendOf(pIDSender, pIDQuery)) {
+	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
+		if (pPlayer.isAFriendOf(pGivenPlayer)) {
 			pPlayer.sendMessage(
-					new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance().getMessagesYml()
-							.getString("Friends.Command.Add.AlreadyFriends").replace("[PLAYER]", pGivenPlayer)));
+					new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
+							.getString("Friends.Command.Add.AlreadyFriends")).replaceAll(Matcher.quoteReplacement(pGivenPlayer.getDisplayName()))));
 			pPlayer.sendMessage(new TextComponent(getHelp()));
 			return true;
 		}
 		return false;
 	}
 
-	private boolean givenPlayerEqualsSender(ProxiedPlayer pPlayer, String pGivenPlayer) {
+	private boolean givenPlayerEqualsSender(OnlinePAFPlayer pPlayer, String pGivenPlayer) {
 		if (pPlayer.getName().equalsIgnoreCase(pGivenPlayer)) {
-			pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance()
+			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
 					.getMessagesYml().getString("Friends.Command.Accept.ErrorSenderEqualsReceiver")));
 			pPlayer.sendMessage(new TextComponent(getHelp()));
 			return true;
@@ -110,21 +105,21 @@ public class Add extends FriendSubCommand {
 		return false;
 	}
 
-	private boolean doesPlayerExist(ProxiedPlayer pPlayer, int pQueryID, String pQueryPlayer) {
-		if (pQueryID == -1) {
-			pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance()
-					.getMessagesYml().getString("Friends.General.DoesNotExist").replace("[PLAYER]", pQueryPlayer)));
+	private boolean doesPlayerExist(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
+		if (!pGivenPlayer.doesExist()) {
+			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance()
+					.getMessagesYml().getString("Friends.General.DoesNotExist")).replaceAll(Matcher.quoteReplacement(pGivenPlayer.getName()))));
 			pPlayer.sendMessage(new TextComponent(getHelp()));
 			return false;
 		}
 		return true;
 	}
 
-	private boolean allowsFriendRequests(ProxiedPlayer pPlayer, String pQueryName, int pQueryID) {
-		if (Main.getInstance().getConnection().getSettingsWorth(pQueryID, 0) == 0) {
+	private boolean allowsFriendRequests(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
+		if (pGivenPlayer.getSettingsWorth(0) == 0) {
 			pPlayer.sendMessage(
-					new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance().getMessagesYml()
-							.getString("Friends.Command.Add.CanNotSendThisPlayer").replace("[PLAYER]", pQueryName)));
+					new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
+							.getString("Friends.Command.Add.CanNotSendThisPlayer")).replaceAll(Matcher.quoteReplacement(pGivenPlayer.getName()))));
 			pPlayer.sendMessage(new TextComponent(getHelp()));
 			return false;
 		}

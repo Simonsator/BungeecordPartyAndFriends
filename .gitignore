@@ -1,3 +1,5 @@
+/target/
+/bin/
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
@@ -41,11 +43,23 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-
-# Maven
+.metadata/*
+.recommenders/*
+/Clans/bin/*
+/Clans/bin/.classpath
+/Clans/bin/.project
+/PartyAndFriends/bin/*
+/PartyAndFriends/bin/.classpath
+/PartyAndFriends/bin/.project
 target/
-
-# eclipse
+**/target/
 .classpath
 .project
-.settings/*
+**/.classpath
+**/.project
+.settings/
+**/.settings/
+**privatebuilds.xml
+.idea/*
+
+Party-and-Friends-For-Bungeecord-MySQL.iml

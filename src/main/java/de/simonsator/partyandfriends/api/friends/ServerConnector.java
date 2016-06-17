@@ -7,11 +7,9 @@ public interface ServerConnector {
 
 	/**
 	 * Connects a player to a spigot server
-	 * 
-	 * @param pPlayer
-	 *            The player who should be send to a server
-	 * @param pServer
-	 *            The server to which the player should be connected
+	 *
+	 * @param pPlayer The player who should be send to a server
+	 * @param pServer The server to which the player should be connected
 	 */
-	public abstract void connect(ProxiedPlayer pPlayer, ServerInfo pServer);
+	void connect(ProxiedPlayer pPlayer, ServerInfo pServer);
 }

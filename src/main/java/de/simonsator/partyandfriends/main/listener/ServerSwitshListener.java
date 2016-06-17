@@ -1,24 +1,28 @@
 /**
  * The class with the ServerSwitchEvent
+ *
  * @author Simonsator
  * @version 1.0.0
  */
 package de.simonsator.partyandfriends.main.listener;
 
-import java.util.List;
-
 import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.party.PartyManager;
-import de.simonsator.partyandfriends.party.PlayerParty;
+import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.party.playerpartys.PlayerParty;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
+import java.util.List;
+
+import static de.simonsator.partyandfriends.main.Main.getInstance;
+import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
+
 /**
  * The class with the ServerSwitchEvent
- * 
+ *
  * @author Simonsator
  * @version 1.0.0
  */
@@ -30,35 +34,31 @@ public class ServerSwitshListener implements Listener {
 
 	/**
 	 * Initials the object
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	public ServerSwitshListener() {
-		notJoinServers = Main.getInstance().getConfig().getStringList("General.PartyDoNotJoinTheseServers");
+		notJoinServers = getInstance().getConfig().getStringList("General.PartyDoNotJoinTheseServers");
 	}
 
 	/**
 	 * Will be executed if a player switches the server
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
-	 * @param pEvent
-	 *            The ServerSwitchEvent event
+	 *
+	 * @param pEvent The ServerSwitchEvent event
 	 */
 	@EventHandler
 	public void onServerSwitch(ServerSwitchEvent pEvent) {
-		ProxiedPlayer player = pEvent.getPlayer();
-		PlayerParty party = PartyManager.getParty(player);
+		OnlinePAFPlayer player = getPlayerManager().getPlayer(pEvent.getPlayer());
+		PlayerParty party = Main.getPartyManager().getParty(player);
 		if (party != null) {
 			if (party.isLeader(player)) {
-				if (notJoinServers.contains(party.getLeader().getServer().getInfo().getName()))
+				ServerInfo server = party.getLeader().getServer();
+				if (notJoinServers.contains(server.getName())) {
 					return;
-				for (ProxiedPlayer p : party.getPlayers())
-					p.connect(party.getLeader().getServer().getInfo());
-				party.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-						+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ServerSwitched")
-								.replace("[SERVER]", party.getLeader().getServer().getInfo().getName())));
+				}
+				for (OnlinePAFPlayer p : party.getPlayers())
+					p.connect(party.getLeader().getServer());
+				party.sendMessage(new TextComponent(getInstance().getPartyPrefix()
+						+ getInstance().getMessagesYml().getString("Party.Command.General.ServerSwitched")
+						.replace("[SERVER]", party.getLeader().getServer().getName())));
 			}
 		}
 	}

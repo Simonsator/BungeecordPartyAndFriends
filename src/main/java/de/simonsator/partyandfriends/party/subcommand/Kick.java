@@ -1,14 +1,16 @@
 package de.simonsator.partyandfriends.party.subcommand;
 
 import de.simonsator.partyandfriends.api.party.abstractcommands.LeaderNeededCommand;
-import de.simonsator.partyandfriends.party.PartyManager;
-import de.simonsator.partyandfriends.party.PlayerParty;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import de.simonsator.partyandfriends.main.Main;
+import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.party.playerpartys.PlayerParty;
+
+import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
 /**
  * The /party kick command
- * 
+ *
  * @author Simonsator
  * @version 1.0.0
  */
@@ -19,22 +21,19 @@ public class Kick extends LeaderNeededCommand {
 
 	/**
 	 * Will be executed on /party kick
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
-	 * @param pPlayer
-	 *            The player
-	 * @param args
-	 *            The arguments
+	 *
+	 * @param pPlayer The player
+	 * @param args    The arguments
 	 */
-	public void onCommand(ProxiedPlayer pPlayer, String[] args) {
-		PlayerParty party = PartyManager.getParty(pPlayer);
+	@Override
+	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
+		PlayerParty party = Main.getPartyManager().getParty(pPlayer);
 		if (!standartCheck(pPlayer, party, args))
 			return;
-		ProxiedPlayer toKick = ProxyServer.getInstance().getPlayer(args[0]);
+		PAFPlayer toKick = getPlayerManager().getPlayer(args[0]);
 		if (!checkIsInParty(pPlayer, toKick, party, args))
 			return;
-		party.kickPlayer(toKick);
+		party.kickPlayer((OnlinePAFPlayer) toKick);
 	}
 
 }

@@ -1,27 +1,23 @@
 package de.simonsator.partyandfriends.mysql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import de.simonsator.partyandfriends.utilities.StringToArray;
+
+import java.sql.*;
 import java.util.ArrayList;
 
-import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.utilities.StringToArray;
+import static de.simonsator.partyandfriends.main.Main.getInstance;
 
 /**
  * Used to import data of the old table structure
- * 
- * @author Simonsator
  *
+ * @author Simonsator
  */
-public class Importer {
-	private MySQL connection;
-	private String database = Main.getInstance().getConfig().getString("MySQL.Database");
+class Importer extends SQLCommunication {
+	private final MySQL connection;
 
-	public Importer(MySQL pCon) {
-		connection = pCon;
+	Importer(String pDatabase, String pURL, MySQL pConnection) {
+		super(pDatabase, pURL);
+		connection = pConnection;
 		importTableHidePlayers();
 		ArrayList<PlayerCollection> players = importPlayers();
 		if (players == null)
@@ -35,20 +31,8 @@ public class Importer {
 		dropOldTable();
 	}
 
-	class PlayerCollection {
-		private final String NAME;
-		private final String UUID;
-		private final int ID;
-
-		public PlayerCollection(String pName, String pUUID, int pID) {
-			NAME = pName;
-			UUID = pUUID;
-			ID = pID;
-		}
-	}
-
 	private void dropOldTable() {
-		Connection con = connection.getConnection();
+		Connection con = getConnection();
 		Statement stmt = null;
 		try {
 			stmt = con.createStatement();
@@ -71,8 +55,8 @@ public class Importer {
 			connection.sendFriendRequest(requester, player.ID);
 	}
 
-	public int[] getRequests(int pID) {
-		Connection con = connection.getConnection();
+	private int[] getRequests(int pID) {
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -83,14 +67,7 @@ public class Importer {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return null;
 	}
@@ -103,7 +80,7 @@ public class Importer {
 	}
 
 	private int getHideModeImport(int playerID) {
-		Connection con = connection.getConnection();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -115,20 +92,13 @@ public class Importer {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return 0;
 	}
 
 	private int[] getSettings(int pPlayerID) {
-		Connection con = connection.getConnection();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -149,18 +119,34 @@ public class Importer {
 				feld[1] = 0;
 			}
 			rs.close();
+			rs = stmt.executeQuery("select EinstellungSendMessages from " + database + ".freunde WHERE ID='" + pPlayerID
+					+ "' LIMIT 1");
+			if (rs.next()) {
+				feld[2] = rs.getInt("EinstellungSendMessages");
+			} else {
+				feld[2] = 0;
+			}
+			rs.close();
+			rs = stmt.executeQuery("select EinstellungImmerOffline from " + database + ".freunde WHERE ID='" + pPlayerID
+					+ "' LIMIT 1");
+			if (rs.next()) {
+				feld[3] = rs.getInt("EinstellungImmerOffline");
+			} else {
+				feld[3] = 0;
+			}
+			rs.close();
+			rs = stmt.executeQuery(
+					"select EinstellungJump from " + database + ".freunde WHERE ID='" + pPlayerID + "' LIMIT 1");
+			if (rs.next()) {
+				feld[4] = rs.getInt("EinstellungJump");
+			} else {
+				feld[4] = 0;
+			}
 			return feld;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return new int[5];
 	}
@@ -170,7 +156,7 @@ public class Importer {
 	}
 
 	private String getFriends(int pID) {
-		Connection con = connection.getConnection();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -184,14 +170,7 @@ public class Importer {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return "";
 	}
@@ -212,7 +191,7 @@ public class Importer {
 	}
 
 	private ArrayList<PlayerCollection> importPlayers() {
-		Connection con = connection.getConnection();
+		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		ArrayList<PlayerCollection> players = new ArrayList<>();
@@ -227,27 +206,20 @@ public class Importer {
 				}
 			}
 			return players;
-		} catch (SQLException e) {
+		} catch (SQLException ignored) {
 
 		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			close(rs, stmt);
 		}
 		return null;
 	}
 
 	private void createPlayerEntry(String pName, String pUUID, int pID) {
-		Connection con = connection.getConnection();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement("insert into  `" + database + "`."
-					+ Main.getInstance().getConfig().getString("MySQL.TablePrefix") + "players values (?, ?, ?)");
+					+ getInstance().getConfig().getString("MySQL.TablePrefix") + "players values (?, ?, ?)");
 			prepStmt.setInt(1, pID);
 			prepStmt.setString(2, pName);
 			prepStmt.setString(3, pUUID);
@@ -266,18 +238,15 @@ public class Importer {
 
 	/**
 	 * Imports the HidePlayers column
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	private void importTableHidePlayers() {
-		Connection con = connection.getConnection();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement("ALTER TABLE " + database
 					+ ".`freunde` ADD `EinstellungHidePlayers` tinyint(1) NOT NULL AFTER `einstellungPartyNurFreunde`;");
 			prepStmt.executeUpdate();
-		} catch (SQLException e) {
+		} catch (SQLException ignored) {
 
 		} finally {
 			try {
@@ -292,12 +261,9 @@ public class Importer {
 
 	/**
 	 * Imports the new settings columns
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
 	 */
 	private void importTableNewSettings() {
-		Connection con = connection.getConnection();
+		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement("ALTER TABLE `" + database + "`.`freunde`\n"
@@ -305,7 +271,7 @@ public class Importer {
 					+ "ADD COLUMN `freunde`.`EinstellungImmerOffline` tinyint(1) NOT NULL COMMENT '' AFTER `EinstellungSendMessages`,\n"
 					+ "ADD COLUMN `freunde`.`EinstellungJump` tinyint(1) NOT NULL COMMENT '' AFTER `EinstellungImmerOffline`;");
 			prepStmt.executeUpdate();
-		} catch (SQLException e) {
+		} catch (SQLException ignored) {
 		} finally {
 			try {
 				if (prepStmt != null)
@@ -313,6 +279,18 @@ public class Importer {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private class PlayerCollection {
+		private final String NAME;
+		private final String UUID;
+		private final int ID;
+
+		PlayerCollection(String pName, String pUUID, int pID) {
+			NAME = pName;
+			UUID = pUUID;
+			ID = pID;
 		}
 	}
 

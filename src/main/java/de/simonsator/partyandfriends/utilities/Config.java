@@ -1,29 +1,26 @@
 package de.simonsator.partyandfriends.utilities;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
 /**
  * This class loads the config
- * 
+ *
  * @author Simonsator
  * @version 1.0.0
  */
 public class Config {
 	/**
 	 * Adds missing lines in the config
-	 * 
-	 * @author Simonsator
-	 * @version 1.0.0
+	 *
 	 * @return Returns the config variable
-	 * @throws IOException
-	 *             Can throw a {@link IOException}
+	 * @throws IOException Can throw a {@link IOException}
 	 */
 	public static Configuration loadConfig() throws IOException {
 		if (!Main.getInstance().getDataFolder().exists()) {

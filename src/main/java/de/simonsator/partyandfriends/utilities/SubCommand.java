@@ -1,11 +1,11 @@
 package de.simonsator.partyandfriends.utilities;
 
+import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+
 import java.util.ArrayList;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-
 public abstract class SubCommand {
-	protected ArrayList<String> commands = new ArrayList<>();
+	private ArrayList<String> commands = new ArrayList<>();
 	private String help;
 	private int priority;
 
@@ -18,13 +18,10 @@ public abstract class SubCommand {
 	}
 
 	public boolean isApplicable(String pCommand) {
-		pCommand = pCommand.toLowerCase();
-		if (commands.contains(pCommand))
-			return true;
-		return false;
+		return commands.contains(pCommand.toLowerCase());
 	}
 
-	public abstract void onCommand(ProxiedPlayer pPlayer, String[] args);
+	public abstract void onCommand(OnlinePAFPlayer pPlayer, String[] args);
 
 	public String getHelp() {
 		return help;
