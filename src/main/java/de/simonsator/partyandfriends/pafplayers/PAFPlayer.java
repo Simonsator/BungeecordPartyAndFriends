@@ -47,5 +47,4 @@ public interface PAFPlayer {
 
 	void setLastPlayerWroteFrom(PAFPlayer pLastWroteTo);
 
-	void addOfflineMessage(OfflineMessage pMessage);
 }

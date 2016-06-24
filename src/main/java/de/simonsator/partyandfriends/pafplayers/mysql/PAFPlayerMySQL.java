@@ -110,8 +110,4 @@ public class PAFPlayerMySQL extends PAFPlayerClass {
 		getInstance().getConnection().setLastPlayerWroteTo(ID, ((PAFPlayerMySQL) pLastWroteTo).getPlayerID(), 0);
 	}
 
-	@Override
-	public void addOfflineMessage(OfflineMessage pMessage) {
-		getInstance().getConnection().offlineMessage(ID, ((PAFPlayerMySQL) pMessage.SENDER).getPlayerID(), pMessage.MESSAGE);
-	}
 }
