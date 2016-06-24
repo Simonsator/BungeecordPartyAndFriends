@@ -30,8 +30,7 @@ public class MessagesYML {
 		switch (pType.toLowerCase()) {
 			case "own":
 				file = new File(Main.getInstance().getDataFolder().getPath(), "Messages.yml");
-				if (!file.exists())
-					file.createNewFile();
+				if (!file.exists()) file.createNewFile();
 				messagesYml = loadEnglishMessages(ConfigurationProvider.getProvider(YamlConfiguration.class).load(file));
 				break;
 			case "english":
@@ -58,32 +57,27 @@ public class MessagesYML {
 		if (messagesYml.getString("Party.CommandUsage.List").isEmpty())
 			messagesYml.set("Party.CommandUsage.List", "&8/&5Party list &8- &7List all players who are in the party");
 		if (messagesYml.getString("Party.CommandUsage.Chat").isEmpty())
-			messagesYml.set("Party.CommandUsage.Chat",
-					"&8/&5Party chat  &8- &7Send all players in the party a message");
+			messagesYml.set("Party.CommandUsage.Chat", "&8/&5Party chat  &8- &7Send all players in the party a message");
 		if (messagesYml.getString("Party.CommandUsage.Leave").isEmpty())
 			messagesYml.set("Party.CommandUsage.Leave", "&8/&5Party leave &8- &7Leave the party");
 		if (messagesYml.getString("Party.CommandUsage.Kick").isEmpty())
 			messagesYml.set("Party.CommandUsage.Kick", "&8/&5Party kick  &8- &7Kicks a player out of the party");
 		if (messagesYml.getString("Party.CommandUsage.Leader").isEmpty())
-			messagesYml.set("Party.CommandUsage.Leader",
-					"&8/&5Party leader &5 &8- &7Makes another player to the party leader");
+			messagesYml.set("Party.CommandUsage.Leader", "&8/&5Party leader &5 &8- &7Makes another player to the party leader");
 		if (messagesYml.getString("Party.Command.General.ErrorNoParty").isEmpty())
 			messagesYml.set("Party.Command.General.ErrorNoParty", "&5You need to be in a party");
 		if (messagesYml.getString("Party.Command.General.ErrorNotPartyLeader").isEmpty())
 			messagesYml.set("Party.Command.General.ErrorNotPartyLeader", "&cYou are not the party leader.");
 		if (messagesYml.getString("Party.Command.General.ErrorGivenPlayerIsNotInTheParty").isEmpty())
-			messagesYml.set("Party.Command.General.ErrorGivenPlayerIsNotInTheParty",
-					"&cThe player &e[PLAYER] &cis not in the party.");
+			messagesYml.set("Party.Command.General.ErrorGivenPlayerIsNotInTheParty", "&cThe player &e[PLAYER] &cis not in the party.");
 		if (messagesYml.getString("Party.Command.General.ErrorNoPlayer").isEmpty())
 			messagesYml.set("Party.Command.General.ErrorNoPlayer", "&cYou need to give a player.");
 		if (messagesYml.getString("Party.Command.General.ErrorPlayerNotOnline").isEmpty())
 			messagesYml.set("Party.Command.General.ErrorPlayerNotOnline", "&cThis &cplayer &cis &cnot &conline.");
 		if (messagesYml.getString("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers").isEmpty())
-			messagesYml.set("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers",
-					"&5The &5party &5was &5dissolved &5because &5of &5too &5less &5players.");
+			messagesYml.set("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers", "&5The &5party &5was &5dissolved &5because &5of &5too &5less &5players.");
 		if (messagesYml.getString("Party.Command.General.PlayerHasLeftTheParty").isEmpty())
-			messagesYml.set("Party.Command.General.PlayerHasLeftTheParty",
-					"&bThe player &6[PLAYER] has left the party.");
+			messagesYml.set("Party.Command.General.PlayerHasLeftTheParty", "&bThe player &6[PLAYER] has left the party.");
 		if (messagesYml.getString("Party.Command.General.ServerSwitched").isEmpty())
 			messagesYml.set("Party.Command.General.ServerSwitched", "&bThe party has joined the Server &e[SERVER]&b.");
 		if (messagesYml.getString("Party.Command.Chat.ErrorNoMessage").isEmpty())
@@ -91,58 +85,45 @@ public class MessagesYML {
 		if (messagesYml.getString("Party.Command.Info.Empty").isEmpty())
 			messagesYml.set("Party.Command.Info.Empty", "empty");
 		if (messagesYml.getString("Party.Command.Invite.GivenPlayerEqualsSender").isEmpty())
-			messagesYml.set("Party.Command.Invite.GivenPlayerEqualsSender",
-					"&7You are not allowed to invite yourself.");
+			messagesYml.set("Party.Command.Invite.GivenPlayerEqualsSender", "&7You are not allowed to invite yourself.");
 		if (messagesYml.getString("Party.Command.Invite.CanNotInviteThisPlayer").isEmpty())
-			messagesYml.set("Party.Command.Invite.CanNotInviteThisPlayer",
-					"&cYou can't invite this player into your Party.");
+			messagesYml.set("Party.Command.Invite.CanNotInviteThisPlayer", "&cYou can't invite this player into your Party.");
 		if (messagesYml.getString("Party.Command.Invite.AlreadyInAParty").isEmpty())
 			messagesYml.set("Party.Command.Invite.AlreadyInAParty", "&cThis player is already in &ca party.");
 		if (messagesYml.getString("Party.Command.Invite.AlreadyInYourParty").isEmpty())
-			messagesYml.set("Party.Command.Invite.AlreadyInYourParty",
-					"&cThe &cplayer &e[PLAYER] &cis &calready &cinvited &cinto &cyour &cparty.");
+			messagesYml.set("Party.Command.Invite.AlreadyInYourParty", "&cThe &cplayer &e[PLAYER] &cis &calready &cinvited &cinto &cyour &cparty.");
 		if (messagesYml.getString("Party.Command.Invite.MaxPlayersInPartyReached").isEmpty())
-			messagesYml.set("Party.Command.Invite.MaxPlayersInPartyReached",
-					"&cThe &cMax &csize &cof &ca &cparty &cis &c[MAXPLAYERSINPARTY]");
+			messagesYml.set("Party.Command.Invite.MaxPlayersInPartyReached", "&cThe &cMax &csize &cof &ca &cparty &cis &c[MAXPLAYERSINPARTY]");
 		if (messagesYml.getString("Party.Command.Invite.InvitedPlayer").isEmpty())
 			messagesYml.set("Party.Command.Invite.InvitedPlayer", "&6[PLAYER] &bwas &binvited &bto &byour &bparty.");
 		if (messagesYml.getString("Party.Command.Invite.YouWereInvitedBY").isEmpty())
-			messagesYml.set("Party.Command.Invite.YouWereInvitedBY",
-					"&5You &5were &5invited &5to &5the &5party &5of &6[PLAYER]&5!");
+			messagesYml.set("Party.Command.Invite.YouWereInvitedBY", "&5You &5were &5invited &5to &5the &5party &5of &6[PLAYER]&5!");
 		if (messagesYml.getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE").isEmpty())
-			messagesYml.set("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE",
-					"&5Join &5the &5party &5by &5using &5the &5command &6/Party &6join &6[PLAYER]!");
+			messagesYml.set("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE", "&5Join &5the &5party &5by &5using &5the &5command &6/Party &6join &6[PLAYER]!");
 		if (messagesYml.getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER").isEmpty())
 			messagesYml.set("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER", "Click here to join the party");
 		if (messagesYml.getString("Party.Command.Invite.InvitationTimedOutInvited").isEmpty())
-			messagesYml.set("Party.Command.Invite.InvitationTimedOutInvited",
-					"&5The invitation of the Party from &6[PLAYER] &5is &5timed &5out!");
+			messagesYml.set("Party.Command.Invite.InvitationTimedOutInvited", "&5The invitation of the Party from &6[PLAYER] &5is &5timed &5out!");
 		if (messagesYml.getString("Party.Command.Invite.InvitationTimedOutLeader").isEmpty())
-			messagesYml.set("Party.Command.Invite.InvitationTimedOutLeader",
-					"&5The player&6 [PLAYER] &5has &5not &5accepted &5your &5invitation!");
+			messagesYml.set("Party.Command.Invite.InvitationTimedOutLeader", "&5The player&6 [PLAYER] &5has &5not &5accepted &5your &5invitation!");
 		if (messagesYml.getString("Party.Command.Join.PlayerHasNoParty").isEmpty())
 			messagesYml.set("Party.Command.Join.PlayerHasNoParty", "&cThis &cplayer &chas &cno &cparty.");
 		if (messagesYml.getString("Party.Command.Join.AlreadyInAPartyError").isEmpty())
-			messagesYml.set("Party.Command.Join.AlreadyInAPartyError",
-					"&cYou &care &calready &cin &ca &cparty. &6use &6/party leave &cto &cleave &this &cParty.");
+			messagesYml.set("Party.Command.Join.AlreadyInAPartyError", "&cYou &care &calready &cin &ca &cparty. &6use &6/party leave &cto &cleave &this &cParty.");
 		if (messagesYml.getString("Party.Command.Join.PlayerHasJoined").isEmpty())
 			messagesYml.set("Party.Command.Join.PlayerHasJoined", "&bThe player &6[PLAYER] &bjoined the party.");
 		if (messagesYml.getString("Party.Command.Join.ErrorNoInvitation").isEmpty())
 			messagesYml.set("Party.Command.Join.ErrorNoInvitation", "&cYou can't join this party.");
 		if (messagesYml.getString("Party.Command.Kick.KickedPlayerOutOfThePartyOthers").isEmpty())
-			messagesYml.set("Party.Command.Kick.KickedPlayerOutOfThePartyOthers",
-					"&bThe &bplayer &6[PLAYER] &bwas &bkicked &bout &bof &bparty &bparty.");
+			messagesYml.set("Party.Command.Kick.KickedPlayerOutOfThePartyOthers", "&bThe &bplayer &6[PLAYER] &bwas &bkicked &bout &bof &bparty &bparty.");
 		if (messagesYml.getString("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer").isEmpty())
-			messagesYml.set("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer",
-					"&bYou &bhave &bbeen &bkicked &bout &bof &bparty.");
+			messagesYml.set("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer", "&bYou &bhave &bbeen &bkicked &bout &bof &bparty.");
 		if (messagesYml.getString("Party.Command.Leader.SenderEqualsGivenPlayer").isEmpty())
-			messagesYml.set("Party.Command.Leader.SenderEqualsGivenPlayer",
-					"&7You &7cannot &7make &7yourself &7to &7the &7new &7party &7leader");
+			messagesYml.set("Party.Command.Leader.SenderEqualsGivenPlayer", "&7You &7cannot &7make &7yourself &7to &7the &7new &7party &7leader");
 		if (messagesYml.getString("Party.Command.Leader.NewLeaderIs").isEmpty())
 			messagesYml.set("Party.Command.Leader.NewLeaderIs", "&7The &7new &7party &7leader &7is &6[NEWLEADER]");
 		if (messagesYml.getString("Party.Command.Leave.NewLeaderIs").isEmpty())
-			messagesYml.set("Party.Command.Leave.NewLeaderIs",
-					"&bThe &bLeader &bhas &bleft &bthe &bParty. &bThe &bnew &bLeader &bis &e[NEWLEADER].");
+			messagesYml.set("Party.Command.Leave.NewLeaderIs", "&bThe &bLeader &bhas &bleft &bthe &bParty. &bThe &bnew &bLeader &bis &e[NEWLEADER].");
 		if (messagesYml.getString("Party.Command.Leave.YouLeftTheParty").isEmpty())
 			messagesYml.set("Party.Command.Leave.YouLeftTheParty", "&bYou &bleft &byour &bparty.");
 		if (messagesYml.getString("Friends.General.Prefix").isEmpty())
@@ -150,11 +131,9 @@ public class MessagesYML {
 		if (messagesYml.getString("Friends.General.CommandNotFound").isEmpty())
 			messagesYml.set("Friends.General.CommandNotFound", " &7The &7Command &7doesn't &7exist.");
 		if (messagesYml.getString("Friends.General.PlayerIsOffline").isEmpty())
-			messagesYml.set("Friends.General.PlayerIsOffline",
-					" &7The Player &e[PLAYER] &7is &7not &7online &7or &7you &7are &7not &7a &7friend &7of &7him");
+			messagesYml.set("Friends.General.PlayerIsOffline", " &7The Player &e[PLAYER] &7is &7not &7online &7or &7you &7are &7not &7a &7friend &7of &7him");
 		if (messagesYml.getString("Friends.General.NotAFriendOfOrOffline").isEmpty())
-			messagesYml.set("Friends.General.NotAFriendOfOrOffline",
-					" &7The Player &e[PLAYER] &7is &7not &7online &7or &7you &7are &7not &7a &7friend &7of &7him");
+			messagesYml.set("Friends.General.NotAFriendOfOrOffline", " &7The Player &e[PLAYER] &7is &7not &7online &7or &7you &7are &7not &7a &7friend &7of &7him");
 		if (messagesYml.getString("Friends.General.NoFriendGiven").isEmpty())
 			messagesYml.set("Friends.General.NoFriendGiven", " &7You &7need &7to &7give &7a &7friend");
 		if (messagesYml.getString("Friends.General.NoPlayerGiven").isEmpty())
@@ -166,8 +145,7 @@ public class MessagesYML {
 		if (messagesYml.getString("Friends.General.PlayerIsNowOnline").isEmpty())
 			messagesYml.set("Friends.General.PlayerIsNowOnline", " &7The friend &e[PLAYER] &7is now &aonline.");
 		if (messagesYml.getString("Friends.General.RequestInfoOnJoin").isEmpty())
-			messagesYml.set("Friends.General.RequestInfoOnJoin",
-					" &7You &7have &7friend &7requests &7from: [FRIENDREQUESTS]");
+			messagesYml.set("Friends.General.RequestInfoOnJoin", " &7You &7have &7friend &7requests &7from: [FRIENDREQUESTS]");
 		if (messagesYml.getString("Friends.General.RequestInfoOnJoinColor").isEmpty())
 			messagesYml.set("Friends.General.RequestInfoOnJoinColor", "&e");
 		if (messagesYml.getString("Friends.General.RequestInfoOnJoinColorComma").isEmpty())
@@ -175,145 +153,105 @@ public class MessagesYML {
 		if (messagesYml.getString("Friends.General.DoesNotExist").isEmpty())
 			messagesYml.set("Friends.General.DoesNotExist", " &7The player &e[PLAYER] &7doesn't &7exist");
 		if (messagesYml.getString("Friends.General.GivenPlayerEqualsSender").isEmpty())
-			messagesYml.set("Friends.General.GivenPlayerEqualsSender",
-					" &7You cannot give you self as player argument.");
+			messagesYml.set("Friends.General.GivenPlayerEqualsSender", " &7You cannot give you self as player argument.");
 		if (messagesYml.getString("Friends.GUI.Hide.ShowAllPlayers").isEmpty())
 			messagesYml.set("Friends.GUI.Hide.ShowAllPlayers", " &aNow you can see all players.");
 		if (messagesYml.getString("Friends.GUI.Hide.ShowOnlyFriendsAndPeopleFromTheServer").isEmpty())
-			messagesYml.set("Friends.GUI.Hide.ShowOnlyFriendsAndPeopleFromTheServer",
-					" &eNow only friends &eand &epeople &eof ðe &eserver &eteam &ewill &ebe &eshown.");
+			messagesYml.set("Friends.GUI.Hide.ShowOnlyFriendsAndPeopleFromTheServer", " &eNow only friends and people of server team will be shown.");
 		if (messagesYml.getString("Friends.GUI.Hide.ShowOnlyFriends").isEmpty())
 			messagesYml.set("Friends.GUI.Hide.ShowOnlyFriends", " &6Now you can see only Friends.");
 		if (messagesYml.getString("Friends.GUI.Hide.ShowOnlyPeopleFromTheServer").isEmpty())
-			messagesYml.set("Friends.GUI.Hide.ShowOnlyPeopleFromTheServer",
-					" &5Now you can see only players from the server &5team.");
+			messagesYml.set("Friends.GUI.Hide.ShowOnlyPeopleFromTheServer", " &5Now you can see only players from the server &5team.");
 		if (messagesYml.getString("Friends.GUI.Hide.ShowNobody").isEmpty())
 			messagesYml.set("Friends.GUI.Hide.ShowNobody", " &cHide all players.");
 		if (messagesYml.getString("Friends.CommandUsage.List").isEmpty())
 			messagesYml.set("Friends.CommandUsage.List", "&8/&5friend list &8- &7Lists &7all &7of &7your &7friends");
 		if (messagesYml.getString("Friends.CommandUsage.MSG").isEmpty())
-			messagesYml.set("Friends.CommandUsage.MSG",
-					"&8/&5friend &5msg &5[name &5of &5the &5friend] &5[message]&r &8- &7send &7a &7friend &7a &7message");
+			messagesYml.set("Friends.CommandUsage.MSG", "&8/&5friend &5msg &5[name &5of &5the &5friend] &5[message]&r &8- &7send &7a &7friend &7a &7message");
 		if (messagesYml.getString("Friends.CommandUsage.ADD").isEmpty())
-			messagesYml.set("Friends.CommandUsage.ADD",
-					"&8/&5friend &5add &5[name &5of &5the &5player]&r &8- &7Add &7a &7friend");
+			messagesYml.set("Friends.CommandUsage.ADD", "&8/&5friend &5add &5[name &5of &5the &5player]&r &8- &7Add &7a &7friend");
 		if (messagesYml.getString("Friends.CommandUsage.Accept").isEmpty())
-			messagesYml.set("Friends.CommandUsage.Accept",
-					"&8/&5friend &5accept &5[name &5of &5the &5player]&r &8- &7accept &7a &7friend request");
+			messagesYml.set("Friends.CommandUsage.Accept", "&8/&5friend &5accept &5[name &5of &5the &5player]&r &8- &7accept &7a &7friend request");
 		if (messagesYml.getString("Friends.CommandUsage.Deny").isEmpty())
-			messagesYml.set("Friends.CommandUsage.Deny",
-					"&8/&5friend &5deny &5[name &5of &5the &5player]&r &8- &7deny &7a &7friend &7request");
+			messagesYml.set("Friends.CommandUsage.Deny", "&8/&5friend &5deny &5[name &5of &5the &5player]&r &8- &7deny &7a &7friend &7request");
 		if (messagesYml.getString("Friends.CommandUsage.Remove").isEmpty())
-			messagesYml.set("Friends.CommandUsage.Remove",
-					"&8/&5friend &5remove &5[name &5of &5the &5friend]&r &8- &7removes &7a &7friend");
+			messagesYml.set("Friends.CommandUsage.Remove", "&8/&5friend &5remove &5[name &5of &5the &5friend]&r &8- &7removes &7a &7friend");
 		if (messagesYml.getString("Friends.CommandUsage.Jump").isEmpty())
-			messagesYml.set("Friends.CommandUsage.Jump",
-					"&8/&5friend &5jump [name of the &5friend]&r&8- &7Jump &7to &7a &7friend");
+			messagesYml.set("Friends.CommandUsage.Jump", "&8/&5friend &5jump [name of the &5friend]&r&8- &7Jump &7to &7a &7friend");
 		if (messagesYml.getString("Friends.CommandUsage.Settings").isEmpty())
 			messagesYml.set("Friends.CommandUsage.Settings", "&8/&5friend &5settings &r&8- &7Change &7the &7settings");
 		if (messagesYml.getString("Friends.Command.Accept.NowFriends").isEmpty())
 			messagesYml.set("Friends.Command.Accept.NowFriends", " &7You and &e[PLAYER] &7are &7now &7friends");
 		if (messagesYml.getString("Friends.Command.Accept.ErrorNoFriendShipInvitation").isEmpty())
-			messagesYml.set("Friends.Command.Accept.ErrorNoFriendShipInvitation",
-					" &7You didn't receive a &7friend &7request &7from &e[PLAYER]&7.");
+			messagesYml.set("Friends.Command.Accept.ErrorNoFriendShipInvitation", " &7You didn't receive a &7friend &7request &7from &e[PLAYER]&7.");
 		if (messagesYml.getString("Friends.Command.Accept.ErrorSenderEqualsReceiver").isEmpty())
-			messagesYml.set("Friends.Command.Accept.ErrorSenderEqualsReceiver",
-					" &7You cannot &7write &7to &7yourself.");
+			messagesYml.set("Friends.Command.Accept.ErrorSenderEqualsReceiver", " &7You cannot &7write &7to &7yourself.");
 		if (messagesYml.getString("Friends.Command.Accept.ErrorAlreadySend").isEmpty())
-			messagesYml.set("Friends.Command.Accept.ErrorAlreadySend",
-					"&7 You already have sent &7the &7player &e[PLAYER] &7a &7friend &7request.");
+			messagesYml.set("Friends.Command.Accept.ErrorAlreadySend", "&7 You already have sent &7the &7player &e[PLAYER] &7a &7friend &7request.");
 		if (messagesYml.getString("Friends.Command.Add.SenderEqualsReceiver").isEmpty())
-			messagesYml.set("Friends.Command.Add.SenderEqualsReceiver",
-					" &7You &7cannot &7send &7yourself &7a &7friend &7request.");
+			messagesYml.set("Friends.Command.Add.SenderEqualsReceiver", " &7You &7cannot &7send &7yourself &7a &7friend &7request.");
 		if (messagesYml.getString("Friends.Command.Add.FriendRequestFromReceiver").isEmpty())
-			messagesYml.set("Friends.Command.Add.FriendRequestFromReceiver",
-					" &7The player &e[PLAYER] &7has &7already &7send &7you &7a &7friend &7request.");
+			messagesYml.set("Friends.Command.Add.FriendRequestFromReceiver", " &7The player &e[PLAYER] &7has &7already &7send &7you &7a &7friend &7request.");
 		if (messagesYml.getString("Friends.Command.Add.FriendRequestReceived").isEmpty())
-			messagesYml.set("Friends.Command.Add.FriendRequestReceived",
-					"&7 You have received a friend request from &e[PLAYER]&7.");
+			messagesYml.set("Friends.Command.Add.FriendRequestReceived", "&7 You have received a friend request from &e[PLAYER]&7.");
 		if (messagesYml.getString("Friends.Command.Add.ClickHere").isEmpty())
 			messagesYml.set("Friends.Command.Add.ClickHere", "&aClick here to accept the friendship request");
 		if (messagesYml.getString("Friends.Command.Add.SentAFriendRequest").isEmpty())
-			messagesYml.set("Friends.Command.Add.SentAFriendRequest",
-					"&7 The player &e[PLAYER]&7 was &7send &7a &7friend &7request");
+			messagesYml.set("Friends.Command.Add.SentAFriendRequest", "&7 The player &e[PLAYER]&7 was &7send &7a &7friend &7request");
 		if (messagesYml.getString("Friends.Command.Add.CanNotSendThisPlayer").isEmpty())
-			messagesYml.set("Friends.Command.Add.CanNotSendThisPlayer",
-					" &7You &7cannot &7send &7the &7player &e[PLAYER] &7a &7friend &7request");
+			messagesYml.set("Friends.Command.Add.CanNotSendThisPlayer", " &7You &7cannot &7send &7the &7player &e[PLAYER] &7a &7friend &7request");
 		if (messagesYml.getString("Friends.Command.Add.HowToAccept").isEmpty())
-			messagesYml.set("Friends.Command.Add.HowToAccept",
-					" &7Accept the friend request with &6/friend &6accept &6[PLAYER]&7.");
+			messagesYml.set("Friends.Command.Add.HowToAccept", " &7Accept the friend request with &6/friend &6accept &6[PLAYER]&7.");
 		if (messagesYml.getString("Friends.Command.Add.AlreadyFriends").isEmpty())
 			messagesYml.set("Friends.Command.Add.AlreadyFriends", "&7 You and &e[PLAYER] &7are &7already &7friends.");
 		if (messagesYml.getString("Friends.Command.Deny.HasDenied").isEmpty())
 			messagesYml.set("Friends.Command.Deny.HasDenied", " &7You have denied the friend request of &e[PLAYER].");
 		if (messagesYml.getString("Friends.Command.Deny.NoFriendRequest").isEmpty())
-			messagesYml.set("Friends.Command.Deny.NoFriendRequest",
-					" &7You didn't receive a &7friend &7request &7from &e[PLAYER]&7.");
+			messagesYml.set("Friends.Command.Deny.NoFriendRequest", " &7You didn't receive a &7friend &7request &7from &e[PLAYER]&7.");
 		if (messagesYml.getString("Friends.Command.Settings.NowYouCanGetInvitedByEveryone").isEmpty())
-			messagesYml.set("Friends.Command.Settings.NowYouCanGetInvitedByEveryone",
-					" &7Now &7you &7can &7get &7invited &7by &aevery &7player &7into &7his &7Party.");
+			messagesYml.set("Friends.Command.Settings.NowYouCanGetInvitedByEveryone", " &7Now &7you &7can &7get &7invited &7by &aevery &7player &7into &7his &7Party.");
 		if (messagesYml.getString("Friends.Command.Settings.NowYouCanGetInvitedByFriends").isEmpty())
-			messagesYml.set("Friends.Command.Settings.NowYouCanGetInvitedByFriends",
-					" &7Now &7you &7can &7get &7invited &conly &7by &7by your friends &7into &7their &7Party.");
+			messagesYml.set("Friends.Command.Settings.NowYouCanGetInvitedByFriends", " &7Now &7you &7can &7get &7invited &conly &7by &7by your friends &7into &7their &7Party.");
 		if (messagesYml.getString("Friends.Command.Settings.NowYouAreNotGoneReceiveFriendRequests").isEmpty())
-			messagesYml.set("Friends.Command.Settings.NowYouAreNotGoneReceiveFriendRequests",
-					" &7Now &7you &7are &cnot &7gone &7receive &7friend &7requests &7anymore");
+			messagesYml.set("Friends.Command.Settings.NowYouAreNotGoneReceiveFriendRequests", " &7Now &7you &7are &cnot &7gone &7receive &7friend &7requests &7anymore");
 		if (messagesYml.getString("Friends.Command.Settings.NowYouAreGoneReceiveFriendRequests").isEmpty())
-			messagesYml.set("Friends.Command.Settings.NowYouAreGoneReceiveFriendRequests",
-					" &7Now &7you &7are &agone &7receive &7friend &7requests &7from &7everyone");
+			messagesYml.set("Friends.Command.Settings.NowYouAreGoneReceiveFriendRequests", " &7Now &7you &7are &agone &7receive &7friend &7requests &7from &7everyone");
 		if (messagesYml.getString("Friends.Command.Settings.NowYouAreNotGoneReceiveMessages").isEmpty())
-			messagesYml.set("Friends.Command.Settings.NowYouAreNotGoneReceiveMessages",
-					" &7Now &7you &7are &cnot &7gone &7receive &7messages &7anymore");
+			messagesYml.set("Friends.Command.Settings.NowYouAreNotGoneReceiveMessages", " &7Now &7you &7are &cnot &7gone &7receive &7messages &7anymore");
 		if (messagesYml.getString("Friends.Command.Settings.NowYouWillBeShowAsOnline").isEmpty())
-			messagesYml.set("Friends.Command.Settings.NowYouWillBeShowAsOnline",
-					" &7Now &7you &7will &7be &7shown &7as &aonline");
+			messagesYml.set("Friends.Command.Settings.NowYouWillBeShowAsOnline", " &7Now &7you &7will &7be &7shown &7as &aonline");
 		if (messagesYml.getString("Friends.Command.Settings.NowYouWilBeShownAsOffline").isEmpty())
-			messagesYml.set("Friends.Command.Settings.NowYouWilBeShownAsOffline",
-					" &7Now &7you &7will &7be &7shown &7as &coffline");
+			messagesYml.set("Friends.Command.Settings.NowYouWilBeShownAsOffline", " &7Now &7you &7will &7be &7shown &7as &coffline");
 		if (messagesYml.getString("Friends.Command.Settings.NowNoMessages").isEmpty())
-			messagesYml.set("Friends.Command.Settings.NowNoMessages",
-					" &7Now &7you &7are &cnot &7gone &7receive &7messages &7anymore");
+			messagesYml.set("Friends.Command.Settings.NowNoMessages", " &7Now &7you &7are &cnot &7gone &7receive &7messages &7anymore");
 		if (messagesYml.getString("Friends.Command.Settings.NowMessages").isEmpty())
-			messagesYml.set("Friends.Command.Settings.NowMessages",
-					" &7Now &7you &7are &agone &7receive &7message &7from &7everyone");
+			messagesYml.set("Friends.Command.Settings.NowMessages", " &7Now &7you &7are &agone &7receive &7message &7from &7everyone");
 		if (messagesYml.getString("Friends.Command.Settings.NowYourFriendsCanJump").isEmpty())
-			messagesYml.set("Friends.Command.Settings.NowYourFriendsCanJump",
-					" &7Now &7your &7friends &7can &ajump &7to &7you");
+			messagesYml.set("Friends.Command.Settings.NowYourFriendsCanJump", " &7Now &7your &7friends &7can &ajump &7to &7you");
 		if (messagesYml.getString("Friends.Command.Settings.NowYourFriendsCanNotJump").isEmpty())
-			messagesYml.set("Friends.Command.Settings.NowYourFriendsCanNotJump",
-					" &7Now &7your &7friends &7can &cnot &7jump &7to &7you");
+			messagesYml.set("Friends.Command.Settings.NowYourFriendsCanNotJump", " &7Now &7your &7friends &7can &cnot &7jump &7to &7you");
 		if (messagesYml.getString("Friends.Command.Settings.AtTheMomentYouAreNotGoneReceiveFriendRequests").isEmpty())
-			messagesYml.set("Friends.Command.Settings.AtTheMomentYouAreNotGoneReceiveFriendRequests",
-					" &7At &7the moment &7you &7are &cnot &7gone &7receive &7friend &7request");
+			messagesYml.set("Friends.Command.Settings.AtTheMomentYouAreNotGoneReceiveFriendRequests", " &7At &7the moment &7you &7are &cnot &7gone &7receive &7friend &7request");
 		if (messagesYml.getString("Friends.Command.Settings.AtTheMomentYouAreGoneReceiveFriendRequests").isEmpty())
-			messagesYml.set("Friends.Command.Settings.AtTheMomentYouAreGoneReceiveFriendRequests",
-					" &7At &7the moment &7you &7are &7gone &7receive &7friend &7requests &7from &aeveryone");
-		if (messagesYml.getString("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty")
-				.isEmpty())
-			messagesYml.set("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty",
-					" &7At &7the moment &7you &7can &7get &7invited &7by &aevery &7player &7into &7his &7Party.");
-		if (messagesYml.getString("Friends.Command.Settings.AtTheMomentYouCanNotGetInvitedByEverybodyIntoHisParty")
-				.isEmpty())
-			messagesYml.set("Friends.Command.Settings.AtTheMomentYouCanNotGetInvitedByEverybodyIntoHisParty",
-					" &7At &7the moment &7you &7can &7get &7invited &aonly &7by &7by your friends &7into &7their &7Party.");
+			messagesYml.set("Friends.Command.Settings.AtTheMomentYouAreGoneReceiveFriendRequests", " &7At &7the moment &7you &7are &7gone &7receive &7friend &7requests &7from &aeveryone");
+		if (messagesYml.getString("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty").isEmpty())
+			messagesYml.set("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty", " &7At &7the moment &7you &7can &7get &7invited &7by &aevery &7player &7into &7his &7Party.");
+		if (messagesYml.getString("Friends.Command.Settings.AtTheMomentYouCanNotGetInvitedByEverybodyIntoHisParty").isEmpty())
+			messagesYml.set("Friends.Command.Settings.AtTheMomentYouCanNotGetInvitedByEverybodyIntoHisParty", " &7At &7the moment &7you &7can &7get &7invited &aonly &7by &7by your friends &7into &7their &7Party.");
 		if (messagesYml.getString("Friends.Command.Settings.ChangeThisSettingsHover").isEmpty())
 			messagesYml.set("Friends.Command.Settings.ChangeThisSettingsHover", "Click here to change this setting.");
 		if (messagesYml.getString("Friends.Command.Settings.ChangeThisSettingWithFriendrequests").isEmpty())
-			messagesYml.set("Friends.Command.Settings.ChangeThisSettingWithFriendrequests",
-					" &7Change &7this &7setting &7with &6/friend &6settings &6friendrequests");
+			messagesYml.set("Friends.Command.Settings.ChangeThisSettingWithFriendrequests", " &7Change &7this &7setting &7with &6/friend &6settings &6friendrequests");
 		if (messagesYml.getString("Friends.Command.Settings.ChangeThisSettingWithParty").isEmpty())
-			messagesYml.set("Friends.Command.Settings.ChangeThisSettingWithParty",
-					" &7Change &7this &7setting &7with &6/friend &6settings &6Party");
+			messagesYml.set("Friends.Command.Settings.ChangeThisSettingWithParty", " &7Change &7this &7setting &7with &6/friend &6settings &6Party");
 		if (messagesYml.getString("Friends.Command.Jump.AlreadyOnTheServer").isEmpty())
 			messagesYml.set("Friends.Command.Jump.AlreadyOnTheServer", " &7You &7are &7already &7on &7this &7server");
 		if (messagesYml.getString("Friends.Command.Jump.JoinedTheServer").isEmpty())
-			messagesYml.set("Friends.Command.Jump.JoinedTheServer",
-					" &7Now &7you &7are &7on &7the &7same &7server, &7like &7the &7player &e[PLAYER]");
+			messagesYml.set("Friends.Command.Jump.JoinedTheServer", " &7Now &7you &7are &7on &7the &7same &7server, &7like &7the &7player &e[PLAYER]");
 		if (messagesYml.getString("Friends.Command.Jump.CanNotJump").isEmpty())
 			messagesYml.set("Friends.Command.Jump.CanNotJump", " &7You &7cannot &7jump to &7this &7person");
 		if (messagesYml.getString("Friends.Command.List.NoFriendsAdded").isEmpty())
-			messagesYml.set("Friends.Command.List.NoFriendsAdded",
-					" &7Till now, &7you don't &7have &7added &7friends.");
+			messagesYml.set("Friends.Command.List.NoFriendsAdded", " &7Till now, &7you don't &7have &7added &7friends.");
 		if (messagesYml.getString("Friends.Command.List.FriendsList").isEmpty())
 			messagesYml.set("Friends.Command.List.FriendsList", " &7These &7are &7your &7friends:");
 		if (messagesYml.getString("Friends.Command.MSG.CanNotWriteToHim").isEmpty())
@@ -322,6 +260,8 @@ public class MessagesYML {
 			messagesYml.set("Friends.Command.MSG.NoOneEverWroteToYou", "&7 No player ever wrote to you.");
 		if (messagesYml.getString("Friends.Command.MSG.PlayerAndMessageMissing").isEmpty())
 			messagesYml.set("Friends.Command.MSG.PlayerAndMessageMissing", " &7You &7need &7to &7give &7a &7message.");
+		if (messagesYml.getString("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin").isEmpty())
+			messagesYml.set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7The &7player &7will &7receive &7the &7message, &7when &7he &7goes &7online.");
 		if (messagesYml.getString("Friends.Command.Remove.Removed").isEmpty())
 			messagesYml.set("Friends.Command.Remove.Removed", "&7 You removed the friend &e[PLAYER]&7.");
 		loadSharedMessages(messagesYml);
@@ -364,19 +304,17 @@ public class MessagesYML {
 			messagesYml.set("Friends.GUI.Hide.ShowNobody",
 					" &cDir &cwerden &cjetzt &ckeine &cSpieler &cmehr &cangezeigt.");
 		if (messagesYml.getString("Friends.CommandUsage.List").isEmpty())
-			messagesYml.set("Friends.CommandUsage.List", "&8/&5friend list&r &8- &7Listet &7deine &7Freunde &7auf");
+			messagesYml.set("Friends.CommandUsage.List",
+					"&8/&5friend list&r &8- &7Listet &7deine &7Freunde &7auf");
 		if (messagesYml.getString("Friends.CommandUsage.MSG").isEmpty())
-			messagesYml.set("Friends.CommandUsage.MSG",
-					"&8/&5friend &5msg &5[Name &5des &5Freundes] &5[Nachricht]&r &8- &7schickt &7einem &7Freund &7eine &7Private Nachricht");
+			messagesYml.set("Friends.CommandUsage.MSG", "&8/&5friend &5msg &5[Name &5des &5Freundes] &5[Nachricht]&r &8- &7schickt &7einem &7Freund &7eine &7Private Nachricht");
 		if (messagesYml.getString("Friends.CommandUsage.ADD").isEmpty())
 			messagesYml.set("Friends.CommandUsage.ADD",
 					"&8/&5friend &5add &5[Name &5des &5Spielers]&r &8- &7Fügt &7einen &7Freund &7hinzu");
 		if (messagesYml.getString("Friends.CommandUsage.Accept").isEmpty())
-			messagesYml.set("Friends.CommandUsage.Accept",
-					"&8/&5friend &5accept &5[Name &5des &5Spielers]&r &8- &7Akzeptiert &7eine &7Freundschaftsanfrage");
+			messagesYml.set("Friends.CommandUsage.Accept", "&8/&5friend &5accept &5[Name &5des &5Spielers]&r &8- &7Akzeptiert &7eine &7Freundschaftsanfrage");
 		if (messagesYml.getString("Friends.CommandUsage.Deny").isEmpty())
-			messagesYml.set("Friends.CommandUsage.Deny",
-					"&8/&5friend &5deny &5[Name &5des &5Spielers]&r &8- &7Lehnt eine &7Freundschaftsanfrage &7ab");
+			messagesYml.set("Friends.CommandUsage.Deny", "&8/&5friend &5deny &5[Name &5des &5Spielers]&r &8- &7Lehnt eine &7Freundschaftsanfrage &7ab");
 		if (messagesYml.getString("Friends.CommandUsage.Remove").isEmpty())
 			messagesYml.set("Friends.CommandUsage.Remove",
 					"&8/&5friend &5remove &5[Name &5des &5Spielers]&r &8- &7Entfernt &7einen &7Freund");
@@ -384,7 +322,8 @@ public class MessagesYML {
 			messagesYml.set("Friends.CommandUsage.Jump",
 					"&8/&5friend &5jump [Name des Freundes]&r&8- &7Zu &7einem &7Freund &7springen");
 		if (messagesYml.getString("Friends.CommandUsage.Settings").isEmpty())
-			messagesYml.set("Friends.CommandUsage.Settings", "&8/&5friend &5settings &r&8- &7Ändere die Einstellungen");
+			messagesYml.set("Friends.CommandUsage.Settings",
+					"&8/&5friend &5settings &r&8- &7Ändere die Einstellungen");
 		if (messagesYml.getString("Friends.Command.Accept.NowFriends").isEmpty())
 			messagesYml.set("Friends.Command.Accept.NowFriends", " &7Du bist jetzt mit &e[PLAYER] &7befreundet");
 		if (messagesYml.getString("Friends.Command.Accept.ErrorAlreadySend").isEmpty())
@@ -429,7 +368,8 @@ public class MessagesYML {
 			messagesYml.set("Friends.Command.List.NoFriendsAdded", " &7Du hast noch keine Freunde &7hinzugefügt.");
 		if (messagesYml.getString("Friends.Command.Remove.Removed").isEmpty())
 			messagesYml.set("Friends.Command.Remove.Removed", "&7 Du hast den Freund &e[PLAYER] &7entfernt");
-		if (messagesYml.getString("Friends.Command.Settings.AtTheMomentYouAreNotGoneReceiveFriendRequests").isEmpty())
+		if (messagesYml.getString("Friends.Command.Settings.AtTheMomentYouAreNotGoneReceiveFriendRequests")
+				.isEmpty())
 			messagesYml.set("Friends.Command.Settings.AtTheMomentYouAreNotGoneReceiveFriendRequests",
 					" &7Momentan &7können &7dir &ckeine &7Freundschaftsanfragen &7gesendet &7werden");
 		if (messagesYml.getString("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty")
@@ -485,12 +425,13 @@ public class MessagesYML {
 					" &7Freunde &7können &7jetzt &cnicht &7zu &7dir &7springen");
 		if (messagesYml.getString("Friends.Command.MSG.CanNotWriteToHim").isEmpty())
 			messagesYml.set("Friends.Command.MSG.CanNotWriteToHim", " &7Du kannst diesem Spieler nicht schreiben.");
+		if (messagesYml.getString("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin").isEmpty())
+			messagesYml.set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin",
+					" &7Der &7Spieler &7erhält &7die &7Nachricht, &7sobald &7er &7online &7geht.");
 		if (messagesYml.getString("Friends.Command.MSG.CanNotWriteToHim").isEmpty())
 			messagesYml.set("Friends.Command.MSG.CanNotWriteToHim", " &7Du kannst diesem Spieler nicht schreiben.");
 		if (messagesYml.getString("Friends.Command.MSG.NoOneEverWroteToYou").isEmpty())
-			messagesYml.set("Friends.Command.MSG.NoOneEverWroteToYou", " Noch kein Spieler hat dich angeschrieben.");
-		if (messagesYml.getString("Friends.Command.MSG.NoOneEverWroteToYou").isEmpty())
-			messagesYml.set("Friends.Command.MSG.NoOneEverWroteToYou", " Noch kein Spieler hat dich angeschrieben.");
+			messagesYml.set("Friends.Command.MSG.NoOneEverWroteToYou", " &7Noch kein Spieler hat dich angeschrieben.");
 		if (messagesYml.getString("Party.General.ErrorNotPartyLeader").isEmpty())
 			messagesYml.set("Party.General.ErrorNotPartyLeader", "&cDu &cbist &cnicht &cder &cParty &cLeader.");
 		if (messagesYml.getString("Party.Leader.SenderEqualsGivenPlayer").isEmpty())
@@ -505,7 +446,8 @@ public class MessagesYML {
 			messagesYml.set("Party.CommandUsage.Invite",
 					"&8/&5Party invite <Name> &8- &7Lade &7einen &7Spieler &7in &7deine &7Party &7ein");
 		if (messagesYml.getString("Party.CommandUsage.List").isEmpty())
-			messagesYml.set("Party.CommandUsage.List", "&8/&5Party list &8- &7Listet alle Spieler in der Party auf");
+			messagesYml.set("Party.CommandUsage.List",
+					"&8/&5Party list &8- &7Listet alle Spieler in der Party auf");
 		if (messagesYml.getString("Party.CommandUsage.Chat").isEmpty())
 			messagesYml.set("Party.CommandUsage.Chat",
 					"&8/&5Party chat <Nachricht> &8- &7Sendet allen Spieler in der Party &7eine &7Nachicht");
@@ -613,7 +555,8 @@ public class MessagesYML {
 		if (messagesYml.getString("Friends.General.HelpEnd").isEmpty())
 			messagesYml.set("Friends.General.HelpEnd", "&8&m-----------------------------------------------");
 		if (messagesYml.getString("Party.General.HelpBegin").isEmpty())
-			messagesYml.set("Party.General.HelpBegin", "&8&m-------------------&r&8[&5&lParty&8]&m-------------------");
+			messagesYml.set("Party.General.HelpBegin",
+					"&8&m-------------------&r&8[&5&lParty&8]&m-------------------");
 		if (messagesYml.getString("Party.General.HelpEnd").isEmpty())
 			messagesYml.set("Party.General.HelpEnd", "&8&m---------------------------------------------");
 		if (messagesYml.getString("Party.Command.Chat.Prefix").isEmpty())
@@ -629,7 +572,7 @@ public class MessagesYML {
 		if (messagesYml.getString("Party.Command.Info.Players").isEmpty())
 			messagesYml.set("Party.Command.Info.Players", "&8Players&7: &b");
 		if (messagesYml.getString("Friends.Command.MSG.SendedMessage").isEmpty())
-			messagesYml.set("Friends.Command.MSG.SendedMessage", " &e[SENDER]&5-> &e[PLAYER]&7: [CONTENT]");
+			messagesYml.set("Friends.Command.MSG.SentMessage", " &e[SENDERNAME]&5-> &e[PLAYER]&7: [CONTENT]");
 		if (messagesYml.getString("Friends.Command.Settings.SplitLine").isEmpty())
 			messagesYml.set("Friends.Command.Settings.SplitLine",
 					"&8&m-----------------------------------------------");

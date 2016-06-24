@@ -51,7 +51,9 @@ class Importer extends SQLCommunication {
 	}
 
 	private void importFriendRequests(PlayerCollection player) {
-		for (int requester : getRequests(player.ID))
+		int[] list = getRequests(player.ID);
+		assert list != null;
+		for (int requester : list)
 			connection.sendFriendRequest(requester, player.ID);
 	}
 

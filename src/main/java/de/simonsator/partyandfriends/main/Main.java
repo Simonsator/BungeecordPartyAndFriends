@@ -31,7 +31,7 @@ public class Main extends Plugin {
 	/**
 	 * This object
 	 */
-	protected static Main instance;
+	private static Main instance;
 	private static PAFPlayerManager playerManager;
 	private static PartyManager partyManager;
 	/**

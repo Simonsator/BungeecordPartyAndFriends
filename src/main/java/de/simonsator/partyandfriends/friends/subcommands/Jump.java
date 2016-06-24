@@ -1,5 +1,10 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
+import static de.simonsator.partyandfriends.main.Main.getInstance;
+import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
+
+import java.util.regex.Matcher;
+
 import de.simonsator.partyandfriends.api.friends.ServerConnector;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
@@ -9,11 +14,6 @@ import de.simonsator.partyandfriends.utilities.StandartConnector;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-
-import java.util.regex.Matcher;
-
-import static de.simonsator.partyandfriends.main.Main.getInstance;
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
 /***
  * The command jump
@@ -31,7 +31,8 @@ public class Jump extends FriendSubCommand {
 	/**
 	 * Sets the server connector, which will be used to join a server.
 	 *
-	 * @param pConnector The connector
+	 * @param pConnector
+	 *            The connector
 	 */
 	public static void setServerConnector(ServerConnector pConnector) {
 		connector = pConnector;

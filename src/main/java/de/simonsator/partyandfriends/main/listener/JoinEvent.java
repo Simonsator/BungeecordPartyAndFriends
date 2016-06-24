@@ -3,14 +3,12 @@ package de.simonsator.partyandfriends.main.listener;
 import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.utilities.CompilePatter;
-import de.simonsator.partyandfriends.utilities.OfflineMessage;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -55,8 +53,6 @@ public class JoinEvent implements Listener {
 		boolean noFriends = friends.isEmpty();
 		if (!friendRequests.isEmpty())
 			deliverFriendRequests(player, friendRequests);
-		if (getInstance().getConfig().getString("General.Disable.OfflineMessages").equalsIgnoreCase("false"))
-			deliverOfflineMessages(player);
 		if (player.getSettingsWorth(3) == 1)
 			noFriends = true;
 		if (!noFriends)
@@ -75,13 +71,6 @@ public class JoinEvent implements Listener {
 				.getMessagesYml().getString("Friends.General.RequestInfoOnJoin")).replaceAll(Matcher.quoteReplacement(content))));
 	}
 
-	private void deliverOfflineMessages(OnlinePAFPlayer pPlayer) {
-		ArrayList<OfflineMessage> offlineMessages = pPlayer.getOfflineMessages();
-		for (OfflineMessage messages : offlineMessages) {
-			getInstance().getFriendsMSGCommand().deliverOfflineMessage(messages.MESSAGE, pPlayer,
-					messages.SENDER);
-		}
-	}
 
 	private void sendNowOnline(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriends) {
 		for (PAFPlayer friend : pFriends) {

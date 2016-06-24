@@ -10,20 +10,20 @@ public abstract class SQLCommunication {
 	/**
 	 * The MySQL database
 	 */
-	final String database;
+	protected final String database;
 	/**
 	 * The url of the SQL server
 	 */
 	private final String url;
 	private Connection connection;
 
-	SQLCommunication(String pDatabase, String pURL) {
+	protected SQLCommunication(String pDatabase, String pURL) {
 		this.database = pDatabase;
 		this.url = pURL;
 		connection = createConnection();
 	}
 
-	void close(ResultSet rs, Statement stmt) {
+	protected void close(ResultSet rs, Statement stmt) {
 		try {
 			if (rs != null)
 				rs.close();
@@ -42,6 +42,15 @@ public abstract class SQLCommunication {
 			e.printStackTrace();
 		}
 		return connection = createConnection();
+	}
+
+	protected void close(PreparedStatement pPrepStmt) {
+		try {
+			if (pPrepStmt != null)
+				pPrepStmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private Connection createConnection() {

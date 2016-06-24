@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import static de.simonsator.partyandfriends.main.Main.getInstance;
 import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTERN;
 
-public abstract class FriendSubCommand extends SubCommand {
+public abstract class FriendSubCommand extends SubCommand implements Comparable<SubCommand> {
 
 	public FriendSubCommand(String[] pCommands, int pPriority, String pHelp) {
 		super(pCommands, pPriority, pHelp);
@@ -35,5 +35,6 @@ public abstract class FriendSubCommand extends SubCommand {
 		}
 		return true;
 	}
+
 
 }

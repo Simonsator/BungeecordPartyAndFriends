@@ -1,7 +1,5 @@
 package de.simonsator.partyandfriends.mysql;
 
-import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
-import de.simonsator.partyandfriends.utilities.OfflineMessage;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.*;
@@ -9,7 +7,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
 /**
  * @author Simonsator
@@ -61,8 +58,7 @@ public class MySQL extends SQLCommunication {
 		try {
 			prepStmt = con.prepareStatement("CREATE DATABASE IF NOT EXISTS " + database);
 			prepStmt.executeUpdate();
-			if (prepStmt != null)
-				prepStmt.close();
+			prepStmt.close();
 			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS " + database + ".`" + tablePrefix + "players` ("
 					+ "`player_id` INT(8) NOT NULL AUTO_INCREMENT, " + "`player_name` VARCHAR(16) NOT NULL, "
 					+ "`player_uuid` CHAR(38) NOT NULL, PRIMARY KEY (`player_id`));");
@@ -95,32 +91,8 @@ public class MySQL extends SQLCommunication {
 				e.printStackTrace();
 			}
 		}
-		importOfflineMessages();
 	}
 
-	/**
-	 * Imports the offlineMessages database
-	 */
-	private void importOfflineMessages() {
-		Connection con = getConnection();
-		PreparedStatement prepStmt = null;
-		try {
-			prepStmt = con.prepareStatement(
-					"CREATE TABLE IF NOT EXISTS `" + database + "`.`" + tablePrefix + "friends_messages` ("
-							+ "`Message` varchar(99) NOT NULL COMMENT ''," + "`Sender` INT(8) NOT NULL COMMENT '',"
-							+ "`Reciver` INT(8) NOT NULL COMMENT ''," + "`Date` int(10) NULL);");
-			prepStmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (prepStmt != null)
-					prepStmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	public int getPlayerID(ProxiedPlayer pPlayer) {
 		if (getInstance().getConfig().getString("General.OfflineServer").equalsIgnoreCase("true"))
@@ -562,40 +534,6 @@ public class MySQL extends SQLCommunication {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	/**
-	 * Get and delete offline messages
-	 *
-	 * @param player The player who receive the offline messages
-	 * @return Returns the offline messages and the senders
-	 */
-	public ArrayList<OfflineMessage> getOfflineMessages(ProxiedPlayer player) {
-		Connection con = getConnection();
-		Statement stmt = null;
-		ResultSet rs = null;
-		PreparedStatement prepStmt = null;
-		ArrayList<OfflineMessage> offlineMessages = new ArrayList<>();
-		try {
-			rs = (stmt = con.createStatement()).executeQuery("SELECT Message, Sender FROM " + database + "."
-					+ tablePrefix + "friends_messages WHERE Reciver='" + getPlayerID(player.getName()) + "'");
-			while (rs.next())
-				offlineMessages.add(new OfflineMessage(rs.getString(1), ((PAFPlayerManagerMySQL) getPlayerManager()).getPlayer(rs.getInt(2))));
-			prepStmt = con.prepareStatement("DELETE FROM " + database + "." + tablePrefix
-					+ "friends_messages WHERE Reciver = '" + getPlayerID(player.getName()) + "' Limit 1");
-			prepStmt.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (prepStmt != null)
-					prepStmt.close();
-				close(rs, stmt);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return offlineMessages;
 	}
 
 	public boolean isAFriendOf(int pPlayerID1, int pPlayerID2) {

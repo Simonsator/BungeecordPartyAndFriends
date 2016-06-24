@@ -1,16 +1,15 @@
 package de.simonsator.partyandfriends.pafplayers.mysql;
 
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.utilities.OfflineMessage;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.protocol.packet.Chat;
+import static de.simonsator.partyandfriends.main.Main.getInstance;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static de.simonsator.partyandfriends.main.Main.getInstance;
+import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.protocol.packet.Chat;
 
 public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPlayer {
 	private final ProxiedPlayer PLAYER;

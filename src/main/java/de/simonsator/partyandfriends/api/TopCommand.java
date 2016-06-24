@@ -9,6 +9,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
@@ -45,29 +46,10 @@ public abstract class TopCommand<T extends SubCommand> extends Command {
 
 	public void addCommand(T pCommand) {
 		subCommands.add(pCommand);
-		sort(subCommands);
+		sort();
 	}
 
-	protected void sort(ArrayList<T> pToSort) {
-		if (pToSort.size() > 1) {
-			ArrayList<T> smaller = new ArrayList<>();
-			ArrayList<T> bigger = new ArrayList<>();
-			T piviot = pToSort.get(0);
-			pToSort.remove(0);
-			while (!pToSort.isEmpty()) {
-				T actual = pToSort.get(0);
-				if (actual.getPriority() < piviot.getPriority()) {
-					smaller.add(actual);
-				} else {
-					bigger.add(actual);
-				}
-				pToSort.remove(0);
-			}
-			sort(smaller);
-			sort(bigger);
-			pToSort.addAll(smaller);
-			pToSort.add(piviot);
-			pToSort.addAll(bigger);
-		}
+	protected void sort() {
+		Collections.sort(subCommands);
 	}
 }

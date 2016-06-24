@@ -1,6 +1,5 @@
 package de.simonsator.partyandfriends.pafplayers;
 
-import de.simonsator.partyandfriends.utilities.OfflineMessage;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
 

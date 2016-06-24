@@ -4,7 +4,7 @@ import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
 
 import java.util.ArrayList;
 
-public abstract class SubCommand {
+public abstract class SubCommand implements Comparable<SubCommand> {
 	private ArrayList<String> commands = new ArrayList<>();
 	private String help;
 	private int priority;
@@ -29,5 +29,10 @@ public abstract class SubCommand {
 
 	public int getPriority() {
 		return priority;
+	}
+
+	@Override
+	public int compareTo(SubCommand o) {
+		return ((Integer) getPriority()).compareTo(o.getPriority());
 	}
 }

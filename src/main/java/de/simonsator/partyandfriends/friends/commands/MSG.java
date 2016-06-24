@@ -3,7 +3,6 @@ package de.simonsator.partyandfriends.friends.commands;
 import de.simonsator.partyandfriends.api.TopCommand;
 import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
-import de.simonsator.partyandfriends.utilities.OfflineMessage;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -34,7 +33,7 @@ public class MSG extends Command {
 	}
 
 	private static boolean playerExists(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
-		if (pPlayerQuery.doesExist()) {
+		if (!pPlayerQuery.doesExist()) {
 			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
 					+ getInstance().getMessagesYml().getString("Friends.Command.MSG.CanNotWriteToHim")));
 			return false;
@@ -73,9 +72,7 @@ public class MSG extends Command {
 		if (!playerExists(pPlayer, writtenTo))
 			return;
 		int n = 2;
-		if (type == 1) {
-			n = 1;
-		}
+		if (type == 1) n = 1;
 		send(pPlayer, args, writtenTo, n);
 	}
 
@@ -116,17 +113,8 @@ public class MSG extends Command {
 
 	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer, String[] args, int n) {
 		if (!pQueryPlayer.isOnline()) {
-			if (getInstance().getConfig().getString("General.Disable.OfflineMessages")
-					.equalsIgnoreCase("false")) {
-				pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
-						.getMessagesYml().getString("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin")));
-				pPlayer.setLastPlayerWroteFrom(pQueryPlayer);
-
-				pPlayer.addOfflineMessage(new OfflineMessage(toMessageNoColor(args, n), pQueryPlayer));
-			} else {
-				pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
-						+ getInstance().getMessagesYml().getString("Friends.Command.MSG.CanNotWriteToHim")));
-			}
+			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
+					+ getInstance().getMessagesYml().getString("Friends.Command.MSG.CanNotWriteToHim")));
 			return true;
 		}
 		return false;
@@ -157,7 +145,7 @@ public class MSG extends Command {
 
 	private void sendMessage(String pContent, OnlinePAFPlayer pReceiver, String pSenderName, String pReceiverName) {
 		pReceiver.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + CONTENTPATTERN.matcher(PLAYERPATTERN.matcher(SENDERNAMEPATTERN.matcher(getInstance()
-				.getMessagesYml().getString("Friends.Command.MSG.SendedMessage")).replaceAll(Matcher.quoteReplacement(pSenderName))).replaceAll(Matcher.quoteReplacement(pReceiverName))).replaceAll(Matcher.quoteReplacement(pContent))));
+				.getMessagesYml().getString("Friends.Command.MSG.SentMessage")).replaceAll(Matcher.quoteReplacement(pSenderName))).replaceAll(Matcher.quoteReplacement(pReceiverName))).replaceAll(Matcher.quoteReplacement(pContent))));
 	}
 
 	/**

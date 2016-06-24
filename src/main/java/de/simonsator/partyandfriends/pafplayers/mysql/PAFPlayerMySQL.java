@@ -4,7 +4,6 @@ import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
-import de.simonsator.partyandfriends.utilities.OfflineMessage;
 
 import java.util.ArrayList;
 import java.util.List;

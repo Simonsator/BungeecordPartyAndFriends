@@ -60,7 +60,7 @@ public class Friends extends TopCommand<FriendSubCommand> {
 							.toArray(new String[0]),
 					7, getInstance().getMessagesYml().getString("Friends.CommandUsage.Settings")));
 		}
-		sort(subCommands);
+		sort();
 	}
 
 	/**

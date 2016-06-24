@@ -78,6 +78,9 @@ public class Config {
 		if (config.getInt("General.MaxPlayersInParty") == 0) {
 			config.set("General.MaxPlayersInParty", 0);
 		}
+		if (config.getString("General.Disable.OfflineMessages").equals("")) {
+			config.set("General.Disable.OfflineMessages", "false");
+		}
 		if (config.getString("General.DisableCommand.Friends.List").equals("")) {
 			config.set("General.DisableCommand.Friends.List", "false");
 		}
