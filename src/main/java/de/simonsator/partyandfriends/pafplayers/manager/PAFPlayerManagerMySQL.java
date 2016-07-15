@@ -1,40 +1,58 @@
 package de.simonsator.partyandfriends.pafplayers.manager;
 
-import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.communication.sql.MySQL;
 import de.simonsator.partyandfriends.pafplayers.mysql.OnlinePAFPlayerMySQL;
 import de.simonsator.partyandfriends.pafplayers.mysql.PAFPlayerMySQL;
+import de.simonsator.partyandfriends.utilities.disable.Deactivated;
+import de.simonsator.partyandfriends.utilities.disable.Disabler;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.UUID;
 
-import static de.simonsator.partyandfriends.main.Main.getInstance;
+public class PAFPlayerManagerMySQL extends PAFPlayerManager implements Deactivated {
+	private static MySQL connection;
 
-public class PAFPlayerManagerMySQL extends PAFPlayerManager {
+	public PAFPlayerManagerMySQL(String pHost, String pUser, String pPassword, int pPort, String pDatabase, String pTablePrefix) {
+		connection = new MySQL(pHost, pUser, pPassword
+				, pPort,
+				pDatabase, pTablePrefix);
+		Disabler.getInstance().registerDeactivated(this);
+	}
+
 	public PAFPlayer getPlayer(String pPlayer) {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(pPlayer);
 		if (player == null)
-			return new PAFPlayerMySQL(getInstance().getConnection().getPlayerID(pPlayer));
+			return new PAFPlayerMySQL(getConnection().getPlayerID(pPlayer));
 		else
-			return getPlayer(player);
+			return this.getPlayer(player);
 	}
 
 	public OnlinePAFPlayer getPlayer(ProxiedPlayer pPlayer) {
-		return new OnlinePAFPlayerMySQL(getInstance().getConnection().getPlayerID(pPlayer), pPlayer);
+		return new OnlinePAFPlayerMySQL(getConnection().getPlayerID(pPlayer), pPlayer);
 	}
 
 	@Override
 	public PAFPlayer getPlayer(UUID pPlayer) {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(pPlayer);
 		if (player != null)
-			return getPlayer(player);
-		return getPlayer(Main.getInstance().getConnection().getPlayerID(pPlayer));
+			return this.getPlayer(player);
+		return this.getPlayer(getConnection().getPlayerID(pPlayer));
 	}
 
 	public PAFPlayer getPlayer(int pPlayerID) {
-		return getPlayer(getInstance().getConnection().getName(pPlayerID));
+		return this.getPlayer(getConnection().getName(pPlayerID));
 	}
 
+	public static MySQL getConnection() {
+		return connection;
+	}
+
+	@Override
+	public void onDisable() {
+		connection.closeConnection();
+	}
 }

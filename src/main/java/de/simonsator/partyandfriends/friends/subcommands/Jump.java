@@ -1,19 +1,19 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
-import static de.simonsator.partyandfriends.main.Main.getInstance;
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
-
-import java.util.regex.Matcher;
-
 import de.simonsator.partyandfriends.api.friends.ServerConnector;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.utilities.CompilePatter;
-import de.simonsator.partyandfriends.utilities.StandartConnector;
+import de.simonsator.partyandfriends.utilities.StandardConnector;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+
+import java.util.regex.Matcher;
+
+import static de.simonsator.partyandfriends.main.Main.getInstance;
+import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
 /***
  * The command jump
@@ -22,7 +22,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @version 1.0.0
  */
 public class Jump extends FriendSubCommand {
-	private static ServerConnector connector = new StandartConnector();
+	private static ServerConnector connector = new StandardConnector();
 
 	public Jump(String[] pCommands, int pPriority, String pHelp) {
 		super(pCommands, pPriority, pHelp);
@@ -31,8 +31,7 @@ public class Jump extends FriendSubCommand {
 	/**
 	 * Sets the server connector, which will be used to join a server.
 	 *
-	 * @param pConnector
-	 *            The connector
+	 * @param pConnector The connector
 	 */
 	public static void setServerConnector(ServerConnector pConnector) {
 		connector = pConnector;
@@ -69,7 +68,7 @@ public class Jump extends FriendSubCommand {
 			return true;
 		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
 				+ getInstance().getMessagesYml().getString("Friends.Command.Jump.CanNotJump")));
-		pPlayer.sendMessage(new TextComponent(getHelp()));
+		pPlayer.sendMessage(HELP);
 		return false;
 	}
 
@@ -77,7 +76,7 @@ public class Jump extends FriendSubCommand {
 		if (pQueryPlayer.getSettingsWorth(4) == 1) {
 			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
 					+ getInstance().getMessagesYml().getString("Friends.Command.Jump.CanNotJump")));
-			pPlayer.sendMessage(new TextComponent(getHelp()));
+			pPlayer.sendMessage(new TextComponent(HELP));
 			return false;
 		}
 		return true;
@@ -87,7 +86,7 @@ public class Jump extends FriendSubCommand {
 		if (pToJoin.equals(pPlayer.getServer().getInfo())) {
 			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
 					+ getInstance().getMessagesYml().getString("Friends.Command.Jump.AlreadyOnTheServer")));
-			pPlayer.sendMessage(new TextComponent(getHelp()));
+			pPlayer.sendMessage(new TextComponent(HELP));
 			return true;
 		}
 		return false;
@@ -98,7 +97,7 @@ public class Jump extends FriendSubCommand {
 			pSender.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + CompilePatter.PLAYERPATTERN
 					.matcher(getInstance().getMessagesYml().getString("Friends.General.PlayerIsOffline"))
 					.replaceAll(Matcher.quoteReplacement(pQueryPlayer.getName()))));
-			pSender.sendMessage(new TextComponent(getHelp()));
+			pSender.sendMessage(new TextComponent(HELP));
 			return false;
 		}
 		return true;

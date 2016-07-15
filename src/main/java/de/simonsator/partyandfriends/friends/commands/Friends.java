@@ -3,7 +3,7 @@ package de.simonsator.partyandfriends.friends.commands;
 import de.simonsator.partyandfriends.api.TopCommand;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.friends.subcommands.*;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
@@ -75,7 +75,7 @@ public class Friends extends TopCommand<FriendSubCommand> {
 			pPlayer.sendMessage(
 					new TextComponent(getInstance().getMessagesYml().getString("Friends.General.HelpBegin")));
 			for (FriendSubCommand command : subCommands)
-				pPlayer.sendMessage(new TextComponent(command.getHelp()));
+				pPlayer.sendMessage(new TextComponent(command.HELP));
 			pPlayer.sendMessage(
 					new TextComponent(getInstance().getMessagesYml().getString("Friends.General.HelpEnd")));
 			return;

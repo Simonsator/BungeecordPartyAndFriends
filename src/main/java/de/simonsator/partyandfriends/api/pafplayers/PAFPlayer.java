@@ -1,4 +1,4 @@
-package de.simonsator.partyandfriends.pafplayers;
+package de.simonsator.partyandfriends.api.pafplayers;
 
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
@@ -40,6 +40,8 @@ public interface PAFPlayer {
 	void sendFriendRequest(PAFPlayer pSender);
 
 	void addFriend(PAFPlayer pPlayer);
+
+	PAFPlayer getPAFPlayer();
 
 	void removeFriend(PAFPlayer pPlayer);
 

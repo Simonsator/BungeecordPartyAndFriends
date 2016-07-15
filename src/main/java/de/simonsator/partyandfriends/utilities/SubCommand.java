@@ -1,38 +1,37 @@
 package de.simonsator.partyandfriends.utilities;
 
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.ArrayList;
 
 public abstract class SubCommand implements Comparable<SubCommand> {
-	private ArrayList<String> commands = new ArrayList<>();
-	private String help;
-	private int priority;
+	private final ArrayList<String> commands = new ArrayList<>();
+	public final TextComponent HELP;
+	private final int PRIORITY;
 
-	public SubCommand(String[] pCommands, int pPriority, String pHelp) {
+	protected SubCommand(String[] pCommands, int pPriority, TextComponent pHelp) {
+		HELP = pHelp;
+		PRIORITY = pPriority;
 		for (String command : pCommands) {
 			commands.add(command.toLowerCase());
 		}
-		help = pHelp;
-		priority = pPriority;
 	}
 
 	public boolean isApplicable(String pCommand) {
 		return commands.contains(pCommand.toLowerCase());
 	}
 
+	protected void sendError(OnlinePAFPlayer pPlayer, TextComponent pMessage) {
+		pPlayer.sendMessage(pMessage);
+		pPlayer.sendMessage(HELP);
+	}
+
 	public abstract void onCommand(OnlinePAFPlayer pPlayer, String[] args);
 
-	public String getHelp() {
-		return help;
-	}
-
-	public int getPriority() {
-		return priority;
-	}
 
 	@Override
 	public int compareTo(SubCommand o) {
-		return ((Integer) getPriority()).compareTo(o.getPriority());
+		return ((Integer) PRIORITY).compareTo(o.PRIORITY);
 	}
 }

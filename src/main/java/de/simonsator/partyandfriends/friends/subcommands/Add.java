@@ -1,8 +1,8 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
 
@@ -77,7 +77,7 @@ public class Add extends FriendSubCommand {
 			pPlayer.sendMessage(
 					new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
 							.getString("Friends.Command.Accept.ErrorAlreadySend")).replaceAll(Matcher.quoteReplacement(pQueryPlayer.getName()))));
-			pPlayer.sendMessage(new TextComponent(getHelp()));
+			pPlayer.sendMessage(new TextComponent(HELP));
 			return false;
 		}
 		return true;
@@ -89,7 +89,7 @@ public class Add extends FriendSubCommand {
 			pPlayer.sendMessage(
 					new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
 							.getString("Friends.Command.Add.AlreadyFriends")).replaceAll(Matcher.quoteReplacement(pGivenPlayer.getDisplayName()))));
-			pPlayer.sendMessage(new TextComponent(getHelp()));
+			pPlayer.sendMessage(new TextComponent(HELP));
 			return true;
 		}
 		return false;
@@ -99,7 +99,7 @@ public class Add extends FriendSubCommand {
 		if (pPlayer.getName().equalsIgnoreCase(pGivenPlayer)) {
 			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
 					.getMessagesYml().getString("Friends.Command.Accept.ErrorSenderEqualsReceiver")));
-			pPlayer.sendMessage(new TextComponent(getHelp()));
+			pPlayer.sendMessage(new TextComponent(HELP));
 			return true;
 		}
 		return false;
@@ -107,9 +107,9 @@ public class Add extends FriendSubCommand {
 
 	private boolean doesPlayerExist(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (!pGivenPlayer.doesExist()) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance()
-					.getMessagesYml().getString("Friends.General.DoesNotExist")).replaceAll(Matcher.quoteReplacement(pGivenPlayer.getName()))));
-			pPlayer.sendMessage(new TextComponent(getHelp()));
+			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() +
+					getInstance().getMessagesYml().getString("Friends.General.DoesNotExist")));
+			pPlayer.sendMessage(new TextComponent(HELP));
 			return false;
 		}
 		return true;
@@ -120,7 +120,7 @@ public class Add extends FriendSubCommand {
 			pPlayer.sendMessage(
 					new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
 							.getString("Friends.Command.Add.CanNotSendThisPlayer")).replaceAll(Matcher.quoteReplacement(pGivenPlayer.getName()))));
-			pPlayer.sendMessage(new TextComponent(getHelp()));
+			pPlayer.sendMessage(new TextComponent(HELP));
 			return false;
 		}
 		return true;

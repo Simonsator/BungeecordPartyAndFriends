@@ -4,8 +4,8 @@ import de.simonsator.partyandfriends.api.TopCommand;
 import de.simonsator.partyandfriends.api.party.PartyAPI;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.party.playerpartys.PlayerParty;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.party.subcommand.*;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -80,7 +80,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 					permissionHeight = PartyAPI.PARTY_MEMBER_PERMISSION_HEIGHT;
 			for (PartySubCommand cmd : subCommands)
 				if (cmd.hasAccess(permissionHeight))
-					pPlayer.sendMessage(new TextComponent(cmd.getHelp()));
+					pPlayer.sendMessage(new TextComponent(cmd.HELP));
 			pPlayer.sendMessage(
 					new TextComponent(Main.getInstance().getMessagesYml().getString("Party.General.HelpEnd")));
 			return;
@@ -95,6 +95,5 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		a.remove(0);
 		args = a.toArray(new String[a.size()]);
 		sc.onCommand(pPlayer, args);
-		return;
 	}
 }

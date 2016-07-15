@@ -7,9 +7,9 @@
 package de.simonsator.partyandfriends.main.listener;
 
 import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
-import de.simonsator.partyandfriends.party.playerpartys.PlayerParty;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.party.PlayerParty;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;

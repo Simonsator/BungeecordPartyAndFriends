@@ -1,8 +1,8 @@
 package de.simonsator.partyandfriends.friends.commands;
 
 import de.simonsator.partyandfriends.api.TopCommand;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -29,7 +29,7 @@ public class MSG extends Command {
 	 * @param friendsAliasMsg The aliases for the command /msg
 	 */
 	public MSG(String[] friendsAliasMsg) {
-		super("msg", getInstance().getConfig().getString("Permissions.FriendPermission"), friendsAliasMsg);
+		super(friendsAliasMsg[0], getInstance().getConfig().getString("Permissions.FriendPermission"), friendsAliasMsg);
 	}
 
 	private static boolean playerExists(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
@@ -81,7 +81,7 @@ public class MSG extends Command {
 			return;
 		if (!allowsWriteTo(pPlayer, pWrittenTo))
 			return;
-		if (isOffline(pPlayer, pWrittenTo, args, n))
+		if (isOffline(pPlayer, pWrittenTo))
 			return;
 		sendMessage(toMessage(args, n), (OnlinePAFPlayer) pWrittenTo, pPlayer);
 		pPlayer.setLastPlayerWroteFrom(pWrittenTo);
@@ -98,20 +98,7 @@ public class MSG extends Command {
 		return true;
 	}
 
-	/**
-	 * Delivers a message that was send, while a player was offline
-	 *
-	 * @param pContent   Content of the message
-	 * @param pWrittenTo The player which was written to
-	 * @param pSender    The name of the sender
-	 */
-	public void deliverOfflineMessage(String pContent, OnlinePAFPlayer pWrittenTo, PAFPlayer pSender) {
-		sendMessage(
-				SPACEPATTERN.matcher(pContent).replaceAll(Matcher.quoteReplacement(getInstance().getMessagesYml().getString("Friends.Command.MSG.ColorOfMessage"))),
-				pWrittenTo, pSender.getDisplayName(), pWrittenTo.getDisplayName());
-	}
-
-	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer, String[] args, int n) {
+	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (!pQueryPlayer.isOnline()) {
 			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
 					+ getInstance().getMessagesYml().getString("Friends.Command.MSG.CanNotWriteToHim")));
@@ -160,22 +147,6 @@ public class MSG extends Command {
 		while (n < args.length) {
 			content = content + getInstance().getMessagesYml().getString("Friends.Command.MSG.ColorOfMessage")
 					+ args[n];
-			n++;
-		}
-		return content;
-	}
-
-	/**
-	 * Returns a styled message
-	 *
-	 * @param args The Arguments The Main.main class
-	 * @param n    At which argument the while loob should start
-	 * @return Returns a styled message
-	 */
-	private String toMessageNoColor(String[] args, int n) {
-		String content = "";
-		while (n < args.length) {
-			content = content + args[n];
 			n++;
 		}
 		return content;

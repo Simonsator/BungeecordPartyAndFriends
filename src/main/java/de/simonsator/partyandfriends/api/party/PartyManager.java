@@ -4,10 +4,11 @@
  * @author Simonsator
  * @version 1.0.0
  */
-package de.simonsator.partyandfriends.party.manager;
+package de.simonsator.partyandfriends.api.party;
 
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.party.playerpartys.PlayerParty;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.utilities.disable.Deactivated;
+import de.simonsator.partyandfriends.utilities.disable.Disabler;
 
 import java.util.HashMap;
 
@@ -17,7 +18,17 @@ import java.util.HashMap;
  * @author Simonsator
  * @version 1.0.1
  */
-public abstract class PartyManager {
+public abstract class PartyManager implements Deactivated {
+	private static PartyManager instance;
+
+	protected PartyManager() {
+		Disabler.getInstance().registerDeactivated(this);
+		instance = this;
+	}
+
+	public static PartyManager getInstance() {
+		return instance;
+	}
 
 	/**
 	 * Returns the party in which a player is
@@ -36,7 +47,7 @@ public abstract class PartyManager {
 	 */
 	public abstract PlayerParty createParty(OnlinePAFPlayer player);
 
-	public abstract void deleteAllParties();
+	protected abstract void deleteAllParties();
 
 	/**
 	 * Deletes a party which is given
@@ -59,4 +70,9 @@ public abstract class PartyManager {
 	 * @param player The Player
 	 */
 	public abstract void removePlayerFromParty(OnlinePAFPlayer player);
+
+	@Override
+	public void onDisable() {
+		deleteAllParties();
+	}
 }

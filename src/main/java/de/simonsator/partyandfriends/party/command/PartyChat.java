@@ -8,8 +8,8 @@ package de.simonsator.partyandfriends.party.command;
 
 import de.simonsator.partyandfriends.api.TopCommand;
 import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.party.playerpartys.PlayerParty;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.party.PlayerParty;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -47,11 +47,14 @@ public class PartyChat extends Command {
 	@Override
 	public void execute(CommandSender pSender, String[] args) {
 		TopCommand.isPlayer(pSender);
-		OnlinePAFPlayer player = getPlayerManager().getPlayer((ProxiedPlayer) pSender);
-		PlayerParty party = Main.getPartyManager().getParty(player);
-		if (!isInParty(player, party))
+		send(getPlayerManager().getPlayer((ProxiedPlayer) pSender), args);
+	}
+
+	public void send(OnlinePAFPlayer pPlayer, String[] args) {
+		PlayerParty party = Main.getPartyManager().getParty(pPlayer);
+		if (!isInParty(pPlayer, party))
 			return;
-		if (!messageGiven(player, args))
+		if (!messageGiven(pPlayer, args))
 			return;
 		String text = "";
 		for (String arg : args) {
@@ -62,7 +65,7 @@ public class PartyChat extends Command {
 						.matcher(SENDERNAMEPATTERN
 								.matcher(Main.getInstance().getMessagesYml()
 										.getString("Party.Command.Chat.PartyChatOutput"))
-								.replaceAll(Matcher.quoteReplacement(player.getDisplayName())))
+								.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())))
 						.replaceAll(Matcher.quoteReplacement(text))));
 	}
 

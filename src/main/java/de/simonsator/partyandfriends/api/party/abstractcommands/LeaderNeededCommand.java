@@ -1,9 +1,9 @@
 package de.simonsator.partyandfriends.api.party.abstractcommands;
 
 import de.simonsator.partyandfriends.api.party.PartyAPI;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
-import de.simonsator.partyandfriends.party.playerpartys.PlayerParty;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.party.PlayerParty;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.regex.Matcher;
@@ -13,7 +13,7 @@ import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTER
 
 public abstract class LeaderNeededCommand extends PartySubCommand {
 
-	public LeaderNeededCommand(String[] pCommands, int pPriority, String pHelpText) {
+	protected LeaderNeededCommand(String[] pCommands, int pPriority, String pHelpText) {
 		super(pCommands, pPriority, pHelpText);
 	}
 
@@ -45,7 +45,7 @@ public abstract class LeaderNeededCommand extends PartySubCommand {
 		return true;
 	}
 
-	protected boolean standartCheck(OnlinePAFPlayer pPlayer, PlayerParty pParty, String[] args) {
+	protected boolean standardCheck(OnlinePAFPlayer pPlayer, PlayerParty pParty, String[] args) {
 		if (!isPlayerGiven(pPlayer, args))
 			return false;
 		if (!isInParty(pPlayer, pParty))

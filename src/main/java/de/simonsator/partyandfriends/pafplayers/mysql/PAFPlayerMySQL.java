@@ -1,15 +1,13 @@
 package de.simonsator.partyandfriends.pafplayers.mysql;
 
-import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
-import de.simonsator.partyandfriends.pafplayers.PAFPlayerClass;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static de.simonsator.partyandfriends.main.Main.getInstance;
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
 public class PAFPlayerMySQL extends PAFPlayerClass {
@@ -21,7 +19,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass {
 
 	@Override
 	public String getName() {
-		return Main.getInstance().getConnection().getName(ID);
+		return PAFPlayerManagerMySQL.getConnection().getName(ID);
 	}
 
 	private int getPlayerID() {
@@ -30,17 +28,17 @@ public class PAFPlayerMySQL extends PAFPlayerClass {
 
 	@Override
 	public List<PAFPlayer> getFriends() {
-		return idListToPAFPlayerList(getInstance().getConnection().getFriends(ID));
+		return idListToPAFPlayerList(PAFPlayerManagerMySQL.getConnection().getFriends(ID));
 	}
 
 	@Override
 	public UUID getUniqueId() {
-		return Main.getInstance().getConnection().getUUID(ID);
+		return PAFPlayerManagerMySQL.getConnection().getUUID(ID);
 	}
 
 	@Override
 	public String toString() {
-		return "{Name:\"" + getName() + "\", DispalyName:\"" + getDisplayName() + "\"}";
+		return "{Name:\"" + getName() + "\", DisplayName:\"" + getDisplayName() + "\"}";
 	}
 
 	@Override
@@ -50,27 +48,27 @@ public class PAFPlayerMySQL extends PAFPlayerClass {
 
 	@Override
 	public int getSettingsWorth(int pSettingsID) {
-		return getInstance().getConnection().getSettingsWorth(ID, pSettingsID);
+		return PAFPlayerManagerMySQL.getConnection().getSettingsWorth(ID, pSettingsID);
 	}
 
 	@Override
 	public List<PAFPlayer> getRequests() {
-		return idListToPAFPlayerList(getInstance().getConnection().getRequests(ID));
+		return idListToPAFPlayerList(PAFPlayerManagerMySQL.getConnection().getRequests(ID));
 	}
 
 	@Override
 	public boolean hasRequestFrom(PAFPlayer pPlayer) {
-		return getInstance().getConnection().hasRequestFrom(ID, ((PAFPlayerMySQL) pPlayer).getPlayerID());
+		return PAFPlayerManagerMySQL.getConnection().hasRequestFrom(ID, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
 	}
 
 	@Override
 	public void denyRequest(PAFPlayer pPlayer) {
-		getInstance().getConnection().denyRequest(ID, ((PAFPlayerMySQL) pPlayer).getPlayerID());
+		PAFPlayerManagerMySQL.getConnection().denyRequest(ID, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
 	}
 
 	@Override
 	public boolean isAFriendOf(PAFPlayer pPlayer) {
-		return getInstance().getConnection().isAFriendOf(ID, ((PAFPlayerMySQL) pPlayer).getPlayerID());
+		return PAFPlayerManagerMySQL.getConnection().isAFriendOf(ID, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
 	}
 
 	private List<PAFPlayer> idListToPAFPlayerList(List<Integer> pList) {
@@ -82,32 +80,37 @@ public class PAFPlayerMySQL extends PAFPlayerClass {
 
 	@Override
 	public PAFPlayer getLastPlayerWroteTo() {
-		return ((PAFPlayerManagerMySQL) getPlayerManager()).getPlayer(getInstance().getConnection().getLastPlayerWroteTo(ID));
+		return ((PAFPlayerManagerMySQL) getPlayerManager()).getPlayer(PAFPlayerManagerMySQL.getConnection().getLastPlayerWroteTo(ID));
 	}
 
 	@Override
 	public void sendFriendRequest(PAFPlayer pSender) {
-		getInstance().getConnection().sendFriendRequest(((PAFPlayerMySQL) pSender).getPlayerID(), ID);
+		PAFPlayerManagerMySQL.getConnection().sendFriendRequest(((PAFPlayerMySQL) pSender).getPlayerID(), ID);
 	}
 
 	@Override
 	public void addFriend(PAFPlayer pPlayer) {
-		getInstance().getConnection().addFriend(((PAFPlayerMySQL) pPlayer).getPlayerID(), ID);
+		PAFPlayerManagerMySQL.getConnection().addFriend(((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID(), ID);
+	}
+
+	@Override
+	public PAFPlayer getPAFPlayer() {
+		return this;
 	}
 
 	@Override
 	public void removeFriend(PAFPlayer pPlayer) {
-		getInstance().getConnection().deleteFriend(((PAFPlayerMySQL) pPlayer).getPlayerID(), ID);
+		PAFPlayerManagerMySQL.getConnection().deleteFriend(((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID(), ID);
 	}
 
 	@Override
 	public void setSetting(int pSettingsID, int pNewWorth) {
-		getInstance().getConnection().setSetting(ID, pSettingsID, pNewWorth);
+		PAFPlayerManagerMySQL.getConnection().setSetting(ID, pSettingsID, pNewWorth);
 	}
 
 	@Override
 	public void setLastPlayerWroteFrom(PAFPlayer pLastWroteTo) {
-		getInstance().getConnection().setLastPlayerWroteTo(ID, ((PAFPlayerMySQL) pLastWroteTo).getPlayerID(), 0);
+		PAFPlayerManagerMySQL.getConnection().setLastPlayerWroteTo(ID, ((PAFPlayerMySQL) pLastWroteTo).getPlayerID(), 0);
 	}
 
 }

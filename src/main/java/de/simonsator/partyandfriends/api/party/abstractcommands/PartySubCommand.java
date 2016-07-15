@@ -1,7 +1,7 @@
 package de.simonsator.partyandfriends.api.party.abstractcommands;
 
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.party.playerpartys.PlayerParty;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.utilities.SubCommand;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -15,8 +15,8 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
  */
 public abstract class PartySubCommand extends SubCommand {
 
-	public PartySubCommand(String[] pCommands, int pPriority, String pHelpText) {
-		super(pCommands, pPriority, pHelpText);
+	protected PartySubCommand(String[] pCommands, int pPriority, String pHelpText) {
+		super(pCommands, pPriority, new TextComponent(pHelpText));
 	}
 
 	protected boolean isInParty(OnlinePAFPlayer pPlayer, PlayerParty pParty) {

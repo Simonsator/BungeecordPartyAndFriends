@@ -7,8 +7,8 @@
 package de.simonsator.partyandfriends.main.listener;
 
 import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.party.playerpartys.PlayerParty;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.party.PlayerParty;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
@@ -26,16 +26,16 @@ import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
  * @author Simonsator
  * @version 1.0.0
  */
-public class ServerSwitshListener implements Listener {
+public class ServerSwitchListener implements Listener {
 	/**
 	 * The list of the servers which the party will not join.
 	 */
-	private List<String> notJoinServers;
+	private final List<String> notJoinServers;
 
 	/**
 	 * Initials the object
 	 */
-	public ServerSwitshListener() {
+	public ServerSwitchListener() {
 		notJoinServers = getInstance().getConfig().getStringList("General.PartyDoNotJoinTheseServers");
 	}
 

@@ -1,7 +1,7 @@
 package de.simonsator.partyandfriends.api.friends.abstractcommands;
 
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.regex.Matcher;
@@ -11,7 +11,7 @@ import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTER
 
 public abstract class RequestReactionsCommands extends FriendSubCommand {
 
-	public RequestReactionsCommands(String[] pCommands, int pPriority, String pHelp) {
+	protected RequestReactionsCommands(String[] pCommands, int pPriority, String pHelp) {
 		super(pCommands, pPriority, pHelp);
 	}
 
@@ -19,7 +19,7 @@ public abstract class RequestReactionsCommands extends FriendSubCommand {
 		if ((!pPlayer.hasRequestFrom(pQueryPlayer))) {
 			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance()
 					.getMessagesYml().getString("Friends.Command.Accept.ErrorNoFriendShipInvitation")).replaceAll(Matcher.quoteReplacement(pQueryPlayer.getName()))));
-			pPlayer.sendMessage(new TextComponent(getHelp()));
+			pPlayer.sendMessage(new TextComponent(HELP));
 			return true;
 		}
 		return false;

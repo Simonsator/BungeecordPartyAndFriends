@@ -1,20 +1,20 @@
 package de.simonsator.partyandfriends.main;
 
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.friends.commands.MSG;
 import de.simonsator.partyandfriends.friends.commands.Reply;
 import de.simonsator.partyandfriends.main.listener.JoinEvent;
 import de.simonsator.partyandfriends.main.listener.PlayerDisconnectListener;
-import de.simonsator.partyandfriends.main.listener.ServerSwitshListener;
-import de.simonsator.partyandfriends.mysql.MySQL;
-import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManager;
+import de.simonsator.partyandfriends.main.listener.ServerSwitchListener;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 import de.simonsator.partyandfriends.party.command.PartyChat;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
-import de.simonsator.partyandfriends.party.manager.LocalPartyManager;
-import de.simonsator.partyandfriends.party.manager.PartyManager;
+import de.simonsator.partyandfriends.party.partymanager.LocalPartyManager;
 import de.simonsator.partyandfriends.utilities.Config;
 import de.simonsator.partyandfriends.utilities.MessagesYML;
+import de.simonsator.partyandfriends.utilities.disable.Disabler;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -34,10 +34,6 @@ public class Main extends Plugin {
 	private static Main instance;
 	private static PAFPlayerManager playerManager;
 	private static PartyManager partyManager;
-	/**
-	 * The connection to MySQL
-	 */
-	protected MySQL connection;
 	/**
 	 * The configuration
 	 */
@@ -85,23 +81,20 @@ public class Main extends Plugin {
 	public void onEnable() {
 		instance = (this);
 		loadConfiguration();
-		connection = (new MySQL(getConfig().getString("MySQL.Host"), getConfig().getString("MySQL.Username"),
-				getConfig().getString("MySQL.Password"), getConfig().getInt("MySQL.Port"),
-				getConfig().getString("MySQL.Database"), getConfig().getString("MySQL.TablePrefix")));
 		switch ("MySQL") {
 			case "MySQL":
-				playerManager = new PAFPlayerManagerMySQL();
+				playerManager = new PAFPlayerManagerMySQL(getConfig().getString("MySQL.Host"), getConfig().getString("MySQL.Username"), getConfig().getString("MySQL.Password"),
+						getConfig().getInt("MySQL.Port"), getConfig().getString("MySQL.Database"), getConfig().getString("MySQL.TablePrefix"));
 				partyManager = new LocalPartyManager();
 				break;
 		}
-		registerListeners();
 		registerCommands();
+		registerListeners();
 	}
 
 	@Override
 	public void onDisable() {
-		Main.getPartyManager().deleteAllParties();
-		getConnection().closeConnection();
+		Disabler.getInstance().disableAll();
 	}
 
 	/**
@@ -131,7 +124,7 @@ public class Main extends Plugin {
 	 */
 	private void registerListeners() {
 		ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerDisconnectListener());
-		ProxyServer.getInstance().getPluginManager().registerListener(this, new ServerSwitshListener());
+		ProxyServer.getInstance().getPluginManager().registerListener(this, new ServerSwitchListener());
 		ProxyServer.getInstance().getPluginManager().registerListener(this, new JoinEvent());
 	}
 
@@ -169,10 +162,6 @@ public class Main extends Plugin {
 
 	public Friends getFriendsCommand() {
 		return friendCommand;
-	}
-
-	public MySQL getConnection() {
-		return connection;
 	}
 
 	public Configuration getConfig() {

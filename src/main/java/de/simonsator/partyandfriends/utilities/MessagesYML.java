@@ -26,28 +26,28 @@ public class MessagesYML {
 	 */
 	public static Configuration loadMessages(String pType) throws IOException {
 		File file = null;
-		Configuration messagesYml;
+		Configuration messagesYml = new Configuration();
 		switch (pType.toLowerCase()) {
 			case "own":
 				file = new File(Main.getInstance().getDataFolder().getPath(), "Messages.yml");
 				if (!file.exists()) file.createNewFile();
-				messagesYml = loadEnglishMessages(ConfigurationProvider.getProvider(YamlConfiguration.class).load(file));
+				messagesYml = (ConfigurationProvider.getProvider(YamlConfiguration.class).load(file));
 				break;
 			case "english":
-				messagesYml = loadEnglishMessages(new Configuration());
+				loadEnglishMessages(messagesYml);
 				break;
 			default:
-				messagesYml = loadGermanMessages(new Configuration());
+				loadGermanMessages(messagesYml);
 				break;
 		}
-		messagesYml = loadEnglishMessages(messagesYml);
+		loadEnglishMessages(messagesYml);
 		if ("own".equalsIgnoreCase(pType))
 			ConfigurationProvider.getProvider(YamlConfiguration.class).save(messagesYml, file);
 		process(messagesYml);
 		return messagesYml;
 	}
 
-	private static Configuration loadEnglishMessages(Configuration messagesYml) {
+	private static void loadEnglishMessages(Configuration messagesYml) {
 		if (messagesYml.getString("Party.Error.CommandNotFound").isEmpty())
 			messagesYml.set("Party.Error.CommandNotFound", "&cThis command doesn't exist!");
 		if (messagesYml.getString("Party.CommandUsage.Join").isEmpty())
@@ -73,7 +73,7 @@ public class MessagesYML {
 		if (messagesYml.getString("Party.Command.General.ErrorNoPlayer").isEmpty())
 			messagesYml.set("Party.Command.General.ErrorNoPlayer", "&cYou need to give a player.");
 		if (messagesYml.getString("Party.Command.General.ErrorPlayerNotOnline").isEmpty())
-			messagesYml.set("Party.Command.General.ErrorPlayerNotOnline", "&cThis &cplayer &cis &cnot &conline.");
+			messagesYml.set("Party.Command.General.ErrorPlayerNotOnline", "&cThis player is not online.");
 		if (messagesYml.getString("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers").isEmpty())
 			messagesYml.set("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers", "&5The &5party &5was &5dissolved &5because &5of &5too &5less &5players.");
 		if (messagesYml.getString("Party.Command.General.PlayerHasLeftTheParty").isEmpty())
@@ -151,7 +151,7 @@ public class MessagesYML {
 		if (messagesYml.getString("Friends.General.RequestInfoOnJoinColorComma").isEmpty())
 			messagesYml.set("Friends.General.RequestInfoOnJoinColorComma", "&7");
 		if (messagesYml.getString("Friends.General.DoesNotExist").isEmpty())
-			messagesYml.set("Friends.General.DoesNotExist", " &7The player &e[PLAYER] &7doesn't &7exist");
+			messagesYml.set("Friends.General.DoesNotExist", " &7The given player &7doesn't &7exist");
 		if (messagesYml.getString("Friends.General.GivenPlayerEqualsSender").isEmpty())
 			messagesYml.set("Friends.General.GivenPlayerEqualsSender", " &7You cannot give you self as player argument.");
 		if (messagesYml.getString("Friends.GUI.Hide.ShowAllPlayers").isEmpty())
@@ -265,13 +265,12 @@ public class MessagesYML {
 		if (messagesYml.getString("Friends.Command.Remove.Removed").isEmpty())
 			messagesYml.set("Friends.Command.Remove.Removed", "&7 You removed the friend &e[PLAYER]&7.");
 		loadSharedMessages(messagesYml);
-		return messagesYml;
 	}
 
-	private static Configuration loadGermanMessages(Configuration messagesYml) {
+	private static void loadGermanMessages(Configuration messagesYml) {
 		if (messagesYml.getString("Friends.Command.Add.SentAFriendRequest").isEmpty())
 			messagesYml.set("Friends.Command.Add.SentAFriendRequest",
-					" &7Dem Spieler &e[PLAYER] wurde eine Freundschaftsanfrage gesendet");
+					" &7Dem Spieler &e[PLAYER] &7wurde eine Freundschaftsanfrage gesendet");
 		if (messagesYml.getString("Friends.General.CommandNotFound").isEmpty())
 			messagesYml.set("Friends.General.CommandNotFound", " &7Das &7Kommando &7existiert &7nicht.");
 		if (messagesYml.getString("Friends.General.PlayerIsOffline").isEmpty())
@@ -283,7 +282,7 @@ public class MessagesYML {
 			messagesYml.set("Friends.General.PlayerIsNowOnline", " &e[PLAYER] &7ist &7jetzt &aOnline");
 		if (messagesYml.getString("Friends.General.RequestInfoOnJoin").isEmpty())
 			messagesYml.set("Friends.General.RequestInfoOnJoin",
-					" &7Freundschaftsanfragen &7stehen &7von &7den &7folgenden &7Spielern &7aus: [FRIENDREQUESTS]");
+					" &7Freundschaftsanfragen stehen von den folgenden Spielern aus: [FRIENDREQUESTS]");
 		if (messagesYml.getString("Friends.General.PlayerIsNowOffline").isEmpty())
 			messagesYml.set("Friends.General.PlayerIsNowOffline", " &7Der Freund &e[PLAYER] &7ist &7nun &cOffline.");
 		if (messagesYml.getString("Friends.GUI.Hide.ShowAllPlayers").isEmpty())
@@ -331,7 +330,7 @@ public class MessagesYML {
 					" &7Du hast dem Spieler &e[PLAYER] &7schon &7eine &7Freundschaftsanfrage &7gesendet.");
 		if (messagesYml.getString("Friends.Command.Accept.ErrorNoFriendShipInvitation").isEmpty())
 			messagesYml.set("Friends.Command.Accept.ErrorNoFriendShipInvitation",
-					"&7 Du hast keine &7Freundschaftsanfrage von &e[PLAYER] &7keine &7erhalten");
+					"&7 Du hast keine Freundschaftsanfrage von &e[PLAYER] &7keine &7erhalten");
 		if (messagesYml.getString("Friends.Command.Add.SentAFriendRequest").isEmpty())
 			messagesYml.set("Friends.Command.Add.SentAFriendRequest",
 					"&7 The player &e[PLAYER] &7was &7send &7a &7friend &7request");
@@ -348,7 +347,7 @@ public class MessagesYML {
 			messagesYml.set("Friends.Command.Accept.ErrorSenderEqualsReceiver",
 					" &7Du kannst dir nicht selber eine &7Freundschaftsanfrage &7senden");
 		if (messagesYml.getString("Friends.General.DoesNotExist").isEmpty())
-			messagesYml.set("Friends.General.DoesnotExist", " &7Der Spieler &e[PLAYER] &7exestiert &7nicht");
+			messagesYml.set("Friends.General.DoesNotExist", " &7Der gegebene Spieler &7exestiert &7nicht");
 		if (messagesYml.getString("Friends.Command.Add.CanNotSendThisPlayer").isEmpty())
 			messagesYml.set("Friends.Command.Add.CanNotSendThisPlayer",
 					" &7Du &7kannst &7dem &7Spieler &e[PLAYER] &7keine &7Freundschaftsanfrage &7senden");
@@ -361,7 +360,7 @@ public class MessagesYML {
 					" &7Du &7bist &7bereits &7auf &7diesem &7Server");
 		if (messagesYml.getString("Friends.Command.Jump.JoinedTheServer").isEmpty())
 			messagesYml.set("Friends.Command.Jump.JoinedTheServer",
-					" &7Du &7bist &7jetzt &7auf &7dem &7gleichen &7Server, &7wie &7der &7Spieler &e[PLAYER]");
+					" &7Du bist jetzt auf dem gleichen Server, wie der Spieler [PLAYER]");
 		if (messagesYml.getString("Friends.Command.List.FriendsList").isEmpty())
 			messagesYml.set("Friends.Command.List.FriendsList", " &7Dies &7sind &7deine &7Freunde:");
 		if (messagesYml.getString("Friends.Command.List.NoFriendsAdded").isEmpty())
@@ -543,10 +542,9 @@ public class MessagesYML {
 			messagesYml.set("Party.Command.Invite.YouWereInvitedBY",
 					"&5Du &5wurdest &5in &5die &5Party &5von&6 [PLAYER] &5eingeladen!");
 		loadSharedMessages(messagesYml);
-		return messagesYml;
 	}
 
-	private static Configuration loadSharedMessages(Configuration messagesYml) {
+	private static void loadSharedMessages(Configuration messagesYml) {
 		if (messagesYml.getString("Party.General.PartyPrefix").isEmpty())
 			messagesYml.set("Party.General.PartyPrefix", "&7[&5Party&7] ");
 		if (messagesYml.getString("Friends.General.HelpBegin").isEmpty())
@@ -571,7 +569,7 @@ public class MessagesYML {
 			messagesYml.set("Party.Command.Info.Leader", "&3Leader&7: &5[LEADER]");
 		if (messagesYml.getString("Party.Command.Info.Players").isEmpty())
 			messagesYml.set("Party.Command.Info.Players", "&8Players&7: &b");
-		if (messagesYml.getString("Friends.Command.MSG.SendedMessage").isEmpty())
+		if (messagesYml.getString("Friends.Command.MSG.SentMessage").isEmpty())
 			messagesYml.set("Friends.Command.MSG.SentMessage", " &e[SENDERNAME]&5-> &e[PLAYER]&7: [CONTENT]");
 		if (messagesYml.getString("Friends.Command.Settings.SplitLine").isEmpty())
 			messagesYml.set("Friends.Command.Settings.SplitLine",
@@ -588,7 +586,6 @@ public class MessagesYML {
 			messagesYml.set("Friends.Command.List.PlayerSplit", "&7, ");
 		if (messagesYml.getString("Friends.Command.MSG.ColorOfMessage").isEmpty())
 			messagesYml.set("Friends.Command.MSG.ColorOfMessage", " &7");
-		return messagesYml;
 	}
 
 	private static void process(Configuration pMessagesYML) {

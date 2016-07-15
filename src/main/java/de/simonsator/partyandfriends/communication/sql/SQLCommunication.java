@@ -1,4 +1,4 @@
-package de.simonsator.partyandfriends.mysql;
+package de.simonsator.partyandfriends.communication.sql;
 
 import java.sql.*;
 

@@ -1,14 +1,14 @@
 package de.simonsator.partyandfriends.pafplayers.mysql;
 
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Chat;
 
+import java.util.ArrayList;
 import java.util.UUID;
-
-import static de.simonsator.partyandfriends.main.Main.getInstance;
 
 public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPlayer {
 	private final ProxiedPlayer PLAYER;
@@ -20,7 +20,7 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 
 	@Override
 	public void createEntry() {
-		getInstance().getConnection().firstJoin(PLAYER);
+		PAFPlayerManagerMySQL.getConnection().firstJoin(PLAYER);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 
 	@Override
 	public int changeSettingsWorth(int pSettingsID) {
-		return getInstance().getConnection().changeSettingsWorth(PLAYER, pSettingsID);
+		return PAFPlayerManagerMySQL.getConnection().changeSettingsWorth(PLAYER, pSettingsID);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 
 	@Override
 	public void updatePlayerName() {
-		if (!PLAYER.getName().equals(getInstance().getConnection().getName(ID)))
-			getInstance().getConnection().updatePlayerName(ID, PLAYER.getName());
+		if (!PLAYER.getName().equals(PAFPlayerManagerMySQL.getConnection().getName(ID)))
+			PAFPlayerManagerMySQL.getConnection().updatePlayerName(ID, PLAYER.getName());
 	}
 }

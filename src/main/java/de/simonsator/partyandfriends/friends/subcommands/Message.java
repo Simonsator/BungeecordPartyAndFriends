@@ -7,7 +7,7 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
 

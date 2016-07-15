@@ -2,8 +2,8 @@ package de.simonsator.partyandfriends.friends.commands;
 
 import de.simonsator.partyandfriends.api.TopCommand;
 import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -19,7 +19,7 @@ import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
  */
 public class Reply extends Command {
 	public Reply(String[] aliases) {
-		super("r", Main.getInstance().getConfig().getString("Permissions.FriendPermission"), aliases);
+		super(aliases[0], Main.getInstance().getConfig().getString("Permissions.FriendPermission"), aliases);
 	}
 
 	@Override

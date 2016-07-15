@@ -1,7 +1,7 @@
 package de.simonsator.partyandfriends.api;
 
 import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.utilities.SubCommand;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -14,7 +14,7 @@ import java.util.Collections;
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
 public abstract class TopCommand<T extends SubCommand> extends Command {
-	protected ArrayList<T> subCommands = new ArrayList<>();
+	protected final ArrayList<T> subCommands = new ArrayList<>();
 
 	protected TopCommand(String[] pCommandNames, String pPermission) {
 		super(pCommandNames[0], pPermission, pCommandNames);
