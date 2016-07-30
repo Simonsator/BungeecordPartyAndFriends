@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.main;
 
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
+import de.simonsator.partyandfriends.communication.sql.MySQLData;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.friends.commands.MSG;
 import de.simonsator.partyandfriends.friends.commands.Reply;
@@ -12,13 +13,15 @@ import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 import de.simonsator.partyandfriends.party.command.PartyChat;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.party.partymanager.LocalPartyManager;
-import de.simonsator.partyandfriends.utilities.Config;
-import de.simonsator.partyandfriends.utilities.MessagesYML;
+import de.simonsator.partyandfriends.utilities.ConfigLoader;
+import de.simonsator.partyandfriends.utilities.Language;
+import de.simonsator.partyandfriends.utilities.MessagesLoader;
 import de.simonsator.partyandfriends.utilities.disable.Disabler;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 
+import java.io.File;
 import java.io.IOException;
 
 /***
@@ -37,11 +40,11 @@ public class Main extends Plugin {
 	/**
 	 * The configuration
 	 */
-	private Configuration config;
+	private ConfigLoader config;
 	/**
 	 * The messages.yml
 	 */
-	private Configuration messagesYml;
+	private MessagesLoader messages = null;
 	/**
 	 * The party prefix
 	 */
@@ -53,7 +56,7 @@ public class Main extends Plugin {
 	/**
 	 * The language
 	 */
-	private String language;
+	private Language language;
 	/**
 	 * The party command object
 	 */
@@ -83,8 +86,11 @@ public class Main extends Plugin {
 		loadConfiguration();
 		switch ("MySQL") {
 			case "MySQL":
-				playerManager = new PAFPlayerManagerMySQL(getConfig().getString("MySQL.Host"), getConfig().getString("MySQL.Username"), getConfig().getString("MySQL.Password"),
-						getConfig().getInt("MySQL.Port"), getConfig().getString("MySQL.Database"), getConfig().getString("MySQL.TablePrefix"));
+				MySQLData mySQLData = new MySQLData(getConfig().getString("MySQL.Host"),
+						getConfig().getString("MySQL.Username"), getConfig().getString("MySQL.Password"),
+						getConfig().getInt("MySQL.Port"), getConfig().getString("MySQL.Database"),
+						getConfig().getString("MySQL.TablePrefix"));
+				playerManager = new PAFPlayerManagerMySQL(mySQLData);
 				partyManager = new LocalPartyManager();
 				break;
 		}
@@ -102,16 +108,17 @@ public class Main extends Plugin {
 	 */
 	public void loadConfiguration() {
 		try {
-			config = (Config.loadConfig());
+			config = new ConfigLoader(new File(Main.getInstance().getDataFolder(), "config.yml"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		language = (getConfig().getString("General.Language"));
-		if (getConfig().getString("General.UseOwnLanguageFile").equalsIgnoreCase("true")) {
-			language = ("own");
-		}
+		language = Language.valueOf(getConfig().getString("General.Language").toUpperCase());
+		if (getConfig().getString("General.UseOwnLanguageFile").equalsIgnoreCase("true"))
+			language = Language.OWN;
 		try {
-			messagesYml = (MessagesYML.loadMessages(language));
+			if (messages == null)
+				messages = new MessagesLoader(language, new File(getDataFolder(), "messages.yml"));
+			else messages.reloadConfiguration();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -165,19 +172,19 @@ public class Main extends Plugin {
 	}
 
 	public Configuration getConfig() {
-		return config;
+		return config.getCreatedConfiguration();
 	}
 
 	public String getFriendsPrefix() {
 		return friendsPrefix;
 	}
 
-	public String getLanguage() {
+	public Language getLanguage() {
 		return language;
 	}
 
 	public Configuration getMessagesYml() {
-		return messagesYml;
+		return messages.getCreatedConfiguration();
 	}
 
 	public PartyCommand getPartyCommand() {

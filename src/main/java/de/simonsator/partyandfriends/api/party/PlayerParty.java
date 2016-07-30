@@ -3,7 +3,7 @@ package de.simonsator.partyandfriends.api.party;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.utilities.CompilePatter;
+import de.simonsator.partyandfriends.utilities.PatterCollection;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 
-import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 /**
  * Objects of this class are the party, where a player is in
@@ -88,7 +88,7 @@ public abstract class PlayerParty {
 	private void removePlayer(OnlinePAFPlayer pPlayer) {
 		removePlayerSilent(pPlayer);
 		sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-				+ CompilePatter.PLAYERPATTERN.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.General.PlayerHasLeftTheParty")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
+				+ PatterCollection.PLAYER_PATTERN.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.General.PlayerHasLeftTheParty")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 	}
 
 	protected abstract void removePlayerSilent(OnlinePAFPlayer pPlayer);
@@ -124,7 +124,7 @@ public abstract class PlayerParty {
 		pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + Main.getInstance().getMessagesYml()
 				.getString("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer")));
 		this.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-				+ PLAYERPATTERN.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.Kick.KickedPlayerOutOfThePartyOthers"))
+				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.Kick.KickedPlayerOutOfThePartyOthers"))
 				.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 		deleteParty();
 	}
@@ -137,10 +137,10 @@ public abstract class PlayerParty {
 	public void invite(final OnlinePAFPlayer pPlayer) {
 		addToInvited(pPlayer);
 		OnlinePAFPlayer lLeader = getLeader();
-		pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + PLAYERPATTERN.matcher(Main.getInstance().getMessagesYml()
+		pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + PLAYER_PATTERN.matcher(Main.getInstance().getMessagesYml()
 				.getString("Party.Command.Invite.YouWereInvitedBY")).replaceAll(Matcher.quoteReplacement(lLeader.getDisplayName()))));
 		pPlayer.sendPacket(new Chat("{\"text\":\"" + Main.getInstance().getPartyPrefix()
-				+ PLAYERPATTERN.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE")).replaceAll(Matcher.quoteReplacement(lLeader.getName()))
+				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE")).replaceAll(Matcher.quoteReplacement(lLeader.getName()))
 				+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
 				+ Main.getInstance().getPartyCommand().getName() + " join " + lLeader.getName()
 				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
@@ -153,9 +153,9 @@ public abstract class PlayerParty {
 				if (isInvited(pPlayer)) {
 					removeFromInvited(pPlayer);
 					OnlinePAFPlayer lLeader = getLeader();
-					pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + PLAYERPATTERN.matcher(Main.getInstance()
+					pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + PLAYER_PATTERN.matcher(Main.getInstance()
 							.getMessagesYml().getString("Party.Command.Invite.InvitationTimedOutInvited")).replaceAll(Matcher.quoteReplacement(lLeader.getDisplayName()))));
-					lLeader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + PLAYERPATTERN.matcher(Main.getInstance()
+					lLeader.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + PLAYER_PATTERN.matcher(Main.getInstance()
 							.getMessagesYml().getString("Party.Command.Invite.InvitationTimedOutLeader")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 					if (isPartyEmpty()) {
 						lLeader.sendMessage(

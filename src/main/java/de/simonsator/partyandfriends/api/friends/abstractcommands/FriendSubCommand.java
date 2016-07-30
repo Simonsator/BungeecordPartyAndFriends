@@ -8,7 +8,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 public abstract class FriendSubCommand extends SubCommand implements Comparable<SubCommand> {
 
@@ -28,7 +28,7 @@ public abstract class FriendSubCommand extends SubCommand implements Comparable<
 
 	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (!pPlayer.isAFriendOf(pGivenPlayer)) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance()
+			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance()
 					.getMessagesYml().getString("Friends.General.PlayerIsOffline")).replaceAll(Matcher.quoteReplacement(pGivenPlayer.getName()))));
 			pPlayer.sendMessage(new TextComponent(HELP));
 			return false;

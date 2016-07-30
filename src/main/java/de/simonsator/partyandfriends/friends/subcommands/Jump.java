@@ -4,7 +4,7 @@ import de.simonsator.partyandfriends.api.friends.ServerConnector;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
-import de.simonsator.partyandfriends.utilities.CompilePatter;
+import de.simonsator.partyandfriends.utilities.PatterCollection;
 import de.simonsator.partyandfriends.utilities.StandardConnector;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -57,7 +57,7 @@ public class Jump extends FriendSubCommand {
 		connector.connect(pPlayer.getPlayer(), toJoin);
 		pPlayer.sendMessage(
 				new TextComponent(
-						getInstance().getFriendsPrefix() + CompilePatter.PLAYERPATTERN
+						getInstance().getFriendsPrefix() + PatterCollection.PLAYER_PATTERN
 								.matcher(getInstance().getMessagesYml()
 										.getString("Friends.Command.Jump.JoinedTheServer"))
 								.replaceAll(Matcher.quoteReplacement(friend.getDisplayName()))));
@@ -94,7 +94,7 @@ public class Jump extends FriendSubCommand {
 
 	private boolean isPlayerOnline(OnlinePAFPlayer pSender, PAFPlayer pQueryPlayer) {
 		if (!pQueryPlayer.isOnline()) {
-			pSender.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + CompilePatter.PLAYERPATTERN
+			pSender.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PatterCollection.PLAYER_PATTERN
 					.matcher(getInstance().getMessagesYml().getString("Friends.General.PlayerIsOffline"))
 					.replaceAll(Matcher.quoteReplacement(pQueryPlayer.getName()))));
 			pSender.sendMessage(new TextComponent(HELP));

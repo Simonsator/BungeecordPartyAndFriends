@@ -9,7 +9,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.regex.Matcher;
 
-import static de.simonsator.partyandfriends.utilities.CompilePatter.LEADERPATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.LEADER_PATTERN;
 
 /**
  * This class will be executed on /party list
@@ -34,7 +34,7 @@ public class Info extends PartySubCommand {
 		PlayerParty party = Main.getPartyManager().getParty(pPlayer);
 		if (!isInParty(pPlayer, party))
 			return;
-		String leader = LEADERPATTERN
+		String leader = LEADER_PATTERN
 				.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.Info.Leader"))
 				.replaceAll(Matcher.quoteReplacement(party.getLeader().getDisplayName()));
 		String players = Main.getInstance().getMessagesYml().getString("Party.Command.Info.Players");

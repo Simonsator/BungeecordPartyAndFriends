@@ -2,7 +2,7 @@ package de.simonsator.partyandfriends.main.listener;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
-import de.simonsator.partyandfriends.utilities.CompilePatter;
+import de.simonsator.partyandfriends.utilities.PatterCollection;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -67,15 +67,14 @@ public class JoinEvent implements Listener {
 					+ getInstance().getMessagesYml().getString("Friends.General.RequestInfoOnJoinColorComma")
 					+ ",";
 		content = content.substring(0, content.length() - 1);
-		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + CompilePatter.FRIENDREQUESTPATTERN.matcher(getInstance()
+		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PatterCollection.FRIEND_REQUEST_PATTERN.matcher(getInstance()
 				.getMessagesYml().getString("Friends.General.RequestInfoOnJoin")).replaceAll(Matcher.quoteReplacement(content))));
 	}
-
 
 	private void sendNowOnline(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriends) {
 		for (PAFPlayer friend : pFriends) {
 			friend.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
-					+ CompilePatter.PLAYERPATTERN.matcher(getInstance().getMessagesYml().getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
+					+ PatterCollection.PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 		}
 	}
 }

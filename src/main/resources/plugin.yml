@@ -3,3 +3,4 @@ version: ${project.version}
 author: Simonsator
 main: de.simonsator.partyandfriends.main.Main
 description: A party and friends plugin
+softDepends: ['RedisBungee']

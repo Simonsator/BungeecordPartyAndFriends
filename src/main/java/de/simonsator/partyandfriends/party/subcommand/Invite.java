@@ -11,8 +11,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.MAXPLAYERSINPARTYPATTERN;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.MAX_PLAYERS_IN_PARTY_PATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 /**
  * The /party chat Invite
@@ -64,7 +64,7 @@ public class Invite extends PartySubCommand {
 		party.invite(toInvite);
 		pPlayer.sendMessage(
 				new TextComponent(
-						Main.getInstance().getPartyPrefix() + PLAYERPATTERN
+						Main.getInstance().getPartyPrefix() + PLAYER_PATTERN
 								.matcher(Main.getInstance().getMessagesYml()
 										.getString("Party.Command.Invite.InvitedPlayer"))
 								.replaceAll(Matcher.quoteReplacement(toInvite.getDisplayName()))));
@@ -100,7 +100,7 @@ public class Invite extends PartySubCommand {
 	private boolean isAlreadyInvited(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pToInvite, PlayerParty pParty) {
 		if (pParty.isInvited(pToInvite)) {
 			pPlayer.sendMessage(
-					new TextComponent(Main.getInstance().getPartyPrefix() + PLAYERPATTERN
+					new TextComponent(Main.getInstance().getPartyPrefix() + PLAYER_PATTERN
 							.matcher(Main.getInstance().getMessagesYml()
 									.getString("Party.Command.Invite.AlreadyInYourParty"))
 							.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
@@ -111,11 +111,11 @@ public class Invite extends PartySubCommand {
 
 	private boolean canInvite(OnlinePAFPlayer pPlayer, PlayerParty pParty) {
 		if (!pPlayer.getPlayer()
-				.hasPermission(Main.getInstance().getConfig().getString("Permissions.NoPlayerLimitForPartys")))
+				.hasPermission(Main.getInstance().getConfig().getString("Permissions.NoPlayerLimitForParties")))
 			if (Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") > 1)
 				if (Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") < pParty.getAllPlayers().size()
 						+ pParty.getInviteListSize() + 1) {
-					pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + MAXPLAYERSINPARTYPATTERN
+					pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + MAX_PLAYERS_IN_PARTY_PATTERN
 							.matcher(Main.getInstance().getMessagesYml()
 									.getString("Party.Command.Invite.MaxPlayersInPartyReached"))
 							.replaceAll(Matcher.quoteReplacement(

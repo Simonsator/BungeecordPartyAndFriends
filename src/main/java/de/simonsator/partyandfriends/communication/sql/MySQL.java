@@ -1,6 +1,5 @@
 package de.simonsator.partyandfriends.communication.sql;
 
-import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.*;
@@ -8,7 +7,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
 /**
  * @author Simonsator
@@ -21,18 +19,15 @@ public class MySQL extends SQLCommunication {
 	/**
 	 * Connects to the MySQL server
 	 *
-	 * @param pHost        The MySQL host
-	 * @param pUsername    The MySQL user
-	 * @param pPassword    The MySQL password
-	 * @param pPort        The port of the MySQL server
-	 * @param pDatabase    The MySQL database
-	 * @param pTablePrefix The prefix of the tables
+	 * @param pMySQLData The MySQL data
 	 */
-	public MySQL(String pHost, String pUsername, String pPassword, int pPort, String pDatabase, String pTablePrefix) {
-		super(pDatabase, "jdbc:mysql://" + pHost + ":" + pPort + "/?user=" + pUsername + "&password=" + pPassword);
-		this.tablePrefix = pTablePrefix;
+	public MySQL(MySQLData pMySQLData) {
+		super(pMySQLData.DATABASE, "jdbc:mysql://" + pMySQLData.HOST + ":" + pMySQLData.PORT + "/?user="
+				+ pMySQLData.USERNAME + "&password=" + pMySQLData.PASSWORD);
+		this.tablePrefix = pMySQLData.TABLE_PREFIX;
 		importDatabase();
-		(new Importer(pDatabase, "jdbc:mysql://" + pHost + ":" + pPort + "/?user=" + pUsername + "&password=" + pPassword, this)).closeConnection();
+		new Importer(pMySQLData.DATABASE, "jdbc:mysql://" + pMySQLData.HOST + ":" + pMySQLData.PORT + "/?user="
+				+ pMySQLData.USERNAME + "&password=" + pMySQLData.PASSWORD, this);
 		closeConnection();
 	}
 
@@ -529,39 +524,7 @@ public class MySQL extends SQLCommunication {
 			}
 		}
 	}
-
-	/**
-	 * Saves an offline message in MySQL
-	 *
-	 * @param idSender   Sender of the message
-	 * @param idReceiver Receiver of the message
-	 * @param pMessage   The message, that should be send
-	 */
-	public void offlineMessage(int idSender, int idReceiver, String pMessage) {
-		Connection con = getConnection();
-		PreparedStatement prepStmt = null;
-		int time = (int) (System.currentTimeMillis() / 1000L);
-		try {
-			prepStmt = con.prepareStatement(
-					"insert into  " + this.database + "." + tablePrefix + "friends_messcages	 values (?, ?, ?, ?)");
-			prepStmt.setInt(2, idSender);
-			prepStmt.setInt(3, idReceiver);
-			prepStmt.setString(1, pMessage);
-			prepStmt.setInt(4, time);
-			prepStmt.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (prepStmt != null)
-					prepStmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
+	
 	public boolean isAFriendOf(int pPlayerID1, int pPlayerID2) {
 		Connection con = getConnection();
 		Statement stmt = null;

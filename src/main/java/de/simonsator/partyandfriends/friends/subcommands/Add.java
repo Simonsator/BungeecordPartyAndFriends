@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 /**
  * The command add
@@ -40,11 +40,11 @@ public class Add extends FriendSubCommand {
 			return;
 		if (pPlayer.hasRequestFrom(playerQuery)) {
 			pPlayer.sendMessage(
-					new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
+					new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
 							.getString("Friends.Command.Add.FriendRequestFromReceiver")).replaceAll(Matcher.quoteReplacement(args[1]))));
 			pPlayer
 					.sendPacket(new Chat("{\"text\":\"" + getInstance().getFriendsPrefix()
-							+ PLAYERPATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1]))
+							+ PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1]))
 							+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
 							+ getInstance().getFriendsCommand().getName() + " accept " + args[1]
 							+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
@@ -56,16 +56,16 @@ public class Add extends FriendSubCommand {
 			return;
 		playerQuery.sendFriendRequest(pPlayer);
 		sendRequest(pPlayer, playerQuery);
-		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance()
+		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance()
 				.getMessagesYml().getString("Friends.Command.Add.SentAFriendRequest")).replaceAll(Matcher.quoteReplacement(args[1]))));
 	}
 
 	private void sendRequest(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
 		pPlayerQuery.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
-				+ PLAYERPATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.FriendRequestReceived")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
+				+ PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.FriendRequestReceived")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 		pPlayerQuery
 				.sendPacket(new Chat("{\"text\":\"" + getInstance().getFriendsPrefix()
-						+ PLAYERPATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(pPlayer.getName()))
+						+ PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(pPlayer.getName()))
 						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/"
 						+ getInstance().getFriendsCommand().getName() + " accept " + pPlayer.getName()
 						+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
@@ -75,7 +75,7 @@ public class Add extends FriendSubCommand {
 	private boolean hasNoRequestFrom(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (pQueryPlayer.hasRequestFrom(pPlayer)) {
 			pPlayer.sendMessage(
-					new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
+					new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
 							.getString("Friends.Command.Accept.ErrorAlreadySend")).replaceAll(Matcher.quoteReplacement(pQueryPlayer.getName()))));
 			pPlayer.sendMessage(new TextComponent(HELP));
 			return false;
@@ -87,7 +87,7 @@ public class Add extends FriendSubCommand {
 	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (pPlayer.isAFriendOf(pGivenPlayer)) {
 			pPlayer.sendMessage(
-					new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
+					new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
 							.getString("Friends.Command.Add.AlreadyFriends")).replaceAll(Matcher.quoteReplacement(pGivenPlayer.getDisplayName()))));
 			pPlayer.sendMessage(new TextComponent(HELP));
 			return true;
@@ -118,7 +118,7 @@ public class Add extends FriendSubCommand {
 	private boolean allowsFriendRequests(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (pGivenPlayer.getSettingsWorth(0) == 0) {
 			pPlayer.sendMessage(
-					new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
+					new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
 							.getString("Friends.Command.Add.CanNotSendThisPlayer")).replaceAll(Matcher.quoteReplacement(pGivenPlayer.getName()))));
 			pPlayer.sendMessage(new TextComponent(HELP));
 			return false;

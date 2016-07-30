@@ -63,12 +63,12 @@ public class PAFPlayerMySQL extends PAFPlayerClass {
 
 	@Override
 	public void denyRequest(PAFPlayer pPlayer) {
-		PAFPlayerManagerMySQL.getConnection().denyRequest(ID, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
+		PAFPlayerManagerMySQL.getConnection().denyRequest(ID,  ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
 	}
 
 	@Override
 	public boolean isAFriendOf(PAFPlayer pPlayer) {
-		return PAFPlayerManagerMySQL.getConnection().isAFriendOf(ID, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
+		return PAFPlayerManagerMySQL.getConnection().isAFriendOf(ID,  ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
 	}
 
 	private List<PAFPlayer> idListToPAFPlayerList(List<Integer> pList) {
@@ -90,7 +90,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass {
 
 	@Override
 	public void addFriend(PAFPlayer pPlayer) {
-		PAFPlayerManagerMySQL.getConnection().addFriend(((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID(), ID);
+		PAFPlayerManagerMySQL.getConnection().addFriend( ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID(), ID);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass {
 
 	@Override
 	public void removeFriend(PAFPlayer pPlayer) {
-		PAFPlayerManagerMySQL.getConnection().deleteFriend(((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID(), ID);
+		PAFPlayerManagerMySQL.getConnection().deleteFriend( ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID(), ID);
 	}
 
 	@Override

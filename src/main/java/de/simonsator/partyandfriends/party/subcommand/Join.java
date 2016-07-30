@@ -11,7 +11,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 /**
  * The class which will be executed on /party join
@@ -50,7 +50,7 @@ public class Join extends PartySubCommand {
 		if (party.addPlayer(pPlayer))
 			party.sendMessage(
 					new TextComponent(
-							Main.getInstance().getPartyPrefix() + PLAYERPATTERN
+							Main.getInstance().getPartyPrefix() + PLAYER_PATTERN
 									.matcher(Main.getInstance().getMessagesYml()
 											.getString("Party.Command.Join.PlayerHasJoined"))
 									.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));

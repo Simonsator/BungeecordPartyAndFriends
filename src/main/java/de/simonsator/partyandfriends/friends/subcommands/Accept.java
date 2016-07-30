@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 /**
  * The command accept
@@ -39,17 +39,17 @@ public class Accept extends RequestReactionsCommands {
 			return;
 		pPlayer.addFriend(playerQuery);
 		pPlayer.denyRequest(playerQuery);
-		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance()
+		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance()
 				.getMessagesYml().getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(args[1]))));
 		if (!playerQuery.isOnline())
 			return;
 		OnlinePAFPlayer friend = (OnlinePAFPlayer) playerQuery;
-		friend.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
+		friend.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
 				.getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
-		friend.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
+		friend.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
 				.getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 		pPlayer.sendMessage(
-				new TextComponent(getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(getInstance().getMessagesYml()
+				new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
 						.getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(friend.getDisplayName()))));
 	}
 

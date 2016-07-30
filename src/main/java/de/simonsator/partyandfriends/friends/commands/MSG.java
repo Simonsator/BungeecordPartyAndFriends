@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.*;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.*;
 
 /**
  * Will be executed on /msg
@@ -98,6 +98,19 @@ public class MSG extends Command {
 		return true;
 	}
 
+	/**
+	 * Delivers a message that was send, while a player was offline
+	 *
+	 * @param pContent   Content of the message
+	 * @param pWrittenTo The player which was written to
+	 * @param pSender    The name of the sender
+	 */
+	public void deliverOfflineMessage(String pContent, OnlinePAFPlayer pWrittenTo, PAFPlayer pSender) {
+		sendMessage(
+				SPACE_PATTERN.matcher(pContent).replaceAll(Matcher.quoteReplacement(getInstance().getMessagesYml().getString("Friends.Command.MSG.ColorOfMessage"))),
+				pWrittenTo, pSender.getDisplayName(), pWrittenTo.getDisplayName());
+	}
+
 	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (!pQueryPlayer.isOnline()) {
 			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
@@ -131,7 +144,7 @@ public class MSG extends Command {
 	}
 
 	private void sendMessage(String pContent, OnlinePAFPlayer pReceiver, String pSenderName, String pReceiverName) {
-		pReceiver.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + CONTENTPATTERN.matcher(PLAYERPATTERN.matcher(SENDERNAMEPATTERN.matcher(getInstance()
+		pReceiver.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + CONTENT_PATTERN.matcher(PLAYER_PATTERN.matcher(SENDER_NAME_PATTERN.matcher(getInstance()
 				.getMessagesYml().getString("Friends.Command.MSG.SentMessage")).replaceAll(Matcher.quoteReplacement(pSenderName))).replaceAll(Matcher.quoteReplacement(pReceiverName))).replaceAll(Matcher.quoteReplacement(pContent))));
 	}
 

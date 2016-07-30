@@ -7,7 +7,6 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Chat;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPlayer {
@@ -50,7 +49,7 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 
 	@Override
 	public ServerInfo getServer() {
-		return PLAYER.getServer().getInfo();
+		return PLAYER.getServer() != null ? PLAYER.getServer().getInfo() : null;
 	}
 
 	@Override
@@ -78,4 +77,5 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 		if (!PLAYER.getName().equals(PAFPlayerManagerMySQL.getConnection().getName(ID)))
 			PAFPlayerManagerMySQL.getConnection().updatePlayerName(ID, PLAYER.getName());
 	}
+
 }

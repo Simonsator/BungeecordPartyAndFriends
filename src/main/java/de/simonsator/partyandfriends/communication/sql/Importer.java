@@ -1,9 +1,8 @@
 package de.simonsator.partyandfriends.communication.sql;
 
-import de.simonsator.partyandfriends.utilities.StringToArray;
-
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
 
@@ -65,7 +64,7 @@ class Importer extends SQLCommunication {
 			rs = (stmt = con.createStatement()).executeQuery(
 					"select FreundschaftsAnfragenID from " + database + ".freunde WHERE ID='" + pID + "' LIMIT 1");
 			if (rs.next())
-				return StringToArray.stringToIntegerArray(rs.getString("FreundschaftsAnfragenID"));
+				return stringToIntegerArray(rs.getString("FreundschaftsAnfragenID"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -154,7 +153,7 @@ class Importer extends SQLCommunication {
 	}
 
 	private int[] getFriendsArray(int idSender) {
-		return StringToArray.stringToIntegerArray(getFriends(idSender));
+		return stringToIntegerArray(getFriends(idSender));
 	}
 
 	private String getFriends(int pID) {
@@ -296,4 +295,13 @@ class Importer extends SQLCommunication {
 		}
 	}
 
+	private static int[] stringToIntegerArray(String string) {
+		StringTokenizer st = new StringTokenizer(string, "|");
+		int stLength = st.countTokens();
+		int[] stArray = new int[stLength];
+		for (int i = 0; i < stLength; i++) {
+			stArray[i] = Integer.parseInt(st.nextToken());
+		}
+		return stArray;
+	}
 }

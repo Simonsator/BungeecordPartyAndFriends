@@ -4,6 +4,7 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.communication.sql.MySQL;
+import de.simonsator.partyandfriends.communication.sql.MySQLData;
 import de.simonsator.partyandfriends.pafplayers.mysql.OnlinePAFPlayerMySQL;
 import de.simonsator.partyandfriends.pafplayers.mysql.PAFPlayerMySQL;
 import de.simonsator.partyandfriends.utilities.disable.Deactivated;
@@ -16,10 +17,8 @@ import java.util.UUID;
 public class PAFPlayerManagerMySQL extends PAFPlayerManager implements Deactivated {
 	private static MySQL connection;
 
-	public PAFPlayerManagerMySQL(String pHost, String pUser, String pPassword, int pPort, String pDatabase, String pTablePrefix) {
-		connection = new MySQL(pHost, pUser, pPassword
-				, pPort,
-				pDatabase, pTablePrefix);
+	public PAFPlayerManagerMySQL(MySQLData pMySQLData) {
+		connection = new MySQL(pMySQLData);
 		Disabler.getInstance().registerDeactivated(this);
 	}
 

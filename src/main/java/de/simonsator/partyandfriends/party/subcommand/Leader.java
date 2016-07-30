@@ -10,7 +10,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.NEWLEADERPATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.NEW_LEADER_PATTERN;
 
 /**
  * The class which will be executed on /party leader
@@ -42,7 +42,7 @@ public class Leader extends LeaderNeededCommand {
 		party.setLeader((OnlinePAFPlayer) player);
 		party.sendMessage(
 				new TextComponent(
-						Main.getInstance().getPartyPrefix() + NEWLEADERPATTERN
+						Main.getInstance().getPartyPrefix() + NEW_LEADER_PATTERN
 								.matcher(Main.getInstance().getMessagesYml()
 										.getString("Party.Command.Leader.NewLeaderIs"))
 								.replaceAll(Matcher.quoteReplacement(player.getDisplayName()))));

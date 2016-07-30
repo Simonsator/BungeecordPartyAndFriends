@@ -18,8 +18,8 @@ import net.md_5.bungee.api.plugin.Command;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.MESSAGE_CONTENTPATTERN;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.SENDERNAMEPATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.MESSAGE_CONTENT_PATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.SENDER_NAME_PATTERN;
 
 /**
  * The /p command
@@ -61,8 +61,8 @@ public class PartyChat extends Command {
 			text += " " + Main.getInstance().getMessagesYml().getString("Party.Command.Chat.ContentColor") + arg;
 		}
 		party.sendMessage(new TextComponent(
-				Main.getInstance().getMessagesYml().getString("Party.Command.Chat.Prefix") + MESSAGE_CONTENTPATTERN
-						.matcher(SENDERNAMEPATTERN
+				Main.getInstance().getMessagesYml().getString("Party.Command.Chat.Prefix") + MESSAGE_CONTENT_PATTERN
+						.matcher(SENDER_NAME_PATTERN
 								.matcher(Main.getInstance().getMessagesYml()
 										.getString("Party.Command.Chat.PartyChatOutput"))
 								.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())))

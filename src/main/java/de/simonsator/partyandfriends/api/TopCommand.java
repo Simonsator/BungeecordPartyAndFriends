@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.api;
 
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.utilities.Language;
 import de.simonsator.partyandfriends.utilities.SubCommand;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -22,7 +23,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command {
 
 	public static boolean isPlayer(CommandSender pCommandSender) {
 		if (!(pCommandSender instanceof ProxiedPlayer)) {
-			if (Main.getInstance().getLanguage().equalsIgnoreCase("own")) {
+			if (Main.getInstance().getLanguage() == Language.OWN) {
 				Main.getInstance().loadConfiguration();
 				pCommandSender.sendMessage(
 						new TextComponent(Main.getInstance().getFriendsPrefix() + "Config and MessagesYML reloaded!"));

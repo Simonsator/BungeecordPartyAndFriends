@@ -9,7 +9,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 public abstract class LeaderNeededCommand extends PartySubCommand {
 
@@ -24,14 +24,14 @@ public abstract class LeaderNeededCommand extends PartySubCommand {
 
 	protected boolean checkIsInParty(OnlinePAFPlayer pPlayer, PAFPlayer pSearched, PlayerParty pParty, String[] args) {
 		if (!pSearched.isOnline()) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getPartyPrefix() + PLAYERPATTERN
+			pPlayer.sendMessage(new TextComponent(getInstance().getPartyPrefix() + PLAYER_PATTERN
 					.matcher(getInstance().getMessagesYml()
 							.getString("Party.Command.General.ErrorGivenPlayerIsNotInTheParty"))
 					.replaceAll(Matcher.quoteReplacement(args[0]))));
 			return false;
 		}
 		if (!pParty.isInParty((OnlinePAFPlayer) pSearched)) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getPartyPrefix() + PLAYERPATTERN
+			pPlayer.sendMessage(new TextComponent(getInstance().getPartyPrefix() + PLAYER_PATTERN
 					.matcher(getInstance().getMessagesYml()
 							.getString("Party.Command.General.ErrorGivenPlayerIsNotInTheParty"))
 					.replaceAll(Matcher.quoteReplacement(args[0]))));

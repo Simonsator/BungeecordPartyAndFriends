@@ -12,7 +12,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.NEWLEADERPATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.NEW_LEADER_PATTERN;
 
 public class LocalPlayerParty extends PlayerParty {
 	/**
@@ -158,7 +158,7 @@ public class LocalPlayerParty extends PlayerParty {
 		OnlinePAFPlayer newLeader = getPlayers().get(0);
 		this.setLeader(newLeader);
 		removePlayerSilent(newLeader);
-		this.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + NEWLEADERPATTERN.matcher(Main.getInstance().getMessagesYml()
+		this.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + NEW_LEADER_PATTERN.matcher(Main.getInstance().getMessagesYml()
 				.getString("Party.Command.Leave.NewLeaderIs")).replaceAll(Matcher.quoteReplacement(getLeader().getDisplayName()))));
 	}
 }

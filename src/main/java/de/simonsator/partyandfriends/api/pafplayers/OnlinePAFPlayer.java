@@ -1,7 +1,5 @@
 package de.simonsator.partyandfriends.api.pafplayers;
 
-import java.util.ArrayList;
-
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Chat;
@@ -24,7 +22,7 @@ public interface OnlinePAFPlayer extends PAFPlayer {
 
 	/**
 	 * @return Returns the player if he is on this Bungeecord. If he is on
-	 *         another Bungeecord (RedisBungee) it returns null.
+	 * another Bungeecord (RedisBungee) it returns null.
 	 */
 	ProxiedPlayer getPlayer();
 }

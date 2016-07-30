@@ -15,7 +15,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
-import static de.simonsator.partyandfriends.utilities.CompilePatter.PLAYERPATTERN;
+import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 /**
  * The command remove
@@ -37,7 +37,7 @@ public class Remove extends FriendSubCommand {
 		if (!isAFriendOf(pPlayer, playerQuery))
 			return;
 		pPlayer.removeFriend(playerQuery);
-		pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + PLAYERPATTERN.matcher(Main.getInstance()
+		pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(Main.getInstance()
 				.getMessagesYml().getString("Friends.Command.Remove.Removed")).replaceAll(Matcher.quoteReplacement(args[1]))));
 	}
 
