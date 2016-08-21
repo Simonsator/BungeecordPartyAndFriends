@@ -1,9 +1,3 @@
-/**
- * The /p command
- *
- * @author Simonsator
- * @version 1.0.0
- */
 package de.simonsator.partyandfriends.party.command;
 
 import de.simonsator.partyandfriends.api.TopCommand;

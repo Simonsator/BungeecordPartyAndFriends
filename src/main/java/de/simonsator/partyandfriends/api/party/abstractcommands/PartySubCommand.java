@@ -16,7 +16,7 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
 public abstract class PartySubCommand extends SubCommand {
 
 	protected PartySubCommand(String[] pCommands, int pPriority, String pHelpText) {
-		super(pCommands, pPriority, new TextComponent(pHelpText));
+		super(pCommands, pPriority, new TextComponent(pHelpText), getInstance().getPartyPrefix());
 	}
 
 	protected boolean isInParty(OnlinePAFPlayer pPlayer, PlayerParty pParty) {

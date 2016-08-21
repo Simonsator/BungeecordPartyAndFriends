@@ -27,7 +27,7 @@ public class PAFPlayerManagerMySQL extends PAFPlayerManager implements Deactivat
 		if (player == null)
 			return new PAFPlayerMySQL(getConnection().getPlayerID(pPlayer));
 		else
-			return this.getPlayer(player);
+			return getPlayer(player);
 	}
 
 	public OnlinePAFPlayer getPlayer(ProxiedPlayer pPlayer) {
@@ -38,12 +38,12 @@ public class PAFPlayerManagerMySQL extends PAFPlayerManager implements Deactivat
 	public PAFPlayer getPlayer(UUID pPlayer) {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(pPlayer);
 		if (player != null)
-			return this.getPlayer(player);
-		return this.getPlayer(getConnection().getPlayerID(pPlayer));
+			return getPlayer(player);
+		return getPlayer(getConnection().getPlayerID(pPlayer));
 	}
 
 	public PAFPlayer getPlayer(int pPlayerID) {
-		return this.getPlayer(getConnection().getName(pPlayerID));
+		return getPlayer(getConnection().getName(pPlayerID));
 	}
 
 	public static MySQL getConnection() {

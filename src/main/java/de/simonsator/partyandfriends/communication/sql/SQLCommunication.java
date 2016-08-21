@@ -34,6 +34,19 @@ public abstract class SQLCommunication {
 		}
 	}
 
+	protected void close(ResultSet rs, Statement stmt, PreparedStatement prepStmt) {
+		try {
+			if (rs != null)
+				rs.close();
+			if (stmt != null)
+				stmt.close();
+			if (prepStmt != null)
+				prepStmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	protected Connection getConnection() {
 		try {
 			if (connection != null && connection.isValid(6))

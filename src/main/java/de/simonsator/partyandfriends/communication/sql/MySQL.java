@@ -524,7 +524,7 @@ public class MySQL extends SQLCommunication {
 			}
 		}
 	}
-	
+
 	public boolean isAFriendOf(int pPlayerID1, int pPlayerID2) {
 		Connection con = getConnection();
 		Statement stmt = null;

@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.main;
 
+import com.google.gson.Gson;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
@@ -15,6 +16,7 @@ import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.party.partymanager.LocalPartyManager;
 import de.simonsator.partyandfriends.utilities.ConfigLoader;
 import de.simonsator.partyandfriends.utilities.Language;
+import de.simonsator.partyandfriends.utilities.LanguageConfiguration;
 import de.simonsator.partyandfriends.utilities.MessagesLoader;
 import de.simonsator.partyandfriends.utilities.disable.Disabler;
 import net.md_5.bungee.api.ProxyServer;
@@ -150,13 +152,11 @@ public class Main extends Plugin {
 		getProxy().getPluginManager().registerCommand(this, friendCommand);
 		friendsMSGCommand = new MSG(
 				(getConfig().getStringList("CommandNames.Friends.TopCommands.MSG").toArray(new String[0])));
-		if (!getConfig().getString("General.DisableMsg").equalsIgnoreCase("true")) {
+		if (!getConfig().getString("General.DisableMsg").equalsIgnoreCase("true"))
 			getProxy().getPluginManager().registerCommand(this, friendsMSGCommand);
-		}
-		if (!getConfig().getString("General.DisableReply").equalsIgnoreCase("true")) {
+		if (!getConfig().getString("General.DisableReply").equalsIgnoreCase("true"))
 			getProxy().getPluginManager().registerCommand(this, new Reply(
 					(getConfig().getStringList("CommandNames.Friends.TopCommands.Reply").toArray(new String[0]))));
-		}
 	}
 
 	public PartyChat getPartyChatCommand() {
@@ -183,8 +183,8 @@ public class Main extends Plugin {
 		return language;
 	}
 
-	public Configuration getMessagesYml() {
-		return messages.getCreatedConfiguration();
+	public LanguageConfiguration getMessagesYml() {
+		return messages;
 	}
 
 	public PartyCommand getPartyCommand() {

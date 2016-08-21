@@ -1,9 +1,3 @@
-/**
- * The command deny
- *
- * @author Simonsator
- * @version 1.0.0
- */
 package de.simonsator.partyandfriends.friends.subcommands;
 
 import de.simonsator.partyandfriends.api.friends.abstractcommands.RequestReactionsCommands;

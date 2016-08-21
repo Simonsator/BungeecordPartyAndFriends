@@ -7,12 +7,12 @@ import java.util.UUID;
 public abstract class PAFPlayerManager {
 	private static PAFPlayerManager instance;
 
-	public static PAFPlayerManager getInstance() {
-		return instance;
+	public PAFPlayerManager() {
+		instance = this;
 	}
 
-	public static void setInstance(PAFPlayerManager instance) {
-		PAFPlayerManager.instance = instance;
+	public static PAFPlayerManager getInstance() {
+		return instance;
 	}
 
 	public abstract PAFPlayer getPlayer(String pPlayer);

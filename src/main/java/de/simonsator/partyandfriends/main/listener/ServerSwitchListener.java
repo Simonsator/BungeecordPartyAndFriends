@@ -1,9 +1,3 @@
-/**
- * The class with the ServerSwitchEvent
- *
- * @author Simonsator
- * @version 1.0.0
- */
 package de.simonsator.partyandfriends.main.listener;
 
 import de.simonsator.partyandfriends.main.Main;

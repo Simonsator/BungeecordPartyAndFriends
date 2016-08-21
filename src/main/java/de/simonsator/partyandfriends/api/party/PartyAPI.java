@@ -1,9 +1,3 @@
-/**
- * The APIs for the party system of Party and Friends
- *
- * @author Simonsator
- * @version 1.0.0
- */
 package de.simonsator.partyandfriends.api.party;
 
 import de.simonsator.partyandfriends.main.Main;

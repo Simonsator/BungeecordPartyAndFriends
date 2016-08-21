@@ -13,7 +13,7 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PA
 public abstract class FriendSubCommand extends SubCommand implements Comparable<SubCommand> {
 
 	protected FriendSubCommand(String[] pCommands, int pPriority, String pHelp) {
-		super(pCommands, pPriority, new TextComponent(pHelp));
+		super(pCommands, pPriority, new TextComponent(pHelp), getInstance().getFriendsPrefix());
 	}
 
 	protected boolean isPlayerGiven(OnlinePAFPlayer pPlayer, String[] args) {

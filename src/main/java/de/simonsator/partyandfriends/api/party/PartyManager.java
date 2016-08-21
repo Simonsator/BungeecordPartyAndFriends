@@ -1,9 +1,3 @@
-/**
- * This class manages the partys.
- *
- * @author Simonsator
- * @version 1.0.0
- */
 package de.simonsator.partyandfriends.api.party;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;

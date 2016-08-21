@@ -1,9 +1,3 @@
-/**
- * Will be executed on /friend msg
- *
- * @author Simonsator
- * @version 1.0.0
- */
 package de.simonsator.partyandfriends.friends.subcommands;
 
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
