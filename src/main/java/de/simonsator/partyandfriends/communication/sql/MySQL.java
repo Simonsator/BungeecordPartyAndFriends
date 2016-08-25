@@ -88,31 +88,6 @@ public class MySQL extends SQLCommunication {
 				e.printStackTrace();
 			}
 		}
-		importOfflineMessages();
-	}
-
-	/**
-	 * Imports the offlineMessages database
-	 */
-	private void importOfflineMessages() {
-		Connection con = getConnection();
-		PreparedStatement prepStmt = null;
-		try {
-			prepStmt = con.prepareStatement(
-					"CREATE TABLE IF NOT EXISTS `" + database + "`.`" + tablePrefix + "friends_messages` ("
-							+ "`Message` varchar(99) NOT NULL COMMENT ''," + "`Sender` INT(8) NOT NULL COMMENT '',"
-							+ "`Reciver` INT(8) NOT NULL COMMENT ''," + "`Date` int(10) NULL);");
-			prepStmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (prepStmt != null)
-					prepStmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	public int getPlayerID(ProxiedPlayer pPlayer) {
