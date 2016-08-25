@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.party.playerpartys;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -70,7 +71,7 @@ public class LocalPlayerParty extends PlayerParty {
 	@Override
 	public void setLeader(OnlinePAFPlayer player) {
 		leader = player.getUniqueId();
-		Main.getPartyManager().addPlayerToParty(player, this);
+		PartyManager.getInstance().addPlayerToParty(player, this);
 		players.remove(player.getUniqueId());
 	}
 
@@ -156,8 +157,8 @@ public class LocalPlayerParty extends PlayerParty {
 	@Override
 	protected void findNewLeader() {
 		OnlinePAFPlayer newLeader = getPlayers().get(0);
-		this.setLeader(newLeader);
 		removePlayerSilent(newLeader);
+		this.setLeader(newLeader);
 		this.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + NEW_LEADER_PATTERN.matcher(Main.getInstance().getMessagesYml()
 				.getString("Party.Command.Leave.NewLeaderIs")).replaceAll(Matcher.quoteReplacement(getLeader().getDisplayName()))));
 	}
