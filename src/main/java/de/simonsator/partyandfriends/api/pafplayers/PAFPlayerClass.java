@@ -9,6 +9,13 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 	}
 
 	@Override
+	public void sendMessage(String pText) {
+		String[] spited = pText.split("LINE_BREAK");
+		for (String split : spited)
+			sendMessage(new TextComponent(split));
+	}
+
+	@Override
 	public void sendPacket(Chat chat) {
 
 	}

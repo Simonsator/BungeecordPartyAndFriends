@@ -19,6 +19,8 @@ public interface PAFPlayer {
 
 	void sendMessage(TextComponent pTextComponent);
 
+	void sendMessage(String pText);
+
 	void sendPacket(Chat chat);
 
 	boolean doesExist();
@@ -28,6 +30,8 @@ public interface PAFPlayer {
 	List<PAFPlayer> getRequests();
 
 	boolean hasRequestFrom(PAFPlayer pPlayer);
+
+	boolean hasPermission(String pPermission);
 
 	void denyRequest(PAFPlayer pPlayer);
 
@@ -48,5 +52,4 @@ public interface PAFPlayer {
 	void setSetting(int pSettingsID, int pNewWorth);
 
 	void setLastPlayerWroteFrom(PAFPlayer pLastWroteTo);
-
 }

@@ -14,8 +14,8 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
 class Importer extends SQLCommunication {
 	private final MySQL connection;
 
-	Importer(String pDatabase, String pURL, MySQL pConnection) {
-		super(pDatabase, pURL);
+	Importer(String pDatabase, String pURL, MySQL pConnection, String pUserName, String pPassword) {
+		super(pDatabase, pURL, pUserName, pPassword);
 		connection = pConnection;
 		importTableHidePlayers();
 		ArrayList<PlayerCollection> players = importPlayers();
@@ -35,8 +35,8 @@ class Importer extends SQLCommunication {
 		Statement stmt = null;
 		try {
 			stmt = con.createStatement();
-			stmt.executeUpdate("Drop Table IF exists " + database + ".freunde;");
-			stmt.executeUpdate("Drop Table IF exists " + database + ".friends_messages;");
+			stmt.executeUpdate("Drop Table IF exists " + DATABASE + ".freunde;");
+			stmt.executeUpdate("Drop Table IF exists " + DATABASE + ".friends_messages;");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -62,7 +62,7 @@ class Importer extends SQLCommunication {
 		ResultSet rs = null;
 		try {
 			rs = (stmt = con.createStatement()).executeQuery(
-					"select FreundschaftsAnfragenID from " + database + ".freunde WHERE ID='" + pID + "' LIMIT 1");
+					"select FreundschaftsAnfragenID from " + DATABASE + ".freunde WHERE ID='" + pID + "' LIMIT 1");
 			if (rs.next())
 				return stringToIntegerArray(rs.getString("FreundschaftsAnfragenID"));
 		} catch (SQLException e) {
@@ -86,7 +86,7 @@ class Importer extends SQLCommunication {
 		ResultSet rs = null;
 		try {
 			rs = (stmt = con.createStatement()).executeQuery(
-					"select EinstellungHidePlayers from " + database + ".freunde WHERE ID='" + playerID + "' LIMIT 1");
+					"select EinstellungHidePlayers from " + DATABASE + ".freunde WHERE ID='" + playerID + "' LIMIT 1");
 			if (rs.next()) {
 				return rs.getInt("EinstellungHidePlayers");
 			}
@@ -104,7 +104,7 @@ class Importer extends SQLCommunication {
 		ResultSet rs = null;
 		try {
 			rs = (stmt = con.createStatement()).executeQuery(
-					"select einstellungAkzeptieren from " + database + ".freunde WHERE ID='" + pPlayerID + "' LIMIT 1");
+					"select einstellungAkzeptieren from " + DATABASE + ".freunde WHERE ID='" + pPlayerID + "' LIMIT 1");
 			int[] feld = new int[5];
 			if (rs.next()) {
 				feld[0] = rs.getInt("einstellungAkzeptieren");
@@ -112,7 +112,7 @@ class Importer extends SQLCommunication {
 				feld[0] = 1;
 			}
 			rs.close();
-			rs = stmt.executeQuery("select einstellungPartyNurFreunde from " + database + ".freunde WHERE ID='"
+			rs = stmt.executeQuery("select einstellungPartyNurFreunde from " + DATABASE + ".freunde WHERE ID='"
 					+ pPlayerID + "' LIMIT 1");
 			if (rs.next()) {
 				feld[1] = rs.getInt("einstellungPartyNurFreunde");
@@ -120,7 +120,7 @@ class Importer extends SQLCommunication {
 				feld[1] = 0;
 			}
 			rs.close();
-			rs = stmt.executeQuery("select EinstellungSendMessages from " + database + ".freunde WHERE ID='" + pPlayerID
+			rs = stmt.executeQuery("select EinstellungSendMessages from " + DATABASE + ".freunde WHERE ID='" + pPlayerID
 					+ "' LIMIT 1");
 			if (rs.next()) {
 				feld[2] = rs.getInt("EinstellungSendMessages");
@@ -128,7 +128,7 @@ class Importer extends SQLCommunication {
 				feld[2] = 0;
 			}
 			rs.close();
-			rs = stmt.executeQuery("select EinstellungImmerOffline from " + database + ".freunde WHERE ID='" + pPlayerID
+			rs = stmt.executeQuery("select EinstellungImmerOffline from " + DATABASE + ".freunde WHERE ID='" + pPlayerID
 					+ "' LIMIT 1");
 			if (rs.next()) {
 				feld[3] = rs.getInt("EinstellungImmerOffline");
@@ -137,7 +137,7 @@ class Importer extends SQLCommunication {
 			}
 			rs.close();
 			rs = stmt.executeQuery(
-					"select EinstellungJump from " + database + ".freunde WHERE ID='" + pPlayerID + "' LIMIT 1");
+					"select EinstellungJump from " + DATABASE + ".freunde WHERE ID='" + pPlayerID + "' LIMIT 1");
 			if (rs.next()) {
 				feld[4] = rs.getInt("EinstellungJump");
 			} else {
@@ -162,7 +162,7 @@ class Importer extends SQLCommunication {
 		ResultSet rs = null;
 		try {
 			rs = (stmt = con.createStatement())
-					.executeQuery("select FreundeID from " + database + ".freunde WHERE ID='" + pID + "' LIMIT 1");
+					.executeQuery("select FreundeID from " + DATABASE + ".freunde WHERE ID='" + pID + "' LIMIT 1");
 			if (rs.next()) {
 				return rs.getString("FreundeID");
 			} else {
@@ -198,7 +198,7 @@ class Importer extends SQLCommunication {
 		ArrayList<PlayerCollection> players = new ArrayList<>();
 		try {
 			rs = (stmt = con.createStatement())
-					.executeQuery("select SpielerName, UUID, ID  from " + database + ".freunde");
+					.executeQuery("select SpielerName, UUID, ID  from " + DATABASE + ".freunde");
 			while (rs.next()) {
 				PlayerCollection player = new PlayerCollection(rs.getString("SpielerName"), rs.getString("UUID"),
 						rs.getInt("ID"));
@@ -219,7 +219,7 @@ class Importer extends SQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("insert into  `" + database + "`."
+			prepStmt = con.prepareStatement("insert into  `" + DATABASE + "`."
 					+ getInstance().getConfig().getString("MySQL.TablePrefix") + "players values (?, ?, ?)");
 			prepStmt.setInt(1, pID);
 			prepStmt.setString(2, pName);
@@ -244,7 +244,7 @@ class Importer extends SQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("ALTER TABLE " + database
+			prepStmt = con.prepareStatement("ALTER TABLE " + DATABASE
 					+ ".`freunde` ADD `EinstellungHidePlayers` tinyint(1) NOT NULL AFTER `einstellungPartyNurFreunde`;");
 			prepStmt.executeUpdate();
 		} catch (SQLException ignored) {
@@ -267,7 +267,7 @@ class Importer extends SQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("ALTER TABLE `" + database + "`.`freunde`\n"
+			prepStmt = con.prepareStatement("ALTER TABLE `" + DATABASE + "`.`freunde`\n"
 					+ "ADD COLUMN `freunde`.`EinstellungSendMessages` tinyint(1) NOT NULL COMMENT '' AFTER `EinstellungHidePlayers`,\n"
 					+ "ADD COLUMN `freunde`.`EinstellungImmerOffline` tinyint(1) NOT NULL COMMENT '' AFTER `EinstellungSendMessages`,\n"
 					+ "ADD COLUMN `freunde`.`EinstellungJump` tinyint(1) NOT NULL COMMENT '' AFTER `EinstellungImmerOffline`;");

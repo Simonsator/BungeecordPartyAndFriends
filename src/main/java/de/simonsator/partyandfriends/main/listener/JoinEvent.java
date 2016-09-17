@@ -65,10 +65,11 @@ public class JoinEvent implements Listener {
 			content = content + getInstance().getMessagesYml().getString("Friends.General.RequestInfoOnJoinColor")
 					+ player.getDisplayName()
 					+ getInstance().getMessagesYml().getString("Friends.General.RequestInfoOnJoinColorComma")
-					+ ",";
-		content = content.substring(0, content.length() - 1);
-		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PatterCollection.FRIEND_REQUEST_PATTERN.matcher(getInstance()
-				.getMessagesYml().getString("Friends.General.RequestInfoOnJoin")).replaceAll(Matcher.quoteReplacement(content))));
+					+ getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit");
+		content = content.substring(0, content.length() - (getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit").length()));
+		pPlayer.sendMessage(PatterCollection.FRIEND_REQUEST_COUNT_PATTERN.matcher(PatterCollection.FRIEND_REQUEST_PATTERN.matcher(getInstance().getFriendsPrefix() + getInstance()
+				.getMessagesYml().getString("Friends.General.RequestInfoOnJoin")).replaceAll(Matcher.quoteReplacement(content))).
+				replaceAll(Matcher.quoteReplacement(pFriendRequests.size() + "")));
 	}
 
 	private void sendNowOnline(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriends) {

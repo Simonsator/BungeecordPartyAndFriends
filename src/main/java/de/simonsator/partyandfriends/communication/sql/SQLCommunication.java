@@ -8,18 +8,22 @@ import java.sql.*;
  */
 public abstract class SQLCommunication {
 	/**
-	 * The MySQL database
+	 * The MySQL DATABASE
 	 */
-	protected final String database;
+	protected final String DATABASE;
 	/**
-	 * The url of the SQL server
+	 * The URL of the SQL server
 	 */
-	private final String url;
+	private final String URL;
 	private Connection connection;
+	private final String USER_NAME;
+	private final String PASSWORD;
 
-	protected SQLCommunication(String pDatabase, String pURL) {
-		this.database = pDatabase;
-		this.url = pURL;
+	protected SQLCommunication(String pDatabase, String pURL, String pUserName, String pPassword) {
+		this.DATABASE = pDatabase;
+		this.URL = pURL;
+		this.USER_NAME = pUserName;
+		this.PASSWORD = pPassword;
 		connection = createConnection();
 	}
 
@@ -70,7 +74,7 @@ public abstract class SQLCommunication {
 		try {
 			closeConnection();
 			Class.forName("com.mysql.jdbc.Driver");
-			return DriverManager.getConnection(url);
+			return DriverManager.getConnection(URL, USER_NAME, PASSWORD);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}

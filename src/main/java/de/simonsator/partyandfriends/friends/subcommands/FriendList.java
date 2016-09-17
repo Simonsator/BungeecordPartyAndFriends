@@ -3,9 +3,11 @@ package de.simonsator.partyandfriends.friends.subcommands;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.utilities.PatterCollection;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.List;
+import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
 
@@ -25,9 +27,9 @@ public class FriendList extends FriendSubCommand {
 		java.util.List<PAFPlayer> friends = pPlayer.getFriends();
 		if (!hasFriends(pPlayer, friends))
 			return;
-		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
+		pPlayer.sendMessage(getInstance().getFriendsPrefix()
 				+ getInstance().getMessagesYml().getString("Friends.Command.List.FriendsList")
-				+ getFriendsCombined(friends)));
+				+ getFriendsCombined(friends));
 	}
 
 	private String getFriendsCombined(List<PAFPlayer> pFriends) {
@@ -39,10 +41,11 @@ public class FriendList extends FriendSubCommand {
 				additive = getInstance().getMessagesYml().getString("Friends.Command.List.OfflineTitle");
 				color = getInstance().getMessagesYml().getString("Friends.Command.List.OfflineColor");
 			} else {
-				additive = getInstance().getMessagesYml().getString("Friends.Command.List.OnlineTitle");
+				additive = PatterCollection.SERVER_ON.matcher(getInstance().getMessagesYml().getString("Friends.Command.List.OnlineTitle")).
+						replaceAll(Matcher.quoteReplacement(((OnlinePAFPlayer) pFriends.get(i)).getServer().getName()));
 				color = getInstance().getMessagesYml().getString("Friends.Command.List.OnlineColor");
 			}
-			String comma = " ";
+			String comma = "";
 			if (i > 0) {
 				comma = getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit");
 			}

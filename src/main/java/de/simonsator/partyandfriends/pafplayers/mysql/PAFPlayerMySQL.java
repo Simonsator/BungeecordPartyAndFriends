@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.pafplayers.mysql;
 
+import de.simonsator.partyandfriends.api.PermissionProvider;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
@@ -59,6 +60,12 @@ public class PAFPlayerMySQL extends PAFPlayerClass {
 	@Override
 	public boolean hasRequestFrom(PAFPlayer pPlayer) {
 		return PAFPlayerManagerMySQL.getConnection().hasRequestFrom(ID, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
+	}
+
+	@Override
+	public boolean hasPermission(String pPermission) {
+		return PermissionProvider.getInstance().hasPermission(this, pPermission);
+
 	}
 
 	@Override

@@ -125,8 +125,8 @@ public class Invite extends PartySubCommand {
 		return true;
 	}
 
-	private boolean isPlayerOffline(OnlinePAFPlayer pPlayer, PAFPlayer pSeracherd) {
-		if (!pSeracherd.isOnline()) {
+	private boolean isPlayerOffline(OnlinePAFPlayer pPlayer, PAFPlayer pSerached) {
+		if (!pSerached.isOnline()) {
 			pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
 					+ Main.getInstance().getMessagesYml().getString("Party.Command.Invite.CanNotInviteThisPlayer")));
 			return true;
