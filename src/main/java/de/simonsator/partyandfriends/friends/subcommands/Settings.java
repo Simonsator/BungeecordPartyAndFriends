@@ -37,7 +37,7 @@ public class Settings extends FriendSubCommand {
 				+ getInstance().getMessagesYml()
 				.getString("Friends.Command.Settings.ChangeThisSettingWithFriendrequests")
 				+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-				+ getInstance().getFriendsCommand().getName() + " " + " " + getCommandName() + " friendrequests"
+				+ getInstance().getFriendsCommand().getName() + " " + getCommandName() + " friendrequests"
 				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
 				+ getInstance().getMessagesYml().getString("Friends.Command.Settings.ChangeThisSettingsHover")
 				+ "\"}]}}}"));
@@ -57,7 +57,7 @@ public class Settings extends FriendSubCommand {
 						+ getInstance().getMessagesYml()
 						.getString("Friends.Command.Settings.ChangeThisSettingWithParty")
 						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-						+ getInstance().getFriendsCommand().getName() + " " + " " + getCommandName() + " party"
+						+ getInstance().getFriendsCommand().getName() + " " + getCommandName() + " party"
 						+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
 						+ "Click here to change this setting." + "\"}]}}}"));
 	}

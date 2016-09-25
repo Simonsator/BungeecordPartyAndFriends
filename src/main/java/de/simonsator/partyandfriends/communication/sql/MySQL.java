@@ -274,7 +274,7 @@ public class MySQL extends SQLCommunication {
 		try {
 			rs = (stmt = con.createStatement()).executeQuery("select requester_id from `" + DATABASE + "`."
 					+ TABLE_PREFIX + "friend_request_assignment WHERE receiver_id='" + pPlayerID + "'");
-			if (rs.next())
+			while (rs.next())
 				requests.add(rs.getInt("requester_id"));
 		} catch (SQLException e) {
 			e.printStackTrace();
