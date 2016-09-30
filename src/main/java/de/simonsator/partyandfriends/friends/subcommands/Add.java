@@ -3,6 +3,7 @@ package de.simonsator.partyandfriends.friends.subcommands;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
 
@@ -19,10 +20,11 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PA
  * @version 1.0.1
  */
 public class Add extends FriendSubCommand {
+	private final String ACCEPT_COMMAND_NAME;
 
-
-	public Add(String[] pCommands, int pPriority, String pHelp) {
+	public Add(String[] pCommands, int pPriority, String pHelp, String pAcceptCommandName) {
 		super(pCommands, pPriority, pHelp);
+		ACCEPT_COMMAND_NAME = " " + pAcceptCommandName + " ";
 	}
 
 	@Override
@@ -46,7 +48,7 @@ public class Add extends FriendSubCommand {
 					.sendPacket(new Chat("{\"text\":\"" + getInstance().getFriendsPrefix()
 							+ PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1]))
 							+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-							+ getInstance().getFriendsCommand().getName() + " accept " + args[1]
+							+ getInstance().getFriendsCommand().getName() + ACCEPT_COMMAND_NAME + args[1]
 							+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
 							+ getInstance().getMessagesYml().getString("Friends.Command.Add.ClickHere")
 							+ "\"}]}}}"));

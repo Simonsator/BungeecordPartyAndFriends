@@ -57,7 +57,7 @@ public class Settings extends FriendSubCommand {
 						+ getInstance().getMessagesYml()
 						.getString("Friends.Command.Settings.ChangeThisSettingWithParty")
 						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-						+ getInstance().getFriendsCommand().getName() + " " + getCommandName() + " party"
+						+ getInstance().getFriendsCommand().getName()  + " " + getCommandName() + " party"
 						+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
 						+ "Click here to change this setting." + "\"}]}}}"));
 	}

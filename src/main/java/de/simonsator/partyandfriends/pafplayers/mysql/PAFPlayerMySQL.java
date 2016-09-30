@@ -115,9 +115,10 @@ public class PAFPlayerMySQL extends PAFPlayerClass {
 		PAFPlayerManagerMySQL.getConnection().setSetting(ID, pSettingsID, pNewWorth);
 	}
 
-	@Override
-	public void setLastPlayerWroteFrom(PAFPlayer pLastWroteTo) {
-		PAFPlayerManagerMySQL.getConnection().setLastPlayerWroteTo(ID, ((PAFPlayerMySQL) pLastWroteTo).getPlayerID(), 0);
-	}
+    @Override
+		public void setLastPlayerWroteFrom(PAFPlayer pLastWroteTo) {
+			PAFPlayerManagerMySQL.getConnection().setLastPlayerWroteTo(ID, ((PAFPlayerMySQL) pLastWroteTo.getPAFPlayer())
+					.getPlayerID(), 0);
+		}
 
 }

@@ -53,4 +53,11 @@ public abstract class TopCommand<T extends SubCommand> extends Command {
 	protected void sort() {
 		Collections.sort(subCommands);
 	}
+
+	public SubCommand getSubCommand(Class<? extends SubCommand> aClass) {
+		for (SubCommand subCommand : subCommands)
+			if (subCommand.getClass().equals(aClass))
+				return subCommand;
+		return null;
+	}
 }

@@ -4,9 +4,8 @@ import de.simonsator.partyandfriends.api.TopCommand;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.friends.subcommands.*;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
-
-import static de.simonsator.partyandfriends.main.Main.getInstance;
 
 /**
  * The /friend command class
@@ -15,6 +14,7 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
  * @version 1.0.0
  */
 public class Friends extends TopCommand<FriendSubCommand> {
+	private static Friends instance;
 
 	/**
 	 * Initials the object
@@ -23,42 +23,44 @@ public class Friends extends TopCommand<FriendSubCommand> {
 	 */
 	public Friends(java.util.List<String> pCommandNames) {
 		super(pCommandNames.toArray(new String[0]),
-				getInstance().getConfig().getString("Permissions.FriendPermission"));
-		if (!getInstance().getConfig().getString("General.DisableCommand.Friends.List").equalsIgnoreCase("true")) {
+				Main.getInstance().getConfig().getString("Permissions.FriendPermission"));
+		instance = this;
+		if (!Main.getInstance().getConfig().getString("General.DisableCommand.Friends.List").equalsIgnoreCase("true")) {
 			subCommands
 					.add(new FriendList(
-							(getInstance().getConfig().getStringList("CommandNames.Friends.List")
+							(Main.getInstance().getConfig().getStringList("CommandNames.Friends.List")
 									.toArray(new String[0])),
-							0, getInstance().getMessagesYml().getString("Friends.CommandUsage.List")));
+							0, Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.List")));
 		}
-		if (!getInstance().getConfig().getString("General.DisableCommand.Friends.MSG").equalsIgnoreCase("true")) {
+		if (!Main.getInstance().getConfig().getString("General.DisableCommand.Friends.MSG").equalsIgnoreCase("true")) {
 			subCommands.add(new Message(
-					getInstance().getConfig().getStringList("CommandNames.Friends.Message").toArray(new String[0]),
-					1, getInstance().getMessagesYml().getString("Friends.CommandUsage.MSG")));
+					Main.getInstance().getConfig().getStringList("CommandNames.Friends.Message").toArray(new String[0]),
+					1, Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.MSG")));
 		}
+		String[] acceptCommandNames = Main.getInstance().getConfig().getStringList("CommandNames.Friends.Accept").toArray(new String[0]);
+		subCommands.add(new Accept(acceptCommandNames
+				, 3,
+				Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Accept")));
 		subCommands.add(
-				new Add(getInstance().getConfig().getStringList("CommandNames.Friends.Add").toArray(new String[0]),
-						2, getInstance().getMessagesYml().getString("Friends.CommandUsage.ADD")));
-		subCommands.add(new Accept(
-				getInstance().getConfig().getStringList("CommandNames.Friends.Accept").toArray(new String[0]), 3,
-				getInstance().getMessagesYml().getString("Friends.CommandUsage.Accept")));
+				new Add(Main.getInstance().getConfig().getStringList("CommandNames.Friends.Add").toArray(new String[0]),
+						2, Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.ADD"), acceptCommandNames[0]));
 		subCommands.add(new Deny(
-				getInstance().getConfig().getStringList("CommandNames.Friends.Deny").toArray(new String[0]), 4,
-				getInstance().getMessagesYml().getString("Friends.CommandUsage.Deny")));
+				Main.getInstance().getConfig().getStringList("CommandNames.Friends.Deny").toArray(new String[0]), 4,
+				Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Deny")));
 		subCommands.add(new Remove(
-				getInstance().getConfig().getStringList("CommandNames.Friends.Remove").toArray(new String[0]), 5,
-				getInstance().getMessagesYml().getString("Friends.CommandUsage.Remove")));
-		if (!getInstance().getConfig().getString("General.DisableCommand.Friends.Jump").equalsIgnoreCase("true")) {
+				Main.getInstance().getConfig().getStringList("CommandNames.Friends.Remove").toArray(new String[0]), 5,
+				Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Remove")));
+		if (!Main.getInstance().getConfig().getString("General.DisableCommand.Friends.Jump").equalsIgnoreCase("true")) {
 			subCommands.add(new Jump(
-					getInstance().getConfig().getStringList("CommandNames.Friends.Jump").toArray(new String[0]), 6,
-					getInstance().getMessagesYml().getString("Friends.CommandUsage.Jump")));
+					Main.getInstance().getConfig().getStringList("CommandNames.Friends.Jump").toArray(new String[0]), 6,
+					Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Jump")));
 		}
-		if (!getInstance().getConfig().getString("General.DisableCommand.Friends.Settings")
+		if (!Main.getInstance().getConfig().getString("General.DisableCommand.Friends.Settings")
 				.equalsIgnoreCase("true")) {
 			subCommands.add(new Settings(
-					getInstance().getConfig().getStringList("CommandNames.Friends.Settings")
+					Main.getInstance().getConfig().getStringList("CommandNames.Friends.Settings")
 							.toArray(new String[0]),
-					7, getInstance().getMessagesYml().getString("Friends.CommandUsage.Settings")));
+					7, Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Settings")));
 		}
 		sort();
 	}
@@ -73,11 +75,11 @@ public class Friends extends TopCommand<FriendSubCommand> {
 	protected void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
 		if (args.length == 0) {
 			pPlayer.sendMessage(
-					new TextComponent(getInstance().getMessagesYml().getString("Friends.General.HelpBegin")));
+					new TextComponent(Main.getInstance().getMessagesYml().getString("Friends.General.HelpBegin")));
 			for (FriendSubCommand command : subCommands)
 				pPlayer.sendMessage(new TextComponent(command.HELP));
 			pPlayer.sendMessage(
-					new TextComponent(getInstance().getMessagesYml().getString("Friends.General.HelpEnd")));
+					new TextComponent(Main.getInstance().getMessagesYml().getString("Friends.General.HelpEnd")));
 			return;
 		}
 		for (FriendSubCommand command : subCommands) {
@@ -86,8 +88,11 @@ public class Friends extends TopCommand<FriendSubCommand> {
 				return;
 			}
 		}
-		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
-				+ getInstance().getMessagesYml().getString("Friends.General.CommandNotFound")));
+		pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix()
+				+ Main.getInstance().getMessagesYml().getString("Friends.General.CommandNotFound")));
 	}
 
+	public static Friends getInstance() {
+		return instance;
+	}
 }
