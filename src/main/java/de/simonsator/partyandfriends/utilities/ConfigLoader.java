@@ -66,7 +66,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("CommandNames.Party.Info", "info", "list");
 		set("CommandNames.Party.Leave", "leave", "le");
 		set("CommandNames.Party.Chat", "chat", "message", "msg");
-		set("CommandNames.Party.Leader", "leader");
+		set("CommandNames.Party.Leader", "leader", "lead");
 	}
 
 	@Override
