@@ -27,9 +27,9 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj.getClass().isAssignableFrom(PAFPlayerClass.class))
+		if (obj instanceof PAFPlayer)
 			return ((PAFPlayer) obj).getUniqueId().equals(this.getUniqueId());
-		return super.equals(obj);
+		return false;
 	}
 
 	@Override
