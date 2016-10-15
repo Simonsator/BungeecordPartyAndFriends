@@ -19,6 +19,7 @@ import java.util.Vector;
  * @version 1.0.0
  */
 public class PartyCommand extends TopCommand<PartySubCommand> {
+	private static PartyCommand instance;
 
 	/**
 	 * Initials the object
@@ -27,6 +28,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 	 */
 	public PartyCommand(String[] pCommandNames) {
 		super(pCommandNames, Main.getInstance().getConfig().getString("Permissions.PartyPermission"));
+		instance = this;
 		subCommands.add(
 				new Join(Main.getInstance().getConfig().getStringList("CommandNames.Party.Join").toArray(new String[0]),
 						0, Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Join")));
@@ -95,5 +97,9 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		a.remove(0);
 		args = a.toArray(new String[a.size()]);
 		sc.onCommand(pPlayer, args);
+	}
+
+	public static PartyCommand getInstance() {
+		return instance;
 	}
 }
