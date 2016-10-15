@@ -52,4 +52,7 @@ public interface PAFPlayer {
 	void setSetting(int pSettingsID, int pNewWorth);
 
 	void setLastPlayerWroteFrom(PAFPlayer pLastWroteTo);
+
+	long getLastOnline();
+
 }

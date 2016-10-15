@@ -57,7 +57,7 @@ public class Settings extends FriendSubCommand {
 						+ getInstance().getMessagesYml()
 						.getString("Friends.Command.Settings.ChangeThisSettingWithParty")
 						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-						+ getInstance().getFriendsCommand().getName()  + " " + getCommandName() + " party"
+						+ getInstance().getFriendsCommand().getName() + " " + getCommandName() + " party"
 						+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
 						+ "Click here to change this setting." + "\"}]}}}"));
 	}
@@ -97,6 +97,7 @@ public class Settings extends FriendSubCommand {
 				} else {
 					pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
 							.getMessagesYml().getString("Friends.Command.Settings.NowYouWilBeShownAsOffline")));
+					pPlayer.updateLastOnline();
 				}
 				return true;
 			}

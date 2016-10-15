@@ -32,16 +32,16 @@ public class PlayerDisconnectListener implements Listener {
 	public void onPlayerDisconnect(PlayerDisconnectEvent pEvent) {
 		OnlinePAFPlayer player = getPlayerManager().getPlayer(pEvent.getPlayer());
 		PlayerParty party = PartyManager.getInstance().getParty(player);
-		if (party != null) {
+		if (party != null)
 			party.leaveParty(player);
-		}
-		for (PAFPlayer friend : player.getFriends()) {
+		for (PAFPlayer friend : player.getFriends())
 			friend.sendMessage(
 					new TextComponent(
 							Main.getInstance().getFriendsPrefix() + PLAYER_PATTERN
 									.matcher(Main.getInstance().getMessagesYml()
 											.getString("Friends.General.PlayerIsNowOffline"))
 									.replaceAll(Matcher.quoteReplacement(player.getDisplayName()))));
-		}
+		if (player.getSettingsWorth(3) != 1)
+			player.updateLastOnline();
 	}
 }

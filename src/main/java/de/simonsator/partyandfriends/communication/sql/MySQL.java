@@ -82,6 +82,21 @@ public class MySQL extends SQLCommunication {
 		} finally {
 			close(prepStmt);
 		}
+		addColumnLastOnline();
+	}
+
+	private void addColumnLastOnline() {
+		Connection con = getConnection();
+		PreparedStatement prepStmt = null;
+		try {
+			prepStmt = con.prepareStatement("ALTER TABLE `" + DATABASE + "`.`" + TABLE_PREFIX + "players`" +
+					" ADD COLUMN `last_online` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `player_uuid`;");
+			prepStmt.executeUpdate();
+			prepStmt.close();
+		} catch (SQLException e) {
+		} finally {
+			close(prepStmt);
+		}
 	}
 
 	public int getPlayerID(ProxiedPlayer pPlayer) {
@@ -148,11 +163,12 @@ public class MySQL extends SQLCommunication {
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement(
-					"insert into  `" + DATABASE + "`." + TABLE_PREFIX + "players values (?, ?, ?)",
+					"insert into  `" + DATABASE + "`." + TABLE_PREFIX + "players values (?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			prepStmt.setNull(1, 1);
 			prepStmt.setString(2, pPlayer.getName());
 			prepStmt.setString(3, pPlayer.getUniqueId().toString());
+			prepStmt.setNull(4, 1);
 			prepStmt.executeUpdate();
 			ResultSet rs = prepStmt.getGeneratedKeys();
 			if (rs.next())
@@ -535,5 +551,37 @@ public class MySQL extends SQLCommunication {
 			close(prepStmt);
 		}
 	}
+
+	public Timestamp getLastOnline(int pPlayerID) {
+		Connection con = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			rs = (stmt = con.createStatement()).executeQuery("select last_online from `" + DATABASE + "`."
+					+ TABLE_PREFIX + "players WHERE player_id='" + pPlayerID + "' LIMIT 1");
+			if (rs.next())
+				return rs.getTimestamp("last_online");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, stmt);
+		}
+		return null;
+	}
+
+	public void updateLastOnline(int pPlayerID) {
+		Connection con = getConnection();
+		PreparedStatement prepStmt = null;
+		try {
+			prepStmt = con.prepareStatement("UPDATE `" + DATABASE + "`." + TABLE_PREFIX + "players set last_online=now() WHERE player_id='" + pPlayerID + "' LIMIT 1");
+			prepStmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(prepStmt);
+		}
+
+	}
+
 
 }

@@ -78,4 +78,8 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 			PAFPlayerManagerMySQL.getConnection().updatePlayerName(ID, PLAYER.getName());
 	}
 
+	@Override
+	public void updateLastOnline() {
+		PAFPlayerManagerMySQL.getConnection().updateLastOnline(ID);
+	}
 }

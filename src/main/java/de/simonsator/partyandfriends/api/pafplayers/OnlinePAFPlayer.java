@@ -25,4 +25,6 @@ public interface OnlinePAFPlayer extends PAFPlayer {
 	 * another Bungeecord (RedisBungee) it returns null.
 	 */
 	ProxiedPlayer getPlayer();
+
+	void updateLastOnline();
 }
