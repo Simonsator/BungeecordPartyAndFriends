@@ -139,7 +139,8 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Jump.JoinedTheServer", " &7Now you are on the same server, like the player &e[PLAYER]&7.");
 		set("Friends.Command.Jump.CanNotJump", " &7You cannot jump to this person.");
 		set("Friends.Command.List.NoFriendsAdded", " &7Until now, you did not add friends.");
-		set("Friends.Command.List.FriendsList", " &7These are your friends:");
+		set("Friends.Command.List.FriendsList", " &7These are your friends:LINE_BREAK &7- ");
+		set("Friends.Command.List.OfflineTitle", " &c(offline)&7, last seen at [LAST_ONLINE]");
 		set("Friends.Command.MSG.CanNotWriteToHim", " &7You cannot message this player.");
 		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7No player ever messaged you.");
 		set("Friends.Command.MSG.PlayerAndMessageMissing", " &7You need to give a message.");
@@ -182,7 +183,8 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Jump.CanNotJump", " &7Du kannst nicht zu dieser Person springen.");
 		set("Friends.Command.Jump.AlreadyOnTheServer", " &7Du bist bereits auf diesem Server.");
 		set("Friends.Command.Jump.JoinedTheServer", " &7Du bist jetzt auf dem gleichen Server wie der Spieler &e[PLAYER]&7.");
-		set("Friends.Command.List.FriendsList", " &7Dies sind deine Freunde:");
+		set("Friends.Command.List.FriendsList", " &7Dies sind deine Freunde:LINE_BREAK &7- ");
+		set("Friends.Command.List.OfflineTitle", " &c(offline)&7, zuletzt online [LAST_ONLINE]");
 		set("Friends.Command.List.NoFriendsAdded", " &7Du hast noch keine Freunde hinzugefügt.");
 		set("Friends.Command.Remove.Removed", " &7Du hast den Freund &e[PLAYER] &7entfernt.");
 		set("Friends.Command.Settings.AtTheMomentYouAreNotGoneReceiveFriendRequests",
@@ -274,11 +276,10 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.MSG.SentMessage", " &e[SENDERNAME]&5-> &e[PLAYER]&7:[CONTENT]");
 		set("Friends.Command.Settings.SplitLine",
 				"&8&m-----------------------------------------------");
-		set("Friends.Command.List.OnlineTitle", "(online)");
+		set("Friends.Command.List.OnlineTitle", " &a(online)");
 		set("Friends.Command.List.OnlineColor", "&a");
-		set("Friends.Command.List.OfflineTitle", "(offline)");
 		set("Friends.Command.List.OfflineColor", "&c");
-		set("Friends.Command.List.PlayerSplit", "&7, ");
+		set("Friends.Command.List.PlayerSplit", "LINE_BREAK &7- ");
 		set("Friends.Command.MSG.ColorOfMessage", " &7");
 	}
 

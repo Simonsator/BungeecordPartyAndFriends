@@ -3,10 +3,14 @@ package de.simonsator.partyandfriends.friends.subcommands;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
@@ -18,8 +22,12 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
  * @version 1.0.0
  */
 public class FriendList extends FriendSubCommand {
+	private SimpleDateFormat dateFormat = new SimpleDateFormat(Main.getInstance().getConfig().getString("General.Time.Format"),
+			Locale.forLanguageTag(Main.getInstance().getConfig().getString("General.Time.LanguageTag")));
+
 	public FriendList(String[] pCommands, int pPriority, String pHelp) {
 		super(pCommands, pPriority, pHelp);
+		dateFormat.setTimeZone(TimeZone.getTimeZone(Main.getInstance().getConfig().getString("General.Time.TimeZone")));
 	}
 
 	@Override
@@ -38,7 +46,9 @@ public class FriendList extends FriendSubCommand {
 			String additive;
 			String color;
 			if (!pFriends.get(i).isOnline() || pFriends.get(i).getSettingsWorth(3) == 1) {
-				additive = getInstance().getMessagesYml().getString("Friends.Command.List.OfflineTitle");
+				additive = PatterCollection.LAST_ONLINE_PATTERN.matcher(
+						getInstance().getMessagesYml().getString("Friends.Command.List.OfflineTitle")).replaceAll(Matcher.quoteReplacement(
+						dateFormat.format(pFriends.get(i).getLastOnline())));
 				color = getInstance().getMessagesYml().getString("Friends.Command.List.OfflineColor");
 			} else {
 				additive = PatterCollection.SERVER_ON.matcher(getInstance().getMessagesYml().getString("Friends.Command.List.OnlineTitle")).

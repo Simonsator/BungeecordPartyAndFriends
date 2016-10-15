@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.utilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.TimeZone;
 
 /**
  * This class loads the config
@@ -28,6 +29,9 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("MySQL.Database", "friends");
 		set("MySQL.TablePrefix", "fr_");
 		set("General.Language", "english");
+		set("General.Time.LanguageTag", "US");
+		set("General.Time.TimeZone", TimeZone.getDefault().getID());
+		set("General.Time.Format", "dd/MM/yyyy HH:mm:ss");
 		set("General.UseOwnLanguageFile", "false");
 		set("General.OfflineServer", "false");
 		set("General.PartyDoNotJoinTheseServers", "lobby", "lobby1", "lobby2");
