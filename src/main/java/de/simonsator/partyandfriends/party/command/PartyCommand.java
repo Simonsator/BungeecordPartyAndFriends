@@ -26,8 +26,8 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 	 *
 	 * @param pCommandNames The alias for the command
 	 */
-	public PartyCommand(String[] pCommandNames) {
-		super(pCommandNames, Main.getInstance().getConfig().getString("Permissions.PartyPermission"));
+	public PartyCommand(String[] pCommandNames, String pPrefix) {
+		super(pCommandNames, Main.getInstance().getConfig().getString("Permissions.PartyPermission"), pPrefix);
 		instance = this;
 		subCommands.add(
 				new Join(Main.getInstance().getConfig().getStringList("CommandNames.Party.Join").toArray(new String[0]),
