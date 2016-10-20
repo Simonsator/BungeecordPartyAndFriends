@@ -194,5 +194,11 @@ public class Main extends Plugin {
 	public String getPartyPrefix() {
 		return partyPrefix;
 	}
-
+	
+	public void reload() {
+			ProxyServer.getInstance().getPluginManager().unregisterCommands(this);
+			ProxyServer.getInstance().getPluginManager().unregisterListeners(this);
+			onDisable();
+			onEnable();
+		}
 }
