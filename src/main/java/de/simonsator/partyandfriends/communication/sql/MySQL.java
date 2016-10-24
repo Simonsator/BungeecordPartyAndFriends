@@ -83,6 +83,7 @@ public class MySQL extends SQLCommunication {
 			close(prepStmt);
 		}
 		addColumnLastOnline();
+		fixLastOnline();
 	}
 
 	private void addColumnLastOnline() {
@@ -96,6 +97,22 @@ public class MySQL extends SQLCommunication {
 		} catch (SQLException e) {
 		} finally {
 			close(prepStmt);
+		}
+	}
+
+	private void fixLastOnline() {
+		Connection con = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			rs = (stmt = con.createStatement()).executeQuery("select player_id from `" + DATABASE + "`." + TABLE_PREFIX
+					+ "players ");
+			while (rs.next())
+				updateLastOnline(rs.getInt("player_id"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, stmt);
 		}
 	}
 
