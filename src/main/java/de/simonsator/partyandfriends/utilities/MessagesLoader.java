@@ -80,8 +80,8 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.General.NoFriendGiven", " &7You need to specify a friend.");
 		set("Friends.General.NoPlayerGiven", " &7You need to specify a player.");
 		set("Friends.General.TooManyArguments", " &7Too many arguments.");
-		set("Friends.General.PlayerIsNowOffline", " &7Your friend &e[PLAYER] is now &coffline.");
-		set("Friends.General.PlayerIsNowOnline", " &7The friend &e[PLAYER] &7is now &aonline.");
+		set("Friends.General.PlayerIsNowOffline", " &7Your friend &e[PLAYER] is &coffline now.");
+		set("Friends.General.PlayerIsNowOnline", " &7The friend &e[PLAYER] &7is &aonline now.");
 		set("Friends.General.RequestInfoOnJoin", " &7You &7have &7friend &7requests &7from: [FRIENDREQUESTS]");
 		set("Friends.General.DoesNotExist", " &7The given player &7does not &7exist");
 		set("Friends.General.GivenPlayerEqualsSender", " &7You cannot specify yourself as player argument.");
@@ -141,6 +141,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.List.NoFriendsAdded", " &7Until now, you did not add friends.");
 		set("Friends.Command.List.FriendsList", " &7These are your friends:LINE_BREAK &7- ");
 		set("Friends.Command.List.OfflineTitle", " &c(offline)&7, last seen at [LAST_ONLINE]");
+		set("Friends.Command.List.OnlineTitle", " &a(online)&7, currently playing on [SERVER_ON]");
 		set("Friends.Command.MSG.CanNotWriteToHim", " &7You cannot message this player.");
 		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7No player ever messaged you.");
 		set("Friends.Command.MSG.PlayerAndMessageMissing", " &7You need to give a message.");
@@ -185,6 +186,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Jump.JoinedTheServer", " &7Du bist jetzt auf dem gleichen Server wie der Spieler &e[PLAYER]&7.");
 		set("Friends.Command.List.FriendsList", " &7Dies sind deine Freunde:LINE_BREAK &7- ");
 		set("Friends.Command.List.OfflineTitle", " &c(offline)&7, zuletzt online [LAST_ONLINE]");
+		set("Friends.Command.List.OnlineTitle", " &a(online)&7, spielt gerade auf [SERVER_ON]");
 		set("Friends.Command.List.NoFriendsAdded", " &7Du hast noch keine Freunde hinzugefügt.");
 		set("Friends.Command.Remove.Removed", " &7Du hast den Freund &e[PLAYER] &7entfernt.");
 		set("Friends.Command.Settings.AtTheMomentYouAreNotGoneReceiveFriendRequests",
@@ -276,7 +278,6 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.MSG.SentMessage", " &e[SENDERNAME]&5-> &e[PLAYER]&7:[CONTENT]");
 		set("Friends.Command.Settings.SplitLine",
 				"&8&m-----------------------------------------------");
-		set("Friends.Command.List.OnlineTitle", " &a(online)");
 		set("Friends.Command.List.OnlineColor", "&a");
 		set("Friends.Command.List.OfflineColor", "&c");
 		set("Friends.Command.List.PlayerSplit", "LINE_BREAK &7- ");
