@@ -242,6 +242,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.Invite.InvitationTimedOutInvited", "&5Die Einladung in die Party von &6[PLAYER] &5ist abgelaufen!");
 		set("Party.Command.Invite.InvitationTimedOutLeader", "&5Der Spieler &6[PLAYER] &5hat die Einladung nicht angenommen!");
 		set("Party.Command.Join.PlayerHasNoParty", "&cDieser Spieler hat keine Party.");
+		set("Party.Command.General.ErrorNoParty", "&cDu bist in keiner Party.");
 		set("Party.Command.Join.AlreadyInAPartyError", "&cDu bist bereits in einer Party. Nutze &6/party leave &cum diese Party zu verlassen.");
 		set("Party.Command.Join.PlayerHasJoined", "&bDer Spieler &6[PLAYER] &bist der Party beigetreten.");
 		set("Party.Command.Join.ErrorNoInvitation", "&cDu kannst der Party nicht beitreten.");
