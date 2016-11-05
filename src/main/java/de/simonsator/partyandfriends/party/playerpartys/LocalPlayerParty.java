@@ -60,7 +60,7 @@ public class LocalPlayerParty extends PlayerParty {
 		PAFPlayer pafPlayer = getPlayerManager().getPlayer(this.leader);
 		if (!(pafPlayer instanceof OnlinePAFPlayer))
 			return null;
-		return (OnlinePAFPlayer) getPlayerManager().getPlayer(this.leader);
+		return (OnlinePAFPlayer) pafPlayer;
 	}
 
 	/**
