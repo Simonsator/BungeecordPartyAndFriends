@@ -1,6 +1,5 @@
 package de.simonsator.partyandfriends.communication.sql;
 
-import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.*;
@@ -8,7 +7,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
 /**
  * @author Simonsator
@@ -83,7 +81,6 @@ public class MySQL extends SQLCommunication {
 		} finally {
 			close(prepStmt);
 		}
-		importOfflineMessages();
 		addColumnLastOnline();
 		fixLastOnline();
 	}
@@ -115,25 +112,6 @@ public class MySQL extends SQLCommunication {
 			e.printStackTrace();
 		} finally {
 			close(rs, stmt);
-		}
-	}
-
-	/**
-	 * Imports the offlineMessages DATABASE
-	 */
-	private void importOfflineMessages() {
-		Connection con = getConnection();
-		PreparedStatement prepStmt = null;
-		try {
-			prepStmt = con.prepareStatement(
-					"CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_PREFIX + "friends_messages` ("
-							+ "`Message` varchar(99) NOT NULL COMMENT ''," + "`Sender` INT(8) NOT NULL COMMENT '',"
-							+ "`Reciver` INT(8) NOT NULL COMMENT ''," + "`Date` int(10) NULL);");
-			prepStmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(prepStmt);
 		}
 	}
 
@@ -500,33 +478,6 @@ public class MySQL extends SQLCommunication {
 			prepStmt = con.prepareStatement("DELETE FROM  `" + DATABASE + "`." + TABLE_PREFIX
 					+ "settings WHERE player_id = '" + pPlayerID + "' AND settings_id='" + pSettingsID + "' Limit 1");
 			prepStmt.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(prepStmt);
-		}
-	}
-
-	/**
-	 * Saves an offline message in MySQL
-	 *
-	 * @param idSender   Sender of the message
-	 * @param idReceiver Receiver of the message
-	 * @param pMessage   The message, that should be send
-	 */
-	public void offlineMessage(int idSender, int idReceiver, String pMessage) {
-		Connection con = getConnection();
-		PreparedStatement prepStmt = null;
-		int time = (int) (System.currentTimeMillis() / 1000L);
-		try {
-			prepStmt = con.prepareStatement(
-					"insert into  " + this.DATABASE + "." + TABLE_PREFIX + "friends_messages	 values (?, ?, ?, ?)");
-			prepStmt.setInt(2, idSender);
-			prepStmt.setInt(3, idReceiver);
-			prepStmt.setString(1, pMessage);
-			prepStmt.setInt(4, time);
-			prepStmt.executeUpdate();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
