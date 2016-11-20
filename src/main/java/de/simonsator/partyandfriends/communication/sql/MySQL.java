@@ -534,34 +534,6 @@ public class MySQL extends SQLCommunication {
 		}
 	}
 
-	/**
-	 * Get and delete offline messages
-	 *
-	 * @param player The player who receive the offline messages
-	 * @return Returns the offline messages and the senders
-	 */
-	public ArrayList<OfflineMessage> getOfflineMessages(ProxiedPlayer player) {
-		Connection con = getConnection();
-		Statement stmt = null;
-		ResultSet rs = null;
-		PreparedStatement prepStmt = null;
-		ArrayList<OfflineMessage> offlineMessages = new ArrayList<>();
-		try {
-			rs = (stmt = con.createStatement()).executeQuery("SELECT Message, Sender FROM " + DATABASE + "."
-					+ TABLE_PREFIX + "friends_messages WHERE Reciver='" + getPlayerID(player.getName()) + "'");
-			while (rs.next())
-				offlineMessages.add(new OfflineMessage(rs.getString(1), ((PAFPlayerManagerMySQL) getPlayerManager()).getPlayer(rs.getInt(2))));
-			prepStmt = con.prepareStatement("DELETE FROM " + DATABASE + "." + TABLE_PREFIX
-					+ "friends_messages WHERE Reciver = '" + getPlayerID(player.getName()) + "' Limit 1");
-			prepStmt.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(rs, stmt, prepStmt);
-		}
-		return offlineMessages;
-	}
-
 	public boolean isAFriendOf(int pPlayerID1, int pPlayerID2) {
 		Connection con = getConnection();
 		Statement stmt = null;
