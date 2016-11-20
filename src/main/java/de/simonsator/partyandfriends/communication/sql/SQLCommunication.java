@@ -15,9 +15,9 @@ public abstract class SQLCommunication {
 	 * The URL of the SQL server
 	 */
 	private final String URL;
-	private Connection connection;
 	private final String USER_NAME;
 	private final String PASSWORD;
+	private Connection connection;
 
 	protected SQLCommunication(String pDatabase, String pURL, String pUserName, String pPassword) {
 		this.DATABASE = pDatabase;

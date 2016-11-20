@@ -1,7 +1,7 @@
 package de.simonsator.partyandfriends.api.party;
 
-import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.main.Main;
 
 /**
  * The APIs for the party system of Party and Friends

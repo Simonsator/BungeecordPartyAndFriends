@@ -1,9 +1,9 @@
 package de.simonsator.partyandfriends.party.command;
 
 import de.simonsator.partyandfriends.api.TopCommand;
-import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
+import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

@@ -22,6 +22,10 @@ public class PAFPlayerManagerMySQL extends PAFPlayerManager implements Deactivat
 		Disabler.getInstance().registerDeactivated(this);
 	}
 
+	public static MySQL getConnection() {
+		return connection;
+	}
+
 	public PAFPlayer getPlayer(String pPlayer) {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(pPlayer);
 		if (player == null)
@@ -44,10 +48,6 @@ public class PAFPlayerManagerMySQL extends PAFPlayerManager implements Deactivat
 
 	public PAFPlayer getPlayer(int pPlayerID) {
 		return getPlayer(getConnection().getName(pPlayerID));
-	}
-
-	public static MySQL getConnection() {
-		return connection;
 	}
 
 	@Override

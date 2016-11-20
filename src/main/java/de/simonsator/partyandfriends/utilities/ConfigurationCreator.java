@@ -16,8 +16,8 @@ import java.util.LinkedHashMap;
  * @version 1.0.0 on 22.07.16.
  */
 public abstract class ConfigurationCreator {
-	protected Configuration configuration = new Configuration();
 	protected final File FILE;
+	protected Configuration configuration = new Configuration();
 
 	protected ConfigurationCreator(File file) {
 		this.FILE = file;
@@ -54,7 +54,7 @@ public abstract class ConfigurationCreator {
 	protected void process(Configuration pMessagesYML) {
 		for (String key : pMessagesYML.getKeys()) {
 			Object entry = pMessagesYML.get(key);
-			if (entry instanceof LinkedHashMap|entry instanceof Configuration)
+			if (entry instanceof LinkedHashMap | entry instanceof Configuration)
 				process(pMessagesYML.getSection(key));
 			else if (entry instanceof String) {
 				String stringEntry = (String) entry;

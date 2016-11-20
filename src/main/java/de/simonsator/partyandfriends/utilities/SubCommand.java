@@ -7,10 +7,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 import java.util.ArrayList;
 
 public abstract class SubCommand implements Comparable<SubCommand> {
-	private final ArrayList<String> commands = new ArrayList<>();
 	public final TextComponent HELP;
-	private final int PRIORITY;
 	protected final String PREFIX;
+	private final ArrayList<String> commands = new ArrayList<>();
+	private final int PRIORITY;
 
 	protected SubCommand(String[] pCommands, int pPriority, TextComponent pHelp, String pPrefix) {
 		HELP = pHelp;

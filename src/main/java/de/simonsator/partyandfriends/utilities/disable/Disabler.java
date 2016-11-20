@@ -11,6 +11,10 @@ public class Disabler {
 	private static Disabler instance = null;
 	private final List<Deactivated> deactivateds = new ArrayList<>();
 
+	public static Disabler getInstance() {
+		if (instance != null) return instance;
+		return instance = new Disabler();
+	}
 
 	public void disableAll() {
 		for (Deactivated toDeactivated : deactivateds)
@@ -19,11 +23,6 @@ public class Disabler {
 
 	public void registerDeactivated(Deactivated pDeactivated) {
 		deactivateds.add(pDeactivated);
-	}
-
-	public static Disabler getInstance() {
-		if (instance != null) return instance;
-		return instance = new Disabler();
 	}
 
 }

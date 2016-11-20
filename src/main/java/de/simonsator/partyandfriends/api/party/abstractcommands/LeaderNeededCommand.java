@@ -1,8 +1,8 @@
 package de.simonsator.partyandfriends.api.party.abstractcommands;
 
-import de.simonsator.partyandfriends.api.party.PartyAPI;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.party.PartyAPI;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import net.md_5.bungee.api.chat.TextComponent;
 

@@ -17,10 +17,6 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.NEW_LEADE
 
 public class LocalPlayerParty extends PlayerParty {
 	/**
-	 * The leader of the party
-	 */
-	private UUID leader;
-	/**
 	 * The "normal" players which are in the party
 	 */
 	private final List<UUID> players = new ArrayList<>();
@@ -28,6 +24,10 @@ public class LocalPlayerParty extends PlayerParty {
 	 * The players who are invited into this party
 	 */
 	private final List<UUID> invited = new ArrayList<>();
+	/**
+	 * The leader of the party
+	 */
+	private UUID leader;
 
 	/**
 	 * Initials a new party

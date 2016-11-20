@@ -2,8 +2,8 @@ package de.simonsator.partyandfriends.friends.commands;
 
 import de.simonsator.partyandfriends.api.TopCommand;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
-import de.simonsator.partyandfriends.friends.subcommands.*;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.friends.subcommands.*;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -65,6 +65,10 @@ public class Friends extends TopCommand<FriendSubCommand> {
 		sort();
 	}
 
+	public static Friends getInstance() {
+		return instance;
+	}
+
 	/**
 	 * Executed on /friend
 	 *
@@ -90,9 +94,5 @@ public class Friends extends TopCommand<FriendSubCommand> {
 		}
 		pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix()
 				+ Main.getInstance().getMessagesYml().getString("Friends.General.CommandNotFound")));
-	}
-
-	public static Friends getInstance() {
-		return instance;
 	}
 }

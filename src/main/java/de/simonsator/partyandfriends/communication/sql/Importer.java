@@ -30,6 +30,16 @@ class Importer extends SQLCommunication {
 		dropOldTable();
 	}
 
+	private static int[] stringToIntegerArray(String string) {
+		StringTokenizer st = new StringTokenizer(string, "|");
+		int stLength = st.countTokens();
+		int[] stArray = new int[stLength];
+		for (int i = 0; i < stLength; i++) {
+			stArray[i] = Integer.parseInt(st.nextToken());
+		}
+		return stArray;
+	}
+
 	private void dropOldTable() {
 		Connection con = getConnection();
 		Statement stmt = null;
@@ -293,15 +303,5 @@ class Importer extends SQLCommunication {
 			UUID = pUUID;
 			ID = pID;
 		}
-	}
-
-	private static int[] stringToIntegerArray(String string) {
-		StringTokenizer st = new StringTokenizer(string, "|");
-		int stLength = st.countTokens();
-		int[] stArray = new int[stLength];
-		for (int i = 0; i < stLength; i++) {
-			stArray[i] = Integer.parseInt(st.nextToken());
-		}
-		return stArray;
 	}
 }

@@ -1,9 +1,9 @@
 package de.simonsator.partyandfriends.party.subcommand;
 
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PartyAPI;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
-import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 
 /**
  * The /party chat command

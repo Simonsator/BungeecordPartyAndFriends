@@ -2,8 +2,8 @@ package de.simonsator.partyandfriends.party.partymanager;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PartyManager;
-import de.simonsator.partyandfriends.party.playerpartys.LocalPlayerParty;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
+import de.simonsator.partyandfriends.party.playerpartys.LocalPlayerParty;
 
 import java.util.HashMap;
 import java.util.UUID;

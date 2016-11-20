@@ -1,6 +1,5 @@
 package de.simonsator.partyandfriends.main;
 
-import com.google.gson.Gson;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
@@ -140,24 +139,24 @@ public class Main extends Plugin {
 	/**
 	 * Registers the commands
 	 */
-	 private void registerCommands() {
- 		partyCommand = new PartyCommand(
- 				(getConfig().getStringList("CommandNames.Party.TopCommands.Party").toArray(new String[0])), partyPrefix);
- 		ProxyServer.getInstance().getPluginManager().registerCommand(this, getPartyCommand());
- 		partyChatCommand = new PartyChat(
- 				(getConfig().getStringList("CommandNames.Party.TopCommands.PartyChat").toArray(new String[0])));
- 		if (!getConfig().getString("General.DisableCommandP").equals("true"))
- 			ProxyServer.getInstance().getPluginManager().registerCommand(this, partyChatCommand);
- 		friendCommand = new Friends(getConfig().getStringList("CommandNames.Friends.TopCommands.Friend"), friendsPrefix);
- 		getProxy().getPluginManager().registerCommand(this, friendCommand);
- 		friendsMSGCommand = new MSG(
- 				(getConfig().getStringList("CommandNames.Friends.TopCommands.MSG").toArray(new String[0])));
- 		if (!getConfig().getString("General.DisableMsg").equalsIgnoreCase("true"))
- 			getProxy().getPluginManager().registerCommand(this, friendsMSGCommand);
- 		if (!getConfig().getString("General.DisableReply").equalsIgnoreCase("true"))
- 			getProxy().getPluginManager().registerCommand(this, new Reply(
- 					(getConfig().getStringList("CommandNames.Friends.TopCommands.Reply").toArray(new String[0]))));
- 	}
+	private void registerCommands() {
+		partyCommand = new PartyCommand(
+				(getConfig().getStringList("CommandNames.Party.TopCommands.Party").toArray(new String[0])), partyPrefix);
+		ProxyServer.getInstance().getPluginManager().registerCommand(this, getPartyCommand());
+		partyChatCommand = new PartyChat(
+				(getConfig().getStringList("CommandNames.Party.TopCommands.PartyChat").toArray(new String[0])));
+		if (!getConfig().getString("General.DisableCommandP").equals("true"))
+			ProxyServer.getInstance().getPluginManager().registerCommand(this, partyChatCommand);
+		friendCommand = new Friends(getConfig().getStringList("CommandNames.Friends.TopCommands.Friend"), friendsPrefix);
+		getProxy().getPluginManager().registerCommand(this, friendCommand);
+		friendsMSGCommand = new MSG(
+				(getConfig().getStringList("CommandNames.Friends.TopCommands.MSG").toArray(new String[0])));
+		if (!getConfig().getString("General.DisableMsg").equalsIgnoreCase("true"))
+			getProxy().getPluginManager().registerCommand(this, friendsMSGCommand);
+		if (!getConfig().getString("General.DisableReply").equalsIgnoreCase("true"))
+			getProxy().getPluginManager().registerCommand(this, new Reply(
+					(getConfig().getStringList("CommandNames.Friends.TopCommands.Reply").toArray(new String[0]))));
+	}
 
 	public PartyChat getPartyChatCommand() {
 		return partyChatCommand;
@@ -196,9 +195,9 @@ public class Main extends Plugin {
 	}
 
 	public void reload() {
-			ProxyServer.getInstance().getPluginManager().unregisterCommands(this);
-			ProxyServer.getInstance().getPluginManager().unregisterListeners(this);
-			onDisable();
-			onEnable();
-		}
+		ProxyServer.getInstance().getPluginManager().unregisterCommands(this);
+		ProxyServer.getInstance().getPluginManager().unregisterListeners(this);
+		onDisable();
+		onEnable();
+	}
 }

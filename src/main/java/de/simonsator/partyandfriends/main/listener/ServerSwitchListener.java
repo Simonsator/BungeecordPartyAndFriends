@@ -1,8 +1,8 @@
 package de.simonsator.partyandfriends.main.listener;
 
-import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
+import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
