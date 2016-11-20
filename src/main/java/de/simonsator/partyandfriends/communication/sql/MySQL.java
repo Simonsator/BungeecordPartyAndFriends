@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.communication.sql;
 
+import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.*;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
+import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
 /**
  * @author Simonsator
@@ -27,7 +29,6 @@ public class MySQL extends SQLCommunication {
 		importDatabase();
 		new Importer(pMySQLData.DATABASE, "jdbc:mysql://" + pMySQLData.HOST + ":" + pMySQLData.PORT + "/?user="
 				+ pMySQLData.USERNAME + "&password=" + pMySQLData.PASSWORD, this, pMySQLData.USERNAME, pMySQLData.PASSWORD);
-		closeConnection();
 	}
 
 	public UUID getUUID(int pPlayerID) {
@@ -82,6 +83,7 @@ public class MySQL extends SQLCommunication {
 		} finally {
 			close(prepStmt);
 		}
+		importOfflineMessages();
 		addColumnLastOnline();
 		fixLastOnline();
 	}
@@ -116,8 +118,27 @@ public class MySQL extends SQLCommunication {
 		}
 	}
 
+	/**
+	 * Imports the offlineMessages DATABASE
+	 */
+	private void importOfflineMessages() {
+		Connection con = getConnection();
+		PreparedStatement prepStmt = null;
+		try {
+			prepStmt = con.prepareStatement(
+					"CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_PREFIX + "friends_messages` ("
+							+ "`Message` varchar(99) NOT NULL COMMENT ''," + "`Sender` INT(8) NOT NULL COMMENT '',"
+							+ "`Reciver` INT(8) NOT NULL COMMENT ''," + "`Date` int(10) NULL);");
+			prepStmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(prepStmt);
+		}
+	}
+
 	public int getPlayerID(ProxiedPlayer pPlayer) {
-		if (getInstance().getConfig().getString("General.OfflineServer").equalsIgnoreCase("true"))
+		if (getInstance().getConfig().getBoolean("General.OfflineServer"))
 			return getPlayerID(pPlayer.getName());
 		return getPlayerID(pPlayer.getUniqueId());
 	}
@@ -486,6 +507,61 @@ public class MySQL extends SQLCommunication {
 		}
 	}
 
+	/**
+	 * Saves an offline message in MySQL
+	 *
+	 * @param idSender   Sender of the message
+	 * @param idReceiver Receiver of the message
+	 * @param pMessage   The message, that should be send
+	 */
+	public void offlineMessage(int idSender, int idReceiver, String pMessage) {
+		Connection con = getConnection();
+		PreparedStatement prepStmt = null;
+		int time = (int) (System.currentTimeMillis() / 1000L);
+		try {
+			prepStmt = con.prepareStatement(
+					"insert into  " + this.DATABASE + "." + TABLE_PREFIX + "friends_messages	 values (?, ?, ?, ?)");
+			prepStmt.setInt(2, idSender);
+			prepStmt.setInt(3, idReceiver);
+			prepStmt.setString(1, pMessage);
+			prepStmt.setInt(4, time);
+			prepStmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(prepStmt);
+		}
+	}
+
+	/**
+	 * Get and delete offline messages
+	 *
+	 * @param player The player who receive the offline messages
+	 * @return Returns the offline messages and the senders
+	 */
+	public ArrayList<OfflineMessage> getOfflineMessages(ProxiedPlayer player) {
+		Connection con = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		PreparedStatement prepStmt = null;
+		ArrayList<OfflineMessage> offlineMessages = new ArrayList<>();
+		try {
+			rs = (stmt = con.createStatement()).executeQuery("SELECT Message, Sender FROM " + DATABASE + "."
+					+ TABLE_PREFIX + "friends_messages WHERE Reciver='" + getPlayerID(player.getName()) + "'");
+			while (rs.next())
+				offlineMessages.add(new OfflineMessage(rs.getString(1), ((PAFPlayerManagerMySQL) getPlayerManager()).getPlayer(rs.getInt(2))));
+			prepStmt = con.prepareStatement("DELETE FROM " + DATABASE + "." + TABLE_PREFIX
+					+ "friends_messages WHERE Reciver = '" + getPlayerID(player.getName()) + "' Limit 1");
+			prepStmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, stmt, prepStmt);
+		}
+		return offlineMessages;
+	}
+
 	public boolean isAFriendOf(int pPlayerID1, int pPlayerID2) {
 		Connection con = getConnection();
 		Statement stmt = null;
@@ -597,8 +673,5 @@ public class MySQL extends SQLCommunication {
 		} finally {
 			close(prepStmt);
 		}
-
 	}
-
-
 }

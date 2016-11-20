@@ -49,7 +49,7 @@ public abstract class SubCommand implements Comparable<SubCommand> {
 		return ((Integer) PRIORITY).compareTo(o.PRIORITY);
 	}
 
-	protected String getCommandName() {
+	public String getCommandName() {
 		return commands.get(0);
 	}
 }

@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.communication.sql;
 
 import java.sql.*;
+import java.util.Properties;
 
 /**
  * @author simonsator
@@ -74,6 +75,9 @@ public abstract class SQLCommunication {
 		try {
 			closeConnection();
 			Class.forName("com.mysql.jdbc.Driver");
+			Properties properties = new Properties();
+			properties.setProperty("user", USER_NAME);
+			properties.setProperty("password", PASSWORD);
 			return DriverManager.getConnection(URL, USER_NAME, PASSWORD);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();

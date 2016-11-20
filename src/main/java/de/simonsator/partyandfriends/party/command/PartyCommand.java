@@ -27,37 +27,33 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 	 * @param pCommandNames The alias for the command
 	 */
 	public PartyCommand(String[] pCommandNames, String pPrefix) {
-		super(pCommandNames, Main.getInstance().getConfig().getString("Permissions.PartyPermission"), pPrefix);
+		super(pCommandNames, Main.getInstance().getConfig().getString("Commands.Party.TopCommands.Party.Permissions"), pPrefix);
 		instance = this;
 		subCommands.add(
-				new Join(Main.getInstance().getConfig().getStringList("CommandNames.Party.Join").toArray(new String[0]),
+				new Join(Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Join.Names").toArray(new String[0]),
 						0, Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Join")));
 		subCommands.add(new Invite(
-				Main.getInstance().getConfig().getStringList("CommandNames.Party.Invite").toArray(new String[0]), 1,
+				Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Invite.Names").toArray(new String[0]), 1,
 				Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Invite")));
-		if (!Main.getInstance().getConfig().getString("General.DisableCommand.Party.Kick").equalsIgnoreCase("true")) {
+		if (!Main.getInstance().getConfig().getBoolean("Commands.Party.SubCommands.Kick.Disabled"))
 			subCommands.add(new Kick(
-					Main.getInstance().getConfig().getStringList("CommandNames.Party.Kick").toArray(new String[0]), 6,
+					Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Kick.Names").toArray(new String[0]), 6,
 					Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Kick")));
-		}
-		if (!Main.getInstance().getConfig().getString("General.DisableCommand.Party.Info").equalsIgnoreCase("true")) {
+		if (!Main.getInstance().getConfig().getBoolean("Commands.Party.SubCommands.Info.Disabled"))
 			subCommands.add(new Info(
-					Main.getInstance().getConfig().getStringList("CommandNames.Party.Info").toArray(new String[0]), 3,
+					Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Info.Names").toArray(new String[0]), 3,
 					Main.getInstance().getMessagesYml().getString("Party.CommandUsage.List")));
-		}
 		subCommands.add(new Leave(
-				Main.getInstance().getConfig().getStringList("CommandNames.Party.Leave").toArray(new String[0]), 5,
+				Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Leave.Names").toArray(new String[0]), 5,
 				Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Leave")));
-		if (!Main.getInstance().getConfig().getString("General.DisableCommand.Party.Chat").equalsIgnoreCase("true")) {
+		if (!Main.getInstance().getConfig().getBoolean("Commands.Party.SubCommands.Chat.Disabled"))
 			subCommands.add(new Chat(
-					Main.getInstance().getConfig().getStringList("CommandNames.Party.Chat").toArray(new String[0]), 4,
+					Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Chat.Names").toArray(new String[0]), 4,
 					Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Chat")));
-		}
-		if (!Main.getInstance().getConfig().getString("General.DisableCommand.Party.Leader").equalsIgnoreCase("true")) {
+		if (!Main.getInstance().getConfig().getBoolean("Commands.Party.SubCommands.Leader.Disabled"))
 			subCommands.add(new Leader(
-					Main.getInstance().getConfig().getStringList("CommandNames.Party.Leader").toArray(new String[0]), 7,
+					Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Leader.Names").toArray(new String[0]), 7,
 					Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Leader")));
-		}
 	}
 
 	public static PartyCommand getInstance() {

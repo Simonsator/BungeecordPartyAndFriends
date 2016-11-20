@@ -3,6 +3,7 @@ package de.simonsator.partyandfriends.api.party;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
+import de.simonsator.partyandfriends.party.subcommand.Join;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -22,6 +23,7 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PA
  * @version 2.0.0
  */
 public abstract class PlayerParty {
+	private final String JOIN_COMMAND_NAME = " " + Main.getInstance().getPartyCommand().getSubCommand(Join.class).getCommandName() + " ";
 
 	/**
 	 * Returns true if the given player is the leader of this party, and it will
@@ -32,7 +34,9 @@ public abstract class PlayerParty {
 	 * and it will returns false if he is not the leader, of this party
 	 */
 	public boolean isLeader(OnlinePAFPlayer player) {
-		return this.getLeader().getUniqueId().equals(player.getUniqueId());
+		if (getLeader() != null && player != null)
+			return this.getLeader().getUniqueId().equals(player.getUniqueId());
+		return false;
 	}
 
 	/**
@@ -142,7 +146,7 @@ public abstract class PlayerParty {
 		pPlayer.sendPacket(new Chat("{\"text\":\"" + Main.getInstance().getPartyPrefix()
 				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE")).replaceAll(Matcher.quoteReplacement(lLeader.getName()))
 				+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-				+ Main.getInstance().getPartyCommand().getName() + " join " + lLeader.getName()
+				+ Main.getInstance().getPartyCommand().getName() + JOIN_COMMAND_NAME + lLeader.getName()
 				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
 				+ Main.getInstance().getMessagesYml().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER")
 				+ "\"}]}}}"));
