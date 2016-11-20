@@ -1,10 +1,12 @@
 package de.simonsator.partyandfriends.party.command;
 
 import de.simonsator.partyandfriends.api.TopCommand;
+import de.simonsator.partyandfriends.api.events.message.PartyMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
@@ -51,9 +53,10 @@ public class PartyChat extends Command {
 		if (!messageGiven(pPlayer, args))
 			return;
 		String text = "";
-		for (String arg : args) {
-			text += " " + Main.getInstance().getMessagesYml().getString("Party.Command.Chat.ContentColor") + arg;
-		}
+		for (String arg : args)
+			text += " " + arg;
+		ProxyServer.getInstance().getPluginManager().callEvent(new PartyMessageEvent(pPlayer, text, party));
+		text = text.replaceAll(" ", Main.getInstance().getMessagesYml().getString("Party.Command.Chat.ContentColor"));
 		party.sendMessage(new TextComponent(
 				Main.getInstance().getMessagesYml().getString("Party.Command.Chat.Prefix") + MESSAGE_CONTENT_PATTERN
 						.matcher(SENDER_NAME_PATTERN

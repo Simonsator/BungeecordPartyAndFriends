@@ -1,9 +1,11 @@
 package de.simonsator.partyandfriends.friends.commands;
 
 import de.simonsator.partyandfriends.api.TopCommand;
+import de.simonsator.partyandfriends.api.events.message.FriendOnlineMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
@@ -83,6 +85,7 @@ public class MSG extends Command {
 			return;
 		if (isOffline(pPlayer, pWrittenTo))
 			return;
+		ProxyServer.getInstance().getPluginManager().callEvent(new FriendOnlineMessageEvent((OnlinePAFPlayer) pWrittenTo, pPlayer, toMessageNoColor(args, n)));
 		sendMessage(toMessage(args, n), (OnlinePAFPlayer) pWrittenTo, pPlayer);
 		pPlayer.setLastPlayerWroteFrom(pWrittenTo);
 	}
@@ -164,5 +167,22 @@ public class MSG extends Command {
 		}
 		return content;
 	}
+
+	/**
+	 * Returns a message which was not styled with a color
+	 *
+	 * @param args The Arguments The Main.main class
+	 * @param n    At which argument the while loop should start
+	 * @return Returns a styled message
+	 */
+	private String toMessageNoColor(String[] args, int n) {
+		String content = "";
+		while (n < args.length) {
+			content = content + args[n];
+			n++;
+		}
+		return content;
+	}
+
 
 }
