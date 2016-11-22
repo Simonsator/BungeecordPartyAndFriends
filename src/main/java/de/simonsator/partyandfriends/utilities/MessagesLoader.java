@@ -31,7 +31,6 @@ public class MessagesLoader extends LanguageConfiguration {
 		process(configuration);
 	}
 
-
 	private void loadEnglishMessages() {
 		set("Party.Error.CommandNotFound", "&cThis command does not exist!");
 		set("Party.CommandUsage.Join", "&8/&5Party join  &8- &7Join a party");
@@ -80,8 +79,8 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.General.NoFriendGiven", " &7You need to specify a friend.");
 		set("Friends.General.NoPlayerGiven", " &7You need to specify a player.");
 		set("Friends.General.TooManyArguments", " &7Too many arguments.");
-		set("Friends.General.PlayerIsNowOffline", " &7Your friend &e[PLAYER] is &coffline now.");
-		set("Friends.General.PlayerIsNowOnline", " &7The friend &e[PLAYER] &7is &aonline now.");
+		set("Friends.General.PlayerIsNowOffline", " &7Your friend &e[PLAYER] is &coffline&7 now.");
+		set("Friends.General.PlayerIsNowOnline", " &7The friend &e[PLAYER] &7is &aonline&7 now.");
 		set("Friends.General.RequestInfoOnJoin", " &7You &7have &7friend &7requests &7from: [FRIENDREQUESTS]");
 		set("Friends.General.DoesNotExist", " &7The given player &7does not &7exist");
 		set("Friends.General.GivenPlayerEqualsSender", " &7You cannot specify yourself as player argument.");
@@ -156,7 +155,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.General.NoPlayerGiven", " &7Du musst einen Spieler angeben.");
 		set("Friends.General.PlayerIsNowOnline", " &e[PLAYER] &7ist jetzt &aonline&7.");
 		set("Friends.General.RequestInfoOnJoin", " &7Freundschaftsanfragen stehen von den folgenden Spielern aus: [FRIENDREQUESTS]");
-		set("Friends.General.PlayerIsNowOffline", " &7Der Freund &e[PLAYER] &7ist nun &coffline.");
+		set("Friends.General.PlayerIsNowOffline", " &7Der Freund &e[PLAYER] &7ist nun &coffline&7.");
 		set("Friends.GUI.Hide.ShowAllPlayers", " &aDir werden jetzt alle Spieler angezeigt.");
 		set("Friends.GUI.Hide.ShowOnlyFriendsAndPeopleFromTheServer", " &eDir werden jetzt nur noch Freunde und Leute vom Server angezeigt.");
 		set("Friends.GUI.Hide.ShowOnlyFriends", " &6Dir werden jetzt nur noch deine Freunde angezeigt.");
@@ -174,6 +173,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Accept.ErrorAlreadySend", " &7Du hast dem Spieler &e[PLAYER] &7bereits eine Freundschaftsanfrage gesendet.");
 		set("Friends.Command.Accept.ErrorNoFriendShipInvitation", " &7Du hast keine Freundschaftsanfrage von &e[PLAYER] &7erhalten.");
 		set("Friends.Command.Add.FriendRequestFromReceiver", " &7Der Spieler &e[PLAYER] &7hat dir schon eine Freundschaftsanfrage gesendet.");
+		set("Friends.Command.Add.FriendRequestReceived", " &7Du hast eine Freundschaftsanfrage von &e[PLAYER]&7 erhalten.");
 		set("Friends.Command.Add.HowToAccept", " &7Nimm sie mit &6/friend accept [PLAYER] &7an.");
 		set("Friends.Command.Add.ClickHere", "&aHier klicken um die Freundschaftsanfrage anzunehmen");
 		set("Friends.Command.Add.AlreadyFriends", " &7Du bist schon mit &e[PLAYER] &7befreundet.");
