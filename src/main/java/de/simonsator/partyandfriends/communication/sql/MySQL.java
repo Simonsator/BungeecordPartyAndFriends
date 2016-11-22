@@ -82,7 +82,6 @@ public class MySQL extends SQLCommunication {
 			close(prepStmt);
 		}
 		addColumnLastOnline();
-		fixLastOnline();
 	}
 
 	private void addColumnLastOnline() {
@@ -93,6 +92,7 @@ public class MySQL extends SQLCommunication {
 					" ADD COLUMN `last_online` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `player_uuid`;");
 			prepStmt.executeUpdate();
 			prepStmt.close();
+			fixLastOnline();
 		} catch (SQLException e) {
 		} finally {
 			close(prepStmt);
