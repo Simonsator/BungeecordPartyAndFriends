@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.simonsator</groupId>
 	<artifactId>BungeecordPartyAndFriends</artifactId>
-	<version>1.0.48</version>
+	<version>1.0.49</version>
 	<name>BungeecordPartyAndFriends</name>
 	<packaging>jar</packaging>
 	<description>BungeecordPartyAndFriends</description>
@@ -30,7 +30,7 @@
 	</build>
 	<repositories>
 		<repository>
-			<id>Bungee Repo</id>
+			<id>Bungee-Repo</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</repository>
 	</repositories>
