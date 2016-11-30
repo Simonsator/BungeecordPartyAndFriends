@@ -103,7 +103,7 @@ public class Invite extends PartySubCommand {
 					new TextComponent(Main.getInstance().getPartyPrefix() + PLAYER_PATTERN
 							.matcher(Main.getInstance().getMessagesYml()
 									.getString("Party.Command.Invite.AlreadyInYourParty"))
-							.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
+							.replaceAll(Matcher.quoteReplacement(pToInvite.getDisplayName()))));
 			return true;
 		}
 		return false;

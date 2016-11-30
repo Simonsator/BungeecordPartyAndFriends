@@ -53,14 +53,14 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.Invite.GivenPlayerEqualsSender", "&7You are not allowed to invite yourself.");
 		set("Party.Command.Invite.CanNotInviteThisPlayer", "&cYou cannot invite this player into your Party.");
 		set("Party.Command.Invite.AlreadyInAParty", "&cThis player is already in a party.");
-		set("Party.Command.Invite.AlreadyInYourParty", "&cThe player &e[PLAYER] is already invited into your party.");
+		set("Party.Command.Invite.AlreadyInYourParty", "&cThe player &e[PLAYER]&c is already invited into your party.");
 		set("Party.Command.Invite.MaxPlayersInPartyReached", "&cThe max size of a party is [MAXPLAYERSINPARTY].");
 		set("Party.Command.Invite.InvitedPlayer", "&6[PLAYER] &bwas invited to your party.");
-		set("Party.Command.Invite.YouWereInvitedBY", "&5You were invited into &6[PLAYER]s &5party!");
+		set("Party.Command.Invite.YouWereInvitedBY", "&5You were invited into &6[PLAYER]'s &5party!");
 		set("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE",
-				"&5Join the party by using the command &6/Party &6join &6[PLAYER]!");
+				"&5Join the party by using the command &6/Party &6join &6[PLAYER]&5!");
 		set("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER", "&aClick here to join the party");
-		set("Party.Command.Invite.InvitationTimedOutInvited", "&5The invitation of &6[PLAYER]s &5party is timed out!");
+		set("Party.Command.Invite.InvitationTimedOutInvited", "&5The invitation of &6[PLAYER]'s &5party is timed out!");
 		set("Party.Command.Invite.InvitationTimedOutLeader", "&5The player &6[PLAYER] &5has not accepted your invitation!");
 		set("Party.Command.Join.PlayerHasNoParty", "&cThis player does not own a party.");
 		set("Party.Command.Join.AlreadyInAPartyError",
@@ -110,7 +110,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Add.CanNotSendThisPlayer", " &7You cannot send the player &e[PLAYER] &7a friend request.");
 		set("Friends.Command.Add.HowToAccept", " &7Accept the friend request with &6/friend accept [PLAYER]&7.");
 		set("Friends.Command.Add.AlreadyFriends", " &7You and &e[PLAYER] &7are already friends.");
-		set("Friends.Command.Deny.HasDenied", " &7You have denied &e[PLAYER]s&7 friend request.");
+		set("Friends.Command.Deny.HasDenied", " &7You have denied &e[PLAYER]'s &7friend request.");
 		set("Friends.Command.Deny.NoFriendRequest", " &7You did not receive a friend request from &e[PLAYER]&7.");
 		set("Friends.Command.Settings.NowYouCanGetInvitedByEveryone", " &7Now you can get invited into a party by &aevery &7player.");
 		set("Friends.Command.Settings.NowYouCanGetInvitedByFriends", " &7Now you can &conly &7get invited into a party by your friends.");
