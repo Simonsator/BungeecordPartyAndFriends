@@ -1,6 +1,5 @@
 package de.simonsator.partyandfriends.main;
 
-import com.google.gson.Gson;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
@@ -90,8 +89,8 @@ public class Main extends Plugin {
 						getConfig().getString("MySQL.Username"), getConfig().getString("MySQL.Password"),
 						getConfig().getInt("MySQL.Port"), getConfig().getString("MySQL.Database"),
 						getConfig().getString("MySQL.TablePrefix"));
-					playerManager = new PAFPlayerManagerMySQL(mySQLData);
-					partyManager = new LocalPartyManager();
+				playerManager = new PAFPlayerManagerMySQL(mySQLData);
+				partyManager = new LocalPartyManager();
 				break;
 		}
 		new StandardPermissionProvider();
