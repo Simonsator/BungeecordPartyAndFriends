@@ -56,7 +56,7 @@ public class PartyChat extends Command {
 		for (String arg : args)
 			text += " " + arg;
 		ProxyServer.getInstance().getPluginManager().callEvent(new PartyMessageEvent(pPlayer, text, party));
-		text = text.replaceAll(" ", Main.getInstance().getMessagesYml().getString("Party.Command.Chat.ContentColor"));
+		text = text.replaceAll(" ", " " + Main.getInstance().getMessagesYml().getString("Party.Command.Chat.ContentColor"));
 		party.sendMessage(new TextComponent(
 				Main.getInstance().getMessagesYml().getString("Party.Command.Chat.Prefix") + MESSAGE_CONTENT_PATTERN
 						.matcher(SENDER_NAME_PATTERN
