@@ -1,8 +1,10 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
+import de.simonsator.partyandfriends.api.events.command.FriendshipCommandEvent;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.RequestReactionsCommands;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.regex.Matcher;
@@ -30,6 +32,10 @@ public class Accept extends RequestReactionsCommands {
 			return;
 		PAFPlayer playerQuery = getPlayerManager().getPlayer(args[1]);
 		if (hasNoRequest(pPlayer, playerQuery))
+			return;
+		FriendshipCommandEvent event = new FriendshipCommandEvent(pPlayer, playerQuery, args, this);
+		ProxyServer.getInstance().getPluginManager().callEvent(event);
+		if (event.isCancelled())
 			return;
 		pPlayer.addFriend(playerQuery);
 		pPlayer.denyRequest(playerQuery);

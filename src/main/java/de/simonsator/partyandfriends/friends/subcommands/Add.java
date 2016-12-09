@@ -1,8 +1,10 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
+import de.simonsator.partyandfriends.api.events.command.FriendshipCommandEvent;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
 
@@ -54,6 +56,10 @@ public class Add extends FriendSubCommand {
 			return;
 		}
 		if (!allowsFriendRequests(pPlayer, playerQuery))
+			return;
+		FriendshipCommandEvent event = new FriendshipCommandEvent(pPlayer, playerQuery, args, this);
+		ProxyServer.getInstance().getPluginManager().callEvent(event);
+		if (event.isCancelled())
 			return;
 		playerQuery.sendFriendRequest(pPlayer);
 		sendRequest(pPlayer, playerQuery);
