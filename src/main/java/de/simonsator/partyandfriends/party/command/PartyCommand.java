@@ -8,8 +8,6 @@ import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.subcommand.*;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.event.TabCompleteEvent;
-import net.md_5.bungee.event.EventHandler;
 
 import java.util.Arrays;
 import java.util.Vector;
@@ -100,10 +98,4 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		args = a.toArray(new String[a.size()]);
 		sc.onCommand(pPlayer, args);
 	}
-
-	@EventHandler
-	public void onTabComplete(TabCompleteEvent pEvent) {
-		tabComplete(pEvent);
-	}
-
 }
