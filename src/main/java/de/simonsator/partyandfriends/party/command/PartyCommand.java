@@ -8,6 +8,8 @@ import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.subcommand.*;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.event.TabCompleteEvent;
+import net.md_5.bungee.event.EventHandler;
 
 import java.util.Arrays;
 import java.util.Vector;
@@ -82,7 +84,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 					permissionHeight = PartyAPI.PARTY_MEMBER_PERMISSION_HEIGHT;
 			for (PartySubCommand cmd : subCommands)
 				if (cmd.hasAccess(permissionHeight))
-					pPlayer.sendMessage(new TextComponent(cmd.HELP));
+					cmd.printOutHelp(pPlayer, getName());
 			pPlayer.sendMessage(
 					new TextComponent(Main.getInstance().getMessagesYml().getString("Party.General.HelpEnd")));
 			return;
@@ -98,4 +100,10 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		args = a.toArray(new String[a.size()]);
 		sc.onCommand(pPlayer, args);
 	}
+
+	@EventHandler
+	public void onTabComplete(TabCompleteEvent pEvent) {
+		tabComplete(pEvent);
+	}
+
 }

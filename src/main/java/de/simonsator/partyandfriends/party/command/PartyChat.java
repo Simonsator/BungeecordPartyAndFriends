@@ -5,15 +5,11 @@ import de.simonsator.partyandfriends.api.events.message.PartyMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Command;
 
 import java.util.regex.Matcher;
 
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 import static de.simonsator.partyandfriends.utilities.PatterCollection.MESSAGE_CONTENT_PATTERN;
 import static de.simonsator.partyandfriends.utilities.PatterCollection.SENDER_NAME_PATTERN;
 
@@ -23,27 +19,20 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.SENDER_NA
  * @author Simonsator
  * @version 1.0.0
  */
-public class PartyChat extends Command {
+public class PartyChat extends TopCommand {
 
 	/**
 	 * Initials the object
 	 *
 	 * @param pCommandNames The alias for this command
 	 */
-	public PartyChat(String[] pCommandNames) {
-		super(pCommandNames[0], Main.getInstance().getConfig().getString("Permissions.PartyPermission"), pCommandNames);
+	public PartyChat(String[] pCommandNames, String pPrefix) {
+		super(pCommandNames, Main.getInstance().getConfig().getString("Permissions.PartyPermission"), pPrefix);
 	}
 
-	/**
-	 * Will be executed on /p command
-	 *
-	 * @param pSender The command sender
-	 * @param args    The arguments
-	 */
 	@Override
-	public void execute(CommandSender pSender, String[] args) {
-		TopCommand.isPlayer(pSender);
-		send(getPlayerManager().getPlayer((ProxiedPlayer) pSender), args);
+	protected void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
+		send(pPlayer, args);
 	}
 
 	public void send(OnlinePAFPlayer pPlayer, String[] args) {

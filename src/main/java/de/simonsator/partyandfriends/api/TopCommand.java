@@ -4,9 +4,13 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.SubCommand;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.TabCompleteEvent;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +25,7 @@ import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
  * @param <T> The type of subcommands this class should use
  * @link de.simonsator.partyandfriends.utilities.SubCommand
  */
-public abstract class TopCommand<T extends SubCommand> extends Command {
+public abstract class TopCommand<T extends SubCommand> extends Command implements Listener {
 	/**
 	 * Contains all subcommands of the TopCommand
 	 */
@@ -70,7 +74,16 @@ public abstract class TopCommand<T extends SubCommand> extends Command {
 	@Override
 	public void execute(CommandSender pCommandSender, String[] args) {
 		if (isPlayer(pCommandSender))
-			onCommand(getPlayerManager().getPlayer((ProxiedPlayer) pCommandSender), args);
+			if (!isDisabledServer((ProxiedPlayer) pCommandSender))
+				onCommand(getPlayerManager().getPlayer((ProxiedPlayer) pCommandSender), args);
+	}
+
+	private boolean isDisabledServer(ProxiedPlayer pPlayer) {
+		if (Main.getInstance().getConfig().getStringList("General.DisabledServers").contains(pPlayer.getServer().getInfo().getName())) {
+			pPlayer.sendMessage(new TextComponent(Main.getInstance().getMessagesYml().getString("General.DisabledServer")));
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -106,8 +119,8 @@ public abstract class TopCommand<T extends SubCommand> extends Command {
 	 * @param pClass The type of the subcommand object which is searched
 	 * @return Returns a subcommand of the {@link #subCommands} list, which has an equal type.
 	 */
-	public SubCommand getSubCommand(Class<? extends SubCommand> pClass) {
-		for (SubCommand subCommand : subCommands)
+	public T getSubCommand(Class<? extends SubCommand> pClass) {
+		for (T subCommand : subCommands)
 			if (subCommand.getClass().equals(pClass))
 				return subCommand;
 		return null;
@@ -119,4 +132,5 @@ public abstract class TopCommand<T extends SubCommand> extends Command {
 	public String getPrefix() {
 		return PREFIX;
 	}
+
 }

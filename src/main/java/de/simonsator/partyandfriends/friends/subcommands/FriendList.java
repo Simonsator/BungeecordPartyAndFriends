@@ -24,6 +24,7 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
 public class FriendList extends FriendSubCommand {
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(Main.getInstance().getConfig().getString("General.Time.Format"),
 			Locale.forLanguageTag(Main.getInstance().getConfig().getString("General.Time.LanguageTag")));
+	private final String LAST_ONLINE_COLOR=Main.getInstance().getMessagesYml().getString("Friends.Command.List.TimeColor");
 
 	public FriendList(String[] pCommands, int pPriority, String pHelp) {
 		super(pCommands, pPriority, pHelp);
@@ -48,7 +49,7 @@ public class FriendList extends FriendSubCommand {
 			if (!pFriends.get(i).isOnline() || pFriends.get(i).getSettingsWorth(3) == 1) {
 				additive = PatterCollection.LAST_ONLINE_PATTERN.matcher(
 						getInstance().getMessagesYml().getString("Friends.Command.List.OfflineTitle")).replaceAll(Matcher.quoteReplacement(
-						dateFormat.format(pFriends.get(i).getLastOnline())));
+						setLastOnlineColor(dateFormat.format(pFriends.get(i).getLastOnline()))));
 				color = getInstance().getMessagesYml().getString("Friends.Command.List.OfflineColor");
 			} else {
 				additive = PatterCollection.SERVER_ON.matcher(getInstance().getMessagesYml().getString("Friends.Command.List.OnlineTitle")).
@@ -71,5 +72,14 @@ public class FriendList extends FriendSubCommand {
 			return false;
 		}
 		return true;
+	}
+
+	private String setLastOnlineColor(String pLastOnline) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (char args : pLastOnline.toCharArray()) {
+			stringBuilder.append(LAST_ONLINE_COLOR);
+			stringBuilder.append(args);
+		}
+		return stringBuilder.toString();
 	}
 }

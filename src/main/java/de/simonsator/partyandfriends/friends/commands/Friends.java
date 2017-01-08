@@ -78,7 +78,7 @@ public class Friends extends TopCommand<FriendSubCommand> {
 			pPlayer.sendMessage(
 					new TextComponent(Main.getInstance().getMessagesYml().getString("Friends.General.HelpBegin")));
 			for (FriendSubCommand command : subCommands)
-				pPlayer.sendMessage(new TextComponent(command.HELP));
+				command.printOutHelp(pPlayer, getName());
 			pPlayer.sendMessage(
 					new TextComponent(Main.getInstance().getMessagesYml().getString("Friends.General.HelpEnd")));
 			return;

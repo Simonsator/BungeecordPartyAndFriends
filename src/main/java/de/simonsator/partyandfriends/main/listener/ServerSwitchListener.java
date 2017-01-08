@@ -39,20 +39,28 @@ public class ServerSwitchListener implements Listener {
 	 * @param pEvent The ServerSwitchEvent event
 	 */
 	@EventHandler
-	public void onServerSwitch(ServerSwitchEvent pEvent) {
+	public void onServerSwitch(final ServerSwitchEvent pEvent) {
+		getInstance().getProxy().getScheduler().runAsync(getInstance(), new Runnable() {
+			@Override
+			public void run() {
+				moveParty(pEvent);
+			}
+		});
+	}
+
+	private void moveParty(ServerSwitchEvent pEvent) {
+		ServerInfo server = pEvent.getPlayer().getServer().getInfo();
+		if (notJoinServers.contains(server.getName()))
+			return;
 		OnlinePAFPlayer player = getPlayerManager().getPlayer(pEvent.getPlayer());
 		PlayerParty party = Main.getPartyManager().getParty(player);
 		if (party != null) {
 			if (party.isLeader(player)) {
-				ServerInfo server = party.getLeader().getServer();
-				if (notJoinServers.contains(server.getName())) {
-					return;
-				}
 				for (OnlinePAFPlayer p : party.getPlayers())
-					p.connect(party.getLeader().getServer());
+					p.connect(server);
 				party.sendMessage(new TextComponent(getInstance().getPartyPrefix()
 						+ getInstance().getMessagesYml().getString("Party.Command.General.ServerSwitched")
-						.replace("[SERVER]", party.getLeader().getServer().getName())));
+						.replace("[SERVER]", server.getName())));
 			}
 		}
 	}

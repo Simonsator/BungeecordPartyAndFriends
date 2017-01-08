@@ -35,6 +35,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("General.Time.Format", "dd/MM/yyyy HH:mm:ss");
 		set("General.OfflineServer", false);
 		set("General.PartyDoNotJoinTheseServers", "lobby", "lobby1", "lobby2");
+		set("General.DisabledServers", "login1", "login2");
 		set("General.MaxPlayersInParty", 0);
 		set("Permissions.NoPlayerLimitForParties", "");
 		set("GUI.ChangedHideModeMessage", true);
@@ -50,6 +51,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Friends.SubCommands.Deny.Names", "deny", "reject");
 		set("Commands.Friends.SubCommands.Jump.Names", "jump", "jumpto");
 		set("Commands.Friends.SubCommands.Jump.Disabled", false);
+		set("Commands.Friends.SubCommands.Jump.DisabledServers", "login1", "adminlobby1");
 		set("Commands.Friends.SubCommands.List.Names", "list", "info");
 		set("Commands.Friends.SubCommands.List.Disabled", false);
 		set("Commands.Friends.SubCommands.MSG.Names", "msg", "message");

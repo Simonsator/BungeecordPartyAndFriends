@@ -1,9 +1,14 @@
 package de.simonsator.partyandfriends.api.pafplayers;
 
+import de.simonsator.partyandfriends.api.events.DisplayNameProviderChangedEvent;
+import de.simonsator.partyandfriends.utilities.StandardDisplayNameProvider;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
 
 public abstract class PAFPlayerClass implements PAFPlayer {
+	private static DisplayNameProvider displayNameProvider = new StandardDisplayNameProvider();
+
 	@Override
 	public void sendMessage(TextComponent pTextComponent) {
 	}
@@ -39,7 +44,7 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 
 	@Override
 	public String getDisplayName() {
-		return getName();
+		return displayNameProvider.getDisplayName(this);
 	}
 
 	@Override
@@ -47,4 +52,12 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 		return false;
 	}
 
+	public static void setDisplayNameProvider(DisplayNameProvider pDisplayNameProvider) {
+		displayNameProvider = pDisplayNameProvider;
+		ProxyServer.getInstance().getPluginManager().callEvent(new DisplayNameProviderChangedEvent(pDisplayNameProvider));
+	}
+
+	public static DisplayNameProvider getDisplayNameProvider() {
+		return displayNameProvider;
+	}
 }

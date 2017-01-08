@@ -12,8 +12,8 @@ import net.md_5.bungee.api.plugin.Event;
 public abstract class PAFSubCommandEvent<T extends SubCommand> extends Event implements Cancellable {
 	private final OnlinePAFPlayer EXECUTOR;
 	private final String[] ARGS;
-	private final T CALLER;
 	private boolean cancelled = false;
+	private final T CALLER;
 
 	public PAFSubCommandEvent(OnlinePAFPlayer pExecutor, String[] args, T pCaller) {
 		EXECUTOR = pExecutor;

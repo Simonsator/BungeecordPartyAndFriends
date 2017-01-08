@@ -31,7 +31,9 @@ public class MessagesLoader extends LanguageConfiguration {
 		process(configuration);
 	}
 
+
 	private void loadEnglishMessages() {
+		set("General.DisabledServer", "&cThis command cannot be executed here.");
 		set("Party.Error.CommandNotFound", "&cThis command does not exist!");
 		set("Party.CommandUsage.Join", "&8/&5Party join  &8- &7Join a party");
 		set("Party.CommandUsage.Invite", "&8/&5Party invite  &8- &7Invite a player into your party");
@@ -53,7 +55,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.Invite.GivenPlayerEqualsSender", "&7You are not allowed to invite yourself.");
 		set("Party.Command.Invite.CanNotInviteThisPlayer", "&cYou cannot invite this player into your Party.");
 		set("Party.Command.Invite.AlreadyInAParty", "&cThis player is already in a party.");
-		set("Party.Command.Invite.AlreadyInYourParty", "&cThe player &e[PLAYER]&c is already invited into your party.");
+		set("Party.Command.Invite.AlreadyInYourParty", "&cThe player &e[PLAYER] &cis already invited into your party.");
 		set("Party.Command.Invite.MaxPlayersInPartyReached", "&cThe max size of a party is [MAXPLAYERSINPARTY].");
 		set("Party.Command.Invite.InvitedPlayer", "&6[PLAYER] &bwas invited to your party.");
 		set("Party.Command.Invite.YouWereInvitedBY", "&5You were invited into &6[PLAYER]'s &5party!");
@@ -79,7 +81,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.General.NoFriendGiven", " &7You need to specify a friend.");
 		set("Friends.General.NoPlayerGiven", " &7You need to specify a player.");
 		set("Friends.General.TooManyArguments", " &7Too many arguments.");
-		set("Friends.General.PlayerIsNowOffline", " &7Your friend &e[PLAYER] is &coffline&7 now.");
+		set("Friends.General.PlayerIsNowOffline", " &7Your friend &e[PLAYER] &7is &coffline&7 now.");
 		set("Friends.General.PlayerIsNowOnline", " &7The friend &e[PLAYER] &7is &aonline&7 now.");
 		set("Friends.General.RequestInfoOnJoin", " &7You &7have &7friend &7requests &7from: [FRIENDREQUESTS]");
 		set("Friends.General.DoesNotExist", " &7The given player &7does not &7exist");
@@ -110,7 +112,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Add.CanNotSendThisPlayer", " &7You cannot send the player &e[PLAYER] &7a friend request.");
 		set("Friends.Command.Add.HowToAccept", " &7Accept the friend request with &6/friend accept [PLAYER]&7.");
 		set("Friends.Command.Add.AlreadyFriends", " &7You and &e[PLAYER] &7are already friends.");
-		set("Friends.Command.Deny.HasDenied", " &7You have denied &e[PLAYER]'s &7friend request.");
+		set("Friends.Command.Deny.HasDenied", " &7You have denied &e[PLAYER]s&7 friend request.");
 		set("Friends.Command.Deny.NoFriendRequest", " &7You did not receive a friend request from &e[PLAYER]&7.");
 		set("Friends.Command.Settings.NowYouCanGetInvitedByEveryone", " &7Now you can get invited into a party by &aevery &7player.");
 		set("Friends.Command.Settings.NowYouCanGetInvitedByFriends", " &7Now you can &conly &7get invited into a party by your friends.");
@@ -141,14 +143,15 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.List.FriendsList", " &7These are your friends:LINE_BREAK &7- ");
 		set("Friends.Command.List.OnlineTitle", " &a(online)&7, currently playing on [SERVER_ON]");
 		set("Friends.Command.List.OfflineTitle", " &c(offline)&7, last seen at [LAST_ONLINE]");
+		set("Friends.Command.List.TimeColor", "&7");
 		set("Friends.Command.MSG.CanNotWriteToHim", " &7You cannot message this player.");
 		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7No player ever messaged you.");
 		set("Friends.Command.MSG.PlayerAndMessageMissing", " &7You need to give a message.");
-		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7The player will receive the message when he goes online.");
 		set("Friends.Command.Remove.Removed", " &7You removed the friend &e[PLAYER]&7.");
 	}
 
 	private void loadGermanMessages() {
+		set("General.DisabledServer", "&cDieses Kommando kann hier nicht ausgeführt werden.");
 		set("Friends.Command.Add.SentAFriendRequest", " &7Dem Spieler &e[PLAYER] &7wurde eine Freundschaftsanfrage gesendet.");
 		set("Friends.General.CommandNotFound", " &7Das Kommando existiert nicht.");
 		set("Friends.General.PlayerIsOffline", " &7Der Spieler &e[PLAYER] &7ist nicht online oder du bist nicht mit ihm befreundet.");
@@ -213,7 +216,6 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Settings.NowYourFriendsCanJump", " &7Freunde können jetzt zu dir &aspringen&7.");
 		set("Friends.Command.Settings.NowYourFriendsCanNotJump", " &7Freunde können jetzt &cnicht &7zu dir springen.");
 		set("Friends.Command.MSG.CanNotWriteToHim", " &7Du kannst diesem Spieler nicht schreiben.");
-		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7Der Spieler erhält die Nachricht, sobald er online geht.");
 		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7Noch kein Spieler hat dich angeschrieben.");
 		set("Party.General.ErrorNotPartyLeader", "&cDu bist nicht der Party Leader.");
 		set("Party.Leader.SenderEqualsGivenPlayer", "&7Du kannst dich nicht selber zum neuen Party Leader machen.");
@@ -247,7 +249,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.Join.ErrorNoInvitation", "&cDu kannst der Party nicht beitreten.");
 		set("Party.Command.Kick.KickedPlayerOutOfThePartyOthers", "&bDer Spieler &6[PLAYER] &bwurde aus der Party gekickt.");
 		set("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer", "&bDu wurdest aus der Party gekickt.");
-		set("Party.Command.Kick.Party.Command.Leader.NewLeaderIs", "&7Der neue Party Leader ist &6[PLAYER].");
+		set("Party.Command.Kick.Party.Command.Leader.NewLeaderIs", "&7Der neue Party Leader ist &6[NEWLEADER].");
 		set("Party.Command.Leader.NewLeaderIs", "&7Der neue Party Leader ist &6[PLAYER].");
 		set("Party.Command.Leave.YouLeftTheParty", "&bDu hast deine Party verlassen.");
 		set("Party.Command.Leave.NewLeaderIs", "&bDer Leader hat die Party verlassen. Der neue Leader ist &e[NEWLEADER].");
@@ -275,7 +277,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.Info.Players", "&8Players&7: &b");
 		set("Friends.General.RequestInfoOnJoinColor", "&e");
 		set("Friends.General.RequestInfoOnJoinColorComma", "&7");
-		set("Friends.Command.MSG.SentMessage", " &e[SENDERNAME]&5-> &e[PLAYER]&7:[CONTENT]");
+		set("Friends.Command.MSG.SentMessage", " &e[SENDERNAME] &5-> &e[PLAYER]&7:[CONTENT]");
 		set("Friends.Command.Settings.SplitLine",
 				"&8&m-----------------------------------------------");
 		set("Friends.Command.List.OnlineColor", "&a");

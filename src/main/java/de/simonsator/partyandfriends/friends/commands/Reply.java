@@ -4,12 +4,9 @@ import de.simonsator.partyandfriends.api.TopCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Command;
-
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
+import net.md_5.bungee.api.event.TabCompleteEvent;
+import net.md_5.bungee.event.EventHandler;
 
 /**
  * Will be executed on /r
@@ -17,16 +14,13 @@ import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
  * @author Simonsator
  * @version 1.0.0
  */
-public class Reply extends Command {
-	public Reply(String[] aliases) {
-		super(aliases[0], Main.getInstance().getConfig().getString("Permissions.FriendPermission"), aliases);
+public class Reply extends TopCommand {
+	public Reply(String[] aliases, String pPrefix) {
+		super(aliases, Main.getInstance().getConfig().getString("Permissions.FriendPermission"), pPrefix);
 	}
 
 	@Override
-	public void execute(CommandSender pCommandSender, String[] args) {
-		if (!TopCommand.isPlayer(pCommandSender))
-			return;
-		OnlinePAFPlayer pPlayer = getPlayerManager().getPlayer((ProxiedPlayer) pCommandSender);
+	protected void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
 		if (!Main.getInstance().getFriendsMSGCommand().messageGiven(pPlayer, args, 0))
 			return;
 		PAFPlayer queryPlayer = pPlayer.getLastPlayerWroteTo();
@@ -36,6 +30,7 @@ public class Reply extends Command {
 			return;
 		}
 		Main.getInstance().getFriendsMSGCommand().send(pPlayer, args, queryPlayer, 0);
+
 	}
 
 }

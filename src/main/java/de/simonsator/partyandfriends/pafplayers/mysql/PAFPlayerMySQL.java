@@ -5,6 +5,7 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -123,6 +124,9 @@ public class PAFPlayerMySQL extends PAFPlayerClass {
 
 	@Override
 	public long getLastOnline() {
-		return PAFPlayerManagerMySQL.getConnection().getLastOnline(ID).getTime();
+		Timestamp time = PAFPlayerManagerMySQL.getConnection().getLastOnline(ID);
+		if (time != null)
+			return time.getTime();
+		return 0;
 	}
 }

@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.api.party.abstractcommands;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
+import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.utilities.SubCommand;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -37,7 +38,12 @@ public abstract class PartySubCommand extends SubCommand {
 			return false;
 		}
 		return true;
+	}
 
+	@Override
+	protected void sendError(OnlinePAFPlayer pPlayer, TextComponent pMessage) {
+		pPlayer.sendMessage(pMessage);
+		printOutHelp(pPlayer, PartyCommand.getInstance().getName());
 	}
 
 }

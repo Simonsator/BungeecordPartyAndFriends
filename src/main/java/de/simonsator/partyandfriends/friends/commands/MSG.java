@@ -4,11 +4,10 @@ import de.simonsator.partyandfriends.api.TopCommand;
 import de.simonsator.partyandfriends.api.events.message.FriendOnlineMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
-import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.event.TabCompleteEvent;
+import net.md_5.bungee.event.EventHandler;
 
 import java.util.regex.Matcher;
 
@@ -22,16 +21,15 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.*;
  * @author Simonsator
  * @version 1.0.0
  */
-public class MSG extends Command {
-
+public class MSG extends TopCommand {
 
 	/**
 	 * Initials the command
 	 *
 	 * @param friendsAliasMsg The aliases for the command /msg
 	 */
-	public MSG(String[] friendsAliasMsg) {
-		super(friendsAliasMsg[0], getInstance().getConfig().getString("Permissions.FriendPermission"), friendsAliasMsg);
+	public MSG(String[] friendsAliasMsg, String pPrefix) {
+		super(friendsAliasMsg, getInstance().getConfig().getString("Permissions.FriendPermission"), pPrefix);
 	}
 
 	private static boolean playerExists(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
@@ -43,16 +41,9 @@ public class MSG extends Command {
 		return true;
 	}
 
-	/**
-	 * Executes the command /msg
-	 *
-	 * @param pCommandSender The sender of the command
-	 * @param args           The arguments
-	 */
 	@Override
-	public void execute(CommandSender pCommandSender, String[] args) {
-		if (TopCommand.isPlayer(pCommandSender))
-			send(getPlayerManager().getPlayer((ProxiedPlayer) pCommandSender), args, 1);
+	protected void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
+		send(pPlayer, args, 1);
 	}
 
 	/**
@@ -83,7 +74,7 @@ public class MSG extends Command {
 			return;
 		if (!allowsWriteTo(pPlayer, pWrittenTo))
 			return;
-		if (isOffline(pPlayer, pWrittenTo))
+		if (isOffline(pPlayer, pWrittenTo, args, n))
 			return;
 		ProxyServer.getInstance().getPluginManager().callEvent(new FriendOnlineMessageEvent((OnlinePAFPlayer) pWrittenTo, pPlayer, toMessageNoColor(args, n)));
 		sendMessage(toMessage(args, n), (OnlinePAFPlayer) pWrittenTo, pPlayer);
@@ -114,7 +105,7 @@ public class MSG extends Command {
 				pWrittenTo, pSender.getDisplayName(), pWrittenTo.getDisplayName());
 	}
 
-	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
+	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer, String[] args, int n) {
 		if (!pQueryPlayer.isOnline()) {
 			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
 					+ getInstance().getMessagesYml().getString("Friends.Command.MSG.CanNotWriteToHim")));
@@ -169,7 +160,7 @@ public class MSG extends Command {
 	}
 
 	/**
-	 * Returns a message which was not styled with a color
+	 * Returns a styled message
 	 *
 	 * @param args The Arguments The Main.main class
 	 * @param n    At which argument the while loop should start
@@ -183,6 +174,5 @@ public class MSG extends Command {
 		}
 		return content;
 	}
-
 
 }

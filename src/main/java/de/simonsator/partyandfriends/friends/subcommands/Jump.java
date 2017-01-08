@@ -8,7 +8,6 @@ import de.simonsator.partyandfriends.utilities.PatterCollection;
 import de.simonsator.partyandfriends.utilities.StandardConnector;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.regex.Matcher;
 
@@ -50,9 +49,11 @@ public class Jump extends FriendSubCommand {
 		ServerInfo toJoin = friend.getServer();
 		if (!serverExists(pPlayer, toJoin))
 			return;
-		if (isAlreadyOnServer(pPlayer.getPlayer(), toJoin))
+		if (isAlreadyOnServer(pPlayer, toJoin))
 			return;
 		if (!allowsJumps(pPlayer, friend))
+			return;
+		if (isDisabled(pPlayer, toJoin))
 			return;
 		connector.connect(pPlayer.getPlayer(), toJoin);
 		pPlayer.sendMessage(
@@ -66,27 +67,21 @@ public class Jump extends FriendSubCommand {
 	private boolean serverExists(OnlinePAFPlayer pPlayer, ServerInfo toJoin) {
 		if (toJoin != null)
 			return true;
-		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
-				+ getInstance().getMessagesYml().getString("Friends.Command.Jump.CanNotJump")));
-		pPlayer.sendMessage(HELP);
+		sendError(pPlayer, "Friends.Command.Jump.CanNotJump");
 		return false;
 	}
 
 	private boolean allowsJumps(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pQueryPlayer) {
 		if (pQueryPlayer.getSettingsWorth(4) == 1) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
-					+ getInstance().getMessagesYml().getString("Friends.Command.Jump.CanNotJump")));
-			pPlayer.sendMessage(new TextComponent(HELP));
+			sendError(pPlayer, "Friends.Command.Jump.CanNotJump");
 			return false;
 		}
 		return true;
 	}
 
-	private boolean isAlreadyOnServer(ProxiedPlayer pPlayer, ServerInfo pToJoin) {
-		if (pToJoin.equals(pPlayer.getServer().getInfo())) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
-					+ getInstance().getMessagesYml().getString("Friends.Command.Jump.AlreadyOnTheServer")));
-			pPlayer.sendMessage(new TextComponent(HELP));
+	private boolean isAlreadyOnServer(OnlinePAFPlayer pPlayer, ServerInfo pToJoin) {
+		if (pToJoin.equals(pPlayer.getServer())) {
+			sendError(pPlayer, "Friends.Command.Jump.AlreadyOnTheServer");
 			return true;
 		}
 		return false;
@@ -94,12 +89,17 @@ public class Jump extends FriendSubCommand {
 
 	private boolean isPlayerOnline(OnlinePAFPlayer pSender, PAFPlayer pQueryPlayer) {
 		if (!pQueryPlayer.isOnline()) {
-			pSender.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PatterCollection.PLAYER_PATTERN
-					.matcher(getInstance().getMessagesYml().getString("Friends.General.PlayerIsOffline"))
-					.replaceAll(Matcher.quoteReplacement(pQueryPlayer.getName()))));
-			pSender.sendMessage(new TextComponent(HELP));
+			sendError(pSender, "Friends.General.PlayerIsOffline");
 			return false;
 		}
 		return true;
+	}
+
+	private boolean isDisabled(OnlinePAFPlayer pPlayer, ServerInfo pToJoin) {
+		if (getInstance().getConfig().getStringList("Commands.Friends.SubCommands.Jump.DisabledServers").contains(pToJoin.getName())) {
+			sendError(pPlayer, "Friends.Command.Jump.CanNotJump");
+			return true;
+		}
+		return false;
 	}
 }

@@ -52,4 +52,12 @@ public abstract class SubCommand implements Comparable<SubCommand> {
 	public String getCommandName() {
 		return commands.get(0);
 	}
+
+	public ArrayList<String> getCommandNames() {
+		return commands;
+	}
+
+	public void printOutHelp(OnlinePAFPlayer pPlayer, String pCommandName) {
+		pPlayer.sendMessage(HELP.getText());
+	}
 }

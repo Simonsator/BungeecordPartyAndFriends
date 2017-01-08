@@ -18,7 +18,7 @@ public interface OnlinePAFPlayer extends PAFPlayer {
 
 	void sendPacket(Chat chat);
 
-	void updatePlayerName();
+	void update();
 
 	/**
 	 * @return Returns the player if he is on this Bungeecord. If he is on

@@ -1,8 +1,10 @@
 package de.simonsator.partyandfriends.main.listener;
 
+import de.simonsator.partyandfriends.api.events.OnlineStatusChangedMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -45,7 +47,7 @@ public class JoinEvent implements Listener {
 			player.createEntry();
 			return;
 		} else
-			player.updatePlayerName();
+			player.update();
 		List<PAFPlayer> friends = player.getFriends();
 		List<PAFPlayer> friendRequests = player.getRequests();
 		if (friends.isEmpty() && friendRequests.isEmpty())
@@ -73,9 +75,12 @@ public class JoinEvent implements Listener {
 	}
 
 	private void sendNowOnline(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriends) {
-		for (PAFPlayer friend : pFriends) {
-			friend.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
-					+ PatterCollection.PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
-		}
+		String message = getInstance().getFriendsPrefix()
+				+ PatterCollection.PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()));
+		OnlineStatusChangedMessageEvent event = new OnlineStatusChangedMessageEvent(pPlayer, message, pFriends);
+		ProxyServer.getInstance().getPluginManager().callEvent(event);
+		if (!event.isCancelled())
+			for (PAFPlayer friend : event.getFriends())
+				friend.sendMessage(new TextComponent(event.getMessage()));
 	}
 }

@@ -75,7 +75,6 @@ public class Main extends Plugin {
 		return playerManager;
 	}
 
-
 	/**
 	 * Will be execute on enable
 	 */
@@ -144,19 +143,19 @@ public class Main extends Plugin {
 		if (!getConfig().getBoolean("Commands.Party.TopCommands.Party.Disabled"))
 			ProxyServer.getInstance().getPluginManager().registerCommand(this, getPartyCommand());
 		partyChatCommand = new PartyChat(
-				(getConfig().getStringList("Commands.Party.TopCommands.PartyChat.Names").toArray(new String[0])));
+				(getConfig().getStringList("Commands.Party.TopCommands.PartyChat.Names").toArray(new String[0])), partyPrefix);
 		if (!getConfig().getBoolean("Commands.Party.TopCommands.PartyChat.Disabled"))
 			ProxyServer.getInstance().getPluginManager().registerCommand(this, partyChatCommand);
 		friendCommand = new Friends(getConfig().getStringList("Commands.Friends.TopCommands.Friend.Names"), friendsPrefix);
 		if (!getConfig().getBoolean("Commands.Friends.TopCommands.Friend.Disabled"))
 			getProxy().getPluginManager().registerCommand(this, friendCommand);
 		friendsMSGCommand = new MSG(
-				(getConfig().getStringList("Commands.Friends.TopCommands.MSG.Names").toArray(new String[0])));
+				(getConfig().getStringList("Commands.Friends.TopCommands.MSG.Names").toArray(new String[0])), friendsPrefix);
 		if (!getConfig().getBoolean("Commands.Friends.TopCommands.MSG.Disabled"))
 			getProxy().getPluginManager().registerCommand(this, friendsMSGCommand);
 		if (!getConfig().getBoolean("Commands.Friends.TopCommands.Reply.Disabled"))
 			getProxy().getPluginManager().registerCommand(this, new Reply(
-					(getConfig().getStringList("Commands.Friends.TopCommands.Reply.Names").toArray(new String[0]))));
+					(getConfig().getStringList("Commands.Friends.TopCommands.Reply.Names").toArray(new String[0])), friendsPrefix));
 	}
 
 	public PartyChat getPartyChatCommand() {

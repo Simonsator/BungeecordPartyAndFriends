@@ -18,7 +18,12 @@ public class PAFPlayerManagerMySQL extends PAFPlayerManager implements Deactivat
 	private static MySQL connection;
 
 	public PAFPlayerManagerMySQL(MySQLData pMySQLData) {
-		connection = new MySQL(pMySQLData);
+		connection = new MySQL(pMySQLData, null);
+		Disabler.getInstance().registerDeactivated(this);
+	}
+
+	public PAFPlayerManagerMySQL(MySQLData pMySQLData, Object pJedisPool) {
+		connection = new MySQL(pMySQLData, pJedisPool);
 		Disabler.getInstance().registerDeactivated(this);
 	}
 

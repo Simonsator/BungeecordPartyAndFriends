@@ -1,5 +1,7 @@
 package de.simonsator.partyandfriends.communication.sql;
 
+import de.simonsator.partyandfriends.communication.sql.cache.LocalPlayerCache;
+import de.simonsator.partyandfriends.communication.sql.cache.PlayerCache;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.*;
@@ -15,29 +17,35 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
 public class MySQL extends SQLCommunication {
 
 	private final String TABLE_PREFIX;
+	private PlayerCache cache;
 
 	/**
 	 * Connects to the MySQL server
 	 *
 	 * @param pMySQLData The MySQL data
 	 */
-	public MySQL(MySQLData pMySQLData) {
+	public MySQL(MySQLData pMySQLData, Object pJedisPool) {
 		super(pMySQLData.DATABASE, "jdbc:mysql://" + pMySQLData.HOST + ":" + pMySQLData.PORT, pMySQLData.USERNAME, pMySQLData.PASSWORD);
 		this.TABLE_PREFIX = pMySQLData.TABLE_PREFIX;
 		importDatabase();
-		new Importer(pMySQLData.DATABASE, "jdbc:mysql://" + pMySQLData.HOST + ":" + pMySQLData.PORT + "/?user="
-				+ pMySQLData.USERNAME + "&password=" + pMySQLData.PASSWORD, this, pMySQLData.USERNAME, pMySQLData.PASSWORD);
+		if (pJedisPool == null)
+			cache = new LocalPlayerCache();
 	}
 
 	public UUID getUUID(int pPlayerID) {
+		UUID uuid = cache.getUUID(pPlayerID);
+		if (uuid != null)
+			return uuid;
 		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select player_uuid from `" + DATABASE + "`." + TABLE_PREFIX
+			rs = (stmt = con.createStatement()).executeQuery("select player_uuid, player_name from `" + DATABASE + "`." + TABLE_PREFIX
 					+ "players WHERE player_id='" + pPlayerID + "' LIMIT 1");
 			if (rs.next()) {
-				return UUID.fromString(rs.getString("player_uuid"));
+				uuid = UUID.fromString(rs.getString("player_uuid"));
+				cache.add(rs.getString("player_name"), uuid, pPlayerID);
+				return uuid;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -124,18 +132,23 @@ public class MySQL extends SQLCommunication {
 	/**
 	 * Returns the ID of a player
 	 *
-	 * @param pUuid The UUID of the player
+	 * @param pUUID The UUID of the player
 	 * @return Returns the ID of a player
 	 */
-	public int getPlayerID(UUID pUuid) {
+	public int getPlayerID(UUID pUUID) {
+		Integer playerID = cache.getPlayerID(pUUID);
+		if (playerID != null)
+			return playerID;
 		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select player_id from `" + DATABASE + "`." + TABLE_PREFIX
-					+ "players WHERE player_uuid='" + pUuid + "' LIMIT 1");
+			rs = (stmt = con.createStatement()).executeQuery("select player_id, player_name from `" + DATABASE + "`." + TABLE_PREFIX
+					+ "players WHERE player_uuid='" + pUUID + "' LIMIT 1");
 			if (rs.next()) {
-				return rs.getInt("player_id");
+				playerID = rs.getInt("player_id");
+				cache.add(rs.getString("player_name"), pUUID, playerID);
+				return playerID;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -152,14 +165,20 @@ public class MySQL extends SQLCommunication {
 	 * @return Returns the ID of a player
 	 */
 	public int getPlayerID(String pPlayerName) {
+		Integer playerID = cache.getPlayerID(pPlayerName);
+		if (playerID != null)
+			return playerID;
 		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select player_id from `" + DATABASE + "`." + TABLE_PREFIX
+			rs = (stmt = con.createStatement()).executeQuery("select player_id, player_uuid from `" + DATABASE + "`." + TABLE_PREFIX
 					+ "players WHERE player_name='" + pPlayerName + "' LIMIT 1");
 			if (rs.next()) {
-				return rs.getInt("player_id");
+				UUID uuid = UUID.fromString(rs.getString("player_uuid"));
+				playerID = rs.getInt("player_id");
+				cache.add(pPlayerName, uuid, playerID);
+				return playerID;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -187,8 +206,11 @@ public class MySQL extends SQLCommunication {
 			prepStmt.setNull(4, 1);
 			prepStmt.executeUpdate();
 			ResultSet rs = prepStmt.getGeneratedKeys();
-			if (rs.next())
-				setStandardSettings(rs.getInt(1));
+			if (rs.next()) {
+				int id = rs.getInt(1);
+				cache.add(pPlayer.getName(), pPlayer.getUniqueId(), id);
+				setStandardSettings(id);
+			}
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -238,14 +260,20 @@ public class MySQL extends SQLCommunication {
 	 * @return Returns the name of a player
 	 */
 	public String getName(int pPlayerID) {
+		String playerName = cache.getName(pPlayerID);
+		if (playerName != null)
+			return playerName;
 		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select player_name from `" + DATABASE + "`." + TABLE_PREFIX
+			rs = (stmt = con.createStatement()).executeQuery("select player_name, player_uuid from `" + DATABASE + "`." + TABLE_PREFIX
 					+ "players WHERE player_id='" + pPlayerID + "' LIMIT 1");
-			if (rs.next())
-				return rs.getString("player_name");
+			if (rs.next()) {
+				playerName = rs.getString("player_name");
+				cache.add(playerName, UUID.fromString(rs.getString("player_uuid")), pPlayerID);
+				return playerName;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -267,6 +295,22 @@ public class MySQL extends SQLCommunication {
 			prepStmt = con.prepareStatement("UPDATE `" + DATABASE + "`." + TABLE_PREFIX + "players set player_name='"
 					+ pNewPlayerName + "' WHERE player_id='" + pPlayerID + "' LIMIT 1");
 			prepStmt.executeUpdate();
+			cache.updateName(pPlayerID, pNewPlayerName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(prepStmt);
+		}
+	}
+
+	public void updateUUID(int pPlayerID, UUID pNewUUID) {
+		Connection con = getConnection();
+		PreparedStatement prepStmt = null;
+		try {
+			prepStmt = con.prepareStatement("UPDATE `" + DATABASE + "`." + TABLE_PREFIX + "players set player_uuid='"
+					+ pNewUUID + "' WHERE player_id='" + pPlayerID + "' LIMIT 1");
+			prepStmt.executeUpdate();
+			cache.updateUUID(pPlayerID, pNewUUID);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -597,4 +641,5 @@ public class MySQL extends SQLCommunication {
 			close(prepStmt);
 		}
 	}
+
 }

@@ -4,6 +4,7 @@ import de.simonsator.partyandfriends.api.events.command.FriendshipCommandEvent;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
@@ -81,10 +82,8 @@ public class Add extends FriendSubCommand {
 
 	private boolean hasNoRequestFrom(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (pQueryPlayer.hasRequestFrom(pPlayer)) {
-			pPlayer.sendMessage(
-					new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
-							.getString("Friends.Command.Accept.ErrorAlreadySend")).replaceAll(Matcher.quoteReplacement(pQueryPlayer.getName()))));
-			pPlayer.sendMessage(new TextComponent(HELP));
+			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Accept.ErrorAlreadySend").replace("[PLAYER]", pPlayer.getDisplayName())));
+
 			return false;
 		}
 		return true;
@@ -93,10 +92,7 @@ public class Add extends FriendSubCommand {
 	@Override
 	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (pPlayer.isAFriendOf(pGivenPlayer)) {
-			pPlayer.sendMessage(
-					new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
-							.getString("Friends.Command.Add.AlreadyFriends")).replaceAll(Matcher.quoteReplacement(pGivenPlayer.getDisplayName()))));
-			pPlayer.sendMessage(new TextComponent(HELP));
+			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Add.AlreadyFriends").replace("[PLAYER]", pPlayer.getDisplayName())));
 			return true;
 		}
 		return false;
@@ -104,9 +100,7 @@ public class Add extends FriendSubCommand {
 
 	private boolean givenPlayerEqualsSender(OnlinePAFPlayer pPlayer, String pGivenPlayer) {
 		if (pPlayer.getName().equalsIgnoreCase(pGivenPlayer)) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
-					.getMessagesYml().getString("Friends.Command.Accept.ErrorSenderEqualsReceiver")));
-			pPlayer.sendMessage(new TextComponent(HELP));
+			sendError(pPlayer, "Friends.Command.Accept.ErrorSenderEqualsReceiver");
 			return true;
 		}
 		return false;
@@ -114,9 +108,7 @@ public class Add extends FriendSubCommand {
 
 	private boolean doesPlayerExist(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (!pGivenPlayer.doesExist()) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() +
-					getInstance().getMessagesYml().getString("Friends.General.DoesNotExist")));
-			pPlayer.sendMessage(new TextComponent(HELP));
+			sendError(pPlayer, "Friends.General.DoesNotExist");
 			return false;
 		}
 		return true;
@@ -124,10 +116,7 @@ public class Add extends FriendSubCommand {
 
 	private boolean allowsFriendRequests(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (pGivenPlayer.getSettingsWorth(0) == 0) {
-			pPlayer.sendMessage(
-					new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
-							.getString("Friends.Command.Add.CanNotSendThisPlayer")).replaceAll(Matcher.quoteReplacement(pGivenPlayer.getName()))));
-			pPlayer.sendMessage(new TextComponent(HELP));
+			sendError(pPlayer, "Friends.Command.Add.CanNotSendThisPlayer");
 			return false;
 		}
 		return true;
