@@ -5,8 +5,6 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.event.TabCompleteEvent;
-import net.md_5.bungee.event.EventHandler;
 
 /**
  * Will be executed on /r

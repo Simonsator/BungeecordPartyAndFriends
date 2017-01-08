@@ -12,8 +12,8 @@ import java.util.List;
  * @version 1.0.0 29.12.16
  */
 public class OnlineStatusChangedMessageEvent extends Event implements Cancellable {
-	private boolean cancelled = false;
 	private final OnlinePAFPlayer PLAYER;
+	private boolean cancelled = false;
 	private String message;
 	private List<PAFPlayer> friends;
 

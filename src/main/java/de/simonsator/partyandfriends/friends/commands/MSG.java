@@ -6,8 +6,6 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.event.TabCompleteEvent;
-import net.md_5.bungee.event.EventHandler;
 
 import java.util.regex.Matcher;
 

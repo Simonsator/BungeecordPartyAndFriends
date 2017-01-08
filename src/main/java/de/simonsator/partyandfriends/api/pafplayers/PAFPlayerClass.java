@@ -9,6 +9,15 @@ import net.md_5.bungee.protocol.packet.Chat;
 public abstract class PAFPlayerClass implements PAFPlayer {
 	private static DisplayNameProvider displayNameProvider = new StandardDisplayNameProvider();
 
+	public static DisplayNameProvider getDisplayNameProvider() {
+		return displayNameProvider;
+	}
+
+	public static void setDisplayNameProvider(DisplayNameProvider pDisplayNameProvider) {
+		displayNameProvider = pDisplayNameProvider;
+		ProxyServer.getInstance().getPluginManager().callEvent(new DisplayNameProviderChangedEvent(pDisplayNameProvider));
+	}
+
 	@Override
 	public void sendMessage(TextComponent pTextComponent) {
 	}
@@ -50,14 +59,5 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 	@Override
 	public boolean isOnline() {
 		return false;
-	}
-
-	public static void setDisplayNameProvider(DisplayNameProvider pDisplayNameProvider) {
-		displayNameProvider = pDisplayNameProvider;
-		ProxyServer.getInstance().getPluginManager().callEvent(new DisplayNameProviderChangedEvent(pDisplayNameProvider));
-	}
-
-	public static DisplayNameProvider getDisplayNameProvider() {
-		return displayNameProvider;
 	}
 }

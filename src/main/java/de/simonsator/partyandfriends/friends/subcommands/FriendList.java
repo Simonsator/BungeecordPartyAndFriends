@@ -22,9 +22,9 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
  * @version 1.0.0
  */
 public class FriendList extends FriendSubCommand {
+	private final String LAST_ONLINE_COLOR = Main.getInstance().getMessagesYml().getString("Friends.Command.List.TimeColor");
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(Main.getInstance().getConfig().getString("General.Time.Format"),
 			Locale.forLanguageTag(Main.getInstance().getConfig().getString("General.Time.LanguageTag")));
-	private final String LAST_ONLINE_COLOR=Main.getInstance().getMessagesYml().getString("Friends.Command.List.TimeColor");
 
 	public FriendList(String[] pCommands, int pPriority, String pHelp) {
 		super(pCommands, pPriority, pHelp);
