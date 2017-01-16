@@ -16,11 +16,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class Friends extends TopCommand<FriendSubCommand> {
 	private static Friends instance;
 
-	/**
-	 * Initials the object
-	 *
-	 * @param pCommandNames The alias for the /friend command
-	 */
 	public Friends(java.util.List<String> pCommandNames, String pPrefix) {
 		super(pCommandNames.toArray(new String[0]),
 				Main.getInstance().getConfig().getString("Commands.Friends.TopCommands.Friend.Permissions"), pPrefix);

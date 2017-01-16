@@ -21,11 +21,6 @@ import java.util.Vector;
 public class PartyCommand extends TopCommand<PartySubCommand> {
 	private static PartyCommand instance;
 
-	/**
-	 * Initials the object
-	 *
-	 * @param pCommandNames The alias for the command
-	 */
 	public PartyCommand(String[] pCommandNames, String pPrefix) {
 		super(pCommandNames, Main.getInstance().getConfig().getString("Commands.Party.TopCommands.Party.Permissions"), pPrefix);
 		instance = this;

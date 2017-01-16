@@ -21,11 +21,6 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.SENDER_NA
  */
 public class PartyChat extends TopCommand {
 
-	/**
-	 * Initials the object
-	 *
-	 * @param pCommandNames The alias for this command
-	 */
 	public PartyChat(String[] pCommandNames, String pPrefix) {
 		super(pCommandNames, Main.getInstance().getConfig().getString("Permissions.PartyPermission"), pPrefix);
 	}
