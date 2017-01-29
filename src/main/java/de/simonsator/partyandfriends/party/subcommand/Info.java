@@ -37,16 +37,19 @@ public class Info extends PartySubCommand {
 		String leader = LEADER_PATTERN
 				.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.Info.Leader"))
 				.replaceAll(Matcher.quoteReplacement(party.getLeader().getDisplayName()));
-		String players = Main.getInstance().getMessagesYml().getString("Party.Command.Info.Players");
-		if (!party.getPlayers().isEmpty()) {
-			for (OnlinePAFPlayer pp : party.getPlayers()) {
-				players = players + pp.getDisplayName()
-						+ Main.getInstance().getMessagesYml().getString("Party.Command.Info.PlayersCut");
-			}
-			players = players.substring(0, players
-					.lastIndexOf(Main.getInstance().getMessagesYml().getString("Party.Command.Info.PlayersCut")));
+		StringBuilder stringBuilder = new StringBuilder();
+		String players;
+		stringBuilder.append(Main.getInstance().getMessagesYml().getString("Party.Command.Info.Players"));
+		if (party.getPlayers().isEmpty()) {
+			stringBuilder.append(Main.getInstance().getMessagesYml().getString("Party.Command.Info.Empty"));
+			players = stringBuilder.toString();
 		} else {
-			players = players + Main.getInstance().getMessagesYml().getString("Party.Command.Info.Empty");
+			for (OnlinePAFPlayer pp : party.getPlayers()) {
+				stringBuilder.append(pp.getDisplayName());
+				stringBuilder.append(Main.getInstance().getMessagesYml().getString("Party.Command.Info.PlayersCut"));
+			}
+			players = stringBuilder.substring(0, stringBuilder
+					.lastIndexOf(Main.getInstance().getMessagesYml().getString("Party.Command.Info.PlayersCut")));
 		}
 		pPlayer.sendMessage(
 				new TextComponent(Main.getInstance().getMessagesYml().getString("Party.General.HelpBegin")));

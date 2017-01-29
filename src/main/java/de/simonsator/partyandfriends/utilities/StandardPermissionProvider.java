@@ -15,8 +15,6 @@ public class StandardPermissionProvider extends PermissionProvider {
 
 	@Override
 	public boolean hasPermission(PAFPlayer pPlayer, String pPermission) {
-		if (pPlayer != null && !pPlayer.isOnline())
-			return false;
-		return ((OnlinePAFPlayer) pPlayer).getPlayer().hasPermission(pPermission);
+		return !(pPlayer != null && !pPlayer.isOnline()) && ((OnlinePAFPlayer) pPlayer).getPlayer().hasPermission(pPermission);
 	}
 }

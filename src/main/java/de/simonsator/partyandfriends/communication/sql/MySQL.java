@@ -6,6 +6,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
@@ -28,8 +30,7 @@ public class MySQL extends SQLCommunication {
 		super(pMySQLData.DATABASE, "jdbc:mysql://" + pMySQLData.HOST + ":" + pMySQLData.PORT, pMySQLData.USERNAME, pMySQLData.PASSWORD);
 		this.TABLE_PREFIX = pMySQLData.TABLE_PREFIX;
 		importDatabase();
-		if (pJedisPool == null)
-			cache = new LocalPlayerCache();
+		cache = new LocalPlayerCache();
 	}
 
 	public UUID getUUID(int pPlayerID) {
@@ -101,7 +102,7 @@ public class MySQL extends SQLCommunication {
 			prepStmt.executeUpdate();
 			prepStmt.close();
 			fixLastOnline();
-		} catch (SQLException e) {
+		} catch (SQLException ignored) {
 		} finally {
 			close(prepStmt);
 		}
@@ -203,7 +204,7 @@ public class MySQL extends SQLCommunication {
 			prepStmt.setNull(1, 1);
 			prepStmt.setString(2, pPlayer.getName());
 			prepStmt.setString(3, pPlayer.getUniqueId().toString());
-			prepStmt.setNull(4, 1);
+			prepStmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
 			prepStmt.executeUpdate();
 			ResultSet rs = prepStmt.getGeneratedKeys();
 			if (rs.next()) {
@@ -229,22 +230,21 @@ public class MySQL extends SQLCommunication {
 	 * @param pPlayerID The ID of the player
 	 * @return Returns the IDs of the friends of a player
 	 */
-	public ArrayList<Integer> getFriends(int pPlayerID) {
+	public List<Integer> getFriends(int pPlayerID) {
 		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
-		ArrayList<Integer> list = new ArrayList<>();
+		List<Integer> list = new LinkedList<>();
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select friend2_id from `" + DATABASE + "`." + TABLE_PREFIX
-					+ "friend_assignment WHERE friend1_id='" + pPlayerID + "'");
-			while (rs.next())
-				list.add(rs.getInt("friend2_id"));
-			stmt.close();
-			rs.close();
-			rs = (stmt = con.createStatement()).executeQuery("select friend1_id from `" + DATABASE + "`." + TABLE_PREFIX
-					+ "friend_assignment WHERE friend2_id='" + pPlayerID + "'");
-			while (rs.next())
-				list.add(rs.getInt("friend1_id"));
+			rs = (stmt = con.createStatement()).executeQuery("select friend2_id, friend1_id from `" + DATABASE + "`." + TABLE_PREFIX
+					+ "friend_assignment WHERE friend1_id='" + pPlayerID + "' OR friend2_id='" + pPlayerID + "'");
+			while (rs.next()) {
+				int friend1 = rs.getInt("friend1_id");
+				int friend2 = rs.getInt("friend2_id");
+				if (friend1 == pPlayerID)
+					list.add(friend2);
+				else list.add(friend1);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -385,7 +385,7 @@ public class MySQL extends SQLCommunication {
 	/**
 	 * Removes a friend request
 	 *
-	 * @param pReceiverSender The ID of the command executer
+	 * @param pReceiverSender The ID of the command executor
 	 * @param pRequesterID    The ID of the person who had send the friend request
 	 */
 	public void denyRequest(int pReceiverSender, int pRequesterID) {
@@ -472,6 +472,7 @@ public class MySQL extends SQLCommunication {
 	 * @return Returns if player one is a friend of player two true, otherwise
 	 * false
 	 */
+	@Deprecated
 	public boolean isAFriendOf(ProxiedPlayer pPlayer1, ProxiedPlayer pPlayer2) {
 		return isAFriendOf(getPlayerID(pPlayer1), getPlayerID(pPlayer2));
 	}

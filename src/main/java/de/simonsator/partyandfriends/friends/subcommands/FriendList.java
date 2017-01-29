@@ -42,7 +42,7 @@ public class FriendList extends FriendSubCommand {
 	}
 
 	private String getFriendsCombined(List<PAFPlayer> pFriends) {
-		String friendsCombined = "";
+		StringBuilder friendsCombined = new StringBuilder();
 		for (int i = 0; i < pFriends.size(); i++) {
 			String additive;
 			String color;
@@ -56,13 +56,13 @@ public class FriendList extends FriendSubCommand {
 						replaceAll(Matcher.quoteReplacement(((OnlinePAFPlayer) pFriends.get(i)).getServer().getName()));
 				color = getInstance().getMessagesYml().getString("Friends.Command.List.OnlineColor");
 			}
-			String comma = "";
-			if (i > 0) {
-				comma = getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit");
-			}
-			friendsCombined += comma + color + pFriends.get(i).getDisplayName() + additive;
+			if (i > 0)
+				friendsCombined.append(getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit"));
+			friendsCombined.append(color);
+			friendsCombined.append(pFriends.get(i).getDisplayName());
+			friendsCombined.append(additive);
 		}
-		return friendsCombined;
+		return friendsCombined.toString();
 	}
 
 	private boolean hasFriends(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriends) {

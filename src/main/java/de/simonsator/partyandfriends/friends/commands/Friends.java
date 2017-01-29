@@ -6,6 +6,8 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.friends.subcommands.*;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.event.TabCompleteEvent;
+import net.md_5.bungee.event.EventHandler;
 
 /**
  * The /friend command class
@@ -16,6 +18,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class Friends extends TopCommand<FriendSubCommand> {
 	private static Friends instance;
 
+	/**
+	 * Initials the object
+	 *
+	 * @param pCommandNames The alias for the /friend command
+	 */
 	public Friends(java.util.List<String> pCommandNames, String pPrefix) {
 		super(pCommandNames.toArray(new String[0]),
 				Main.getInstance().getConfig().getString("Commands.Friends.TopCommands.Friend.Permissions"), pPrefix);
@@ -87,4 +94,5 @@ public class Friends extends TopCommand<FriendSubCommand> {
 		pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix()
 				+ Main.getInstance().getMessagesYml().getString("Friends.General.CommandNotFound")));
 	}
+
 }

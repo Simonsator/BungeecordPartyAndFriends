@@ -1,6 +1,6 @@
 package de.simonsator.partyandfriends.friends.commands;
 
-import de.simonsator.partyandfriends.api.TopCommand;
+import de.simonsator.partyandfriends.api.OnlyTopCommand;
 import de.simonsator.partyandfriends.api.events.message.FriendOnlineMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
@@ -19,7 +19,7 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.*;
  * @author Simonsator
  * @version 1.0.0
  */
-public class MSG extends TopCommand {
+public class MSG extends OnlyTopCommand {
 
 	/**
 	 * Initials the command
@@ -72,7 +72,7 @@ public class MSG extends TopCommand {
 			return;
 		if (!allowsWriteTo(pPlayer, pWrittenTo))
 			return;
-		if (isOffline(pPlayer, pWrittenTo, args, n))
+		if (isOffline(pPlayer, pWrittenTo))
 			return;
 		ProxyServer.getInstance().getPluginManager().callEvent(new FriendOnlineMessageEvent((OnlinePAFPlayer) pWrittenTo, pPlayer, toMessageNoColor(args, n)));
 		sendMessage(toMessage(args, n), (OnlinePAFPlayer) pWrittenTo, pPlayer);
@@ -90,20 +90,8 @@ public class MSG extends TopCommand {
 		return true;
 	}
 
-	/**
-	 * Delivers a message that was send, while a player was offline
-	 *
-	 * @param pContent   Content of the message
-	 * @param pWrittenTo The player which was written to
-	 * @param pSender    The name of the sender
-	 */
-	public void deliverOfflineMessage(String pContent, OnlinePAFPlayer pWrittenTo, PAFPlayer pSender) {
-		sendMessage(
-				SPACE_PATTERN.matcher(pContent).replaceAll(Matcher.quoteReplacement(getInstance().getMessagesYml().getString("Friends.Command.MSG.ColorOfMessage"))),
-				pWrittenTo, pSender.getDisplayName(), pWrittenTo.getDisplayName());
-	}
 
-	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer, String[] args, int n) {
+	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (!pQueryPlayer.isOnline()) {
 			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
 					+ getInstance().getMessagesYml().getString("Friends.Command.MSG.CanNotWriteToHim")));
@@ -148,13 +136,12 @@ public class MSG extends TopCommand {
 	 * @return Returns a styled message
 	 */
 	private String toMessage(String[] args, int n) {
-		String content = "";
-		while (n < args.length) {
-			content = content + getInstance().getMessagesYml().getString("Friends.Command.MSG.ColorOfMessage")
-					+ args[n];
-			n++;
+		StringBuilder content;
+		for (content = new StringBuilder(); n < args.length; n++) {
+			content.append(getInstance().getMessagesYml().getString("Friends.Command.MSG.ColorOfMessage"));
+			content.append(args[n]);
 		}
-		return content;
+		return content.toString();
 	}
 
 	/**
@@ -165,12 +152,12 @@ public class MSG extends TopCommand {
 	 * @return Returns a styled message
 	 */
 	private String toMessageNoColor(String[] args, int n) {
-		String content = "";
-		while (n < args.length) {
-			content = content + args[n];
-			n++;
+		StringBuilder content;
+		for (content = new StringBuilder(); n < args.length; n++) {
+			content.append(" ");
+			content.append(args[n]);
 		}
-		return content;
+		return content.toString();
 	}
 
 }

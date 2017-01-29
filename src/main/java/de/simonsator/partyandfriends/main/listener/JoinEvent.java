@@ -24,7 +24,7 @@ import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
  * @version 1.0.0
  */
 public class JoinEvent implements Listener {
-
+	private final int PLAYER_SPLIT_LENGTH = getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit").length();
 
 	/**
 	 * Will be execute if somebody logs in into server
@@ -62,15 +62,15 @@ public class JoinEvent implements Listener {
 	}
 
 	private void deliverFriendRequests(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriendRequests) {
-		String content = "";
-		for (PAFPlayer player : pFriendRequests)
-			content = content + getInstance().getMessagesYml().getString("Friends.General.RequestInfoOnJoinColor")
-					+ player.getDisplayName()
-					+ getInstance().getMessagesYml().getString("Friends.General.RequestInfoOnJoinColorComma")
-					+ getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit");
-		content = content.substring(0, content.length() - (getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit").length()));
+		StringBuilder content = new StringBuilder();
+		for (PAFPlayer player : pFriendRequests) {
+			content.append(getInstance().getMessagesYml().getString("Friends.General.RequestInfoOnJoinColor"));
+			content.append(player.getDisplayName());
+			content.append(getInstance().getMessagesYml().getString("Friends.General.RequestInfoOnJoinColorComma"));
+			content.append(getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit"));
+		}
 		pPlayer.sendMessage(PatterCollection.FRIEND_REQUEST_COUNT_PATTERN.matcher(PatterCollection.FRIEND_REQUEST_PATTERN.matcher(getInstance().getFriendsPrefix() + getInstance()
-				.getMessagesYml().getString("Friends.General.RequestInfoOnJoin")).replaceAll(Matcher.quoteReplacement(content))).
+				.getMessagesYml().getString("Friends.General.RequestInfoOnJoin")).replaceAll(Matcher.quoteReplacement(content.substring(0, content.length() - PLAYER_SPLIT_LENGTH)))).
 				replaceAll(Matcher.quoteReplacement(pFriendRequests.size() + "")));
 	}
 

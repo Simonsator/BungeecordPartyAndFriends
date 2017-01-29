@@ -11,13 +11,13 @@ import java.util.UUID;
 
 public class LocalPartyManager extends PartyManager {
 	/**
-	 * All partys of players in a HashMap
+	 * All parties of players in a HashMap
 	 */
-	private static HashMap<UUID, PlayerParty> partys = new HashMap<>();
+	private static HashMap<UUID, PlayerParty> parties = new HashMap<>();
 
 	@Override
 	public PlayerParty getParty(OnlinePAFPlayer player) {
-		return partys.get(player.getUniqueId());
+		return parties.get(player.getUniqueId());
 	}
 
 	/**
@@ -29,13 +29,13 @@ public class LocalPartyManager extends PartyManager {
 	@Override
 	public PlayerParty createParty(OnlinePAFPlayer player) {
 		PlayerParty party = new LocalPlayerParty(player);
-		partys.put(player.getUniqueId(), party);
+		parties.put(player.getUniqueId(), party);
 		return party;
 	}
 
 	@Override
 	public void deleteAllParties() {
-		partys = new HashMap<>();
+		parties = new HashMap<>();
 	}
 
 	/**
@@ -48,11 +48,11 @@ public class LocalPartyManager extends PartyManager {
 		if (party != null) {
 			for (int i = 0; i < party.getPlayers().size(); i++) {
 				if (party.getPlayers().get(i) != null) {
-					partys.remove(party.getPlayers().get(i).getUniqueId());
+					parties.remove(party.getPlayers().get(i).getUniqueId());
 				}
 			}
 			if (party.getLeader() != null)
-				partys.remove(party.getLeader().getUniqueId());
+				parties.remove(party.getLeader().getUniqueId());
 		}
 	}
 
@@ -64,7 +64,7 @@ public class LocalPartyManager extends PartyManager {
 	 */
 	@Override
 	public void addPlayerToParty(OnlinePAFPlayer player, PlayerParty party) {
-		partys.put(player.getUniqueId(), party);
+		parties.put(player.getUniqueId(), party);
 	}
 
 	/**
@@ -74,6 +74,6 @@ public class LocalPartyManager extends PartyManager {
 	 */
 	@Override
 	public void removePlayerFromParty(OnlinePAFPlayer player) {
-		partys.remove(player.getUniqueId());
+		parties.remove(player.getUniqueId());
 	}
 }

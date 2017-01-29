@@ -34,9 +34,7 @@ public abstract class PlayerParty {
 	 * and it will returns false if he is not the leader, of this party
 	 */
 	public boolean isLeader(OnlinePAFPlayer player) {
-		if (getLeader() != null && player != null)
-			return this.getLeader().getUniqueId().equals(player.getUniqueId());
-		return false;
+		return getLeader() != null && player != null && this.getLeader().getUniqueId().equals(player.getUniqueId());
 	}
 
 	/**

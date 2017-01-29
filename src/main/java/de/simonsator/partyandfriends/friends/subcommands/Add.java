@@ -92,7 +92,7 @@ public class Add extends FriendSubCommand {
 	@Override
 	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (pPlayer.isAFriendOf(pGivenPlayer)) {
-			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Add.AlreadyFriends").replace("[PLAYER]", pPlayer.getDisplayName())));
+			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Add.AlreadyFriends").replace("[PLAYER]", pGivenPlayer.getDisplayName())));
 			return true;
 		}
 		return false;
@@ -116,7 +116,7 @@ public class Add extends FriendSubCommand {
 
 	private boolean allowsFriendRequests(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (pGivenPlayer.getSettingsWorth(0) == 0) {
-			sendError(pPlayer, "Friends.Command.Add.CanNotSendThisPlayer");
+			sendError(pPlayer, new TextComponent(PREFIX + PLAYER_PATTERN.matcher("Friends.Command.Add.CanNotSendThisPlayer").replaceFirst(pGivenPlayer.getName())));
 			return false;
 		}
 		return true;

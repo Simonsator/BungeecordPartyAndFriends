@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.main;
 
+import com.google.gson.Gson;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
@@ -29,6 +30,7 @@ import java.io.IOException;
  * @version 1.0.0
  */
 public class Main extends Plugin {
+	private static final Gson gson = new Gson();
 	/**
 	 * This object
 	 */
@@ -73,6 +75,10 @@ public class Main extends Plugin {
 
 	public static PAFPlayerManager getPlayerManager() {
 		return playerManager;
+	}
+
+	public static Gson getGson() {
+		return gson;
 	}
 
 	/**

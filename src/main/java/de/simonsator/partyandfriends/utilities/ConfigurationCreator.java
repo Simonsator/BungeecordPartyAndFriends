@@ -1,12 +1,12 @@
 package de.simonsator.partyandfriends.utilities;
 
+import com.google.common.base.Charsets;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -29,7 +29,9 @@ public abstract class ConfigurationCreator {
 			folder.mkdir();
 		if (!FILE.exists())
 			FILE.createNewFile();
-		configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(FILE);
+		try (InputStreamReader inputStream = new InputStreamReader(new FileInputStream(FILE), Charsets.UTF_8)) {
+			configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(inputStream);
+		}
 	}
 
 	public abstract void reloadConfiguration() throws IOException;
@@ -48,7 +50,9 @@ public abstract class ConfigurationCreator {
 	}
 
 	protected void saveFile() throws IOException {
-		ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, FILE);
+		try (Writer writer = new OutputStreamWriter(new FileOutputStream(FILE), Charsets.UTF_8)) {
+			ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, writer);
+		}
 	}
 
 	protected void process(Configuration pMessagesYML) {

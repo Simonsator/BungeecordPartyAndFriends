@@ -1,6 +1,6 @@
 package de.simonsator.partyandfriends.friends.commands;
 
-import de.simonsator.partyandfriends.api.TopCommand;
+import de.simonsator.partyandfriends.api.OnlyTopCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
@@ -12,7 +12,7 @@ import net.md_5.bungee.api.chat.TextComponent;
  * @author Simonsator
  * @version 1.0.0
  */
-public class Reply extends TopCommand {
+public class Reply extends OnlyTopCommand {
 	public Reply(String[] aliases, String pPrefix) {
 		super(aliases, Main.getInstance().getConfig().getString("Permissions.FriendPermission"), pPrefix);
 	}

@@ -1,12 +1,14 @@
 package de.simonsator.partyandfriends.party.command;
 
-import de.simonsator.partyandfriends.api.TopCommand;
+import de.simonsator.partyandfriends.api.OnlyTopCommand;
 import de.simonsator.partyandfriends.api.events.message.PartyMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.event.TabCompleteEvent;
+import net.md_5.bungee.event.EventHandler;
 
 import java.util.regex.Matcher;
 
@@ -19,7 +21,7 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.SENDER_NA
  * @author Simonsator
  * @version 1.0.0
  */
-public class PartyChat extends TopCommand {
+public class PartyChat extends OnlyTopCommand {
 
 	public PartyChat(String[] pCommandNames, String pPrefix) {
 		super(pCommandNames, Main.getInstance().getConfig().getString("Permissions.PartyPermission"), pPrefix);
@@ -36,11 +38,14 @@ public class PartyChat extends TopCommand {
 			return;
 		if (!messageGiven(pPlayer, args))
 			return;
-		String text = "";
-		for (String arg : args)
-			text += " " + arg;
+		StringBuilder stringBuilder = new StringBuilder();
+		for (String arg : args) {
+			stringBuilder.append(" ");
+			stringBuilder.append(Main.getInstance().getMessagesYml().getString("Party.Command.Chat.ContentColor"));
+			stringBuilder.append(arg);
+		}
+		String text = stringBuilder.toString();
 		ProxyServer.getInstance().getPluginManager().callEvent(new PartyMessageEvent(pPlayer, text, party));
-		text = text.replaceAll(" ", " " + Main.getInstance().getMessagesYml().getString("Party.Command.Chat.ContentColor"));
 		party.sendMessage(new TextComponent(
 				Main.getInstance().getMessagesYml().getString("Party.Command.Chat.Prefix") + MESSAGE_CONTENT_PATTERN
 						.matcher(SENDER_NAME_PATTERN
@@ -68,4 +73,5 @@ public class PartyChat extends TopCommand {
 		}
 		return true;
 	}
+
 }

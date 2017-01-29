@@ -3,6 +3,7 @@ package de.simonsator.partyandfriends.utilities;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.protocol.packet.Chat;
 
 import java.util.ArrayList;
 
@@ -37,7 +38,7 @@ public abstract class SubCommand implements Comparable<SubCommand> {
 		pPlayer.sendMessage(HELP);
 	}
 
-	protected void sendError(OnlinePAFPlayer pPlayer, String pIdentifier) {
+	public void sendError(OnlinePAFPlayer pPlayer, String pIdentifier) {
 		sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString(pIdentifier)));
 	}
 
@@ -58,6 +59,6 @@ public abstract class SubCommand implements Comparable<SubCommand> {
 	}
 
 	public void printOutHelp(OnlinePAFPlayer pPlayer, String pCommandName) {
-		pPlayer.sendMessage(HELP.getText());
+		pPlayer.sendMessage(new TextComponent(HELP.getText()));
 	}
 }

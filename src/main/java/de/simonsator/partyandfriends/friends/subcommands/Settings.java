@@ -35,7 +35,7 @@ public class Settings extends FriendSubCommand {
 		}
 		pPlayer.sendPacket(new Chat("{\"text\":\""
 				+ getInstance().getMessagesYml()
-				.getString("Friends.Command.Settings.ChangeThisSettingWithFriendrequests")
+				.getString("Friends.Command.Settings.ChangeThisSettingWithFriendRequests")
 				+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
 				+ getInstance().getFriendsCommand().getName() + " " + getCommandName() + " friendrequests"
 				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""

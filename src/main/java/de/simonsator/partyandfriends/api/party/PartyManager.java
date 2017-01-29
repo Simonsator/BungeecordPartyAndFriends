@@ -7,7 +7,7 @@ import de.simonsator.partyandfriends.utilities.disable.Disabler;
 import java.util.HashMap;
 
 /**
- * This class manages the partys.
+ * This class manages the parties.
  *
  * @author Simonsator
  * @version 1.0.1
