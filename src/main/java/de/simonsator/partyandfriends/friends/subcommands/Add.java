@@ -82,7 +82,7 @@ public class Add extends FriendSubCommand {
 
 	private boolean hasNoRequestFrom(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (pQueryPlayer.hasRequestFrom(pPlayer)) {
-			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Accept.ErrorAlreadySend").replace("[PLAYER]", pPlayer.getDisplayName())));
+			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Accept.ErrorAlreadySend").replace("[PLAYER]", pQueryPlayer.getDisplayName())));
 
 			return false;
 		}
