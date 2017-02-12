@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.main;
 
 import com.google.gson.Gson;
+import de.simonsator.partyandfriends.api.PAFExtension;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
@@ -22,6 +23,8 @@ import net.md_5.bungee.config.Configuration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /***
  * The main class
@@ -64,6 +67,7 @@ public class Main extends Plugin {
 	private Friends friendCommand;
 	private MSG friendsMSGCommand;
 	private PartyChat partyChatCommand;
+	private List<PAFExtension> pafExtensions = new ArrayList<>();
 
 	public static Main getInstance() {
 		return instance;
@@ -200,10 +204,21 @@ public class Main extends Plugin {
 		return partyPrefix;
 	}
 
+	public void registerExtension(PAFExtension pPAFExtension) {
+		pafExtensions.add(pPAFExtension);
+	}
+
+	public void unregisterExtension(PAFExtension pPAFExtension) {
+		pafExtensions.remove(pPAFExtension);
+	}
+
 	public void reload() {
 		ProxyServer.getInstance().getPluginManager().unregisterCommands(this);
 		ProxyServer.getInstance().getPluginManager().unregisterListeners(this);
 		onDisable();
 		onEnable();
+		for (PAFExtension extension : pafExtensions)
+			extension.reload();
 	}
+
 }
