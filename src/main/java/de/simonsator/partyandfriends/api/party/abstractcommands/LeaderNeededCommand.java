@@ -6,6 +6,7 @@ import de.simonsator.partyandfriends.api.party.PartyAPI;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.util.List;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
@@ -15,6 +16,10 @@ public abstract class LeaderNeededCommand extends PartySubCommand {
 
 	protected LeaderNeededCommand(String[] pCommands, int pPriority, String pHelpText) {
 		super(pCommands, pPriority, pHelpText);
+	}
+
+	public LeaderNeededCommand(List<String> pCommands, int pPriority, String pHelpText, String pPermission) {
+		super(pCommands, pPriority, pHelpText, pPermission);
 	}
 
 	@Override

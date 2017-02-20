@@ -6,6 +6,8 @@ import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.LeaderNeededCommand;
 import de.simonsator.partyandfriends.main.Main;
 
+import java.util.List;
+
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
 /**
@@ -15,8 +17,8 @@ import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
  * @version 1.0.0
  */
 public class Kick extends LeaderNeededCommand {
-	public Kick(String[] pCommands, int pPriority, String pHelpText) {
-		super(pCommands, pPriority, pHelpText);
+	public Kick(List<String> pCommands, int pPriority, String pHelpText, String pPermission) {
+		super(pCommands, pPriority, pHelpText, pPermission);
 	}
 
 	/**

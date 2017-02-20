@@ -25,9 +25,10 @@ public class MySQL extends SQLCommunication {
 	 * Connects to the MySQL server
 	 *
 	 * @param pMySQLData The MySQL data
+	 * @param pJedisPool Can be ignored in the non extended version
 	 */
 	public MySQL(MySQLData pMySQLData, Object pJedisPool) {
-		super(pMySQLData.DATABASE, "jdbc:mysql://" + pMySQLData.HOST + ":" + pMySQLData.PORT, pMySQLData.USERNAME, pMySQLData.PASSWORD);
+		super(pMySQLData.DATABASE, "jdbc:mysql://" + pMySQLData.HOST + ":" + pMySQLData.PORT, pMySQLData.USERNAME, pMySQLData.PASSWORD, pMySQLData.USE_SSL);
 		this.TABLE_PREFIX = pMySQLData.TABLE_PREFIX;
 		importDatabase();
 		cache = new LocalPlayerCache();

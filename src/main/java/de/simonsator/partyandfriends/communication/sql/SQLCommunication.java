@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.communication.sql;
 
 import java.sql.*;
+import java.util.Properties;
 
 /**
  * @author simonsator
@@ -15,15 +16,25 @@ public abstract class SQLCommunication {
 	 * The URL of the SQL server
 	 */
 	private final String URL;
-	private final String USER_NAME;
-	private final String PASSWORD;
+	private final Properties connectionProperties;
 	private Connection connection;
+
+	protected SQLCommunication(String pDatabase, String pURL, String pUserName, String pPassword, boolean pUseSSL) {
+		this.DATABASE = pDatabase;
+		this.URL = pURL;
+		connectionProperties = new Properties();
+		connectionProperties.setProperty("user", pUserName);
+		connectionProperties.setProperty("password", pPassword);
+		connectionProperties.setProperty("useSSL", pUseSSL + "");
+		connection = createConnection();
+	}
 
 	protected SQLCommunication(String pDatabase, String pURL, String pUserName, String pPassword) {
 		this.DATABASE = pDatabase;
 		this.URL = pURL;
-		this.USER_NAME = pUserName;
-		this.PASSWORD = pPassword;
+		connectionProperties = new Properties();
+		connectionProperties.setProperty("user", pUserName);
+		connectionProperties.setProperty("password", pPassword);
 		connection = createConnection();
 	}
 
@@ -74,7 +85,7 @@ public abstract class SQLCommunication {
 		try {
 			closeConnection();
 			Class.forName("com.mysql.jdbc.Driver");
-			return DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+			return DriverManager.getConnection(URL, connectionProperties);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}

@@ -26,8 +26,8 @@ public class FriendList extends FriendSubCommand {
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(Main.getInstance().getConfig().getString("General.Time.Format"),
 			Locale.forLanguageTag(Main.getInstance().getConfig().getString("General.Time.LanguageTag")));
 
-	public FriendList(String[] pCommands, int pPriority, String pHelp) {
-		super(pCommands, pPriority, pHelp);
+	public FriendList(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
+		super(pCommands, pPriority, pHelp, pPermission);
 		dateFormat.setTimeZone(TimeZone.getTimeZone(Main.getInstance().getConfig().getString("General.Time.TimeZone")));
 	}
 

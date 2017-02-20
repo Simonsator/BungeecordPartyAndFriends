@@ -3,6 +3,8 @@ package de.simonsator.partyandfriends.friends.subcommands;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 
+import java.util.List;
+
 import static de.simonsator.partyandfriends.main.Main.getInstance;
 
 /**
@@ -12,8 +14,8 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
  * @version 1.0.0
  */
 public class Message extends FriendSubCommand {
-	public Message(String[] pCommands, int pPriority, String pHelp) {
-		super(pCommands, pPriority, pHelp);
+	public Message(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
+		super(pCommands, pPriority, pHelp, pPermission);
 	}
 
 	@Override

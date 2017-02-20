@@ -7,9 +7,9 @@ import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.subcommand.*;
+import de.simonsator.partyandfriends.utilities.LanguageConfiguration;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.event.TabCompleteEvent;
-import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.config.Configuration;
 
 import java.util.Arrays;
 import java.util.Vector;
@@ -24,38 +24,39 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 	private static PartyCommand instance;
 
 	/**
-	 * Initials the object
-	 *
 	 * @param pCommandNames The alias for the command
+	 * @param pPrefix       The prefix for this command (e.g. [Party])
 	 */
 	public PartyCommand(String[] pCommandNames, String pPrefix) {
 		super(pCommandNames, Main.getInstance().getConfig().getString("Commands.Party.TopCommands.Party.Permissions"), pPrefix);
 		instance = this;
+		Configuration config = Main.getInstance().getConfig();
+		LanguageConfiguration messages = Main.getInstance().getMessagesYml();
 		subCommands.add(
-				new Join(Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Join.Names").toArray(new String[0]),
-						0, Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Join")));
+				new Join(config.getStringList("Commands.Party.SubCommands.Join.Names"),
+						0, messages.getString("Party.CommandUsage.Join"), config.getString("Commands.Party.SubCommands.Join.Permissions")));
 		subCommands.add(new Invite(
-				Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Invite.Names").toArray(new String[0]), 1,
-				Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Invite")));
-		if (!Main.getInstance().getConfig().getBoolean("Commands.Party.SubCommands.Kick.Disabled"))
+				config.getStringList("Commands.Party.SubCommands.Invite.Names"), 1,
+				messages.getString("Party.CommandUsage.Invite"), config.getString("Commands.Party.SubCommands.Invite.Permissions")));
+		if (!config.getBoolean("Commands.Party.SubCommands.Kick.Disabled"))
 			subCommands.add(new Kick(
-					Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Kick.Names").toArray(new String[0]), 6,
-					Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Kick")));
-		if (!Main.getInstance().getConfig().getBoolean("Commands.Party.SubCommands.Info.Disabled"))
+					config.getStringList("Commands.Party.SubCommands.Kick.Names"), 6,
+					messages.getString("Party.CommandUsage.Kick"), config.getString("Commands.Party.SubCommands.Kick.Permissions")));
+		if (!config.getBoolean("Commands.Party.SubCommands.Info.Disabled"))
 			subCommands.add(new Info(
-					Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Info.Names").toArray(new String[0]), 3,
-					Main.getInstance().getMessagesYml().getString("Party.CommandUsage.List")));
+					config.getStringList("Commands.Party.SubCommands.Info.Names"), 3,
+					messages.getString("Party.CommandUsage.List"), config.getString("Commands.Party.SubCommands.Info.Permissions")));
 		subCommands.add(new Leave(
-				Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Leave.Names").toArray(new String[0]), 5,
-				Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Leave")));
-		if (!Main.getInstance().getConfig().getBoolean("Commands.Party.SubCommands.Chat.Disabled"))
+				config.getStringList("Commands.Party.SubCommands.Leave.Names"), 5,
+				messages.getString("Party.CommandUsage.Leave"), config.getString("Commands.Party.SubCommands.Leave.Permissions")));
+		if (!config.getBoolean("Commands.Party.SubCommands.Chat.Disabled"))
 			subCommands.add(new Chat(
-					Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Chat.Names").toArray(new String[0]), 4,
-					Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Chat")));
-		if (!Main.getInstance().getConfig().getBoolean("Commands.Party.SubCommands.Leader.Disabled"))
+					config.getStringList("Commands.Party.SubCommands.Chat.Names"), 4,
+					messages.getString("Party.CommandUsage.Chat"), config.getString("Commands.Party.SubCommands.Chat.Permissions")));
+		if (!config.getBoolean("Commands.Party.SubCommands.Leader.Disabled"))
 			subCommands.add(new Leader(
-					Main.getInstance().getConfig().getStringList("Commands.Party.SubCommands.Leader.Names").toArray(new String[0]), 7,
-					Main.getInstance().getMessagesYml().getString("Party.CommandUsage.Leader")));
+					config.getStringList("Commands.Party.SubCommands.Leader.Names"), 7,
+					messages.getString("Party.CommandUsage.Leader"), "Commands.Party.SubCommands.Leader.Permissions"));
 	}
 
 	public static PartyCommand getInstance() {
@@ -93,6 +94,10 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		if (sc == null) {
 			pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
 					+ Main.getInstance().getMessagesYml().getString("Party.Error.CommandNotFound")));
+			return;
+		}
+		if (!sc.hasPermission(pPlayer)) {
+			pPlayer.sendMessage(getPrefix() + Main.getInstance().getMessagesYml().getString("Party.Error.NoPermission"));
 			return;
 		}
 		Vector<String> a = new Vector<>(Arrays.asList(args));

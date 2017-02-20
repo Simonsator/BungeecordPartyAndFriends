@@ -5,6 +5,8 @@ import de.simonsator.partyandfriends.api.party.PartyAPI;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
 
+import java.util.List;
+
 /**
  * The /party chat command
  *
@@ -13,8 +15,8 @@ import de.simonsator.partyandfriends.main.Main;
  */
 public class Chat extends PartySubCommand {
 
-	public Chat(String[] pCommands, int pPriority, String pHelpText) {
-		super(pCommands, pPriority, pHelpText);
+	public Chat(List<String> pCommands, int pPriority, String pHelpText, String pPermission) {
+		super(pCommands, pPriority, pHelpText, pPermission);
 	}
 
 	@Override

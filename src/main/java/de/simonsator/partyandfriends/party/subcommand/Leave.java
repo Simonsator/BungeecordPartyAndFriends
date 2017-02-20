@@ -7,6 +7,8 @@ import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.util.List;
+
 /**
  * The class which will be executed on /party leave
  *
@@ -15,8 +17,8 @@ import net.md_5.bungee.api.chat.TextComponent;
  */
 public class Leave extends PartySubCommand {
 
-	public Leave(String[] pCommands, int pPriority, String pHelpText) {
-		super(pCommands, pPriority, pHelpText);
+	public Leave(List<String> pCommands, int pPriority, String pHelpText, String pPermission) {
+		super(pCommands, pPriority, pHelpText, pPermission);
 	}
 
 	/**

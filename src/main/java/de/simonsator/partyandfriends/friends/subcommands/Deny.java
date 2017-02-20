@@ -5,6 +5,7 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.util.List;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
@@ -19,8 +20,8 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PA
  */
 public class Deny extends RequestReactionsCommands {
 
-	public Deny(String[] pCommands, int pPriority, String pHelp) {
-		super(pCommands, pPriority, pHelp);
+	public Deny(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
+		super(pCommands, pPriority, pHelp, pPermission);
 	}
 
 	@Override

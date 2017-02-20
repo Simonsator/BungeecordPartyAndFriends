@@ -9,6 +9,7 @@ import de.simonsator.partyandfriends.utilities.StandardConnector;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 
+import java.util.List;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
@@ -23,8 +24,8 @@ import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 public class Jump extends FriendSubCommand {
 	private static ServerConnector connector = new StandardConnector();
 
-	public Jump(String[] pCommands, int pPriority, String pHelp) {
-		super(pCommands, pPriority, pHelp);
+	public Jump(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
+		super(pCommands, pPriority, pHelp, pPermission);
 	}
 
 	/**

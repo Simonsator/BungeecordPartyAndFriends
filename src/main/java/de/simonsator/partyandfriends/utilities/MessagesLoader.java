@@ -35,6 +35,7 @@ public class MessagesLoader extends LanguageConfiguration {
 	private void loadEnglishMessages() {
 		set("General.DisabledServer", "&cThis command cannot be executed here.");
 		set("Party.Error.CommandNotFound", "&cThis command does not exist!");
+		set("Party.Error.NoPermission", "&cYou don't have the permission to execute this command!");
 		set("Party.CommandUsage.Join", "&8/&5Party join  &8- &7Join a party");
 		set("Party.CommandUsage.Invite", "&8/&5Party invite  &8- &7Invite a player into your party");
 		set("Party.CommandUsage.List", "&8/&5Party list &8- &7List all players who are in the party");
@@ -75,7 +76,8 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.Leader.NewLeaderIs", "&7The new party leader is &6[NEWLEADER]");
 		set("Party.Command.Leave.NewLeaderIs", "&bThe leader has left the party. The new leader is &e[NEWLEADER].");
 		set("Party.Command.Leave.YouLeftTheParty", "&bYou left your party.");
-		set("Friends.General.CommandNotFound", " &7The command does not exist.");
+		set("Friends.General.CommandNotFound", " &cThe command does not exist.");
+		set("Friends.General.NoPermission", " &cYou don't have the permission to execute this command.");
 		set("Friends.General.PlayerIsOffline", " &7The player &e[PLAYER] &7is not online or you are not his friend.");
 		set("Friends.General.NotAFriendOfOrOffline", " &7The player &e[PLAYER] &7is not online or you are not his friend.");
 		set("Friends.General.NoFriendGiven", " &7You need to specify a friend.");
@@ -152,7 +154,8 @@ public class MessagesLoader extends LanguageConfiguration {
 	private void loadGermanMessages() {
 		set("General.DisabledServer", "&cDieses Kommando kann hier nicht ausgeführt werden.");
 		set("Friends.Command.Add.SentAFriendRequest", " &7Dem Spieler &e[PLAYER] &7wurde eine Freundschaftsanfrage gesendet.");
-		set("Friends.General.CommandNotFound", " &7Das Kommando existiert nicht.");
+		set("Friends.General.CommandNotFound", " &cDas Kommando existiert nicht.");
+		set("Friends.General.NoPermission", " &cDu hast nicht die Permssion um dieses Kommando auszuführen.");
 		set("Friends.General.PlayerIsOffline", " &7Der Spieler &e[PLAYER] &7ist nicht online oder du bist nicht mit ihm befreundet.");
 		set("Friends.General.NotAFriendOfOrOffline", " &7Der Spieler &e[PLAYER] &7ist nicht online oder kein Freund von dir.");
 		set("Friends.General.NoPlayerGiven", " &7Du musst einen Spieler angeben.");
@@ -232,6 +235,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.CommandUsage.Kick", "&8/&5Party kick <Spieler> &8- &7Kickt einen Spieler aus der Party");
 		set("Party.CommandUsage.Leader", "&8/&5Party leader <Spieler> &8- &7Macht einen anderen Spieler zum Leader");
 		set("Party.Error.CommandNotFound", "&cDieser Befehl existiert nicht!");
+		set("Party.Error.NoPermission", "&cDu hast nicht die Permssion um dieses Kommando auszuführen!");
 		set("Party.Command.General.PlayerHasLeftTheParty", "&bDer Spieler &6[PLAYER] hat die Party verlassen.");
 		set("Party.Command.General.ErrorNoParty", "&cDu bist in keiner Party.");
 		set("Party.Command.General.ErrorNotPartyLeader", "&cDu bist nicht der Party Leader.");

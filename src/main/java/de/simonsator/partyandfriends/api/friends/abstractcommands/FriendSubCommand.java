@@ -6,12 +6,18 @@ import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.utilities.SubCommand;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.util.List;
+
 import static de.simonsator.partyandfriends.main.Main.getInstance;
 
 public abstract class FriendSubCommand extends SubCommand implements Comparable<SubCommand> {
 
 	protected FriendSubCommand(String[] pCommands, int pPriority, String pHelp) {
 		super(pCommands, pPriority, new TextComponent(pHelp), getInstance().getFriendsPrefix());
+	}
+
+	protected FriendSubCommand(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
+		super(pCommands, pPriority, pHelp, getInstance().getFriendsPrefix(), pPermission);
 	}
 
 	protected boolean isPlayerGiven(OnlinePAFPlayer pPlayer, String[] args) {

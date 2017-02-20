@@ -6,6 +6,8 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
 
+import java.util.List;
+
 import static de.simonsator.partyandfriends.main.Main.getInstance;
 
 /***
@@ -15,8 +17,8 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
  * @version 1.0.0
  */
 public class Settings extends FriendSubCommand {
-	public Settings(String[] pCommands, int pPriority, String pHelp) {
-		super(pCommands, pPriority, pHelp);
+	public Settings(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
+		super(pCommands, pPriority, pHelp, pPermission);
 	}
 
 	@Override

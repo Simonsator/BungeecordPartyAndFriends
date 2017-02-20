@@ -7,6 +7,7 @@ import de.simonsator.partyandfriends.api.party.abstractcommands.LeaderNeededComm
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.util.List;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
@@ -20,8 +21,8 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.NEW_LEADE
  */
 public class Leader extends LeaderNeededCommand {
 
-	public Leader(String[] pCommands, int pPriority, String pHelpText) {
-		super(pCommands, pPriority, pHelpText);
+	public Leader(List<String> pCommands, int pPriority, String pHelpText, String pPermission) {
+		super(pCommands, pPriority, pHelpText, pPermission);
 	}
 
 	/**

@@ -65,8 +65,11 @@ public class PAFPlayerMySQL extends PAFPlayerClass {
 
 	@Override
 	public boolean hasPermission(String pPermission) {
+		if (pPermission == null)
+			return true;
+		if (pPermission.equals(""))
+			return true;
 		return PermissionProvider.getInstance().hasPermission(this, pPermission);
-
 	}
 
 	@Override

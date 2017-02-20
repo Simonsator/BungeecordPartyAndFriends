@@ -6,6 +6,8 @@ import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.utilities.SubCommand;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.util.List;
+
 import static de.simonsator.partyandfriends.main.Main.getInstance;
 
 /**
@@ -16,8 +18,16 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
  */
 public abstract class PartySubCommand extends SubCommand {
 
-	protected PartySubCommand(String[] pCommands, int pPriority, String pHelpText) {
-		super(pCommands, pPriority, new TextComponent(pHelpText), getInstance().getPartyPrefix());
+	protected PartySubCommand(List<String> pCommands, int pPriority, String pHelpText, String pPermission) {
+		super(pCommands, pPriority, pHelpText, getInstance().getPartyPrefix(), pPermission);
+	}
+
+	public PartySubCommand(String[] pCommands, int pPriority, TextComponent pHelp) {
+		super(pCommands, pPriority, pHelp, PartyCommand.getInstance().getPrefix());
+	}
+
+	public PartySubCommand(String[] pCommands, int pPriority, String pHelp) {
+		super(pCommands, pPriority, pHelp, PartyCommand.getInstance().getPrefix());
 	}
 
 	protected boolean isInParty(OnlinePAFPlayer pPlayer, PlayerParty pParty) {

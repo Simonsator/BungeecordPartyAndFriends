@@ -6,8 +6,9 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.friends.subcommands.*;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.event.TabCompleteEvent;
-import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.config.Configuration;
+
+import java.util.List;
 
 /**
  * The /friend command class
@@ -27,40 +28,36 @@ public class Friends extends TopCommand<FriendSubCommand> {
 		super(pCommandNames.toArray(new String[0]),
 				Main.getInstance().getConfig().getString("Commands.Friends.TopCommands.Friend.Permissions"), pPrefix);
 		instance = this;
-		if (!Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.List.Disabled"))
+		Configuration config = Main.getInstance().getConfig();
+		if (!config.getBoolean("Commands.Friends.SubCommands.List.Disabled"))
 			subCommands
-					.add(new FriendList(
-							(Main.getInstance().getConfig().getStringList("Commands.Friends.SubCommands.List.Names")
-									.toArray(new String[0])),
-							0, Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.List")));
-		if (!Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.MSG.Disabled"))
+					.add(new FriendList(config.getStringList("Commands.Friends.SubCommands.List.Names"),
+							0, Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.List"), config.getString("Commands.Friends.SubCommands.List.Permission")));
+		if (!config.getBoolean("Commands.Friends.SubCommands.MSG.Disabled"))
 			subCommands.add(new Message(
-					Main.getInstance().getConfig().getStringList("Commands.Friends.SubCommands.MSG.Names").toArray(new String[0]),
-					1, Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.MSG")));
-		String[] acceptCommandNames = Main.getInstance().getConfig().getStringList("Commands.Friends.SubCommands.Accept.Names").toArray(new String[0]);
+					config.getStringList("Commands.Friends.SubCommands.MSG.Names"),
+					1, Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.MSG"), config.getString("Commands.Friends.SubCommands.MSG.Permission")));
+		List<String> acceptCommandNames = config.getStringList("Commands.Friends.SubCommands.Accept.Names");
 		subCommands.add(new Accept(acceptCommandNames
 				, 3,
-				Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Accept")));
+				Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Accept"), config.getString("Commands.Friends.SubCommands.Accept.Permission")));
 		subCommands.add(
-				new Add(Main.getInstance().getConfig().getStringList("Commands.Friends.SubCommands.Add.Names").toArray(new String[0]),
-						2, Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.ADD"), acceptCommandNames[0]));
+				new Add(config.getStringList("Commands.Friends.SubCommands.Add.Names"),
+						2, Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.ADD"), acceptCommandNames.get(0), config.getString("Commands.Friends.SubCommands.Add.Permission")));
 		subCommands.add(new Deny(
-				Main.getInstance().getConfig().getStringList("Commands.Friends.SubCommands.Deny.Names").toArray(new String[0]), 4,
-				Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Deny")));
+				config.getStringList("Commands.Friends.SubCommands.Deny.Names"), 4,
+				Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Deny"), config.getString("Commands.Friends.SubCommands.Deny.Permission")));
 		subCommands.add(new Remove(
-				Main.getInstance().getConfig().getStringList("Commands.Friends.SubCommands.Remove.Names").toArray(new String[0]), 5,
-				Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Remove")));
-		if (!Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Jump.Disabled")) {
+				config.getStringList("Commands.Friends.SubCommands.Remove.Names"), 5,
+				Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Remove"), config.getString("Commands.Friends.SubCommands.Remove.Permission")));
+		if (!config.getBoolean("Commands.Friends.SubCommands.Jump.Disabled"))
 			subCommands.add(new Jump(
-					Main.getInstance().getConfig().getStringList("Commands.Friends.SubCommands.Jump.Names").toArray(new String[0]), 6,
-					Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Jump")));
-		}
-		if (!Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Disabled")) {
+					config.getStringList("Commands.Friends.SubCommands.Jump.Names"), 6,
+					Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Jump"), config.getString("Commands.Friends.SubCommands.Jump.Permission")));
+		if (!config.getBoolean("Commands.Friends.SubCommands.Settings.Disabled"))
 			subCommands.add(new Settings(
-					Main.getInstance().getConfig().getStringList("Commands.Friends.SubCommands.Settings.Names")
-							.toArray(new String[0]),
-					7, Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Settings")));
-		}
+					config.getStringList("Commands.Friends.SubCommands.Settings.Names"),
+					7, Main.getInstance().getMessagesYml().getString("Friends.CommandUsage.Settings"), config.getString("Commands.Friends.SubCommands.Settings.Permission")));
 		sort();
 	}
 
@@ -87,7 +84,10 @@ public class Friends extends TopCommand<FriendSubCommand> {
 		}
 		for (FriendSubCommand command : subCommands) {
 			if (command.isApplicable(args[0])) {
-				command.onCommand(pPlayer, args);
+				if (command.hasPermission(pPlayer))
+					command.onCommand(pPlayer, args);
+				else
+					pPlayer.sendMessage(getPrefix() + Main.getInstance().getMessagesYml().getString("Friends.General.NoPermission"));
 				return;
 			}
 		}

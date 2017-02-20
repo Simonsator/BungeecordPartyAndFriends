@@ -90,7 +90,6 @@ public class MSG extends OnlyTopCommand {
 		return true;
 	}
 
-
 	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (!pQueryPlayer.isOnline()) {
 			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()

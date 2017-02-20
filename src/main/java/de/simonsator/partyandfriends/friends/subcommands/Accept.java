@@ -4,9 +4,11 @@ import de.simonsator.partyandfriends.api.events.command.FriendshipCommandEvent;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.RequestReactionsCommands;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.friends.commands.Friends;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.util.List;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
@@ -22,8 +24,8 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PA
 public class Accept extends RequestReactionsCommands {
 
 
-	public Accept(String[] pCommands, int pPriority, String pHelp) {
-		super(pCommands, pPriority, pHelp);
+	public Accept(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
+		super(pCommands, pPriority, pHelp, pPermission);
 	}
 
 	@Override
@@ -31,6 +33,10 @@ public class Accept extends RequestReactionsCommands {
 		if (!isPlayerGiven(pPlayer, args))
 			return;
 		PAFPlayer playerQuery = getPlayerManager().getPlayer(args[1]);
+		if (!playerQuery.doesExist()) {
+			sendError(pPlayer, Friends.getInstance().getPrefix() + playerMatcher.replaceFirst(args[1]));
+			return;
+		}
 		if (hasNoRequest(pPlayer, playerQuery))
 			return;
 		FriendshipCommandEvent event = new FriendshipCommandEvent(pPlayer, playerQuery, args, this);

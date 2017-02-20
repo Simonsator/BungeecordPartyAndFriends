@@ -9,6 +9,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
 
+import java.util.List;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
@@ -24,8 +25,8 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PA
 public class Add extends FriendSubCommand {
 	private final String ACCEPT_COMMAND_NAME;
 
-	public Add(String[] pCommands, int pPriority, String pHelp, String pAcceptCommandName) {
-		super(pCommands, pPriority, pHelp);
+	public Add(List<String> pCommands, int pPriority, String pHelp, String pAcceptCommandName, String pPermission) {
+		super(pCommands, pPriority, pHelp, pPermission);
 		ACCEPT_COMMAND_NAME = " " + pAcceptCommandName + " ";
 	}
 
@@ -83,7 +84,6 @@ public class Add extends FriendSubCommand {
 	private boolean hasNoRequestFrom(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (pQueryPlayer.hasRequestFrom(pPlayer)) {
 			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Accept.ErrorAlreadySend").replace("[PLAYER]", pQueryPlayer.getDisplayName())));
-
 			return false;
 		}
 		return true;
