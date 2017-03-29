@@ -1,14 +1,19 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
+import de.simonsator.partyandfriends.api.Setting;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.protocol.packet.Chat;
+import de.simonsator.partyandfriends.friends.settings.FriendRequestSetting;
+import de.simonsator.partyandfriends.friends.settings.JumpSetting;
+import de.simonsator.partyandfriends.friends.settings.OfflineSetting;
+import de.simonsator.partyandfriends.friends.settings.PMSetting;
+import de.simonsator.partyandfriends.main.Main;
+import de.simonsator.partyandfriends.party.settings.InviteSetting;
+import net.md_5.bungee.config.Configuration;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import static de.simonsator.partyandfriends.main.Main.getInstance;
 
 /***
  * The command settings
@@ -17,116 +22,74 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
  * @version 1.0.0
  */
 public class Settings extends FriendSubCommand {
+	private static Settings instance;
+	private final List<Setting> SETTINGS = new ArrayList<>();
+
 	public Settings(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
 		super(pCommands, pPriority, pHelp, pPermission);
+		instance = this;
+		Configuration config = Main.getInstance().getConfig();
+		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Enabled"))
+			SETTINGS.add(new FriendRequestSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Names"),
+					config.getString("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Permission"),
+					config.getInt("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Priority")));
+		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Jump.Enabled"))
+			SETTINGS.add(new JumpSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.Jump.Names"),
+					config.getString("Commands.Friends.SubCommands.Settings.Settings.Jump.Permission"),
+					config.getInt("Commands.Friends.SubCommands.Settings.Settings.Jump.Priority")));
+		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Offline.Enabled"))
+			SETTINGS.add(new OfflineSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.Offline.Names"),
+					config.getString("Commands.Friends.SubCommands.Settings.Settings.Offline.Permission"),
+					config.getInt("Commands.Friends.SubCommands.Settings.Settings.Offline.Priority")));
+		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PM.Enabled"))
+			SETTINGS.add(new PMSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.PM.Names"),
+					config.getString("Commands.Friends.SubCommands.Settings.Settings.PM.Permission"),
+					config.getInt("Commands.Friends.SubCommands.Settings.Settings.PM.Priority")));
+		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Enabled"))
+			SETTINGS.add(new InviteSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Names"),
+					config.getString("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Permission"),
+					config.getInt("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Priority")));
+		Collections.sort(SETTINGS);
+	}
+
+	public static Settings getInstance() {
+		return instance;
+	}
+
+	public void registerSetting(Setting pSetting) {
+		SETTINGS.add(pSetting);
+		Collections.sort(SETTINGS);
+	}
+
+	public void unregisterSetting(Setting pSetting) {
+		SETTINGS.remove(pSetting);
+	}
+
+	public Setting getSettingInstance(Class<? extends Setting> pSettingClass) {
+		for (Setting setting : SETTINGS)
+			if (setting.getClass().equals(pSettingClass))
+				return setting;
+		return null;
 	}
 
 	@Override
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
-		if (changeSetting(pPlayer, args))
-			return;
-		if (pPlayer.getSettingsWorth(
-				0) == 0) {
-			pPlayer.sendMessage(
-					new TextComponent(getInstance().getFriendsPrefix() + getInstance().getMessagesYml()
-							.getString("Friends.Command.Settings.AtTheMomentYouAreNotGoneReceiveFriendRequests")));
-		} else {
-			pPlayer.sendMessage(
-					new TextComponent(getInstance().getFriendsPrefix() + getInstance().getMessagesYml()
-							.getString("Friends.Command.Settings.AtTheMomentYouAreGoneReceiveFriendRequests")));
-		}
-		pPlayer.sendPacket(new Chat("{\"text\":\""
-				+ getInstance().getMessagesYml()
-				.getString("Friends.Command.Settings.ChangeThisSettingWithFriendRequests")
-				+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-				+ getInstance().getFriendsCommand().getName() + " " + getCommandName() + " friendrequests"
-				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-				+ getInstance().getMessagesYml().getString("Friends.Command.Settings.ChangeThisSettingsHover")
-				+ "\"}]}}}"));
-		pPlayer.sendMessage(
-				new TextComponent(getInstance().getMessagesYml().getString("Friends.Command.Settings.SplitLine")));
-		if (pPlayer.getSettingsWorth(1) == 0) {
-			pPlayer.sendMessage(new TextComponent(
-					getInstance().getFriendsPrefix() + ChatColor.RESET + getInstance().getMessagesYml()
-							.getString("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty")));
-		} else {
-			pPlayer.sendMessage(
-					new TextComponent(getInstance().getFriendsPrefix() + ChatColor.RESET + getInstance()
-							.getMessagesYml().getString("Friends.Command.Settings.NowYouCanGetInvitedByFriends")));
-		}
-		pPlayer
-				.sendPacket(new Chat("{\"text\":\"" + getInstance().getFriendsPrefix() + ChatColor.RESET
-						+ getInstance().getMessagesYml()
-						.getString("Friends.Command.Settings.ChangeThisSettingWithParty")
-						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-						+ getInstance().getFriendsCommand().getName() + " " + getCommandName() + " party"
-						+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-						+ "Click here to change this setting." + "\"}]}}}"));
+		if (args.length <= 1) {
+			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Settings.Introduction"));
+			for (int i = 0; i < SETTINGS.size(); i++) {
+				pPlayer.sendMessage(Main.getInstance().getMessagesYml().getString("Friends.Command.Settings.SplitLine"));
+				SETTINGS.get(i).outputMessage(pPlayer);
+			}
+		} else if (!changeSetting(pPlayer, args))
+			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Settings.NotFound"));
 	}
 
 	private boolean changeSetting(OnlinePAFPlayer pPlayer, String[] args) {
-		if (args.length <= 1)
-			return false;
-		switch (args[1].toLowerCase()) {
-			case "party": {
-				int worthNow = pPlayer.changeSettingsWorth(1);
-				if (worthNow == 0) {
-					pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
-							.getMessagesYml().getString("Friends.Command.Settings.NowYouCanGetInvitedByEveryone")));
-				} else {
-					pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
-							.getMessagesYml().getString("Friends.Command.Settings.NowYouCanGetInvitedByFriends")));
-				}
+		for (Setting setting : SETTINGS)
+			if (setting.isApplicable(pPlayer, args[1])) {
+				setting.changeSetting(pPlayer, args);
 				return true;
 			}
-			case "friendrequests": {
-				int worthNow = pPlayer.changeSettingsWorth(0);
-				if (worthNow == 0) {
-					pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
-							.getMessagesYml().getString("Friends.Command.Settings.NowYouAreNotGoneReceiveFriendRequests")));
-				} else {
-
-					pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
-							.getMessagesYml().getString("Friends.Command.Settings.NowYouAreGoneReceiveFriendRequests")));
-				}
-				return true;
-			}
-			case "offline": {
-				int worthNow = pPlayer.changeSettingsWorth(3);
-				if (worthNow == 0) {
-					pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
-							.getMessagesYml().getString("Friends.Command.Settings.NowYouWillBeShowAsOnline")));
-				} else {
-					pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
-							.getMessagesYml().getString("Friends.Command.Settings.NowYouWilBeShownAsOffline")));
-					pPlayer.updateLastOnline();
-				}
-				return true;
-			}
-			case "messages": {
-				int worthNow = pPlayer.changeSettingsWorth(2);
-				if (worthNow == 1) {
-					pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
-							+ getInstance().getMessagesYml().getString("Friends.Command.Settings.NowNoMessages")));
-				} else {
-					pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
-							+ getInstance().getMessagesYml().getString("Friends.Command.Settings.NowMessages")));
-				}
-				return true;
-			}
-			case "jump": {
-				int worthNow = pPlayer.changeSettingsWorth(4);
-				if (worthNow == 0) {
-					pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
-							.getMessagesYml().getString("Friends.Command.Settings.NowYourFriendsCanJump")));
-				} else {
-					pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + getInstance()
-							.getMessagesYml().getString("Friends.Command.Settings.NowYourFriendsCanNotJump")));
-				}
-				return true;
-			}
-			default:
-				return false;
-		}
+		return false;
 	}
 }

@@ -126,17 +126,29 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Settings.NowMessages", " &7Now you are &agoing to &7receive messages from everyone.");
 		set("Friends.Command.Settings.NowYourFriendsCanJump", " &7Now your friends &acan jump &7to you.");
 		set("Friends.Command.Settings.NowYourFriendsCanNotJump", " &7Now your friends &ccan not jump &7to you.");
-		set("Friends.Command.Settings.AtTheMomentYouAreNotGoneReceiveFriendRequests",
-				" &7At the moment you are &cnot going to &7receive friend request.");
-		set("Friends.Command.Settings.AtTheMomentYouAreGoneReceiveFriendRequests",
-				" &7At the moment you are going to receive friend requests from &aeveryone.&7");
-		set("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty",
-				" &7At the moment you can get invited into a party by &aevery &7player.");
-		set("Friends.Command.Settings.AtTheMomentYouCanNotGetInvitedByEverybodyIntoHisParty",
-				" &7At the moment you can get invited &aonly &7by by your friends into their Party.");
+		set("Friends.Command.Settings.Introduction", " &7These are your settings:");
+		set("Friends.Command.Settings.FriendRequestSettingEveryone",
+				"&7At the moment you are going to receive friend requests from &aeveryone&7. To change this setting use &6/friend settings friendrequests&7.");
+		set("Friends.Command.Settings.FriendRequestSettingNobody",
+				"&7At the moment you are &cnot going to &7receive friend requests. To change this setting use &6/friend settings friendrequests&7.");
+		set("Friends.Command.Settings.PartyInvitedByEveryone",
+				"&7At the moment you can get invited into a party by &aevery &7player. To change this setting use &6/friend settings invite&7.");
+		set("Friends.Command.Settings.PartyInvitedByFriends",
+				"&7At the moment you can get invited &aonly &7by your friends into their Party. To change this setting use &6/friend settings invite&7.");
+		set("Friends.Command.Settings.CanJump",
+				"&7At the moment your friends &acan jump to you&7. To change this setting use &6/friend settings jump&7.");
+		set("Friends.Command.Settings.CanNotJump",
+				"&7At the moment your friends &ccannot &7jump to you. To change this setting use &6/friend settings jump&7.");
+		set("Friends.Command.Settings.ShowAsOnline",
+				"&7At the moment you are shown as &aonline&7. To change this setting use &6/friend settings offline&7.");
+		set("Friends.Command.Settings.ShowAsOffline",
+				"&7At the moment you are shown as &coffline&7. To change this setting use &6/friend settings offline&7.");
+		set("Friends.Command.Settings.ReceivePM",
+				"&7At the moment you are able to &areceive &7private messages. To change this setting use &6/friend settings message&7.");
+		set("Friends.Command.Settings.DoNotReceivePM",
+				"&7At the moment you are &cnot &7able to receive private messages. To change this setting use &6/friend settings message&7.");
 		set("Friends.Command.Settings.ChangeThisSettingsHover", "&aClick here to change this setting.");
-		set("Friends.Command.Settings.ChangeThisSettingWithFriendRequests", " &7Change this setting with &6/friend settings friendrequests&7.");
-		set("Friends.Command.Settings.ChangeThisSettingWithParty", " &7Change this setting with &6/friend settings Party&7.");
+		set("Friends.Command.Settings.NotFound", " &7The setting which was specified could not be found or you don't have the permission to use this setting.");
 		set("Friends.Command.Jump.AlreadyOnTheServer", " &7You are already on this server.");
 		set("Friends.Command.Jump.JoinedTheServer", " &7Now you are on the same server, like the player &e[PLAYER]&7.");
 		set("Friends.Command.Jump.CanNotJump", " &7You cannot jump to this person.");
@@ -198,17 +210,32 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.List.OnlineTitle", " &a(online)&7, spielt gerade auf [SERVER_ON]");
 		set("Friends.Command.List.OfflineTitle", " &c(offline)&7, zuletzt online [LAST_ONLINE]");
 		set("Friends.Command.Remove.Removed", " &7Du hast den Freund &e[PLAYER] &7entfernt.");
-		set("Friends.Command.Settings.AtTheMomentYouAreNotGoneReceiveFriendRequests",
-				" &7Momentan können dir &ckeine &7Freundschaftsanfragen gesendet werden.");
-		set("Friends.Command.Settings.AtTheMomentYouAreGoneReceiveFriendRequests",
-				" &7Momentan erhälst du Freundschaftsanfragen von &ajedem&7.");
-		set("Friends.Command.Settings.AtTheMomentYouCanGetInvitedByEverybodyIntoHisParty",
-				" &7Momentan können dir Partyeinladungen von &ajedem &7gesendet werden gesendet werden.");
-		set("Friends.Command.Settings.ChangeThisSettingWithFriendrequests",
-				" &7Ändere diese Einstellung mit &6/friend settings friendrequests&7.");
-		set("Friends.Command.Settings.AtTheMomentYouCanNotGetInvitedByEverybodyIntoHisParty",
-				" &7Momentan können dir &cnur &7Partyeinladungen von Freunden gesendet werden.");
-		set("Friends.Command.Settings.ChangeThisSettingWithParty", " &7Ändere diese Einstellung mit &6/friend settings party");
+		set("Friends.Command.Settings.Introduction",
+				" &7Dies sind deine Einstellungen:");
+		set("Friends.Command.Settings.FriendRequestSettingEveryone",
+				"&7Momentan erhälst du Freundschaftsanfragen von &ajedem&7. Um dies zu ändern nutze &6/friend settings friendrequests&7.");
+		set("Friends.Command.Settings.FriendRequestSettingNobody",
+				"&7Momentan können dir &ckeine &7Freundschaftsanfragen gesendet werden. Um dies zu ändern nutze &6/friend settings friendrequests&7.");
+		set("Friends.Command.Settings.PartyInvitedByEveryone",
+				"&7Momentan können dir Partyeinladungen von &ajedem &7gesendet werden gesendet werden. Um dies zu ändern nutze &6/friend settings invite&7.");
+		set("Friends.Command.Settings.PartyInvitedByFriends",
+				"&7Momentan kannst du &anur &7von deinen Freunden in eine Party eingeladen werden. Um dies zu ändern nutze &6/friend settings invite&7.");
+
+		set("Friends.Command.Settings.CanJump",
+				"&7Momentan &akönnen &7deine Freunde zu dir Springen. Um dies zu ändern nutze &6/friend settings jump&7.");
+		set("Friends.Command.Settings.CanNotJump",
+				"&7Momentan können deine Freunde &cnicht &7zu dir springen. Um dies zu ändern nutze &6/friend settings jump&7.");
+		set("Friends.Command.Settings.ShowAsOnline",
+				"&7Momentan wirst du als &aOnline&7 angezeigt. Um dies zu ändern nutze &6/friend settings offline&7.");
+		set("Friends.Command.Settings.ShowAsOffline",
+				"&7Momentan wirst du als &cOffline&7 angezeigt. Um dies zu ändern nutze &6/friend settings offline&7.");
+		set("Friends.Command.Settings.ReceivePM",
+				"&7Momentan &aerhälst &7du private Nachrichten. Um dies zu ändern nutze &6/friend settings message&7.");
+		set("Friends.Command.Settings.DoNotReceivePM",
+				"&7Momentan erhälst du &ckeine &7private Nachrichten. Um dies zu ändern nutze &6/friend settings message&7.");
+
+
+		set("Friends.Command.Settings.NotFound", " &7Die gegebene Einstellung konnte nicht gefunden werden oder du hast nicht die Rechte um diese zu benutzen.");
 		set("Friends.Command.Settings.ChangeThisSettingsHover", "&aHier klicken um die Einstellung zu ändern.");
 		set("Friends.Command.Settings.NowYouCanGetInvitedByEveryone", " &7Du kannst jetzt von &ajedem &7Spieler in eine Party eingeladen werden.");
 		set("Friends.Command.Settings.NowYouCanGetInvitedByFriends",
@@ -289,12 +316,12 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.General.RequestInfoOnJoinColor", "&e");
 		set("Friends.General.RequestInfoOnJoinColorComma", "&7");
 		set("Friends.Command.MSG.SentMessage", " &e[SENDERNAME] &5-> &e[PLAYER]&7:[CONTENT]");
-		set("Friends.Command.Settings.SplitLine",
-				"&8&m-----------------------------------------------");
 		set("Friends.Command.List.OnlineColor", "&a");
 		set("Friends.Command.List.OfflineColor", "&c");
 		set("Friends.Command.List.PlayerSplit", "LINE_BREAK &7- ");
 		set("Friends.Command.MSG.ColorOfMessage", " &7");
+		set("Friends.Command.Settings.SplitLine",
+				"&8&m-----------------------------------------------");
 	}
 
 	@Override
