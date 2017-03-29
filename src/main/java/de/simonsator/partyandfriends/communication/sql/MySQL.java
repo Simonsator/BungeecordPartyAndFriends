@@ -61,28 +61,28 @@ public class MySQL extends SQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("CREATE DATABASE IF NOT EXISTS " + DATABASE);
+			prepStmt = con.prepareStatement("CREATE DATABASE IF NOT EXISTS `" + DATABASE + "`");
 			prepStmt.executeUpdate();
 			prepStmt.close();
-			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS " + DATABASE + ".`" + TABLE_PREFIX + "players` ("
+			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_PREFIX + "players` ("
 					+ "`player_id` INT(8) NOT NULL AUTO_INCREMENT, " + "`player_name` VARCHAR(16) NOT NULL, "
 					+ "`player_uuid` CHAR(38) NOT NULL, PRIMARY KEY (`player_id`));");
 			prepStmt.executeUpdate();
 			prepStmt.close();
-			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS " + DATABASE + ".`" + TABLE_PREFIX
+			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_PREFIX
 					+ "last_player_wrote_to` (`player_id` INT(8) NOT NULL, `written_to_id` INT(8) NOT NULL);");
 			prepStmt.executeUpdate();
 			prepStmt.close();
-			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS " + DATABASE + ".`" + TABLE_PREFIX
+			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_PREFIX
 					+ "friend_assignment` (`friend1_id` INT(8) NOT NULL, `friend2_id` INT(8) NOT NULL);");
 			prepStmt.executeUpdate();
 			prepStmt.close();
-			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS " + DATABASE + ".`" + TABLE_PREFIX
+			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_PREFIX
 					+ "settings` (`player_id` INT(8) NOT NULL, " + "`settings_id` TINYINT(2) NOT NULL, "
 					+ " `settings_worth` TINYINT(1) NOT NULL);");
 			prepStmt.executeUpdate();
 			prepStmt.close();
-			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS " + DATABASE + ".`" + TABLE_PREFIX
+			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_PREFIX
 					+ "friend_request_assignment` (`requester_id` INT(8) NOT NULL, "
 					+ "`receiver_id` INT(8) NOT NULL);");
 			prepStmt.executeUpdate();
