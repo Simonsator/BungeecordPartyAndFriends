@@ -40,6 +40,7 @@ public class Main extends Plugin {
 	private static Main instance;
 	private static PAFPlayerManager playerManager;
 	private static PartyManager partyManager;
+	public final String VALIDATION_KEY = "key:xzdnjfpdsofmuj:5554dfjkiue";
 	/**
 	 * The configuration
 	 */
@@ -92,19 +93,23 @@ public class Main extends Plugin {
 	public void onEnable() {
 		instance = (this);
 		loadConfiguration();
+		initPAFClasses();
+		registerCommands();
+		registerListeners();
+	}
+
+	private void initPAFClasses() {
 		switch ("MySQL") {
 			case "MySQL":
 				MySQLData mySQLData = new MySQLData(getConfig().getString("MySQL.Host"),
 						getConfig().getString("MySQL.Username"), getConfig().getString("MySQL.Password"),
 						getConfig().getInt("MySQL.Port"), getConfig().getString("MySQL.Database"),
-						getConfig().getString("MySQL.TablePrefix"));
+						getConfig().getString("MySQL.TablePrefix"), getConfig().getBoolean("MySQL.UseSSL"));
 				playerManager = new PAFPlayerManagerMySQL(mySQLData);
 				partyManager = new LocalPartyManager();
 				break;
 		}
 		new StandardPermissionProvider();
-		registerCommands();
-		registerListeners();
 	}
 
 	@Override
@@ -217,8 +222,9 @@ public class Main extends Plugin {
 		ProxyServer.getInstance().getPluginManager().unregisterListeners(this);
 		onDisable();
 		onEnable();
-		for (PAFExtension extension : pafExtensions)
+		List<PAFExtension> toReload = new ArrayList<>(pafExtensions);
+		pafExtensions.clear();
+		for (PAFExtension extension : toReload)
 			extension.reload();
 	}
-
 }
