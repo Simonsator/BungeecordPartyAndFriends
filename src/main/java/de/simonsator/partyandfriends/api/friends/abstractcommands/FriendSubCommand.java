@@ -3,6 +3,7 @@ package de.simonsator.partyandfriends.api.friends.abstractcommands;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.friends.commands.Friends;
+import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.SubCommand;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -30,7 +31,7 @@ public abstract class FriendSubCommand extends SubCommand implements Comparable<
 
 	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (!pPlayer.isAFriendOf(pGivenPlayer)) {
-			sendError(pPlayer, "Friends.General.PlayerIsOffline");
+			sendError(pPlayer, new TextComponent(Main.getInstance().getMessagesYml().getString("Friends.General.PlayerIsOffline").replace("[PLAYER]", pGivenPlayer.getDisplayName())));
 			return false;
 		}
 		return true;
