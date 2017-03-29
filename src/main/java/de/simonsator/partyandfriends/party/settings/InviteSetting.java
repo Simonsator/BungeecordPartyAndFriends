@@ -21,7 +21,7 @@ public class InviteSetting extends SimpleSetting {
 	@Override
 	protected String getMessage(OnlinePAFPlayer pPlayer) {
 		String identifier;
-		if (pPlayer.getSettingsWorth(0) == 0) {
+		if (pPlayer.getSettingsWorth(1) == 0) {
 			identifier = "Friends.Command.Settings.PartyInvitedByEveryone";
 		} else {
 			identifier = "Friends.Command.Settings.PartyInvitedByFriends";

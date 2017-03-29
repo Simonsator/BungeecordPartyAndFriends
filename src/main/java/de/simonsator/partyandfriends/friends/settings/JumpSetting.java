@@ -19,7 +19,7 @@ public class JumpSetting extends SimpleSetting {
 	@Override
 	protected String getMessage(OnlinePAFPlayer pPlayer) {
 		String identifier;
-		if (pPlayer.getSettingsWorth(0) == 1) {
+		if (pPlayer.getSettingsWorth(4) == 0) {
 			identifier = "Friends.Command.Settings.CanJump";
 		} else {
 			identifier = "Friends.Command.Settings.CanNotJump";
@@ -30,7 +30,7 @@ public class JumpSetting extends SimpleSetting {
 	@Override
 	public void changeSetting(OnlinePAFPlayer pPlayer, String[] pArgs) {
 		int worthNow = pPlayer.changeSettingsWorth(4);
-		if (worthNow == 0) {
+		if (worthNow == 1) {
 			pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance()
 					.getMessagesYml().getString("Friends.Command.Settings.NowYourFriendsCanJump")));
 		} else {

@@ -19,7 +19,7 @@ public class PMSetting extends SimpleSetting {
 	@Override
 	protected String getMessage(OnlinePAFPlayer pPlayer) {
 		String identifier;
-		if (pPlayer.getSettingsWorth(0) == 1) {
+		if (pPlayer.getSettingsWorth(2) == 0) {
 			identifier = "Friends.Command.Settings.ReceivePM";
 		} else {
 			identifier = "Friends.Command.Settings.DoNotReceivePM";

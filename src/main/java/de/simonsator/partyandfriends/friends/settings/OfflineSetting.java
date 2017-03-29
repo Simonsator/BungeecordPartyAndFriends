@@ -19,7 +19,7 @@ public class OfflineSetting extends SimpleSetting {
 	@Override
 	protected String getMessage(OnlinePAFPlayer pPlayer) {
 		String identifier;
-		if (pPlayer.getSettingsWorth(0) == 1) {
+		if (pPlayer.getSettingsWorth(3) == 0) {
 			identifier = "Friends.Command.Settings.ShowAsOnline";
 		} else {
 			identifier = "Friends.Command.Settings.ShowAsOffline";

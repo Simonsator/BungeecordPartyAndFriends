@@ -134,7 +134,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Settings.PartyInvitedByEveryone",
 				"&7At the moment you can get invited into a party by &aevery &7player. To change this setting use &6/friend settings invite&7.");
 		set("Friends.Command.Settings.PartyInvitedByFriends",
-				"&7At the moment you can get invited &aonly &7by your friends into their Party. To change this setting use &6/friend settings invite&7.");
+				"&7At the moment you can get invited &conly &7by your friends into their Party. To change this setting use &6/friend settings invite&7.");
 		set("Friends.Command.Settings.CanJump",
 				"&7At the moment your friends &acan jump to you&7. To change this setting use &6/friend settings jump&7.");
 		set("Friends.Command.Settings.CanNotJump",
@@ -219,7 +219,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Settings.PartyInvitedByEveryone",
 				"&7Momentan können dir Partyeinladungen von &ajedem &7gesendet werden gesendet werden. Um dies zu ändern nutze &6/friend settings invite&7.");
 		set("Friends.Command.Settings.PartyInvitedByFriends",
-				"&7Momentan kannst du &anur &7von deinen Freunden in eine Party eingeladen werden. Um dies zu ändern nutze &6/friend settings invite&7.");
+				"&7Momentan kannst du &cnur &7von deinen Freunden in eine Party eingeladen werden. Um dies zu ändern nutze &6/friend settings invite&7.");
 
 		set("Friends.Command.Settings.CanJump",
 				"&7Momentan &akönnen &7deine Freunde zu dir Springen. Um dies zu ändern nutze &6/friend settings jump&7.");
