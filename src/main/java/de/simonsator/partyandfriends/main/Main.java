@@ -20,6 +20,7 @@ import de.simonsator.partyandfriends.utilities.disable.Disabler;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
+import org.bstats.Metrics;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,6 +97,11 @@ public class Main extends Plugin {
 		initPAFClasses();
 		registerCommands();
 		registerListeners();
+		initBStats();
+	}
+
+	private void initBStats() {
+		new Metrics(this);
 	}
 
 	private void initPAFClasses() {
