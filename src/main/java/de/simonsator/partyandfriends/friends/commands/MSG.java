@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.friends.commands;
 
 import de.simonsator.partyandfriends.api.OnlyTopCommand;
+import de.simonsator.partyandfriends.api.events.message.FriendMessageEvent;
 import de.simonsator.partyandfriends.api.events.message.FriendOnlineMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
@@ -74,10 +75,14 @@ public class MSG extends OnlyTopCommand {
 			return;
 		if (isOffline(pPlayer, pWrittenTo))
 			return;
-		ProxyServer.getInstance().getPluginManager().callEvent(new FriendOnlineMessageEvent((OnlinePAFPlayer) pWrittenTo, pPlayer, toMessageNoColor(args, n)));
+		FriendMessageEvent friendMessageEvent = new FriendOnlineMessageEvent((OnlinePAFPlayer) pWrittenTo, pPlayer, toMessageNoColor(args, n));
+		ProxyServer.getInstance().getPluginManager().callEvent(friendMessageEvent);
+		if (friendMessageEvent.isCancelled())
+			return;
 		sendMessage(toMessage(args, n), (OnlinePAFPlayer) pWrittenTo, pPlayer);
 		pPlayer.setLastPlayerWroteFrom(pWrittenTo);
 	}
+
 
 	boolean messageGiven(OnlinePAFPlayer pPlayer, String[] args, int n) {
 		if (args.length <= n) {

@@ -7,6 +7,8 @@ import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.event.TabCompleteEvent;
+import net.md_5.bungee.event.EventHandler;
 
 import java.util.regex.Matcher;
 
@@ -43,7 +45,10 @@ public class PartyChat extends OnlyTopCommand {
 			stringBuilder.append(arg);
 		}
 		String text = stringBuilder.toString();
-		ProxyServer.getInstance().getPluginManager().callEvent(new PartyMessageEvent(pPlayer, text, party));
+		PartyMessageEvent partyMessageEvent = new PartyMessageEvent(pPlayer, text, party);
+		ProxyServer.getInstance().getPluginManager().callEvent(partyMessageEvent);
+		if (partyMessageEvent.isCancelled())
+			return;
 		party.sendMessage(new TextComponent(
 				Main.getInstance().getMessagesYml().getString("Party.Command.Chat.Prefix") + MESSAGE_CONTENT_PATTERN
 						.matcher(SENDER_NAME_PATTERN
@@ -70,6 +75,11 @@ public class PartyChat extends OnlyTopCommand {
 			return false;
 		}
 		return true;
+	}
+
+	@EventHandler
+	public void onTabComplete(TabCompleteEvent pEvent) {
+		tabComplete(pEvent);
 	}
 
 }
