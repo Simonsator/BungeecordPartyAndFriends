@@ -83,7 +83,6 @@ public class MSG extends OnlyTopCommand {
 		pPlayer.setLastPlayerWroteFrom(pWrittenTo);
 	}
 
-
 	boolean messageGiven(OnlinePAFPlayer pPlayer, String[] args, int n) {
 		if (args.length <= n) {
 			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
@@ -163,5 +162,4 @@ public class MSG extends OnlyTopCommand {
 		}
 		return content.toString();
 	}
-
 }

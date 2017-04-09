@@ -6,12 +6,11 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.config.ServerInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
-
-import static de.simonsator.partyandfriends.main.Main.getInstance;
 
 /***
  * The command list
@@ -20,8 +19,8 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
  * @version 1.0.0
  */
 public class FriendList extends FriendSubCommand {
-	private final String LAST_ONLINE_COLOR = Main.getInstance().getMessagesYml().getString("Friends.Command.List.TimeColor");
 	private boolean sortElements;
+	private final String LAST_ONLINE_COLOR = Main.getInstance().getMessagesYml().getString("Friends.Command.List.TimeColor");
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(Main.getInstance().getConfig().getString("General.Time.Format"),
 			Locale.forLanguageTag(Main.getInstance().getConfig().getString("General.Time.LanguageTag")));
 
@@ -36,8 +35,8 @@ public class FriendList extends FriendSubCommand {
 		java.util.List<PAFPlayer> friends = pPlayer.getFriends();
 		if (!hasFriends(pPlayer, friends))
 			return;
-		pPlayer.sendMessage(getInstance().getFriendsPrefix()
-				+ getInstance().getMessagesYml().getString("Friends.Command.List.FriendsList")
+		pPlayer.sendMessage(Main.getInstance().getFriendsPrefix()
+				+ Main.getInstance().getMessagesYml().getString("Friends.Command.List.FriendsList")
 				+ getFriendsCombined(friends));
 	}
 
@@ -51,16 +50,22 @@ public class FriendList extends FriendSubCommand {
 			String color;
 			if (!pFriends.get(i).isOnline() || pFriends.get(i).getSettingsWorth(3) == 1) {
 				additive = PatterCollection.LAST_ONLINE_PATTERN.matcher(
-						getInstance().getMessagesYml().getString("Friends.Command.List.OfflineTitle")).replaceAll(Matcher.quoteReplacement(
+						Main.getInstance().getMessagesYml().getString("Friends.Command.List.OfflineTitle")).replaceAll(Matcher.quoteReplacement(
 						setLastOnlineColor(dateFormat.format(pFriends.get(i).getLastOnline()))));
-				color = getInstance().getMessagesYml().getString("Friends.Command.List.OfflineColor");
+				color = Main.getInstance().getMessagesYml().getString("Friends.Command.List.OfflineColor");
 			} else {
-				additive = PatterCollection.SERVER_ON.matcher(getInstance().getMessagesYml().getString("Friends.Command.List.OnlineTitle")).
-						replaceAll(Matcher.quoteReplacement(((OnlinePAFPlayer) pFriends.get(i)).getServer().getName()));
-				color = getInstance().getMessagesYml().getString("Friends.Command.List.OnlineColor");
+				ServerInfo server = ((OnlinePAFPlayer) pFriends.get(i)).getServer();
+				String serverName;
+				if (server == null)
+					serverName = "?";
+				else
+					serverName = server.getName();
+				additive = PatterCollection.SERVER_ON.matcher(Main.getInstance().getMessagesYml().getString("Friends.Command.List.OnlineTitle")).
+						replaceAll(Matcher.quoteReplacement(serverName));
+				color = Main.getInstance().getMessagesYml().getString("Friends.Command.List.OnlineColor");
 			}
 			if (i > 0)
-				friendsCombined.append(getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit"));
+				friendsCombined.append(Main.getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit"));
 			friendsCombined.append(color);
 			friendsCombined.append(pFriends.get(i).getDisplayName());
 			friendsCombined.append(additive);
@@ -70,8 +75,8 @@ public class FriendList extends FriendSubCommand {
 
 	private boolean hasFriends(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriends) {
 		if (pFriends.isEmpty()) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
-					+ getInstance().getMessagesYml().getString("Friends.Command.List.NoFriendsAdded")));
+			pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix()
+					+ Main.getInstance().getMessagesYml().getString("Friends.Command.List.NoFriendsAdded")));
 			return false;
 		}
 		return true;

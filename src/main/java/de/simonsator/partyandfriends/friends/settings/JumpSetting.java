@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.friends.settings;
 
 import de.simonsator.partyandfriends.api.SimpleSetting;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -30,11 +31,11 @@ public class JumpSetting extends SimpleSetting {
 	@Override
 	public void changeSetting(OnlinePAFPlayer pPlayer, String[] pArgs) {
 		int worthNow = pPlayer.changeSettingsWorth(4);
-		if (worthNow == 1) {
-			pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance()
+		if (worthNow == 0) {
+			pPlayer.sendMessage(new TextComponent(Friends.getInstance().getPrefix() + Main.getInstance()
 					.getMessagesYml().getString("Friends.Command.Settings.NowYourFriendsCanJump")));
 		} else {
-			pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + Main.getInstance()
+			pPlayer.sendMessage(new TextComponent(Friends.getInstance().getPrefix() + Main.getInstance()
 					.getMessagesYml().getString("Friends.Command.Settings.NowYourFriendsCanNotJump")));
 		}
 	}

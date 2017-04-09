@@ -4,6 +4,7 @@ import de.simonsator.partyandfriends.api.events.command.FriendshipCommandEvent;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -51,7 +52,7 @@ public class Add extends FriendSubCommand {
 					.sendPacket(new Chat("{\"text\":\"" + getInstance().getFriendsPrefix()
 							+ PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1]))
 							+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-							+ getInstance().getFriendsCommand().getName() + ACCEPT_COMMAND_NAME + args[1]
+							+ Friends.getInstance().getName() + ACCEPT_COMMAND_NAME + args[1]
 							+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
 							+ getInstance().getMessagesYml().getString("Friends.Command.Add.ClickHere")
 							+ "\"}]}}}"));
@@ -76,7 +77,7 @@ public class Add extends FriendSubCommand {
 				.sendPacket(new Chat("{\"text\":\"" + getInstance().getFriendsPrefix()
 						+ PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(pPlayer.getName()))
 						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/"
-						+ getInstance().getFriendsCommand().getName() + " accept " + pPlayer.getName()
+						+ Friends.getInstance().getName() + " accept " + pPlayer.getName()
 						+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
 						+ getInstance().getMessagesYml().getString("Friends.Command.Add.ClickHere") + "\"}]}}}"));
 	}

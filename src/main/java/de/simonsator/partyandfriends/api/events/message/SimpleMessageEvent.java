@@ -10,12 +10,12 @@ import net.md_5.bungee.api.plugin.Event;
  */
 public abstract class SimpleMessageEvent extends Event implements Cancellable {
 	private final OnlinePAFPlayer SENDER;
-	private final String MESSAGE;
+	private String message;
 	private boolean isCancelled = false;
 
 	protected SimpleMessageEvent(OnlinePAFPlayer pSender, String pMessage) {
 		SENDER = pSender;
-		MESSAGE = pMessage;
+		message = pMessage;
 	}
 
 	public OnlinePAFPlayer getSender() {
@@ -23,7 +23,7 @@ public abstract class SimpleMessageEvent extends Event implements Cancellable {
 	}
 
 	public String getMessage() {
-		return MESSAGE;
+		return message;
 	}
 
 	@Override
@@ -34,5 +34,9 @@ public abstract class SimpleMessageEvent extends Event implements Cancellable {
 	@Override
 	public void setCancelled(boolean b) {
 		isCancelled = b;
+	}
+
+	public void setMessage(String pMessage) {
+		this.message = pMessage;
 	}
 }
