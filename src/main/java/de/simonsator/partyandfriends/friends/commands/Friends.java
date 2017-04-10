@@ -23,6 +23,7 @@ public class Friends extends TopCommand<FriendSubCommand> {
 	 * Initials the object
 	 *
 	 * @param pCommandNames The alias for the /friend command
+	 * @param pPrefix The prefix of the command
 	 */
 	public Friends(java.util.List<String> pCommandNames, String pPrefix) {
 		super(pCommandNames.toArray(new String[0]),

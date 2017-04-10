@@ -26,6 +26,7 @@ public class MSG extends OnlyTopCommand {
 	 * Initials the command
 	 *
 	 * @param friendsAliasMsg The aliases for the command /msg
+	 * @param pPrefix         The prefix of the command
 	 */
 	public MSG(String[] friendsAliasMsg, String pPrefix) {
 		super(friendsAliasMsg, getInstance().getConfig().getString("Permissions.FriendPermission"), pPrefix);
