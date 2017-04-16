@@ -108,7 +108,7 @@ public class Main extends Plugin {
 
 	private void searchForUpdate() {
 		if (getConfig().getBoolean("General.CheckForUpdates")) {
-			UpdateSearcher searcher = new UpdateSearcher("Party-and-Friends-Extended-For-BungeeCord", getDescription().getVersion());
+			UpdateSearcher searcher = new UpdateSearcher("Party-and-Friends-Free", getDescription().getVersion());
 			ProxyServer.getInstance().getConsole().sendMessage(new TextComponent(searcher.checkForUpdate()));
 		}
 	}
