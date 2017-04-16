@@ -4,6 +4,7 @@ import de.simonsator.partyandfriends.api.events.command.FriendshipCommandEvent;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.RequestReactionsCommands;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -12,7 +13,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 /**
@@ -32,9 +32,9 @@ public class Accept extends RequestReactionsCommands {
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
 		if (!isPlayerGiven(pPlayer, args))
 			return;
-		PAFPlayer playerQuery = getPlayerManager().getPlayer(args[1]);
+		PAFPlayer playerQuery = PAFPlayerManager.getInstance().getPlayer(args[1]);
 		if (!playerQuery.doesExist()) {
-			sendError(pPlayer, Friends.getInstance().getPrefix() + playerMatcher.replaceFirst(args[1]));
+			sendError(pPlayer, new TextComponent(Friends.getInstance().getPrefix() + playerMatcher.replaceFirst(args[1])));
 			return;
 		}
 		if (hasNoRequest(pPlayer, playerQuery))
@@ -45,18 +45,18 @@ public class Accept extends RequestReactionsCommands {
 			return;
 		pPlayer.addFriend(playerQuery);
 		pPlayer.denyRequest(playerQuery);
-		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance()
-				.getMessagesYml().getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(args[1]))));
+		pPlayer.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance()
+				.getMessagesYml().getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(args[1])));
 		if (!playerQuery.isOnline())
 			return;
 		OnlinePAFPlayer friend = (OnlinePAFPlayer) playerQuery;
-		friend.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
-				.getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
-		friend.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
-				.getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
+		friend.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
+				.getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())));
+		friend.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
+				.getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())));
 		pPlayer.sendMessage(
-				new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
-						.getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(friend.getDisplayName()))));
+				PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
+						.getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(friend.getDisplayName())));
 	}
 
 }

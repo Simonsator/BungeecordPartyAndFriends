@@ -1,13 +1,16 @@
 package de.simonsator.partyandfriends.communication.sql;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Properties;
 
 /**
  * @author simonsator
  * @version 1.0.0 created on 12.06.16
  */
-public abstract class SQLCommunication {
+public abstract class SQLCommunication extends DBCommunication {
 	/**
 	 * The MySQL DATABASE
 	 */
@@ -15,13 +18,13 @@ public abstract class SQLCommunication {
 	/**
 	 * The URL of the SQL server
 	 */
-	private final String URL;
+	private String url;
 	private final Properties connectionProperties;
 	private Connection connection;
 
 	protected SQLCommunication(String pDatabase, String pURL, String pUserName, String pPassword, boolean pUseSSL) {
 		this.DATABASE = pDatabase;
-		this.URL = pURL;
+		this.url = pURL;
 		connectionProperties = new Properties();
 		connectionProperties.setProperty("user", pUserName);
 		connectionProperties.setProperty("password", pPassword);
@@ -31,35 +34,32 @@ public abstract class SQLCommunication {
 
 	protected SQLCommunication(String pDatabase, String pURL, String pUserName, String pPassword) {
 		this.DATABASE = pDatabase;
-		this.URL = pURL;
+		this.url = pURL;
 		connectionProperties = new Properties();
 		connectionProperties.setProperty("user", pUserName);
 		connectionProperties.setProperty("password", pPassword);
 		connection = createConnection();
 	}
 
-	protected void close(ResultSet rs, Statement stmt) {
+	protected SQLCommunication(MySQLData pMySQLData) {
+		this.DATABASE = pMySQLData.DATABASE;
+		this.url = "jdbc:mysql://" + pMySQLData.HOST + "/";
+		connectionProperties = new Properties();
+		connectionProperties.setProperty("user", pMySQLData.USERNAME);
+		connectionProperties.setProperty("password", pMySQLData.PASSWORD);
+		connectionProperties.setProperty("useSSL", pMySQLData.USE_SSL + "");
+		Connection con = createConnection();
+		PreparedStatement prepStmt = null;
 		try {
-			if (rs != null)
-				rs.close();
-			if (stmt != null)
-				stmt.close();
+			prepStmt = con.prepareStatement("CREATE DATABASE IF NOT EXISTS `" + DATABASE + "`");
+			prepStmt.executeUpdate();
+			prepStmt.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	protected void close(ResultSet rs, Statement stmt, PreparedStatement prepStmt) {
-		try {
-			if (rs != null)
-				rs.close();
-			if (stmt != null)
-				stmt.close();
-			if (prepStmt != null)
-				prepStmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		url += pMySQLData.DATABASE;
+		connection = createConnection();
 	}
 
 	protected Connection getConnection() {
@@ -72,20 +72,11 @@ public abstract class SQLCommunication {
 		return connection = createConnection();
 	}
 
-	protected void close(PreparedStatement pPrepStmt) {
-		try {
-			if (pPrepStmt != null)
-				pPrepStmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	private Connection createConnection() {
 		try {
 			closeConnection();
 			Class.forName("com.mysql.jdbc.Driver");
-			return DriverManager.getConnection(URL, connectionProperties);
+			return DriverManager.getConnection(url, connectionProperties);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}

@@ -3,6 +3,7 @@ package de.simonsator.partyandfriends.party.command;
 import de.simonsator.partyandfriends.api.OnlyTopCommand;
 import de.simonsator.partyandfriends.api.events.message.PartyMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ProxyServer;
@@ -33,7 +34,7 @@ public class PartyChat extends OnlyTopCommand {
 	}
 
 	public void send(OnlinePAFPlayer pPlayer, String[] args) {
-		PlayerParty party = Main.getPartyManager().getParty(pPlayer);
+		PlayerParty party = PartyManager.getInstance().getParty(pPlayer);
 		if (!isInParty(pPlayer, party))
 			return;
 		if (!messageGiven(pPlayer, args))
@@ -70,8 +71,8 @@ public class PartyChat extends OnlyTopCommand {
 
 	private boolean isInParty(OnlinePAFPlayer pPlayer, PlayerParty pParty) {
 		if (pParty == null) {
-			pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-					+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ErrorNoParty")));
+			pPlayer.sendMessage(PartyCommand.getInstance().getPrefix()
+					+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ErrorNoParty"));
 			return false;
 		}
 		return true;

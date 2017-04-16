@@ -29,21 +29,21 @@ public abstract class LeaderNeededCommand extends PartySubCommand {
 
 	protected boolean checkIsInParty(OnlinePAFPlayer pPlayer, PAFPlayer pSearched, PlayerParty pParty, String[] args) {
 		if (!pSearched.isOnline()) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getPartyPrefix() + PLAYER_PATTERN
+			pPlayer.sendMessage(new TextComponent(PREFIX + PLAYER_PATTERN
 					.matcher(getInstance().getMessagesYml()
 							.getString("Party.Command.General.ErrorGivenPlayerIsNotInTheParty"))
 					.replaceAll(Matcher.quoteReplacement(args[0]))));
 			return false;
 		}
 		if (!pParty.isInParty((OnlinePAFPlayer) pSearched)) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getPartyPrefix() + PLAYER_PATTERN
+			pPlayer.sendMessage(new TextComponent(PREFIX + PLAYER_PATTERN
 					.matcher(getInstance().getMessagesYml()
 							.getString("Party.Command.General.ErrorGivenPlayerIsNotInTheParty"))
 					.replaceAll(Matcher.quoteReplacement(args[0]))));
 			return false;
 		}
 		if (pSearched.equals(pPlayer)) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getPartyPrefix()
+			pPlayer.sendMessage(new TextComponent(PREFIX
 					+ getInstance().getMessagesYml().getString("Party.Command.Leader.SenderEqualsGivenPlayer")));
 			return false;
 		}
@@ -57,7 +57,7 @@ public abstract class LeaderNeededCommand extends PartySubCommand {
 			return false;
 
 		if (!pParty.isLeader(pPlayer)) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getPartyPrefix()
+			pPlayer.sendMessage(new TextComponent(PREFIX
 					+ getInstance().getMessagesYml().getString("Party.Command.General.ErrorNotPartyLeader")));
 			return false;
 		}

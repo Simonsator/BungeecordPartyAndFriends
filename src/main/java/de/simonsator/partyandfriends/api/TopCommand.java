@@ -1,10 +1,10 @@
 package de.simonsator.partyandfriends.api;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.SubCommand;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.TabCompleteEvent;
 import net.md_5.bungee.api.plugin.Command;
@@ -53,7 +53,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	public static boolean isPlayer(CommandSender pCommandSender) {
 		if (!(pCommandSender instanceof ProxiedPlayer)) {
 			Main.getInstance().reload();
-			pCommandSender.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + "Party and Friends was reloaded. " +
+			pCommandSender.sendMessage((Friends.getInstance().getPrefix() + "Party and Friends was reloaded. " +
 					"Anyway it is recommended to restart the bungeecord completely because it can be that " +
 					"not all features were reloaded/were right reloaded."));
 			return false;
@@ -78,7 +78,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 
 	private boolean isDisabledServer(ProxiedPlayer pPlayer) {
 		if (Main.getInstance().getConfig().getStringList("General.DisabledServers").contains(pPlayer.getServer().getInfo().getName())) {
-			pPlayer.sendMessage(new TextComponent(Main.getInstance().getMessagesYml().getString("General.DisabledServer")));
+			pPlayer.sendMessage((Main.getInstance().getMessagesYml().getString("General.DisabledServer")));
 			return true;
 		}
 		return false;
@@ -132,8 +132,6 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	}
 
 	public void tabComplete(TabCompleteEvent pEvent) {
-// Only important for Extended version
-		return;
+		// Only important for Extended version
 	}
-
 }

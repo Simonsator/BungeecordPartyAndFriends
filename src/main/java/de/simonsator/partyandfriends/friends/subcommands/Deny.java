@@ -32,7 +32,7 @@ public class Deny extends RequestReactionsCommands {
 		if (hasNoRequest(pPlayer, playerQuery))
 			return;
 		pPlayer.denyRequest(playerQuery);
-		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance()
+		pPlayer.sendMessage((PREFIX + PLAYER_PATTERN.matcher(getInstance()
 				.getMessagesYml().getString("Friends.Command.Deny.HasDenied")).replaceAll(Matcher.quoteReplacement(args[1]))));
 	}
 

@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.party.subcommand;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PartyAPI;
+import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
@@ -32,7 +33,7 @@ public class Info extends PartySubCommand {
 	 */
 	@Override
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
-		PlayerParty party = Main.getPartyManager().getParty(pPlayer);
+		PlayerParty party = PartyManager.getInstance().getParty(pPlayer);
 		if (!isInParty(pPlayer, party))
 			return;
 		String leader = LEADER_PATTERN
@@ -54,8 +55,8 @@ public class Info extends PartySubCommand {
 		}
 		pPlayer.sendMessage(
 				new TextComponent(Main.getInstance().getMessagesYml().getString("Party.General.HelpBegin")));
-		pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + leader));
-		pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + players));
+		pPlayer.sendMessage(new TextComponent(PREFIX + leader));
+		pPlayer.sendMessage(new TextComponent(PREFIX + players));
 		pPlayer.sendMessage(new TextComponent(Main.getInstance().getMessagesYml().getString("Party.General.HelpEnd")));
 	}
 

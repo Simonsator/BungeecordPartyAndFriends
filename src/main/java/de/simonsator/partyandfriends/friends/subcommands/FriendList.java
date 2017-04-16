@@ -5,7 +5,7 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
-import net.md_5.bungee.api.chat.TextComponent;
+import de.simonsator.partyandfriends.utilities.PlayerListElement;
 import net.md_5.bungee.api.config.ServerInfo;
 
 import java.text.SimpleDateFormat;
@@ -35,7 +35,7 @@ public class FriendList extends FriendSubCommand {
 		java.util.List<PAFPlayer> friends = pPlayer.getFriends();
 		if (!hasFriends(pPlayer, friends))
 			return;
-		pPlayer.sendMessage(Main.getInstance().getFriendsPrefix()
+		pPlayer.sendMessage(PREFIX
 				+ Main.getInstance().getMessagesYml().getString("Friends.Command.List.FriendsList")
 				+ getFriendsCombined(friends));
 	}
@@ -45,16 +45,16 @@ public class FriendList extends FriendSubCommand {
 		List<PlayerListElement> playerListElements = toList(pFriends);
 		if (sortElements)
 			Collections.sort(playerListElements);
-		for (int i = 0; i < pFriends.size(); i++) {
+		for (int i = 0; i < playerListElements.size(); i++) {
 			String additive;
 			String color;
-			if (!pFriends.get(i).isOnline() || pFriends.get(i).getSettingsWorth(3) == 1) {
+			if (!playerListElements.get(i).isOnline()) {
 				additive = PatterCollection.LAST_ONLINE_PATTERN.matcher(
 						Main.getInstance().getMessagesYml().getString("Friends.Command.List.OfflineTitle")).replaceAll(Matcher.quoteReplacement(
-						setLastOnlineColor(dateFormat.format(pFriends.get(i).getLastOnline()))));
+						setLastOnlineColor(dateFormat.format(playerListElements.get(i).getLastOnline()))));
 				color = Main.getInstance().getMessagesYml().getString("Friends.Command.List.OfflineColor");
 			} else {
-				ServerInfo server = ((OnlinePAFPlayer) pFriends.get(i)).getServer();
+				ServerInfo server = playerListElements.get(i).getServer();
 				String serverName;
 				if (server == null)
 					serverName = "?";
@@ -67,7 +67,7 @@ public class FriendList extends FriendSubCommand {
 			if (i > 0)
 				friendsCombined.append(Main.getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit"));
 			friendsCombined.append(color);
-			friendsCombined.append(pFriends.get(i).getDisplayName());
+			friendsCombined.append(playerListElements.get(i).getDisplayName());
 			friendsCombined.append(additive);
 		}
 		return friendsCombined.toString();
@@ -75,7 +75,7 @@ public class FriendList extends FriendSubCommand {
 
 	private boolean hasFriends(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriends) {
 		if (pFriends.isEmpty()) {
-			pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix()
+			pPlayer.sendMessage((PREFIX
 					+ Main.getInstance().getMessagesYml().getString("Friends.Command.List.NoFriendsAdded")));
 			return false;
 		}
@@ -96,40 +96,5 @@ public class FriendList extends FriendSubCommand {
 		for (PAFPlayer player : pPlayers)
 			playerListElements.add(new PlayerListElement(player));
 		return playerListElements;
-	}
-
-	private class PlayerListElement implements Comparable<PlayerListElement> {
-		private final boolean IS_ONLINE;
-		private final String DISPLAY_NAME;
-		private final Long LAST_ONLINE;
-
-		public PlayerListElement(PAFPlayer pPlayer) {
-			boolean isOnline = pPlayer.isOnline() && pPlayer.getSettingsWorth(3) == 0;
-			IS_ONLINE = isOnline;
-			DISPLAY_NAME = pPlayer.getDisplayName();
-			if (!isOnline)
-				LAST_ONLINE = pPlayer.getLastOnline();
-			else
-				LAST_ONLINE = null;
-		}
-
-		@Override
-		public int compareTo(PlayerListElement pCompare) {
-			if (pCompare.isOnline() && this.isOnline())
-				return this.getDisplayName().compareTo(pCompare.getDisplayName());
-			else if (pCompare.isOnline())
-				return 1;
-			if (isOnline())
-				return -1;
-			return LAST_ONLINE.compareTo(pCompare.LAST_ONLINE);
-		}
-
-		public String getDisplayName() {
-			return DISPLAY_NAME;
-		}
-
-		public boolean isOnline() {
-			return IS_ONLINE;
-		}
 	}
 }

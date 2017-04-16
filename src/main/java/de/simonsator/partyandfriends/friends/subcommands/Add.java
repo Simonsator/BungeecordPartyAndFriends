@@ -4,6 +4,7 @@ import de.simonsator.partyandfriends.api.events.command.FriendshipCommandEvent;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ProxyServer;
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 /**
@@ -37,7 +37,7 @@ public class Add extends FriendSubCommand {
 			return;
 		if (givenPlayerEqualsSender(pPlayer, args[1]))
 			return;
-		PAFPlayer playerQuery = getPlayerManager().getPlayer(args[1]);
+		PAFPlayer playerQuery = PAFPlayerManager.getInstance().getPlayer(args[1]);
 		if (!doesPlayerExist(pPlayer, playerQuery))
 			return;
 		if (isAFriendOf(pPlayer, playerQuery))
@@ -46,10 +46,10 @@ public class Add extends FriendSubCommand {
 			return;
 		if (pPlayer.hasRequestFrom(playerQuery)) {
 			pPlayer.sendMessage(
-					new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
+					(PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
 							.getString("Friends.Command.Add.FriendRequestFromReceiver")).replaceAll(Matcher.quoteReplacement(args[1]))));
 			pPlayer
-					.sendPacket(new Chat("{\"text\":\"" + getInstance().getFriendsPrefix()
+					.sendPacket(new Chat("{\"text\":\"" + PREFIX
 							+ PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1]))
 							+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
 							+ Friends.getInstance().getName() + ACCEPT_COMMAND_NAME + args[1]
@@ -66,15 +66,15 @@ public class Add extends FriendSubCommand {
 			return;
 		playerQuery.sendFriendRequest(pPlayer);
 		sendRequest(pPlayer, playerQuery);
-		pPlayer.sendMessage(new TextComponent(getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(getInstance()
+		pPlayer.sendMessage((PREFIX + PLAYER_PATTERN.matcher(getInstance()
 				.getMessagesYml().getString("Friends.Command.Add.SentAFriendRequest")).replaceAll(Matcher.quoteReplacement(args[1]))));
 	}
 
 	private void sendRequest(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
-		pPlayerQuery.sendMessage(new TextComponent(getInstance().getFriendsPrefix()
+		pPlayerQuery.sendMessage((PREFIX
 				+ PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.FriendRequestReceived")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 		pPlayerQuery
-				.sendPacket(new Chat("{\"text\":\"" + getInstance().getFriendsPrefix()
+				.sendPacket(new Chat("{\"text\":\"" + PREFIX
 						+ PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(pPlayer.getName()))
 						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/"
 						+ Friends.getInstance().getName() + " accept " + pPlayer.getName()
@@ -93,7 +93,7 @@ public class Add extends FriendSubCommand {
 	@Override
 	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (pPlayer.isAFriendOf(pGivenPlayer)) {
-			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Add.AlreadyFriends").replace("[PLAYER]", pGivenPlayer.getDisplayName())));
+			sendError(pPlayer, (new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Add.AlreadyFriends").replace("[PLAYER]", pGivenPlayer.getDisplayName()))));
 			return true;
 		}
 		return false;

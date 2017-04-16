@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.simonsator</groupId>
 	<artifactId>BungeecordPartyAndFriends</artifactId>
-	<version>1.0.57</version>
+	<version>1.0.58</version>
 	<name>BungeecordPartyAndFriends</name>
 	<packaging>jar</packaging>
 	<description>BungeecordPartyAndFriends</description>
@@ -28,12 +28,22 @@
 					<artifactSet>
 						<includes>
 							<include>org.bstats:*</include>
+							<include>com.mchange:*</include>
+							<include>de.simonsator:*</include>
 						</includes>
 					</artifactSet>
 					<relocations>
 						<relocation>
 							<pattern>org.bstats</pattern>
 							<shadedPattern>de.simonsator.partyandfriends</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>com.mchange</pattern>
+							<shadedPattern>de.simonsator.partyandfriends.c3p0</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>de.simonsator.updatechecker</pattern>
+							<shadedPattern>de.simonsator.partyandfriends.updatechecker</shadedPattern>
 						</relocation>
 					</relocations>
 					<createDependencyReducedPom>false</createDependencyReducedPom>
@@ -64,6 +74,10 @@
 			<id>bstats-repo</id>
 			<url>http://repo.bstats.org/content/repositories/releases/</url>
 		</repository>
+		<repository>
+			<id>Simonsators-repo</id>
+			<url>http://simonsator.de/repo</url>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -84,6 +98,16 @@
 			<groupId>org.bstats</groupId>
 			<artifactId>bstats-bungeecord</artifactId>
 			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>de.simonsator</groupId>
+			<artifactId>UpdateChecker</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 </project>

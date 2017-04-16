@@ -14,11 +14,11 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
 public abstract class FriendSubCommand extends SubCommand implements Comparable<SubCommand> {
 
 	protected FriendSubCommand(String[] pCommands, int pPriority, String pHelp) {
-		super(pCommands, pPriority, new TextComponent(pHelp), getInstance().getFriendsPrefix());
+		super(pCommands, pPriority, pHelp, Friends.getInstance().getPrefix());
 	}
 
 	protected FriendSubCommand(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
-		super(pCommands, pPriority, pHelp, getInstance().getFriendsPrefix(), pPermission);
+		super(pCommands, pPriority, pHelp, Friends.getInstance().getPrefix(), pPermission);
 	}
 
 	protected boolean isPlayerGiven(OnlinePAFPlayer pPlayer, String[] args) {
@@ -41,6 +41,7 @@ public abstract class FriendSubCommand extends SubCommand implements Comparable<
 	@Override
 	protected void sendError(OnlinePAFPlayer pPlayer, TextComponent pMessage) {
 		pPlayer.sendMessage(pMessage);
-		printOutHelp(pPlayer, Friends.getInstance().getName());
+		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.General.PrintOutHelpOnError"))
+			printOutHelp(pPlayer, Friends.getInstance().getName());
 	}
 }

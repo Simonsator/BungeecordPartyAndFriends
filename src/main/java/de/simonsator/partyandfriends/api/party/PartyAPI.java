@@ -1,7 +1,6 @@
 package de.simonsator.partyandfriends.api.party;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.main.Main;
 
 /**
  * The APIs for the party system of Party and Friends
@@ -23,7 +22,7 @@ public class PartyAPI {
 	 * he is not in a party
 	 */
 	public static PlayerParty getParty(OnlinePAFPlayer player) {
-		return Main.getPartyManager().getParty(player);
+		return PartyManager.getInstance().getParty(player);
 	}
 
 }

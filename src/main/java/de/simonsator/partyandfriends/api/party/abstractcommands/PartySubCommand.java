@@ -2,13 +2,13 @@ package de.simonsator.partyandfriends.api.party.abstractcommands;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
+import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.utilities.SubCommand;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.List;
 
-import static de.simonsator.partyandfriends.main.Main.getInstance;
 
 /**
  * An abstract class for the party commands
@@ -19,7 +19,7 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
 public abstract class PartySubCommand extends SubCommand {
 
 	protected PartySubCommand(List<String> pCommands, int pPriority, String pHelpText, String pPermission) {
-		super(pCommands, pPriority, pHelpText, getInstance().getPartyPrefix(), pPermission);
+		super(pCommands, pPriority, pHelpText, PartyCommand.getInstance().getPrefix(), pPermission);
 	}
 
 	public PartySubCommand(String[] pCommands, int pPriority, TextComponent pHelp) {
@@ -32,8 +32,8 @@ public abstract class PartySubCommand extends SubCommand {
 
 	protected boolean isInParty(OnlinePAFPlayer pPlayer, PlayerParty pParty) {
 		if (pParty == null) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getPartyPrefix()
-					+ getInstance().getMessagesYml().getString("Party.Command.General.ErrorNoParty")));
+			pPlayer.sendMessage(PartyCommand.getInstance().getPrefix()
+					+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ErrorNoParty"));
 			return false;
 		}
 		return true;
@@ -43,8 +43,8 @@ public abstract class PartySubCommand extends SubCommand {
 
 	protected boolean isPlayerGiven(OnlinePAFPlayer pPlayer, String[] args) {
 		if (args.length == 0) {
-			pPlayer.sendMessage(new TextComponent(getInstance().getPartyPrefix()
-					+ getInstance().getMessagesYml().getString("Party.Command.General.ErrorNoPlayer")));
+			pPlayer.sendMessage((PREFIX
+					+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ErrorNoPlayer")));
 			return false;
 		}
 		return true;
@@ -53,7 +53,8 @@ public abstract class PartySubCommand extends SubCommand {
 	@Override
 	protected void sendError(OnlinePAFPlayer pPlayer, TextComponent pMessage) {
 		pPlayer.sendMessage(pMessage);
-		printOutHelp(pPlayer, PartyCommand.getInstance().getName());
+		if (Main.getInstance().getConfig().getBoolean("Commands.Party.General.PrintOutHelpOnError"))
+			printOutHelp(pPlayer, PartyCommand.getInstance().getName());
 	}
 
 }

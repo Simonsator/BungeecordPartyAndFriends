@@ -5,7 +5,7 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.chat.TextComponent;
+import de.simonsator.partyandfriends.party.command.PartyCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +99,7 @@ public class LocalPlayerParty extends PlayerParty {
 	public boolean addPlayer(OnlinePAFPlayer pPlayer) {
 		if (!players.contains(pPlayer.getUniqueId()) && (invited.contains(pPlayer.getUniqueId()) || isLeader(pPlayer))) {
 			players.add(pPlayer.getUniqueId());
-			Main.getPartyManager().addPlayerToParty(pPlayer, this);
+			PartyManager.getInstance().addPlayerToParty(pPlayer, this);
 			removeFromInvited(pPlayer);
 			return true;
 		} else {
@@ -120,7 +120,7 @@ public class LocalPlayerParty extends PlayerParty {
 	@Override
 	protected void removePlayerSilent(OnlinePAFPlayer pPlayer) {
 		players.remove(pPlayer.getUniqueId());
-		Main.getPartyManager().removePlayerFromParty(pPlayer);
+		PartyManager.getInstance().removePlayerFromParty(pPlayer);
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class LocalPlayerParty extends PlayerParty {
 		OnlinePAFPlayer newLeader = getPlayers().get(0);
 		removePlayerSilent(newLeader);
 		this.setLeader(newLeader);
-		this.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix() + NEW_LEADER_PATTERN.matcher(Main.getInstance().getMessagesYml()
-				.getString("Party.Command.Leave.NewLeaderIs")).replaceAll(Matcher.quoteReplacement(getLeader().getDisplayName()))));
+		this.sendMessage(PartyCommand.getInstance().getPrefix() + NEW_LEADER_PATTERN.matcher(Main.getInstance().getMessagesYml()
+				.getString("Party.Command.Leave.NewLeaderIs")).replaceAll(Matcher.quoteReplacement(getLeader().getDisplayName())));
 	}
 }

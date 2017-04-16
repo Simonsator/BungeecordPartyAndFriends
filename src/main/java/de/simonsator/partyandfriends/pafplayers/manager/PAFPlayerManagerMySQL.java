@@ -5,26 +5,23 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.communication.sql.MySQL;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
+import de.simonsator.partyandfriends.communication.sql.pool.PoolData;
 import de.simonsator.partyandfriends.pafplayers.mysql.OnlinePAFPlayerMySQL;
 import de.simonsator.partyandfriends.pafplayers.mysql.PAFPlayerMySQL;
-import de.simonsator.partyandfriends.utilities.disable.Deactivated;
-import de.simonsator.partyandfriends.utilities.disable.Disabler;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.UUID;
 
-public class PAFPlayerManagerMySQL extends PAFPlayerManager implements Deactivated {
+public class PAFPlayerManagerMySQL extends PAFPlayerManager {
 	private static MySQL connection;
 
-	public PAFPlayerManagerMySQL(MySQLData pMySQLData) {
-		connection = new MySQL(pMySQLData, null);
-		Disabler.getInstance().registerDeactivated(this);
+	public PAFPlayerManagerMySQL(MySQLData pMySQLData, PoolData pPoolData) {
+		connection = new MySQL(pMySQLData, pPoolData, null);
 	}
 
-	public PAFPlayerManagerMySQL(MySQLData pMySQLData, Object pJedisPool) {
-		connection = new MySQL(pMySQLData, pJedisPool);
-		Disabler.getInstance().registerDeactivated(this);
+	public PAFPlayerManagerMySQL(MySQLData pMySQLData, PoolData pPoolData, Object pJedisPool) {
+		connection = new MySQL(pMySQLData, pPoolData, pJedisPool);
 	}
 
 	public static MySQL getConnection() {
@@ -55,8 +52,4 @@ public class PAFPlayerManagerMySQL extends PAFPlayerManager implements Deactivat
 		return getPlayer(getConnection().getName(pPlayerID));
 	}
 
-	@Override
-	public void onDisable() {
-		connection.closeConnection();
-	}
 }

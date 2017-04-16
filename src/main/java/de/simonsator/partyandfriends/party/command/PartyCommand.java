@@ -3,13 +3,16 @@ package de.simonsator.partyandfriends.party.command;
 import de.simonsator.partyandfriends.api.TopCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PartyAPI;
+import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.subcommand.*;
 import de.simonsator.partyandfriends.utilities.LanguageConfiguration;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.event.TabCompleteEvent;
 import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.event.EventHandler;
 
 import java.util.Arrays;
 import java.util.Vector;
@@ -74,7 +77,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 	@Override
 	protected void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
 		if (args.length == 0) {
-			PlayerParty party = Main.getPartyManager().getParty(pPlayer);
+			PlayerParty party = PartyManager.getInstance().getParty(pPlayer);
 			pPlayer.sendMessage(
 					new TextComponent(Main.getInstance().getMessagesYml().getString("Party.General.HelpBegin")));
 			int permissionHeight = PartyAPI.NO_PARTY_PERMISSION_HEIGHT;
@@ -92,8 +95,8 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		}
 		PartySubCommand sc = getCommand(args[0]);
 		if (sc == null) {
-			pPlayer.sendMessage(new TextComponent(Main.getInstance().getPartyPrefix()
-					+ Main.getInstance().getMessagesYml().getString("Party.Error.CommandNotFound")));
+			pPlayer.sendMessage(getPrefix()
+					+ Main.getInstance().getMessagesYml().getString("Party.Error.CommandNotFound"));
 			return;
 		}
 		if (!sc.hasPermission(pPlayer)) {
@@ -104,6 +107,11 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		a.remove(0);
 		args = a.toArray(new String[a.size()]);
 		sc.onCommand(pPlayer, args);
+	}
+
+	@EventHandler
+	public void onTabComplete(TabCompleteEvent pEvent) {
+		tabComplete(pEvent);
 	}
 
 }

@@ -32,7 +32,7 @@ public class Remove extends FriendSubCommand {
 		if (!isAFriendOf(pPlayer, playerQuery))
 			return;
 		pPlayer.removeFriend(playerQuery);
-		pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix() + PLAYER_PATTERN.matcher(Main.getInstance()
+		pPlayer.sendMessage((PREFIX + PLAYER_PATTERN.matcher(Main.getInstance()
 				.getMessagesYml().getString("Friends.Command.Remove.Removed")).replaceAll(Matcher.quoteReplacement(args[1]))));
 	}
 

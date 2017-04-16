@@ -58,8 +58,8 @@ public class Jump extends FriendSubCommand {
 			return;
 		connector.connect(pPlayer.getPlayer(), toJoin);
 		pPlayer.sendMessage(
-				new TextComponent(
-						getInstance().getFriendsPrefix() + PatterCollection.PLAYER_PATTERN
+				(
+						PREFIX + PatterCollection.PLAYER_PATTERN
 								.matcher(getInstance().getMessagesYml()
 										.getString("Friends.Command.Jump.JoinedTheServer"))
 								.replaceAll(Matcher.quoteReplacement(friend.getDisplayName()))));

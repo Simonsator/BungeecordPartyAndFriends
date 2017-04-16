@@ -2,6 +2,10 @@ package de.simonsator.partyandfriends.communication.sql;
 
 import de.simonsator.partyandfriends.communication.sql.cache.LocalPlayerCache;
 import de.simonsator.partyandfriends.communication.sql.cache.PlayerCache;
+import de.simonsator.partyandfriends.communication.sql.pool.PoolData;
+import de.simonsator.partyandfriends.communication.sql.pool.PoolSQLCommunication;
+import de.simonsator.partyandfriends.utilities.disable.Disabler;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.*;
@@ -10,13 +14,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-import static de.simonsator.partyandfriends.main.Main.getInstance;
-
 /**
  * @author Simonsator
  * @version 2.0.0
  */
-public class MySQL extends SQLCommunication {
+public class MySQL extends PoolSQLCommunication {
 
 	private final String TABLE_PREFIX;
 	private PlayerCache cache;
@@ -25,13 +27,14 @@ public class MySQL extends SQLCommunication {
 	 * Connects to the MySQL server
 	 *
 	 * @param pMySQLData The MySQL data
-	 * @param pJedisPool Can be ignored in the non extended version
+	 * @param pIgnored   Can be ignored in the free version
 	 */
-	public MySQL(MySQLData pMySQLData, Object pJedisPool) {
-		super(pMySQLData.DATABASE, "jdbc:mysql://" + pMySQLData.HOST + ":" + pMySQLData.PORT, pMySQLData.USERNAME, pMySQLData.PASSWORD, pMySQLData.USE_SSL);
+	public MySQL(MySQLData pMySQLData, PoolData pPoolData, Object pIgnored) {
+		super(pMySQLData, pPoolData);
 		this.TABLE_PREFIX = pMySQLData.TABLE_PREFIX;
 		importDatabase();
 		cache = new LocalPlayerCache();
+		Disabler.getInstance().registerDeactivated(this);
 	}
 
 	public UUID getUUID(int pPlayerID) {
@@ -42,7 +45,7 @@ public class MySQL extends SQLCommunication {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select player_uuid, player_name from `" + DATABASE + "`." + TABLE_PREFIX
+			rs = (stmt = con.createStatement()).executeQuery("select player_uuid, player_name from " + TABLE_PREFIX
 					+ "players WHERE player_id='" + pPlayerID + "' LIMIT 1");
 			if (rs.next()) {
 				uuid = UUID.fromString(rs.getString("player_uuid"));
@@ -52,7 +55,7 @@ public class MySQL extends SQLCommunication {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, stmt);
+			close(con, rs, stmt);
 		}
 		return null;
 	}
@@ -61,35 +64,32 @@ public class MySQL extends SQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("CREATE DATABASE IF NOT EXISTS `" + DATABASE + "`");
-			prepStmt.executeUpdate();
-			prepStmt.close();
-			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_PREFIX + "players` ("
+			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + TABLE_PREFIX + "players` ("
 					+ "`player_id` INT(8) NOT NULL AUTO_INCREMENT, " + "`player_name` VARCHAR(16) NOT NULL, "
 					+ "`player_uuid` CHAR(38) NOT NULL, PRIMARY KEY (`player_id`));");
 			prepStmt.executeUpdate();
 			prepStmt.close();
-			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_PREFIX
+			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + TABLE_PREFIX
 					+ "last_player_wrote_to` (`player_id` INT(8) NOT NULL, `written_to_id` INT(8) NOT NULL);");
 			prepStmt.executeUpdate();
 			prepStmt.close();
-			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_PREFIX
+			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + TABLE_PREFIX
 					+ "friend_assignment` (`friend1_id` INT(8) NOT NULL, `friend2_id` INT(8) NOT NULL);");
 			prepStmt.executeUpdate();
 			prepStmt.close();
-			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_PREFIX
+			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + TABLE_PREFIX
 					+ "settings` (`player_id` INT(8) NOT NULL, " + "`settings_id` TINYINT(2) NOT NULL, "
 					+ " `settings_worth` TINYINT(1) NOT NULL);");
 			prepStmt.executeUpdate();
 			prepStmt.close();
-			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_PREFIX
+			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + TABLE_PREFIX
 					+ "friend_request_assignment` (`requester_id` INT(8) NOT NULL, "
 					+ "`receiver_id` INT(8) NOT NULL);");
 			prepStmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 		addColumnLastOnline();
 	}
@@ -98,14 +98,14 @@ public class MySQL extends SQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("ALTER TABLE `" + DATABASE + "`.`" + TABLE_PREFIX + "players`" +
+			prepStmt = con.prepareStatement("ALTER TABLE `" + TABLE_PREFIX + "players`" +
 					" ADD COLUMN `last_online` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `player_uuid`;");
 			prepStmt.executeUpdate();
 			prepStmt.close();
 			fixLastOnline();
 		} catch (SQLException ignored) {
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 	}
 
@@ -114,21 +114,21 @@ public class MySQL extends SQLCommunication {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select player_id from `" + DATABASE + "`." + TABLE_PREFIX
+			rs = (stmt = con.createStatement()).executeQuery("select player_id from " + TABLE_PREFIX
 					+ "players ");
 			while (rs.next())
 				updateLastOnline(rs.getInt("player_id"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, stmt);
+			close(con, rs, stmt);
 		}
 	}
 
 	public int getPlayerID(ProxiedPlayer pPlayer) {
-		if (getInstance().getConfig().getBoolean("General.OfflineServer"))
-			return getPlayerID(pPlayer.getName());
-		return getPlayerID(pPlayer.getUniqueId());
+		if (ProxyServer.getInstance().getConfig().isOnlineMode())
+			return getPlayerID(pPlayer.getUniqueId());
+		return getPlayerID(pPlayer.getName());
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class MySQL extends SQLCommunication {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select player_id, player_name from `" + DATABASE + "`." + TABLE_PREFIX
+			rs = (stmt = con.createStatement()).executeQuery("select player_id, player_name from " + TABLE_PREFIX
 					+ "players WHERE player_uuid='" + pUUID + "' LIMIT 1");
 			if (rs.next()) {
 				playerID = rs.getInt("player_id");
@@ -155,7 +155,7 @@ public class MySQL extends SQLCommunication {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, stmt);
+			close(con, rs, stmt);
 		}
 		return -1;
 	}
@@ -174,7 +174,7 @@ public class MySQL extends SQLCommunication {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select player_id, player_uuid from `" + DATABASE + "`." + TABLE_PREFIX
+			rs = (stmt = con.createStatement()).executeQuery("select player_id, player_uuid from " + TABLE_PREFIX
 					+ "players WHERE player_name='" + pPlayerName + "' LIMIT 1");
 			if (rs.next()) {
 				UUID uuid = UUID.fromString(rs.getString("player_uuid"));
@@ -185,7 +185,7 @@ public class MySQL extends SQLCommunication {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, stmt);
+			close(con, rs, stmt);
 		}
 		return -1;
 	}
@@ -200,7 +200,7 @@ public class MySQL extends SQLCommunication {
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement(
-					"insert into  `" + DATABASE + "`." + TABLE_PREFIX + "players values (?, ?, ?, ?)",
+					"insert into  " + TABLE_PREFIX + "players values (?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			prepStmt.setNull(1, 1);
 			prepStmt.setString(2, pPlayer.getName());
@@ -217,7 +217,7 @@ public class MySQL extends SQLCommunication {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 	}
 
@@ -237,7 +237,7 @@ public class MySQL extends SQLCommunication {
 		ResultSet rs = null;
 		List<Integer> list = new LinkedList<>();
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select friend2_id, friend1_id from `" + DATABASE + "`." + TABLE_PREFIX
+			rs = (stmt = con.createStatement()).executeQuery("select friend2_id, friend1_id from " + TABLE_PREFIX
 					+ "friend_assignment WHERE friend1_id='" + pPlayerID + "' OR friend2_id='" + pPlayerID + "'");
 			while (rs.next()) {
 				int friend1 = rs.getInt("friend1_id");
@@ -249,7 +249,7 @@ public class MySQL extends SQLCommunication {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, stmt);
+			close(con, rs, stmt);
 		}
 		return list;
 	}
@@ -268,7 +268,7 @@ public class MySQL extends SQLCommunication {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select player_name, player_uuid from `" + DATABASE + "`." + TABLE_PREFIX
+			rs = (stmt = con.createStatement()).executeQuery("select player_name, player_uuid from " + TABLE_PREFIX
 					+ "players WHERE player_id='" + pPlayerID + "' LIMIT 1");
 			if (rs.next()) {
 				playerName = rs.getString("player_name");
@@ -278,7 +278,7 @@ public class MySQL extends SQLCommunication {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, stmt);
+			close(con, rs, stmt);
 		}
 		return "";
 	}
@@ -293,14 +293,14 @@ public class MySQL extends SQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("UPDATE `" + DATABASE + "`." + TABLE_PREFIX + "players set player_name='"
+			prepStmt = con.prepareStatement("UPDATE " + TABLE_PREFIX + "players set player_name='"
 					+ pNewPlayerName + "' WHERE player_id='" + pPlayerID + "' LIMIT 1");
 			prepStmt.executeUpdate();
 			cache.updateName(pPlayerID, pNewPlayerName);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 	}
 
@@ -308,14 +308,14 @@ public class MySQL extends SQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("UPDATE `" + DATABASE + "`." + TABLE_PREFIX + "players set player_uuid='"
+			prepStmt = con.prepareStatement("UPDATE " + TABLE_PREFIX + "players set player_uuid='"
 					+ pNewUUID + "' WHERE player_id='" + pPlayerID + "' LIMIT 1");
 			prepStmt.executeUpdate();
 			cache.updateUUID(pPlayerID, pNewUUID);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 	}
 
@@ -324,7 +324,7 @@ public class MySQL extends SQLCommunication {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select requester_id from `" + DATABASE + "`."
+			rs = (stmt = con.createStatement()).executeQuery("select requester_id from "
 					+ TABLE_PREFIX + "friend_request_assignment WHERE receiver_id='" + pReceiver + "' AND requester_id='"
 					+ pRequester + "' LIMIT 1");
 			if (rs.next())
@@ -332,7 +332,7 @@ public class MySQL extends SQLCommunication {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, stmt);
+			close(con, rs, stmt);
 		}
 		return false;
 	}
@@ -349,14 +349,14 @@ public class MySQL extends SQLCommunication {
 		ResultSet rs = null;
 		ArrayList<Integer> requests = new ArrayList<>();
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select requester_id from `" + DATABASE + "`."
+			rs = (stmt = con.createStatement()).executeQuery("select requester_id from "
 					+ TABLE_PREFIX + "friend_request_assignment WHERE receiver_id='" + pPlayerID + "'");
 			while (rs.next())
 				requests.add(rs.getInt("requester_id"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, stmt);
+			close(con, rs, stmt);
 		}
 		return requests;
 	}
@@ -372,14 +372,14 @@ public class MySQL extends SQLCommunication {
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement(
-					"insert into `" + DATABASE + "`." + TABLE_PREFIX + "friend_assignment values (?, ?)");
+					"insert into " + TABLE_PREFIX + "friend_assignment values (?, ?)");
 			prepStmt.setInt(1, pIDRequester);
 			prepStmt.setInt(2, pIDReceiver);
 			prepStmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 	}
 
@@ -394,13 +394,13 @@ public class MySQL extends SQLCommunication {
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement(
-					"DELETE FROM `" + DATABASE + "`." + TABLE_PREFIX + "friend_request_assignment WHERE requester_id = '"
+					"DELETE FROM " + TABLE_PREFIX + "friend_request_assignment WHERE requester_id = '"
 							+ pRequesterID + "' AND receiver_id='" + pReceiverSender + "' Limit 1");
 			prepStmt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 	}
 
@@ -414,14 +414,14 @@ public class MySQL extends SQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("DELETE FROM `" + DATABASE + "`." + TABLE_PREFIX
+			prepStmt = con.prepareStatement("DELETE FROM " + TABLE_PREFIX
 					+ "friend_assignment WHERE (friend1_id = '" + pFriend1ID + "' AND friend2_id='" + pFriend2ID
 					+ "') OR (friend1_id = '" + pFriend2ID + "' AND friend2_id='" + pFriend1ID + "') Limit 1");
 			prepStmt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 	}
 
@@ -436,14 +436,14 @@ public class MySQL extends SQLCommunication {
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement(
-					"insert into  `" + DATABASE + "`." + TABLE_PREFIX + "friend_request_assignment values (?, ?)");
+					"insert into  " + TABLE_PREFIX + "friend_request_assignment values (?, ?)");
 			prepStmt.setInt(1, pSenderID);
 			prepStmt.setInt(2, pQueryID);
 			prepStmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 	}
 
@@ -484,7 +484,7 @@ public class MySQL extends SQLCommunication {
 		ResultSet rs = null;
 		try {
 			rs = (stmt = con.createStatement()).executeQuery(
-					"select settings_worth from `" + DATABASE + "`." + TABLE_PREFIX + "settings WHERE player_id='"
+					"select settings_worth from " + TABLE_PREFIX + "settings WHERE player_id='"
 							+ pPlayerID + "' AND settings_id='" + pSettingsID + "' LIMIT 1");
 			if (rs.next()) {
 				return rs.getInt("settings_worth");
@@ -492,7 +492,7 @@ public class MySQL extends SQLCommunication {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, stmt);
+			close(con, rs, stmt);
 		}
 		return 0;
 	}
@@ -504,7 +504,7 @@ public class MySQL extends SQLCommunication {
 			PreparedStatement prepStmt = null;
 			try {
 				prepStmt = con.prepareStatement(
-						"insert into  `" + DATABASE + "`." + TABLE_PREFIX + "settings values (?, ?, ?)");
+						"insert into  " + TABLE_PREFIX + "settings values (?, ?, ?)");
 				prepStmt.setInt(1, pPlayerID);
 				prepStmt.setInt(2, pSettingsID);
 				prepStmt.setInt(3, pNewWorth);
@@ -512,7 +512,7 @@ public class MySQL extends SQLCommunication {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} finally {
-				close(prepStmt);
+				close(con, prepStmt);
 			}
 		}
 	}
@@ -521,13 +521,13 @@ public class MySQL extends SQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("DELETE FROM  `" + DATABASE + "`." + TABLE_PREFIX
+			prepStmt = con.prepareStatement("DELETE FROM  " + TABLE_PREFIX
 					+ "settings WHERE player_id = '" + pPlayerID + "' AND settings_id='" + pSettingsID + "' Limit 1");
 			prepStmt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 	}
 
@@ -536,7 +536,7 @@ public class MySQL extends SQLCommunication {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("Select friend1_id FROM `" + DATABASE + "`." + TABLE_PREFIX
+			rs = (stmt = con.createStatement()).executeQuery("Select friend1_id FROM " + TABLE_PREFIX
 					+ "friend_assignment WHERE (friend1_id = '" + pPlayerID1 + "' AND friend2_id='" + pPlayerID2
 					+ "') OR (friend1_id = '" + pPlayerID2 + "' AND friend2_id='" + pPlayerID1 + "') LIMIT 1");
 			if (rs.next()) {
@@ -545,7 +545,7 @@ public class MySQL extends SQLCommunication {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, stmt);
+			close(con, rs, stmt);
 		}
 		return false;
 	}
@@ -561,7 +561,7 @@ public class MySQL extends SQLCommunication {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select written_to_id from `" + DATABASE + "`."
+			rs = (stmt = con.createStatement()).executeQuery("select written_to_id from "
 					+ TABLE_PREFIX + "last_player_wrote_to WHERE player_id='" + pID + "' LIMIT 1");
 			if (rs.next()) {
 				return rs.getInt("written_to_id");
@@ -571,7 +571,7 @@ public class MySQL extends SQLCommunication {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, stmt);
+			close(con, rs, stmt);
 		}
 		return 0;
 	}
@@ -587,14 +587,14 @@ public class MySQL extends SQLCommunication {
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement(
-					"insert into  `" + DATABASE + "`." + TABLE_PREFIX + "last_player_wrote_to values (?, ?)");
+					"insert into  " + TABLE_PREFIX + "last_player_wrote_to values (?, ?)");
 			prepStmt.setInt(1, pPlayerID);
 			prepStmt.setInt(2, pLastWroteTo);
 			prepStmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 		if (pI == 0)
 			setLastPlayerWroteTo(pLastWroteTo, pPlayerID, 1);
@@ -604,13 +604,13 @@ public class MySQL extends SQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("DELETE FROM `" + DATABASE + "`." + TABLE_PREFIX
+			prepStmt = con.prepareStatement("DELETE FROM " + TABLE_PREFIX
 					+ "last_player_wrote_to WHERE player_id = '" + pPlayerID + "' Limit 1");
 			prepStmt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 	}
 
@@ -619,14 +619,14 @@ public class MySQL extends SQLCommunication {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select last_online from `" + DATABASE + "`."
+			rs = (stmt = con.createStatement()).executeQuery("select last_online from "
 					+ TABLE_PREFIX + "players WHERE player_id='" + pPlayerID + "' LIMIT 1");
 			if (rs.next())
 				return rs.getTimestamp("last_online");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, stmt);
+			close(con, rs, stmt);
 		}
 		return null;
 	}
@@ -635,12 +635,12 @@ public class MySQL extends SQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("UPDATE `" + DATABASE + "`." + TABLE_PREFIX + "players set last_online=now() WHERE player_id='" + pPlayerID + "' LIMIT 1");
+			prepStmt = con.prepareStatement("UPDATE " + TABLE_PREFIX + "players set last_online=now() WHERE player_id='" + pPlayerID + "' LIMIT 1");
 			prepStmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(prepStmt);
+			close(con, prepStmt);
 		}
 	}
 

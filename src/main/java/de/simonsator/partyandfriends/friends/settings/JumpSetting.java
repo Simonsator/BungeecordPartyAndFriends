@@ -32,10 +32,10 @@ public class JumpSetting extends SimpleSetting {
 	public void changeSetting(OnlinePAFPlayer pPlayer, String[] pArgs) {
 		int worthNow = pPlayer.changeSettingsWorth(4);
 		if (worthNow == 0) {
-			pPlayer.sendMessage(new TextComponent(Friends.getInstance().getPrefix() + Main.getInstance()
+			pPlayer.sendMessage((Friends.getInstance().getPrefix() + Main.getInstance()
 					.getMessagesYml().getString("Friends.Command.Settings.NowYourFriendsCanJump")));
 		} else {
-			pPlayer.sendMessage(new TextComponent(Friends.getInstance().getPrefix() + Main.getInstance()
+			pPlayer.sendMessage((Friends.getInstance().getPrefix() + Main.getInstance()
 					.getMessagesYml().getString("Friends.Command.Settings.NowYourFriendsCanNotJump")));
 		}
 	}

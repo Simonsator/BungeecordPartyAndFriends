@@ -4,7 +4,8 @@ import de.simonsator.partyandfriends.api.OnlyTopCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.event.TabCompleteEvent;
+import net.md_5.bungee.event.EventHandler;
 
 /**
  * Will be executed on /r
@@ -23,12 +24,16 @@ public class Reply extends OnlyTopCommand {
 			return;
 		PAFPlayer queryPlayer = pPlayer.getLastPlayerWroteTo();
 		if (!queryPlayer.doesExist()) {
-			pPlayer.sendMessage(new TextComponent(Main.getInstance().getFriendsPrefix()
+			pPlayer.sendMessage((getPrefix()
 					+ Main.getInstance().getMessagesYml().getString("Friends.Command.MSG.NoOneEverWroteToYou")));
 			return;
 		}
 		Main.getInstance().getFriendsMSGCommand().send(pPlayer, args, queryPlayer, 0);
+	}
 
+	@EventHandler
+	public void onTabComplete(TabCompleteEvent pEvent) {
+		tabComplete(pEvent);
 	}
 
 }

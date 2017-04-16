@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.party.subcommand;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.LeaderNeededCommand;
 import de.simonsator.partyandfriends.main.Main;
@@ -29,7 +30,7 @@ public class Kick extends LeaderNeededCommand {
 	 */
 	@Override
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
-		PlayerParty party = Main.getPartyManager().getParty(pPlayer);
+		PlayerParty party = PartyManager.getInstance().getParty(pPlayer);
 		if (!standardCheck(pPlayer, party, args))
 			return;
 		PAFPlayer toKick = getPlayerManager().getPlayer(args[0]);

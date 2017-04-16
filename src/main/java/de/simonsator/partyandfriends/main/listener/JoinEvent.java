@@ -3,9 +3,10 @@ package de.simonsator.partyandfriends.main.listener;
 import de.simonsator.partyandfriends.api.events.OnlineStatusChangedMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.friends.commands.Friends;
+import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -33,12 +34,13 @@ public class JoinEvent implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPostLogin(final PostLoginEvent pEvent) {
-		getInstance().getProxy().getScheduler().runAsync(getInstance(), new Runnable() {
-			@Override
-			public void run() {
-				sbLoggedIn(pEvent);
-			}
-		});
+		if (pEvent.getPlayer().isConnected())
+			getInstance().getProxy().getScheduler().runAsync(getInstance(), new Runnable() {
+				@Override
+				public void run() {
+					sbLoggedIn(pEvent);
+				}
+			});
 	}
 
 	private void sbLoggedIn(PostLoginEvent pEvent) {
@@ -69,18 +71,18 @@ public class JoinEvent implements Listener {
 			content.append(getInstance().getMessagesYml().getString("Friends.General.RequestInfoOnJoinColorComma"));
 			content.append(getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit"));
 		}
-		pPlayer.sendMessage(PatterCollection.FRIEND_REQUEST_COUNT_PATTERN.matcher(PatterCollection.FRIEND_REQUEST_PATTERN.matcher(getInstance().getFriendsPrefix() + getInstance()
+		pPlayer.sendMessage(PatterCollection.FRIEND_REQUEST_COUNT_PATTERN.matcher(PatterCollection.FRIEND_REQUEST_PATTERN.matcher(Friends.getInstance().getPrefix() + Main.getInstance()
 				.getMessagesYml().getString("Friends.General.RequestInfoOnJoin")).replaceAll(Matcher.quoteReplacement(content.substring(0, content.length() - PLAYER_SPLIT_LENGTH)))).
 				replaceAll(Matcher.quoteReplacement(pFriendRequests.size() + "")));
 	}
 
 	private void sendNowOnline(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriends) {
-		String message = getInstance().getFriendsPrefix()
+		String message = Friends.getInstance().getPrefix()
 				+ PatterCollection.PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()));
 		OnlineStatusChangedMessageEvent event = new OnlineStatusChangedMessageEvent(pPlayer, message, pFriends);
 		ProxyServer.getInstance().getPluginManager().callEvent(event);
 		if (!event.isCancelled())
 			for (PAFPlayer friend : event.getFriends())
-				friend.sendMessage(new TextComponent(event.getMessage()));
+				friend.sendMessage((event.getMessage()));
 	}
 }

@@ -5,6 +5,7 @@ import de.simonsator.partyandfriends.api.PAFExtension;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
+import de.simonsator.partyandfriends.communication.sql.pool.PoolData;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.friends.commands.MSG;
 import de.simonsator.partyandfriends.friends.commands.Reply;
@@ -17,7 +18,9 @@ import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.party.partymanager.LocalPartyManager;
 import de.simonsator.partyandfriends.utilities.*;
 import de.simonsator.partyandfriends.utilities.disable.Disabler;
+import de.simonsator.updatechecker.UpdateSearcher;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import org.bstats.Metrics;
@@ -75,10 +78,12 @@ public class Main extends Plugin {
 		return instance;
 	}
 
+	@Deprecated
 	public static PartyManager getPartyManager() {
 		return partyManager;
 	}
 
+	@Deprecated
 	public static PAFPlayerManager getPlayerManager() {
 		return playerManager;
 	}
@@ -98,6 +103,14 @@ public class Main extends Plugin {
 		registerCommands();
 		registerListeners();
 		initBStats();
+		searchForUpdate();
+	}
+
+	private void searchForUpdate() {
+		if (getConfig().getBoolean("General.CheckForUpdates")) {
+			UpdateSearcher searcher = new UpdateSearcher("Party-and-Friends-Extended-For-BungeeCord", getDescription().getVersion());
+			ProxyServer.getInstance().getConsole().sendMessage(new TextComponent(searcher.checkForUpdate()));
+		}
 	}
 
 	private void initBStats() {
@@ -107,11 +120,14 @@ public class Main extends Plugin {
 	private void initPAFClasses() {
 		switch ("MySQL") {
 			case "MySQL":
+				PoolData poolData = new PoolData(Main.getInstance().getConfig().getInt("MySQL.Pool.MinPoolSize"),
+						Main.getInstance().getConfig().getInt("MySQL.Pool.MaxPoolSize"),
+						Main.getInstance().getConfig().getInt("MySQL.Pool.InitialPoolSize"));
 				MySQLData mySQLData = new MySQLData(getConfig().getString("MySQL.Host"),
 						getConfig().getString("MySQL.Username"), getConfig().getString("MySQL.Password"),
 						getConfig().getInt("MySQL.Port"), getConfig().getString("MySQL.Database"),
 						getConfig().getString("MySQL.TablePrefix"), getConfig().getBoolean("MySQL.UseSSL"));
-				playerManager = new PAFPlayerManagerMySQL(mySQLData);
+				playerManager = new PAFPlayerManagerMySQL(mySQLData, poolData);
 				partyManager = new LocalPartyManager();
 				break;
 		}
@@ -144,6 +160,9 @@ public class Main extends Plugin {
 		}
 		partyPrefix = (getMessagesYml().getString("Party.General.PartyPrefix"));
 		friendsPrefix = (getMessagesYml().getString("Friends.General.Prefix"));
+		System.setProperty("com.mchange.v2.log.MLog", "com.mchange.v2.log.FallbackMLog");
+		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
+
 	}
 
 	/**
@@ -162,7 +181,7 @@ public class Main extends Plugin {
 		partyCommand = new PartyCommand(
 				(getConfig().getStringList("Commands.Party.TopCommands.Party.Names").toArray(new String[0])), partyPrefix);
 		if (!getConfig().getBoolean("Commands.Party.TopCommands.Party.Disabled"))
-			ProxyServer.getInstance().getPluginManager().registerCommand(this, getPartyCommand());
+			ProxyServer.getInstance().getPluginManager().registerCommand(this, PartyCommand.getInstance());
 		partyChatCommand = new PartyChat(
 				(getConfig().getStringList("Commands.Party.TopCommands.PartyChat.Names").toArray(new String[0])), partyPrefix);
 		if (!getConfig().getBoolean("Commands.Party.TopCommands.PartyChat.Disabled"))
@@ -187,6 +206,7 @@ public class Main extends Plugin {
 		return friendsMSGCommand;
 	}
 
+	@Deprecated
 	public Friends getFriendsCommand() {
 		return friendCommand;
 	}
@@ -195,6 +215,7 @@ public class Main extends Plugin {
 		return config.getCreatedConfiguration();
 	}
 
+	@Deprecated
 	public String getFriendsPrefix() {
 		return friendsPrefix;
 	}
@@ -207,10 +228,12 @@ public class Main extends Plugin {
 		return messages;
 	}
 
+	@Deprecated
 	public PartyCommand getPartyCommand() {
 		return partyCommand;
 	}
 
+	@Deprecated
 	public String getPartyPrefix() {
 		return partyPrefix;
 	}
