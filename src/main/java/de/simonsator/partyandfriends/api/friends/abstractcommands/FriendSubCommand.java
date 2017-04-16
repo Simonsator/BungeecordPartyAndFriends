@@ -9,8 +9,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.List;
 
-import static de.simonsator.partyandfriends.main.Main.getInstance;
-
 public abstract class FriendSubCommand extends SubCommand implements Comparable<SubCommand> {
 
 	protected FriendSubCommand(String[] pCommands, int pPriority, String pHelp) {
@@ -29,6 +27,15 @@ public abstract class FriendSubCommand extends SubCommand implements Comparable<
 		return true;
 	}
 
+	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer, String[] args) {
+		if (!pPlayer.isAFriendOf(pGivenPlayer)) {
+			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.General.PlayerIsOffline").replace("[PLAYER]", args[1])));
+			return false;
+		}
+		return true;
+	}
+
+	@Deprecated
 	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (!pPlayer.isAFriendOf(pGivenPlayer)) {
 			sendError(pPlayer, new TextComponent(Main.getInstance().getMessagesYml().getString("Friends.General.PlayerIsOffline").replace("[PLAYER]", pGivenPlayer.getDisplayName())));
@@ -36,7 +43,6 @@ public abstract class FriendSubCommand extends SubCommand implements Comparable<
 		}
 		return true;
 	}
-
 
 	@Override
 	protected void sendError(OnlinePAFPlayer pPlayer, TextComponent pMessage) {

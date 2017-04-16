@@ -6,7 +6,6 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import de.simonsator.partyandfriends.utilities.StandardConnector;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 
 import java.util.List;
@@ -45,7 +44,7 @@ public class Jump extends FriendSubCommand {
 		if (!isPlayerOnline(pPlayer, playerQuery))
 			return;
 		OnlinePAFPlayer friend = (OnlinePAFPlayer) playerQuery;
-		if (!isAFriendOf(pPlayer, friend))
+		if (!isAFriendOf(pPlayer, friend, args))
 			return;
 		ServerInfo toJoin = friend.getServer();
 		if (!serverExists(pPlayer, toJoin))

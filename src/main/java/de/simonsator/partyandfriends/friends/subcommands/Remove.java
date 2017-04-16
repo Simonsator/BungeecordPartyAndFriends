@@ -4,7 +4,6 @@ import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubComma
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -29,7 +28,7 @@ public class Remove extends FriendSubCommand {
 		if (!isPlayerGiven(pPlayer, args))
 			return;
 		PAFPlayer playerQuery = getPlayerManager().getPlayer(args[1]);
-		if (!isAFriendOf(pPlayer, playerQuery))
+		if (!isAFriendOf(pPlayer, playerQuery, args))
 			return;
 		pPlayer.removeFriend(playerQuery);
 		pPlayer.sendMessage((PREFIX + PLAYER_PATTERN.matcher(Main.getInstance()
