@@ -33,7 +33,7 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 	private void createDatabase() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://" + MYSQL_DATA.HOST, connectionProperties);
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT, connectionProperties);
 			PreparedStatement prepStmt = con.prepareStatement("CREATE DATABASE IF NOT EXISTS `" + getDatabase() + "`");
 			prepStmt.executeUpdate();
 			prepStmt.close();
@@ -48,7 +48,7 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 		try {
 			ComboPooledDataSource cpds = new ComboPooledDataSource();
 			cpds.setDriverClass("com.mysql.jdbc.Driver");
-			cpds.setJdbcUrl("jdbc:mysql://" + MYSQL_DATA.HOST + "/" + MYSQL_DATA.DATABASE);
+			cpds.setJdbcUrl("jdbc:mysql://" + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT + "/" + MYSQL_DATA.DATABASE);
 			cpds.setProperties(connectionProperties);
 			cpds.setInitialPoolSize(POOL_DATA.INITIAL_POOL_SIZE);
 			cpds.setMinPoolSize(POOL_DATA.MIN_POOL_SIZE);

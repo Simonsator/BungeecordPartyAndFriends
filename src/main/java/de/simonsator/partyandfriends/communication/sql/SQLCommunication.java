@@ -43,7 +43,7 @@ public abstract class SQLCommunication extends DBCommunication {
 
 	protected SQLCommunication(MySQLData pMySQLData) {
 		this.DATABASE = pMySQLData.DATABASE;
-		this.url = "jdbc:mysql://" + pMySQLData.HOST + "/";
+		this.url = "jdbc:mysql://" + pMySQLData.HOST + ":" + pMySQLData.PORT + "/";
 		connectionProperties = new Properties();
 		connectionProperties.setProperty("user", pMySQLData.USERNAME);
 		connectionProperties.setProperty("password", pMySQLData.PASSWORD);
