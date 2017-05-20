@@ -1,8 +1,8 @@
 package de.simonsator.partyandfriends.pafplayers.manager;
 
+import de.simonsator.partyandfriends.api.pafplayers.IDBasedPAFPlayerManager;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
-import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.communication.sql.MySQL;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
 import de.simonsator.partyandfriends.communication.sql.pool.PoolData;
@@ -13,7 +13,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.UUID;
 
-public class PAFPlayerManagerMySQL extends PAFPlayerManager {
+public class PAFPlayerManagerMySQL extends IDBasedPAFPlayerManager {
 	private static MySQL connection;
 
 	public PAFPlayerManagerMySQL(MySQLData pMySQLData, PoolData pPoolData) {
@@ -48,6 +48,7 @@ public class PAFPlayerManagerMySQL extends PAFPlayerManager {
 		return getPlayer(getConnection().getPlayerID(pPlayer));
 	}
 
+	@Override
 	public PAFPlayer getPlayer(int pPlayerID) {
 		return getPlayer(getConnection().getName(pPlayerID));
 	}

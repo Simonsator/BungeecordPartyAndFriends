@@ -5,7 +5,6 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.LeaderNeededCommand;
-import de.simonsator.partyandfriends.main.Main;
 
 import java.util.List;
 

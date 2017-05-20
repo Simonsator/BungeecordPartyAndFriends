@@ -46,7 +46,7 @@ public class Accept extends RequestReactionsCommands {
 		pPlayer.addFriend(playerQuery);
 		pPlayer.denyRequest(playerQuery);
 		pPlayer.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance()
-				.getMessagesYml().getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(args[1])));
+				.getMessagesYml().getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(playerQuery.getDisplayName())));
 		if (!playerQuery.isOnline())
 			return;
 		OnlinePAFPlayer friend = (OnlinePAFPlayer) playerQuery;

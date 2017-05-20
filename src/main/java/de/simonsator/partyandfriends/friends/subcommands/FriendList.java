@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
+import de.simonsator.partyandfriends.api.TextReplacer;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
@@ -19,10 +20,11 @@ import java.util.regex.Matcher;
  * @version 1.0.0
  */
 public class FriendList extends FriendSubCommand {
-	private boolean sortElements;
 	private final String LAST_ONLINE_COLOR = Main.getInstance().getMessagesYml().getString("Friends.Command.List.TimeColor");
+	private boolean sortElements;
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(Main.getInstance().getConfig().getString("General.Time.Format"),
 			Locale.forLanguageTag(Main.getInstance().getConfig().getString("General.Time.LanguageTag")));
+	private List<TextReplacer> replacerList = new ArrayList<>();
 
 	public FriendList(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
 		super(pCommands, pPriority, pHelp, pPermission);
@@ -46,6 +48,7 @@ public class FriendList extends FriendSubCommand {
 		if (sortElements)
 			Collections.sort(playerListElements);
 		for (int i = 0; i < playerListElements.size(); i++) {
+			StringBuilder builder = new StringBuilder();
 			String additive;
 			String color;
 			if (!playerListElements.get(i).isOnline()) {
@@ -65,10 +68,12 @@ public class FriendList extends FriendSubCommand {
 				color = Main.getInstance().getMessagesYml().getString("Friends.Command.List.OnlineColor");
 			}
 			if (i > 0)
-				friendsCombined.append(Main.getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit"));
-			friendsCombined.append(color);
-			friendsCombined.append(playerListElements.get(i).getDisplayName());
-			friendsCombined.append(additive);
+				builder.append(Main.getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit"));
+			builder.append(color);
+			builder.append(playerListElements.get(i).getDisplayName());
+			builder.append(additive);
+			String processed = process(playerListElements.get(i).getPlayer(), builder.toString());
+			friendsCombined.append(processed);
 		}
 		return friendsCombined.toString();
 	}
@@ -96,5 +101,19 @@ public class FriendList extends FriendSubCommand {
 		for (PAFPlayer player : pPlayers)
 			playerListElements.add(new PlayerListElement(player));
 		return playerListElements;
+	}
+
+	private String process(PAFPlayer pPlayer, String pMessage) {
+		for (TextReplacer replacer : replacerList)
+			pMessage = replacer.onProecess(pPlayer, pMessage);
+		return pMessage;
+	}
+
+	public void registerTextReplacer(TextReplacer pTextReplacer) {
+		replacerList.add(pTextReplacer);
+	}
+
+	public void unregisterTextReplacer(TextReplacer pTextReplacer) {
+		replacerList.remove(pTextReplacer);
 	}
 }

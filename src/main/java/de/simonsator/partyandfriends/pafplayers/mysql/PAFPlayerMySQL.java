@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.pafplayers.mysql;
 
 import de.simonsator.partyandfriends.api.PermissionProvider;
+import de.simonsator.partyandfriends.api.pafplayers.IDBasedPAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
-public class PAFPlayerMySQL extends PAFPlayerClass {
+public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	final int ID;
 
 	public PAFPlayerMySQL(int pID) {

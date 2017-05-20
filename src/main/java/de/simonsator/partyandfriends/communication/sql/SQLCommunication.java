@@ -15,11 +15,11 @@ public abstract class SQLCommunication extends DBCommunication {
 	 * The MySQL DATABASE
 	 */
 	protected final String DATABASE;
+	private final Properties connectionProperties;
 	/**
 	 * The URL of the SQL server
 	 */
 	private String url;
-	private final Properties connectionProperties;
 	private Connection connection;
 
 	protected SQLCommunication(String pDatabase, String pURL, String pUserName, String pPassword, boolean pUseSSL) {

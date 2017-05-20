@@ -14,10 +14,10 @@ import java.util.Properties;
  * @version 1.0.0 11.04.17
  */
 public class PoolSQLCommunication extends DBCommunication implements Deactivated {
-	private ComboPooledDataSource cpds;
 	private final MySQLData MYSQL_DATA;
 	private final PoolData POOL_DATA;
 	private final Properties connectionProperties;
+	private ComboPooledDataSource cpds;
 
 	public PoolSQLCommunication(MySQLData pMySQLData, PoolData pPoolData) {
 		MYSQL_DATA = pMySQLData;
@@ -26,11 +26,16 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 		connectionProperties.setProperty("user", MYSQL_DATA.USERNAME);
 		connectionProperties.setProperty("password", MYSQL_DATA.PASSWORD);
 		connectionProperties.setProperty("useSSL", pMySQLData.USE_SSL + "");
-		createDatabase();
-		cpds = createConnection();
+		try {
+			createDatabase();
+			cpds = createConnection();
+		} catch (SQLException e) {
+			System.out.println("Could not create connection to the MySQL server. Is the MySQL server running and is your password, username and the db name correct?");
+			e.printStackTrace();
+		}
 	}
 
-	private void createDatabase() {
+	private void createDatabase() throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://" + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT, connectionProperties);
@@ -38,8 +43,6 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 			prepStmt.executeUpdate();
 			prepStmt.close();
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}

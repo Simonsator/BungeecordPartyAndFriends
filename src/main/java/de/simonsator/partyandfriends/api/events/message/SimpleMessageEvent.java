@@ -26,6 +26,10 @@ public abstract class SimpleMessageEvent extends Event implements Cancellable {
 		return message;
 	}
 
+	public void setMessage(String pMessage) {
+		this.message = pMessage;
+	}
+
 	@Override
 	public boolean isCancelled() {
 		return isCancelled;
@@ -34,9 +38,5 @@ public abstract class SimpleMessageEvent extends Event implements Cancellable {
 	@Override
 	public void setCancelled(boolean b) {
 		isCancelled = b;
-	}
-
-	public void setMessage(String pMessage) {
-		this.message = pMessage;
 	}
 }

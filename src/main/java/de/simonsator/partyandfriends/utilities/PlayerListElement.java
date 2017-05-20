@@ -13,8 +13,10 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 	private final String DISPLAY_NAME;
 	private final Long LAST_ONLINE;
 	private final ServerInfo SERVER;
+	private final PAFPlayer PLAYER;
 
 	public PlayerListElement(PAFPlayer pPlayer) {
+		PLAYER = pPlayer;
 		boolean isOnline = pPlayer.isOnline() && pPlayer.getSettingsWorth(3) == 0;
 		IS_ONLINE = isOnline;
 		DISPLAY_NAME = pPlayer.getDisplayName();
@@ -60,5 +62,9 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 
 	public ServerInfo getServer() {
 		return SERVER;
+	}
+
+	public PAFPlayer getPlayer() {
+		return PLAYER;
 	}
 }

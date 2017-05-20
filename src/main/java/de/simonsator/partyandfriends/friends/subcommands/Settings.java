@@ -22,8 +22,8 @@ import java.util.List;
  * @version 1.0.0
  */
 public class Settings extends FriendSubCommand {
-	private final List<Setting> SETTINGS = new ArrayList<>();
 	private static Settings instance;
+	private final List<Setting> SETTINGS = new ArrayList<>();
 
 	public Settings(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
 		super(pCommands, pPriority, pHelp, pPermission);
@@ -52,13 +52,13 @@ public class Settings extends FriendSubCommand {
 		Collections.sort(SETTINGS);
 	}
 
+	public static Settings getInstance() {
+		return instance;
+	}
+
 	public void registerSetting(Setting pSetting) {
 		SETTINGS.add(pSetting);
 		Collections.sort(SETTINGS);
-	}
-
-	public static Settings getInstance() {
-		return instance;
 	}
 
 	public void unregisterSetting(Setting pSetting) {

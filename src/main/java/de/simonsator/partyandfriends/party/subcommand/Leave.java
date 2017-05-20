@@ -6,7 +6,6 @@ import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.List;
 
@@ -34,8 +33,8 @@ public class Leave extends PartySubCommand {
 		if (!isInParty(pPlayer, party))
 			return;
 		party.leaveParty(pPlayer);
-		pPlayer.sendMessage(new TextComponent(PREFIX
-				+ Main.getInstance().getMessagesYml().getString("Party.Command.Leave.YouLeftTheParty")));
+		pPlayer.sendMessage(PREFIX
+				+ Main.getInstance().getMessagesYml().getString("Party.Command.Leave.YouLeftTheParty"));
 	}
 
 	@Override
