@@ -24,7 +24,7 @@ public class PMSetting extends SimpleSetting {
 		} else {
 			identifier = "Friends.Command.Settings.DoNotReceivePM";
 		}
-		return Main.getInstance().getMessagesYml().getString(identifier);
+		return Main.getInstance().getMessages().getString(identifier);
 	}
 
 	@Override
@@ -32,10 +32,10 @@ public class PMSetting extends SimpleSetting {
 		int worthNow = pPlayer.changeSettingsWorth(2);
 		if (worthNow == 1) {
 			pPlayer.sendMessage((Friends.getInstance().getPrefix()
-					+ Main.getInstance().getMessagesYml().getString("Friends.Command.Settings.NowNoMessages")));
+					+ Main.getInstance().getMessages().getString("Friends.Command.Settings.NowNoMessages")));
 		} else {
 			pPlayer.sendMessage((Friends.getInstance().getPrefix()
-					+ Main.getInstance().getMessagesYml().getString("Friends.Command.Settings.NowMessages")));
+					+ Main.getInstance().getMessages().getString("Friends.Command.Settings.NowMessages")));
 		}
 	}
 }

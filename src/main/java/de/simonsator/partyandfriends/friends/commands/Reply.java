@@ -20,15 +20,15 @@ public class Reply extends OnlyTopCommand {
 
 	@Override
 	protected void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
-		if (!Main.getInstance().getFriendsMSGCommand().messageGiven(pPlayer, args, 0))
+		if (!MSG.getInstance().messageGiven(pPlayer, args, 0))
 			return;
 		PAFPlayer queryPlayer = pPlayer.getLastPlayerWroteTo();
 		if (!queryPlayer.doesExist()) {
 			pPlayer.sendMessage((getPrefix()
-					+ Main.getInstance().getMessagesYml().getString("Friends.Command.MSG.NoOneEverWroteToYou")));
+					+ Main.getInstance().getMessages().getString("Friends.Command.MSG.NoOneEverWroteToYou")));
 			return;
 		}
-		Main.getInstance().getFriendsMSGCommand().send(pPlayer, args, queryPlayer, 0);
+		MSG.getInstance().send(pPlayer, args, queryPlayer, 0);
 	}
 
 	@EventHandler

@@ -2,10 +2,9 @@ package de.simonsator.partyandfriends.friends.subcommands;
 
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.friends.commands.MSG;
 
 import java.util.List;
-
-import static de.simonsator.partyandfriends.main.Main.getInstance;
 
 /**
  * Will be executed on /friend msg
@@ -20,6 +19,6 @@ public class Message extends FriendSubCommand {
 
 	@Override
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
-		getInstance().getFriendsMSGCommand().send(pPlayer, args, 0);
+		MSG.getInstance().send(pPlayer, args, 0);
 	}
 }

@@ -46,15 +46,15 @@ public class Add extends FriendSubCommand {
 			return;
 		if (pPlayer.hasRequestFrom(playerQuery)) {
 			pPlayer.sendMessage(
-					(PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
+					(PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessages()
 							.getString("Friends.Command.Add.FriendRequestFromReceiver")).replaceAll(Matcher.quoteReplacement(args[1]))));
 			pPlayer
 					.sendPacket(new Chat("{\"text\":\"" + PREFIX
-							+ PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1]))
+							+ PLAYER_PATTERN.matcher(getInstance().getMessages().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1]))
 							+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
 							+ Friends.getInstance().getName() + ACCEPT_COMMAND_NAME + args[1]
 							+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-							+ getInstance().getMessagesYml().getString("Friends.Command.Add.ClickHere")
+							+ getInstance().getMessages().getString("Friends.Command.Add.ClickHere")
 							+ "\"}]}}}"));
 			return;
 		}
@@ -67,24 +67,24 @@ public class Add extends FriendSubCommand {
 		playerQuery.sendFriendRequest(pPlayer);
 		sendRequest(pPlayer, playerQuery);
 		pPlayer.sendMessage((PREFIX + PLAYER_PATTERN.matcher(getInstance()
-				.getMessagesYml().getString("Friends.Command.Add.SentAFriendRequest")).replaceAll(Matcher.quoteReplacement(args[1]))));
+				.getMessages().getString("Friends.Command.Add.SentAFriendRequest")).replaceAll(Matcher.quoteReplacement(args[1]))));
 	}
 
 	private void sendRequest(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
 		pPlayerQuery.sendMessage((PREFIX
-				+ PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.FriendRequestReceived")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
+				+ PLAYER_PATTERN.matcher(getInstance().getMessages().getString("Friends.Command.Add.FriendRequestReceived")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 		pPlayerQuery
 				.sendPacket(new Chat("{\"text\":\"" + PREFIX
-						+ PLAYER_PATTERN.matcher(getInstance().getMessagesYml().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(pPlayer.getName()))
+						+ PLAYER_PATTERN.matcher(getInstance().getMessages().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(pPlayer.getName()))
 						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/"
 						+ Friends.getInstance().getName() + " accept " + pPlayer.getName()
 						+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-						+ getInstance().getMessagesYml().getString("Friends.Command.Add.ClickHere") + "\"}]}}}"));
+						+ getInstance().getMessages().getString("Friends.Command.Add.ClickHere") + "\"}]}}}"));
 	}
 
 	private boolean hasNoRequestFrom(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (pQueryPlayer.hasRequestFrom(pPlayer)) {
-			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Accept.ErrorAlreadySend").replace("[PLAYER]", pQueryPlayer.getDisplayName())));
+			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessages().getString("Friends.Command.Accept.ErrorAlreadySend").replace("[PLAYER]", pQueryPlayer.getDisplayName())));
 			return false;
 		}
 		return true;
@@ -93,7 +93,7 @@ public class Add extends FriendSubCommand {
 	@Override
 	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (pPlayer.isAFriendOf(pGivenPlayer)) {
-			sendError(pPlayer, (new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString("Friends.Command.Add.AlreadyFriends").replace("[PLAYER]", pGivenPlayer.getDisplayName()))));
+			sendError(pPlayer, (new TextComponent(PREFIX + Main.getInstance().getMessages().getString("Friends.Command.Add.AlreadyFriends").replace("[PLAYER]", pGivenPlayer.getDisplayName()))));
 			return true;
 		}
 		return false;

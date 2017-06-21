@@ -25,7 +25,7 @@ public abstract class SimpleSetting extends Setting {
 				+ getMessage(pPlayer) + "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
 				+ Friends.getInstance().getName() + " " + Settings.getInstance().getCommandName() + " " + getName()
 				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-				+ Main.getInstance().getMessagesYml().getString("Friends.Command.Settings.ChangeThisSettingsHover")
+				+ Main.getInstance().getMessages().getString("Friends.Command.Settings.ChangeThisSettingsHover")
 				+ "\"}]}}}"));
 	}
 

@@ -33,7 +33,7 @@ public abstract class PartySubCommand extends SubCommand {
 	protected boolean isInParty(OnlinePAFPlayer pPlayer, PlayerParty pParty) {
 		if (pParty == null) {
 			pPlayer.sendMessage(PartyCommand.getInstance().getPrefix()
-					+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ErrorNoParty"));
+					+ Main.getInstance().getMessages().getString("Party.Command.General.ErrorNoParty"));
 			return false;
 		}
 		return true;
@@ -44,7 +44,7 @@ public abstract class PartySubCommand extends SubCommand {
 	protected boolean isPlayerGiven(OnlinePAFPlayer pPlayer, String[] args) {
 		if (args.length == 0) {
 			pPlayer.sendMessage((PREFIX
-					+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ErrorNoPlayer")));
+					+ Main.getInstance().getMessages().getString("Party.Command.General.ErrorNoPlayer")));
 			return false;
 		}
 		return true;

@@ -24,7 +24,7 @@ public class OfflineSetting extends SimpleSetting {
 		} else {
 			identifier = "Friends.Command.Settings.ShowAsOffline";
 		}
-		return Main.getInstance().getMessagesYml().getString(identifier);
+		return Main.getInstance().getMessages().getString(identifier);
 	}
 
 	@Override
@@ -32,10 +32,10 @@ public class OfflineSetting extends SimpleSetting {
 		int worthNow = pPlayer.changeSettingsWorth(3);
 		if (worthNow == 0) {
 			pPlayer.sendMessage((Friends.getInstance().getPrefix() + Main.getInstance()
-					.getMessagesYml().getString("Friends.Command.Settings.NowYouWillBeShowAsOnline")));
+					.getMessages().getString("Friends.Command.Settings.NowYouWillBeShowAsOnline")));
 		} else {
 			pPlayer.sendMessage((Friends.getInstance().getPrefix() + Main.getInstance()
-					.getMessagesYml().getString("Friends.Command.Settings.NowYouWilBeShownAsOffline")));
+					.getMessages().getString("Friends.Command.Settings.NowYouWilBeShownAsOffline")));
 			pPlayer.updateLastOnline();
 		}
 	}

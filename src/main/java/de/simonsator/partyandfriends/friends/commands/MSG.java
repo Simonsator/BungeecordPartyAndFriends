@@ -1,16 +1,20 @@
 package de.simonsator.partyandfriends.friends.commands;
 
+import com.google.gson.JsonObject;
 import de.simonsator.partyandfriends.api.OnlyTopCommand;
 import de.simonsator.partyandfriends.api.events.message.FriendMessageEvent;
 import de.simonsator.partyandfriends.api.events.message.FriendOnlineMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.event.TabCompleteEvent;
+import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.protocol.packet.Chat;
 
 import java.util.regex.Matcher;
 
-import static de.simonsator.partyandfriends.main.Main.getInstance;
 import static de.simonsator.partyandfriends.utilities.PatterCollection.*;
 
 /**
@@ -20,6 +24,8 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.*;
  * @version 1.0.0
  */
 public class MSG extends OnlyTopCommand {
+	private final String REPLY_COMMAND = Main.getInstance().getConfig().getString("Commands.Friends.SubCommands.MSG.ReplyCommand");
+	private static MSG instance;
 
 	/**
 	 * Initials the command
@@ -27,13 +33,14 @@ public class MSG extends OnlyTopCommand {
 	 * @param friendsAliasMsg The aliases for the command /msg
 	 */
 	public MSG(String[] friendsAliasMsg, String pPrefix) {
-		super(friendsAliasMsg, getInstance().getConfig().getString("Permissions.FriendPermission"), pPrefix);
+		super(friendsAliasMsg, Main.getInstance().getConfig().getString("Permissions.FriendPermission"), pPrefix);
+		instance = this;
 	}
 
 	private static boolean playerExists(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
 		if (!pPlayerQuery.doesExist()) {
 			pPlayer.sendMessage((Friends.getInstance().getPrefix()
-					+ getInstance().getMessagesYml().getString("Friends.Command.MSG.CanNotWriteToHim")));
+					+ Main.getInstance().getMessages().getString("Friends.Command.MSG.CanNotWriteToHim")));
 			return false;
 		}
 		return true;
@@ -85,9 +92,10 @@ public class MSG extends OnlyTopCommand {
 	boolean messageGiven(OnlinePAFPlayer pPlayer, String[] args, int n) {
 		if (args.length <= n) {
 			pPlayer.sendMessage((getPrefix()
-					+ getInstance().getMessagesYml().getString("Friends.General.NoPlayerGiven")));
-			pPlayer.sendMessage(
-					(getInstance().getMessagesYml().getString("Friends.CommandUsage.MSG")));
+					+ Main.getInstance().getMessages().getString("Friends.General.NoPlayerGiven")));
+			if (Main.getInstance().getConfig().getBoolean("Commands.Friends.General.PrintOutHelpOnError"))
+				pPlayer.sendMessage(
+						(Main.getInstance().getMessages().getString("Friends.CommandUsage.MSG")));
 			return false;
 		}
 		return true;
@@ -96,7 +104,7 @@ public class MSG extends OnlyTopCommand {
 	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (!pQueryPlayer.isOnline()) {
 			pPlayer.sendMessage((getPrefix()
-					+ getInstance().getMessagesYml().getString("Friends.Command.MSG.CanNotWriteToHim")));
+					+ Main.getInstance().getMessages().getString("Friends.Command.MSG.CanNotWriteToHim")));
 			return true;
 		}
 		return false;
@@ -105,7 +113,7 @@ public class MSG extends OnlyTopCommand {
 	private boolean allowsWriteTo(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (pQueryPlayer.getSettingsWorth(2) == 1) {
 			pPlayer.sendMessage((getPrefix()
-					+ getInstance().getMessagesYml().getString("Friends.Command.MSG.CanNotWriteToHim")));
+					+ Main.getInstance().getMessages().getString("Friends.Command.MSG.CanNotWriteToHim")));
 			return false;
 		}
 		return true;
@@ -114,20 +122,24 @@ public class MSG extends OnlyTopCommand {
 	private boolean isFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (!pPlayer.isAFriendOf(pQueryPlayer)) {
 			pPlayer.sendMessage((getPrefix()
-					+ getInstance().getMessagesYml().getString("Friends.Command.MSG.CanNotWriteToHim")));
+					+ Main.getInstance().getMessages().getString("Friends.Command.MSG.CanNotWriteToHim")));
 			return false;
 		}
 		return true;
 	}
 
 	private void sendMessage(String pContent, OnlinePAFPlayer pPlayer1, OnlinePAFPlayer pPlayer2) {
-		sendMessage(pContent, pPlayer1, pPlayer2.getDisplayName(), pPlayer1.getDisplayName());
-		sendMessage(pContent, pPlayer2, pPlayer2.getDisplayName(), pPlayer1.getDisplayName());
+		sendMessage(pContent, pPlayer1, pPlayer2.getDisplayName(), pPlayer1.getDisplayName(), pPlayer2.getName());
+		sendMessage(pContent, pPlayer2, pPlayer2.getDisplayName(), pPlayer1.getDisplayName(), pPlayer1.getName());
 	}
 
-	private void sendMessage(String pContent, OnlinePAFPlayer pReceiver, String pSenderName, String pReceiverName) {
-		pReceiver.sendMessage((getPrefix() + CONTENT_PATTERN.matcher(PLAYER_PATTERN.matcher(SENDER_NAME_PATTERN.matcher(getInstance()
-				.getMessagesYml().getString("Friends.Command.MSG.SentMessage")).replaceAll(Matcher.quoteReplacement(pSenderName))).replaceAll(Matcher.quoteReplacement(pReceiverName))).replaceAll(Matcher.quoteReplacement(pContent))));
+	private void sendMessage(String pContent, OnlinePAFPlayer pReceiver, String pSenderDisplayName, String pReceiverName, String pSenderName) {
+		String message = (getPrefix() + CONTENT_PATTERN.matcher(PLAYER_PATTERN.matcher(SENDER_NAME_PATTERN.matcher(Main.getInstance()
+				.getMessages().getString("Friends.Command.MSG.SentMessage")).replaceAll(Matcher.quoteReplacement(pSenderDisplayName))).replaceAll(Matcher.quoteReplacement(pReceiverName))).replaceAll(Matcher.quoteReplacement(pContent)));
+		JsonObject jsonObject = Main.getGson().fromJson("{\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"" + REPLY_COMMAND.replace("[PLAYER]", pSenderName) + "\"}}", JsonObject.class);
+		jsonObject.addProperty("text", message);
+
+		pReceiver.sendPacket(new Chat(jsonObject.toString()));
 	}
 
 	/**
@@ -140,7 +152,7 @@ public class MSG extends OnlyTopCommand {
 	private String toMessage(String[] args, int n) {
 		StringBuilder content;
 		for (content = new StringBuilder(); n < args.length; n++) {
-			content.append(getInstance().getMessagesYml().getString("Friends.Command.MSG.ColorOfMessage"));
+			content.append(Main.getInstance().getMessages().getString("Friends.Command.MSG.ColorOfMessage"));
 			content.append(args[n]);
 		}
 		return content.toString();
@@ -160,5 +172,14 @@ public class MSG extends OnlyTopCommand {
 			content.append(args[n]);
 		}
 		return content.toString();
+	}
+
+	@EventHandler
+	public void onTabComplete(TabCompleteEvent pEvent) {
+		tabComplete(pEvent);
+	}
+
+	public static MSG getInstance() {
+		return instance;
 	}
 }

@@ -65,7 +65,7 @@ public abstract class SubCommand implements Comparable<SubCommand> {
 	}
 
 	public void sendError(OnlinePAFPlayer pPlayer, String pIdentifier) {
-		sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessagesYml().getString(pIdentifier)));
+		sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessages().getString(pIdentifier)));
 	}
 
 	public abstract void onCommand(OnlinePAFPlayer pPlayer, String[] args);

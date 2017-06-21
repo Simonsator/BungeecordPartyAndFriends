@@ -71,7 +71,7 @@ public class Invite extends PartySubCommand {
 		party.invite(toInvite);
 		pPlayer.sendMessage(
 				PREFIX + PLAYER_PATTERN
-						.matcher(Main.getInstance().getMessagesYml()
+						.matcher(Main.getInstance().getMessages()
 								.getString("Party.Command.Invite.InvitedPlayer"))
 						.replaceAll(Matcher.quoteReplacement(toInvite.getDisplayName())));
 	}
@@ -79,7 +79,7 @@ public class Invite extends PartySubCommand {
 	private boolean senderEqualsSearched(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pSearched) {
 		if (pPlayer.equals(pSearched)) {
 			pPlayer.sendMessage(PREFIX
-					+ Main.getInstance().getMessagesYml().getString("Party.Command.Invite.GivenPlayerEqualsSender"));
+					+ Main.getInstance().getMessages().getString("Party.Command.Invite.GivenPlayerEqualsSender"));
 			return true;
 		}
 		return false;
@@ -88,7 +88,7 @@ public class Invite extends PartySubCommand {
 	private boolean isPartyLeader(OnlinePAFPlayer pPlayer, PlayerParty pParty) {
 		if (!pParty.isLeader(pPlayer)) {
 			pPlayer.sendMessage(PREFIX
-					+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ErrorNotPartyLeader"));
+					+ Main.getInstance().getMessages().getString("Party.Command.General.ErrorNotPartyLeader"));
 			return false;
 		}
 		return true;
@@ -97,7 +97,7 @@ public class Invite extends PartySubCommand {
 	private boolean isAlreadyInAParty(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pToInvite) {
 		if (PartyManager.getInstance().getParty(pToInvite) != null) {
 			pPlayer.sendMessage(PREFIX
-					+ Main.getInstance().getMessagesYml().getString("Party.Command.Invite.AlreadyInAParty"));
+					+ Main.getInstance().getMessages().getString("Party.Command.Invite.AlreadyInAParty"));
 			return true;
 		}
 		return false;
@@ -107,7 +107,7 @@ public class Invite extends PartySubCommand {
 		if (pParty.isInvited(pToInvite)) {
 			pPlayer.sendMessage(
 					PREFIX + PLAYER_PATTERN
-							.matcher(Main.getInstance().getMessagesYml()
+							.matcher(Main.getInstance().getMessages()
 									.getString("Party.Command.Invite.AlreadyInYourParty"))
 							.replaceAll(Matcher.quoteReplacement(pToInvite.getDisplayName())));
 			return true;
@@ -122,7 +122,7 @@ public class Invite extends PartySubCommand {
 				if (Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") < pParty.getAllPlayers().size()
 						+ pParty.getInviteListSize() + 1) {
 					pPlayer.sendMessage(PREFIX + MAX_PLAYERS_IN_PARTY_PATTERN
-							.matcher(Main.getInstance().getMessagesYml()
+							.matcher(Main.getInstance().getMessages()
 									.getString("Party.Command.Invite.MaxPlayersInPartyReached"))
 							.replaceAll(Matcher.quoteReplacement(
 									Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") + "")));
@@ -134,7 +134,7 @@ public class Invite extends PartySubCommand {
 	private boolean isPlayerOffline(OnlinePAFPlayer pPlayer, PAFPlayer pSearched) {
 		if (!pSearched.isOnline()) {
 			pPlayer.sendMessage(PREFIX
-					+ Main.getInstance().getMessagesYml().getString("Party.Command.Invite.CanNotInviteThisPlayer"));
+					+ Main.getInstance().getMessages().getString("Party.Command.Invite.CanNotInviteThisPlayer"));
 			return true;
 		}
 		return false;
@@ -142,7 +142,7 @@ public class Invite extends PartySubCommand {
 
 	private boolean allowsInvitation(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pQueryPlayer) {
 		if (pQueryPlayer.getSettingsWorth(1) == 1 && !pPlayer.isAFriendOf(pQueryPlayer)) {
-			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessagesYml().getString("Party.Command.Invite.CanNotInviteThisPlayer"))
+			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessages().getString("Party.Command.Invite.CanNotInviteThisPlayer"))
 			;
 			return false;
 		}

@@ -48,7 +48,7 @@ public class PlayerDisconnectListener implements Listener {
 		if (party != null)
 			party.leaveParty(player);
 		String message = Friends.getInstance().getPrefix() + PLAYER_PATTERN
-				.matcher(Main.getInstance().getMessagesYml()
+				.matcher(Main.getInstance().getMessages()
 						.getString("Friends.General.PlayerIsNowOffline"))
 				.replaceAll(Matcher.quoteReplacement(player.getDisplayName()));
 		OnlineStatusChangedMessageEvent event = new OnlineStatusChangedMessageEvent(player, message, player.getFriends());

@@ -37,27 +37,27 @@ public class Info extends PartySubCommand {
 		if (!isInParty(pPlayer, party))
 			return;
 		String leader = LEADER_PATTERN
-				.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.Info.Leader"))
+				.matcher(Main.getInstance().getMessages().getString("Party.Command.Info.Leader"))
 				.replaceAll(Matcher.quoteReplacement(party.getLeader().getDisplayName()));
 		StringBuilder stringBuilder = new StringBuilder();
 		String players;
-		stringBuilder.append(Main.getInstance().getMessagesYml().getString("Party.Command.Info.Players"));
+		stringBuilder.append(Main.getInstance().getMessages().getString("Party.Command.Info.Players"));
 		if (party.getPlayers().isEmpty()) {
-			stringBuilder.append(Main.getInstance().getMessagesYml().getString("Party.Command.Info.Empty"));
+			stringBuilder.append(Main.getInstance().getMessages().getString("Party.Command.Info.Empty"));
 			players = stringBuilder.toString();
 		} else {
 			for (OnlinePAFPlayer pp : party.getPlayers()) {
 				stringBuilder.append(pp.getDisplayName());
-				stringBuilder.append(Main.getInstance().getMessagesYml().getString("Party.Command.Info.PlayersCut"));
+				stringBuilder.append(Main.getInstance().getMessages().getString("Party.Command.Info.PlayersCut"));
 			}
 			players = stringBuilder.substring(0, stringBuilder
-					.lastIndexOf(Main.getInstance().getMessagesYml().getString("Party.Command.Info.PlayersCut")));
+					.lastIndexOf(Main.getInstance().getMessages().getString("Party.Command.Info.PlayersCut")));
 		}
 		pPlayer.sendMessage(
-				new TextComponent(Main.getInstance().getMessagesYml().getString("Party.General.HelpBegin")));
+				new TextComponent(Main.getInstance().getMessages().getString("Party.General.HelpBegin")));
 		pPlayer.sendMessage(new TextComponent(PREFIX + leader));
 		pPlayer.sendMessage(new TextComponent(PREFIX + players));
-		pPlayer.sendMessage(new TextComponent(Main.getInstance().getMessagesYml().getString("Party.General.HelpEnd")));
+		pPlayer.sendMessage(new TextComponent(Main.getInstance().getMessages().getString("Party.General.HelpEnd")));
 	}
 
 	@Override

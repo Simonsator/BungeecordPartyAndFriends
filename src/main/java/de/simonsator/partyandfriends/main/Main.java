@@ -18,12 +18,9 @@ import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.party.partymanager.LocalPartyManager;
 import de.simonsator.partyandfriends.utilities.*;
 import de.simonsator.partyandfriends.utilities.disable.Disabler;
-import de.simonsator.updatechecker.UpdateSearcher;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
-import org.bstats.Metrics;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,12 +36,9 @@ import java.util.List;
 public class Main extends Plugin {
 	private static final Gson gson = new Gson();
 	/**
-	 * This object
+	 * The main instance of this plugin
 	 */
 	private static Main instance;
-	private static PAFPlayerManager playerManager;
-	private static PartyManager partyManager;
-	public final String VALIDATION_KEY = "key:xzdnjfpdsofmuj:5554dfjkiue";
 	/**
 	 * The configuration
 	 */
@@ -58,20 +52,10 @@ public class Main extends Plugin {
 	 */
 	private String partyPrefix;
 	/**
-	 * The friends prefix
-	 */
-	private String friendsPrefix;
-	/**
 	 * The language
 	 */
 	private Language language;
-	/**
-	 * The party command object
-	 */
-	private PartyCommand partyCommand;
 	private Friends friendCommand;
-	private MSG friendsMSGCommand;
-	private PartyChat partyChatCommand;
 	private List<PAFExtension> pafExtensions = new ArrayList<>();
 
 	public static Main getInstance() {
@@ -80,12 +64,12 @@ public class Main extends Plugin {
 
 	@Deprecated
 	public static PartyManager getPartyManager() {
-		return partyManager;
+		return PartyManager.getInstance();
 	}
 
 	@Deprecated
 	public static PAFPlayerManager getPlayerManager() {
-		return playerManager;
+		return PAFPlayerManager.getInstance();
 	}
 
 	public static Gson getGson() {
@@ -102,19 +86,6 @@ public class Main extends Plugin {
 		initPAFClasses();
 		registerCommands();
 		registerListeners();
-		initBStats();
-		searchForUpdate();
-	}
-
-	private void searchForUpdate() {
-		if (getConfig().getBoolean("General.CheckForUpdates")) {
-			UpdateSearcher searcher = new UpdateSearcher("Party-and-Friends-Free", getDescription().getVersion());
-			ProxyServer.getInstance().getConsole().sendMessage(new TextComponent(searcher.checkForUpdate()));
-		}
-	}
-
-	private void initBStats() {
-		new Metrics(this);
 	}
 
 	private void initPAFClasses() {
@@ -127,8 +98,8 @@ public class Main extends Plugin {
 						getConfig().getString("MySQL.Username"), getConfig().getString("MySQL.Password"),
 						getConfig().getInt("MySQL.Port"), getConfig().getString("MySQL.Database"),
 						getConfig().getString("MySQL.TablePrefix"), getConfig().getBoolean("MySQL.UseSSL"));
-				playerManager = new PAFPlayerManagerMySQL(mySQLData, poolData);
-				partyManager = new LocalPartyManager();
+				new PAFPlayerManagerMySQL(mySQLData, poolData);
+				new LocalPartyManager();
 				break;
 		}
 		new StandardPermissionProvider();
@@ -137,12 +108,14 @@ public class Main extends Plugin {
 	@Override
 	public void onDisable() {
 		Disabler.getInstance().disableAll();
+		ProxyServer.getInstance().getPluginManager().unregisterListeners(this);
+		ProxyServer.getInstance().getPluginManager().unregisterCommands(this);
 	}
 
 	/**
 	 * Loads the configurations(config.yml and messages.yml)
 	 */
-	public void loadConfiguration() {
+	private void loadConfiguration() {
 		try {
 			config = new ConfigLoader(new File(Main.getInstance().getDataFolder(), "config.yml"));
 		} catch (IOException e) {
@@ -158,11 +131,9 @@ public class Main extends Plugin {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		partyPrefix = (getMessagesYml().getString("Party.General.PartyPrefix"));
-		friendsPrefix = (getMessagesYml().getString("Friends.General.Prefix"));
+		partyPrefix = (getMessages().getString("Party.General.PartyPrefix"));
 		System.setProperty("com.mchange.v2.log.MLog", "com.mchange.v2.log.FallbackMLog");
 		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
-
 	}
 
 	/**
@@ -178,18 +149,19 @@ public class Main extends Plugin {
 	 * Registers the commands
 	 */
 	private void registerCommands() {
-		partyCommand = new PartyCommand(
+		String friendsPrefix = (getMessages().getString("Friends.General.Prefix"));
+		new PartyCommand(
 				(getConfig().getStringList("Commands.Party.TopCommands.Party.Names").toArray(new String[0])), partyPrefix);
 		if (!getConfig().getBoolean("Commands.Party.TopCommands.Party.Disabled"))
 			ProxyServer.getInstance().getPluginManager().registerCommand(this, PartyCommand.getInstance());
-		partyChatCommand = new PartyChat(
+		PartyChat partyChatCommand = new PartyChat(
 				(getConfig().getStringList("Commands.Party.TopCommands.PartyChat.Names").toArray(new String[0])), partyPrefix);
 		if (!getConfig().getBoolean("Commands.Party.TopCommands.PartyChat.Disabled"))
 			ProxyServer.getInstance().getPluginManager().registerCommand(this, partyChatCommand);
 		friendCommand = new Friends(getConfig().getStringList("Commands.Friends.TopCommands.Friend.Names"), friendsPrefix);
 		if (!getConfig().getBoolean("Commands.Friends.TopCommands.Friend.Disabled"))
 			getProxy().getPluginManager().registerCommand(this, friendCommand);
-		friendsMSGCommand = new MSG(
+		MSG friendsMSGCommand = new MSG(
 				(getConfig().getStringList("Commands.Friends.TopCommands.MSG.Names").toArray(new String[0])), friendsPrefix);
 		if (!getConfig().getBoolean("Commands.Friends.TopCommands.MSG.Disabled"))
 			getProxy().getPluginManager().registerCommand(this, friendsMSGCommand);
@@ -198,12 +170,14 @@ public class Main extends Plugin {
 					(getConfig().getStringList("Commands.Friends.TopCommands.Reply.Names").toArray(new String[0])), friendsPrefix));
 	}
 
+	@Deprecated
 	public PartyChat getPartyChatCommand() {
-		return partyChatCommand;
+		return PartyChat.getInstance();
 	}
 
+	@Deprecated
 	public MSG getFriendsMSGCommand() {
-		return friendsMSGCommand;
+		return MSG.getInstance();
 	}
 
 	@Deprecated
@@ -217,25 +191,30 @@ public class Main extends Plugin {
 
 	@Deprecated
 	public String getFriendsPrefix() {
-		return friendsPrefix;
+		return Friends.getInstance().getPrefix();
 	}
 
 	public Language getLanguage() {
 		return language;
 	}
 
-	public LanguageConfiguration getMessagesYml() {
+	public LanguageConfiguration getMessages() {
 		return messages;
 	}
 
 	@Deprecated
+	public LanguageConfiguration getMessagesYml() {
+		return getMessages();
+	}
+
+	@Deprecated
 	public PartyCommand getPartyCommand() {
-		return partyCommand;
+		return PartyCommand.getInstance();
 	}
 
 	@Deprecated
 	public String getPartyPrefix() {
-		return partyPrefix;
+		return PartyCommand.getInstance().getPrefix();
 	}
 
 	public void registerExtension(PAFExtension pPAFExtension) {

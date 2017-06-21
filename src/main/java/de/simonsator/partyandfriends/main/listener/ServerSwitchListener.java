@@ -59,7 +59,7 @@ public class ServerSwitchListener implements Listener {
 				for (OnlinePAFPlayer p : party.getPlayers())
 					p.connect(server);
 				party.sendMessage((PartyCommand.getInstance().getPrefix()
-						+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ServerSwitched")
+						+ Main.getInstance().getMessages().getString("Party.Command.General.ServerSwitched")
 						.replace("[SERVER]", server.getName())));
 			}
 		}

@@ -34,7 +34,7 @@ public class Leave extends PartySubCommand {
 			return;
 		party.leaveParty(pPlayer);
 		pPlayer.sendMessage(PREFIX
-				+ Main.getInstance().getMessagesYml().getString("Party.Command.Leave.YouLeftTheParty"));
+				+ Main.getInstance().getMessages().getString("Party.Command.Leave.YouLeftTheParty"));
 	}
 
 	@Override

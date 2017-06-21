@@ -24,7 +24,7 @@ public class JumpSetting extends SimpleSetting {
 		} else {
 			identifier = "Friends.Command.Settings.CanNotJump";
 		}
-		return Main.getInstance().getMessagesYml().getString(identifier);
+		return Main.getInstance().getMessages().getString(identifier);
 	}
 
 	@Override
@@ -32,10 +32,10 @@ public class JumpSetting extends SimpleSetting {
 		int worthNow = pPlayer.changeSettingsWorth(4);
 		if (worthNow == 0) {
 			pPlayer.sendMessage((Friends.getInstance().getPrefix() + Main.getInstance()
-					.getMessagesYml().getString("Friends.Command.Settings.NowYourFriendsCanJump")));
+					.getMessages().getString("Friends.Command.Settings.NowYourFriendsCanJump")));
 		} else {
 			pPlayer.sendMessage((Friends.getInstance().getPrefix() + Main.getInstance()
-					.getMessagesYml().getString("Friends.Command.Settings.NowYourFriendsCanNotJump")));
+					.getMessages().getString("Friends.Command.Settings.NowYourFriendsCanNotJump")));
 		}
 	}
 

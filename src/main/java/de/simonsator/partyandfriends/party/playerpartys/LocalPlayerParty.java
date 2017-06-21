@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.party.playerpartys;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
@@ -12,7 +13,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 import static de.simonsator.partyandfriends.utilities.PatterCollection.NEW_LEADER_PATTERN;
 
 public class LocalPlayerParty extends PlayerParty {
@@ -57,7 +57,7 @@ public class LocalPlayerParty extends PlayerParty {
 	public OnlinePAFPlayer getLeader() {
 		if (leader == null)
 			return null;
-		PAFPlayer pafPlayer = getPlayerManager().getPlayer(this.leader);
+		PAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(this.leader);
 		if (!(pafPlayer instanceof OnlinePAFPlayer))
 			return null;
 		return (OnlinePAFPlayer) pafPlayer;
@@ -84,7 +84,7 @@ public class LocalPlayerParty extends PlayerParty {
 	public List<OnlinePAFPlayer> getPlayers() {
 		List<OnlinePAFPlayer> lPlayers = new ArrayList<>();
 		for (UUID player : players)
-			lPlayers.add((OnlinePAFPlayer) getPlayerManager().getPlayer(player));
+			lPlayers.add((OnlinePAFPlayer) PAFPlayerManager.getInstance().getPlayer(player));
 		return lPlayers;
 	}
 
@@ -159,7 +159,7 @@ public class LocalPlayerParty extends PlayerParty {
 		OnlinePAFPlayer newLeader = getPlayers().get(0);
 		removePlayerSilent(newLeader);
 		this.setLeader(newLeader);
-		this.sendMessage(PartyCommand.getInstance().getPrefix() + NEW_LEADER_PATTERN.matcher(Main.getInstance().getMessagesYml()
+		this.sendMessage(PartyCommand.getInstance().getPrefix() + NEW_LEADER_PATTERN.matcher(Main.getInstance().getMessages()
 				.getString("Party.Command.Leave.NewLeaderIs")).replaceAll(Matcher.quoteReplacement(getLeader().getDisplayName())));
 	}
 }

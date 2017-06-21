@@ -76,10 +76,10 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 	@Override
 	public void update() {
 		if (ProxyServer.getInstance().getConfig().isOnlineMode()) {
+			PAFPlayerManagerMySQL.getConnection().updatePlayerName(ID, PLAYER.getName());
+		} else if (!PLAYER.getName().equals(PAFPlayerManagerMySQL.getConnection().getName(ID)))
 			if (!PLAYER.getUniqueId().equals(PAFPlayerManagerMySQL.getConnection().getUUID(ID)))
 				PAFPlayerManagerMySQL.getConnection().updateUUID(ID, PLAYER.getUniqueId());
-		} else if (!PLAYER.getName().equals(PAFPlayerManagerMySQL.getConnection().getName(ID)))
-			PAFPlayerManagerMySQL.getConnection().updatePlayerName(ID, PLAYER.getName());
 	}
 
 	@Override

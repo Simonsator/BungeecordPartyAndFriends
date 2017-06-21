@@ -3,12 +3,12 @@ package de.simonsator.partyandfriends.friends.subcommands;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.RequestReactionsCommands;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 
 import java.util.List;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 /**
@@ -27,12 +27,12 @@ public class Deny extends RequestReactionsCommands {
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
 		if (!isPlayerGiven(pPlayer, args))
 			return;
-		PAFPlayer playerQuery = getPlayerManager().getPlayer(args[1]);
+		PAFPlayer playerQuery = PAFPlayerManager.getInstance().getPlayer(args[1]);
 		if (hasNoRequest(pPlayer, playerQuery))
 			return;
 		pPlayer.denyRequest(playerQuery);
 		pPlayer.sendMessage((PREFIX + PLAYER_PATTERN.matcher(getInstance()
-				.getMessagesYml().getString("Friends.Command.Deny.HasDenied")).replaceAll(Matcher.quoteReplacement(args[1]))));
+				.getMessages().getString("Friends.Command.Deny.HasDenied")).replaceAll(Matcher.quoteReplacement(args[1]))));
 	}
 
 }

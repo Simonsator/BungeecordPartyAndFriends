@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.party.subcommand;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.LeaderNeededCommand;
@@ -11,7 +12,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import java.util.List;
 import java.util.regex.Matcher;
 
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 import static de.simonsator.partyandfriends.utilities.PatterCollection.NEW_LEADER_PATTERN;
 
 /**
@@ -37,7 +37,7 @@ public class Leader extends LeaderNeededCommand {
 		PlayerParty party = PartyManager.getInstance().getParty(pPlayer);
 		if (!standardCheck(pPlayer, party, args))
 			return;
-		PAFPlayer player = getPlayerManager().getPlayer(args[0]);
+		PAFPlayer player = PAFPlayerManager.getInstance().getPlayer(args[0]);
 		if (!checkIsInParty(pPlayer, player, party, args))
 			return;
 		party.addPlayer(pPlayer);
@@ -45,7 +45,7 @@ public class Leader extends LeaderNeededCommand {
 		party.sendMessage(
 				new TextComponent(
 						PREFIX + NEW_LEADER_PATTERN
-								.matcher(Main.getInstance().getMessagesYml()
+								.matcher(Main.getInstance().getMessages()
 										.getString("Party.Command.Leader.NewLeaderIs"))
 								.replaceAll(Matcher.quoteReplacement(player.getDisplayName()))));
 	}

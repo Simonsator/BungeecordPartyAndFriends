@@ -4,6 +4,7 @@ import de.simonsator.partyandfriends.api.friends.ServerConnector;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import de.simonsator.partyandfriends.utilities.StandardConnector;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -12,7 +13,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 
 /***
  * The command jump
@@ -40,7 +40,7 @@ public class Jump extends FriendSubCommand {
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
 		if (!isPlayerGiven(pPlayer, args))
 			return;
-		PAFPlayer playerQuery = getPlayerManager().getPlayer(args[1]);
+		PAFPlayer playerQuery = PAFPlayerManager.getInstance().getPlayer(args[1]);
 		if (!isPlayerOnline(pPlayer, playerQuery))
 			return;
 		OnlinePAFPlayer friend = (OnlinePAFPlayer) playerQuery;
@@ -59,7 +59,7 @@ public class Jump extends FriendSubCommand {
 		pPlayer.sendMessage(
 				(
 						PREFIX + PatterCollection.PLAYER_PATTERN
-								.matcher(getInstance().getMessagesYml()
+								.matcher(getInstance().getMessages()
 										.getString("Friends.Command.Jump.JoinedTheServer"))
 								.replaceAll(Matcher.quoteReplacement(friend.getDisplayName()))));
 	}

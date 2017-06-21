@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
  * @version 1.0.0
  */
 public class FriendList extends FriendSubCommand {
-	private final String LAST_ONLINE_COLOR = Main.getInstance().getMessagesYml().getString("Friends.Command.List.TimeColor");
+	private final String LAST_ONLINE_COLOR = Main.getInstance().getMessages().getString("Friends.Command.List.TimeColor");
 	private boolean sortElements;
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(Main.getInstance().getConfig().getString("General.Time.Format"),
 			Locale.forLanguageTag(Main.getInstance().getConfig().getString("General.Time.LanguageTag")));
@@ -38,7 +38,7 @@ public class FriendList extends FriendSubCommand {
 		if (!hasFriends(pPlayer, friends))
 			return;
 		pPlayer.sendMessage(PREFIX
-				+ Main.getInstance().getMessagesYml().getString("Friends.Command.List.FriendsList")
+				+ Main.getInstance().getMessages().getString("Friends.Command.List.FriendsList")
 				+ getFriendsCombined(friends));
 	}
 
@@ -53,9 +53,9 @@ public class FriendList extends FriendSubCommand {
 			String color;
 			if (!playerListElements.get(i).isOnline()) {
 				additive = PatterCollection.LAST_ONLINE_PATTERN.matcher(
-						Main.getInstance().getMessagesYml().getString("Friends.Command.List.OfflineTitle")).replaceAll(Matcher.quoteReplacement(
+						Main.getInstance().getMessages().getString("Friends.Command.List.OfflineTitle")).replaceAll(Matcher.quoteReplacement(
 						setLastOnlineColor(dateFormat.format(playerListElements.get(i).getLastOnline()))));
-				color = Main.getInstance().getMessagesYml().getString("Friends.Command.List.OfflineColor");
+				color = Main.getInstance().getMessages().getString("Friends.Command.List.OfflineColor");
 			} else {
 				ServerInfo server = playerListElements.get(i).getServer();
 				String serverName;
@@ -63,12 +63,12 @@ public class FriendList extends FriendSubCommand {
 					serverName = "?";
 				else
 					serverName = server.getName();
-				additive = PatterCollection.SERVER_ON.matcher(Main.getInstance().getMessagesYml().getString("Friends.Command.List.OnlineTitle")).
+				additive = PatterCollection.SERVER_ON.matcher(Main.getInstance().getMessages().getString("Friends.Command.List.OnlineTitle")).
 						replaceAll(Matcher.quoteReplacement(serverName));
-				color = Main.getInstance().getMessagesYml().getString("Friends.Command.List.OnlineColor");
+				color = Main.getInstance().getMessages().getString("Friends.Command.List.OnlineColor");
 			}
 			if (i > 0)
-				builder.append(Main.getInstance().getMessagesYml().getString("Friends.Command.List.PlayerSplit"));
+				builder.append(Main.getInstance().getMessages().getString("Friends.Command.List.PlayerSplit"));
 			builder.append(color);
 			builder.append(playerListElements.get(i).getDisplayName());
 			builder.append(additive);
@@ -81,7 +81,7 @@ public class FriendList extends FriendSubCommand {
 	private boolean hasFriends(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriends) {
 		if (pFriends.isEmpty()) {
 			pPlayer.sendMessage((PREFIX
-					+ Main.getInstance().getMessagesYml().getString("Friends.Command.List.NoFriendsAdded")));
+					+ Main.getInstance().getMessages().getString("Friends.Command.List.NoFriendsAdded")));
 			return false;
 		}
 		return true;

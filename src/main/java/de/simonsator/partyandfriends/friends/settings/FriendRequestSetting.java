@@ -24,7 +24,7 @@ public class FriendRequestSetting extends SimpleSetting {
 		} else {
 			identifier = "Friends.Command.Settings.FriendRequestSettingEveryone";
 		}
-		return Main.getInstance().getMessagesYml().getString(identifier);
+		return Main.getInstance().getMessages().getString(identifier);
 	}
 
 	@Override
@@ -32,11 +32,11 @@ public class FriendRequestSetting extends SimpleSetting {
 		int worthNow = pPlayer.changeSettingsWorth(0);
 		if (worthNow == 0) {
 			pPlayer.sendMessage((Friends.getInstance().getPrefix() + Main.getInstance()
-					.getMessagesYml().getString("Friends.Command.Settings.NowYouAreNotGoneReceiveFriendRequests")));
+					.getMessages().getString("Friends.Command.Settings.NowYouAreNotGoneReceiveFriendRequests")));
 		} else {
 
 			pPlayer.sendMessage((Friends.getInstance().getPrefix() + Main.getInstance()
-					.getMessagesYml().getString("Friends.Command.Settings.NowYouAreGoneReceiveFriendRequests")));
+					.getMessages().getString("Friends.Command.Settings.NowYouAreGoneReceiveFriendRequests")));
 		}
 	}
 }

@@ -34,7 +34,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		super(pCommandNames, Main.getInstance().getConfig().getString("Commands.Party.TopCommands.Party.Permissions"), pPrefix);
 		instance = this;
 		Configuration config = Main.getInstance().getConfig();
-		LanguageConfiguration messages = Main.getInstance().getMessagesYml();
+		LanguageConfiguration messages = Main.getInstance().getMessages();
 		subCommands.add(
 				new Join(config.getStringList("Commands.Party.SubCommands.Join.Names"),
 						0, messages.getString("Party.CommandUsage.Join"), config.getString("Commands.Party.SubCommands.Join.Permissions")));
@@ -59,7 +59,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		if (!config.getBoolean("Commands.Party.SubCommands.Leader.Disabled"))
 			subCommands.add(new Leader(
 					config.getStringList("Commands.Party.SubCommands.Leader.Names"), 7,
-					messages.getString("Party.CommandUsage.Leader"), "Commands.Party.SubCommands.Leader.Permissions"));
+					messages.getString("Party.CommandUsage.Leader"), config.getString("Commands.Party.SubCommands.Leader.Permissions")));
 	}
 
 	public static PartyCommand getInstance() {
@@ -79,7 +79,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		if (args.length == 0) {
 			PlayerParty party = PartyManager.getInstance().getParty(pPlayer);
 			pPlayer.sendMessage(
-					new TextComponent(Main.getInstance().getMessagesYml().getString("Party.General.HelpBegin")));
+					new TextComponent(Main.getInstance().getMessages().getString("Party.General.HelpBegin")));
 			int permissionHeight = PartyAPI.NO_PARTY_PERMISSION_HEIGHT;
 			if (party != null)
 				if (party.isLeader(pPlayer))
@@ -90,17 +90,17 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 				if (cmd.hasAccess(permissionHeight))
 					cmd.printOutHelp(pPlayer, getName());
 			pPlayer.sendMessage(
-					new TextComponent(Main.getInstance().getMessagesYml().getString("Party.General.HelpEnd")));
+					new TextComponent(Main.getInstance().getMessages().getString("Party.General.HelpEnd")));
 			return;
 		}
 		PartySubCommand sc = getCommand(args[0]);
 		if (sc == null) {
 			pPlayer.sendMessage(getPrefix()
-					+ Main.getInstance().getMessagesYml().getString("Party.Error.CommandNotFound"));
+					+ Main.getInstance().getMessages().getString("Party.Error.CommandNotFound"));
 			return;
 		}
 		if (!sc.hasPermission(pPlayer)) {
-			pPlayer.sendMessage(getPrefix() + Main.getInstance().getMessagesYml().getString("Party.Error.NoPermission"));
+			pPlayer.sendMessage(getPrefix() + Main.getInstance().getMessages().getString("Party.Error.NoPermission"));
 			return;
 		}
 		Vector<String> a = new Vector<>(Arrays.asList(args));

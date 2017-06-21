@@ -23,9 +23,11 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.SENDER_NA
  * @version 1.0.0
  */
 public class PartyChat extends OnlyTopCommand {
+	private static PartyChat instance;
 
 	public PartyChat(String[] pCommandNames, String pPrefix) {
 		super(pCommandNames, Main.getInstance().getConfig().getString("Permissions.PartyPermission"), pPrefix);
+		instance = this;
 	}
 
 	@Override
@@ -42,7 +44,7 @@ public class PartyChat extends OnlyTopCommand {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (String arg : args) {
 			stringBuilder.append(" ");
-			stringBuilder.append(Main.getInstance().getMessagesYml().getString("Party.Command.Chat.ContentColor"));
+			stringBuilder.append(Main.getInstance().getMessages().getString("Party.Command.Chat.ContentColor"));
 			stringBuilder.append(arg);
 		}
 		String text = stringBuilder.toString();
@@ -51,9 +53,9 @@ public class PartyChat extends OnlyTopCommand {
 		if (partyMessageEvent.isCancelled())
 			return;
 		party.sendMessage(new TextComponent(
-				Main.getInstance().getMessagesYml().getString("Party.Command.Chat.Prefix") + MESSAGE_CONTENT_PATTERN
+				Main.getInstance().getMessages().getString("Party.Command.Chat.Prefix") + MESSAGE_CONTENT_PATTERN
 						.matcher(SENDER_NAME_PATTERN
-								.matcher(Main.getInstance().getMessagesYml()
+								.matcher(Main.getInstance().getMessages()
 										.getString("Party.Command.Chat.PartyChatOutput"))
 								.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())))
 						.replaceAll(Matcher.quoteReplacement(text))));
@@ -62,8 +64,8 @@ public class PartyChat extends OnlyTopCommand {
 	private boolean messageGiven(OnlinePAFPlayer pPlayer, String[] args) {
 		if (args.length == 0) {
 			pPlayer.sendMessage(
-					new TextComponent(Main.getInstance().getMessagesYml().getString("Party.Command.Chat.Prefix")
-							+ Main.getInstance().getMessagesYml().getString("Party.Command.Chat.ErrorNoMessage")));
+					new TextComponent(Main.getInstance().getMessages().getString("Party.Command.Chat.Prefix")
+							+ Main.getInstance().getMessages().getString("Party.Command.Chat.ErrorNoMessage")));
 			return false;
 		}
 		return true;
@@ -72,7 +74,7 @@ public class PartyChat extends OnlyTopCommand {
 	private boolean isInParty(OnlinePAFPlayer pPlayer, PlayerParty pParty) {
 		if (pParty == null) {
 			pPlayer.sendMessage(PartyCommand.getInstance().getPrefix()
-					+ Main.getInstance().getMessagesYml().getString("Party.Command.General.ErrorNoParty"));
+					+ Main.getInstance().getMessages().getString("Party.Command.General.ErrorNoParty"));
 			return false;
 		}
 		return true;
@@ -83,4 +85,7 @@ public class PartyChat extends OnlyTopCommand {
 		tabComplete(pEvent);
 	}
 
+	public static PartyChat getInstance() {
+		return instance;
+	}
 }

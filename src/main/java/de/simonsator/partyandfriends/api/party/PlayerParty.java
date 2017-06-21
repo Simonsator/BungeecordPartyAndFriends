@@ -91,7 +91,7 @@ public abstract class PlayerParty {
 	private void removePlayer(OnlinePAFPlayer pPlayer) {
 		removePlayerSilent(pPlayer);
 		sendMessage((PartyCommand.getInstance().getPrefix()
-				+ PatterCollection.PLAYER_PATTERN.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.General.PlayerHasLeftTheParty")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
+				+ PatterCollection.PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Party.Command.General.PlayerHasLeftTheParty")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 	}
 
 	protected abstract void removePlayerSilent(OnlinePAFPlayer pPlayer);
@@ -124,10 +124,10 @@ public abstract class PlayerParty {
 
 	public void kickPlayer(OnlinePAFPlayer pPlayer) {
 		removePlayerSilent(pPlayer);
-		pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + Main.getInstance().getMessagesYml()
+		pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + Main.getInstance().getMessages()
 				.getString("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer")));
 		this.sendMessage((PartyCommand.getInstance().getPrefix()
-				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.Kick.KickedPlayerOutOfThePartyOthers"))
+				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Party.Command.Kick.KickedPlayerOutOfThePartyOthers"))
 				.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 		deleteParty();
 	}
@@ -140,14 +140,14 @@ public abstract class PlayerParty {
 	public void invite(final OnlinePAFPlayer pPlayer) {
 		addToInvited(pPlayer);
 		OnlinePAFPlayer lLeader = getLeader();
-		pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance().getMessagesYml()
+		pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance().getMessages()
 				.getString("Party.Command.Invite.YouWereInvitedBY")).replaceAll(Matcher.quoteReplacement(lLeader.getDisplayName()))));
 		pPlayer.sendPacket(new Chat("{\"text\":\"" + PartyCommand.getInstance().getPrefix()
-				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessagesYml().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE")).replaceAll(Matcher.quoteReplacement(lLeader.getName()))
+				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE")).replaceAll(Matcher.quoteReplacement(lLeader.getName()))
 				+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
 				+ PartyCommand.getInstance().getName() + JOIN_COMMAND_NAME + lLeader.getName()
 				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-				+ Main.getInstance().getMessagesYml().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER")
+				+ Main.getInstance().getMessages().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER")
 				+ "\"}]}}}"));
 		final PlayerParty party = this;
 		ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {
@@ -157,13 +157,13 @@ public abstract class PlayerParty {
 					removeFromInvited(pPlayer);
 					OnlinePAFPlayer lLeader = getLeader();
 					pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance()
-							.getMessagesYml().getString("Party.Command.Invite.InvitationTimedOutInvited")).replaceAll(Matcher.quoteReplacement(lLeader.getDisplayName()))));
+							.getMessages().getString("Party.Command.Invite.InvitationTimedOutInvited")).replaceAll(Matcher.quoteReplacement(lLeader.getDisplayName()))));
 					lLeader.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance()
-							.getMessagesYml().getString("Party.Command.Invite.InvitationTimedOutLeader")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
+							.getMessages().getString("Party.Command.Invite.InvitationTimedOutLeader")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 					if (isPartyEmpty()) {
 						lLeader.sendMessage(
 								(PartyCommand.getInstance().getPrefix()
-										+ Main.getInstance().getMessagesYml().getString(
+										+ Main.getInstance().getMessages().getString(
 										"Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers")));
 						PartyManager.getInstance().deleteParty(party);
 					}
@@ -209,7 +209,7 @@ public abstract class PlayerParty {
 
 	private boolean deleteParty() {
 		if (this.getAllPlayers().size() < 2) {
-			sendMessage((PartyCommand.getInstance().getPrefix() + Main.getInstance().getMessagesYml()
+			sendMessage((PartyCommand.getInstance().getPrefix() + Main.getInstance().getMessages()
 					.getString("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers")));
 			PartyManager.getInstance().deleteParty(this);
 			for (OnlinePAFPlayer player : getAllPlayers())

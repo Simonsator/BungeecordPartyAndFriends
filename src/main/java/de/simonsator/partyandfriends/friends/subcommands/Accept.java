@@ -46,16 +46,16 @@ public class Accept extends RequestReactionsCommands {
 		pPlayer.addFriend(playerQuery);
 		pPlayer.denyRequest(playerQuery);
 		pPlayer.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance()
-				.getMessagesYml().getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(playerQuery.getDisplayName())));
+				.getMessages().getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(playerQuery.getDisplayName())));
 		if (!playerQuery.isOnline())
 			return;
 		OnlinePAFPlayer friend = (OnlinePAFPlayer) playerQuery;
-		friend.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
+		friend.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessages()
 				.getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())));
-		friend.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
+		friend.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessages()
 				.getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())));
 		pPlayer.sendMessage(
-				PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessagesYml()
+				PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessages()
 						.getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(friend.getDisplayName())));
 	}
 

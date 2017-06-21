@@ -3,7 +3,7 @@ package de.simonsator.partyandfriends.party.subcommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PartyAPI;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
-import de.simonsator.partyandfriends.main.Main;
+import de.simonsator.partyandfriends.party.command.PartyChat;
 
 import java.util.List;
 
@@ -26,6 +26,6 @@ public class Chat extends PartySubCommand {
 
 	@Override
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
-		Main.getInstance().getPartyChatCommand().send(pPlayer, args);
+		PartyChat.getInstance().send(pPlayer, args);
 	}
 }

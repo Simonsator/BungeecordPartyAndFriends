@@ -52,4 +52,6 @@ public interface PAFPlayer {
 	void setLastPlayerWroteFrom(PAFPlayer pLastWroteTo);
 
 	long getLastOnline();
+
+	boolean deleteAccount();
 }

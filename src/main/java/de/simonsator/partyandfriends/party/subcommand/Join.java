@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.party.subcommand;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyAPI;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
@@ -12,7 +13,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import java.util.List;
 import java.util.regex.Matcher;
 
-import static de.simonsator.partyandfriends.main.Main.getPlayerManager;
 import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 /**
@@ -39,10 +39,10 @@ public class Join extends PartySubCommand {
 			return;
 		if (isInParty(pPlayer))
 			return;
-		PAFPlayer pl = getPlayerManager().getPlayer(args[0]);
+		PAFPlayer pl = PAFPlayerManager.getInstance().getPlayer(args[0]);
 		if (!pl.isOnline()) {
 			pPlayer.sendMessage(new TextComponent(PREFIX
-					+ Main.getInstance().getMessagesYml().getString("Party.Command.Join.PlayerHasNoParty")));
+					+ Main.getInstance().getMessages().getString("Party.Command.Join.PlayerHasNoParty")));
 			return;
 		}
 		OnlinePAFPlayer onlinePAFPlayer = (OnlinePAFPlayer) pl;
@@ -53,12 +53,12 @@ public class Join extends PartySubCommand {
 			party.sendMessage(
 					new TextComponent(
 							PREFIX + PLAYER_PATTERN
-									.matcher(Main.getInstance().getMessagesYml()
+									.matcher(Main.getInstance().getMessages()
 											.getString("Party.Command.Join.PlayerHasJoined"))
 									.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 		else
 			pPlayer.sendMessage(new TextComponent(PREFIX
-					+ Main.getInstance().getMessagesYml().getString("Party.Command.Join.ErrorNoInvitation")));
+					+ Main.getInstance().getMessages().getString("Party.Command.Join.ErrorNoInvitation")));
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class Join extends PartySubCommand {
 	private boolean hasNoParty(OnlinePAFPlayer pPlayer, PlayerParty pParty) {
 		if (pParty == null) {
 			pPlayer.sendMessage(new TextComponent(PREFIX
-					+ Main.getInstance().getMessagesYml().getString("Party.Command.Join.PlayerHasNoParty")));
+					+ Main.getInstance().getMessages().getString("Party.Command.Join.PlayerHasNoParty")));
 			return true;
 		}
 		return false;
@@ -78,7 +78,7 @@ public class Join extends PartySubCommand {
 	private boolean isInParty(OnlinePAFPlayer pPlayer) {
 		if (PartyManager.getInstance().getParty(pPlayer) != null) {
 			pPlayer.sendMessage(new TextComponent(PREFIX
-					+ Main.getInstance().getMessagesYml().getString("Party.Command.Join.AlreadyInAPartyError")));
+					+ Main.getInstance().getMessages().getString("Party.Command.Join.AlreadyInAPartyError")));
 			return true;
 		}
 		return false;
