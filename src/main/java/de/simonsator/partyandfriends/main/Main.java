@@ -1,6 +1,5 @@
 package de.simonsator.partyandfriends.main;
 
-import com.google.gson.Gson;
 import de.simonsator.partyandfriends.api.PAFExtension;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
@@ -18,10 +17,13 @@ import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.party.partymanager.LocalPartyManager;
 import de.simonsator.partyandfriends.utilities.*;
 import de.simonsator.partyandfriends.utilities.disable.Disabler;
+import de.simonsator.updatechecker.UpdateSearcher;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
+import org.bstats.Metrics;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +38,6 @@ import java.util.List;
  * @version 1.0.0
  */
 public class Main extends Plugin {
-	private static final Gson gson = new Gson();
 	/**
 	 * The main instance of this plugin
 	 */
@@ -74,10 +75,6 @@ public class Main extends Plugin {
 		return PAFPlayerManager.getInstance();
 	}
 
-	public static Gson getGson() {
-		return gson;
-	}
-
 	/**
 	 * Will be execute on enable
 	 */
@@ -89,6 +86,12 @@ public class Main extends Plugin {
 			initPAFClasses();
 			registerCommands();
 			registerListeners();
+			new Metrics(this);
+			if (getConfig().getBoolean("General.CheckForUpdates")) {
+				UpdateSearcher searcher = new UpdateSearcher("Party-and-Friends-Free", getDescription().getVersion());
+				ProxyServer.getInstance().getConsole().sendMessage(new TextComponent(searcher.checkForUpdate()));
+			}
+
 		} catch (SQLException e) {
 			initError(e);
 		}

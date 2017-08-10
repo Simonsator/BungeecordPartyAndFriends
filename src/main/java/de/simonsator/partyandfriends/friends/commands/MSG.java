@@ -1,6 +1,5 @@
 package de.simonsator.partyandfriends.friends.commands;
 
-import com.google.gson.JsonObject;
 import de.simonsator.partyandfriends.api.OnlyTopCommand;
 import de.simonsator.partyandfriends.api.events.message.FriendMessageEvent;
 import de.simonsator.partyandfriends.api.events.message.FriendOnlineMessageEvent;
@@ -11,7 +10,6 @@ import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.TabCompleteEvent;
 import net.md_5.bungee.event.EventHandler;
-import net.md_5.bungee.protocol.packet.Chat;
 
 import java.util.regex.Matcher;
 
@@ -136,10 +134,7 @@ public class MSG extends OnlyTopCommand {
 	private void sendMessage(String pContent, OnlinePAFPlayer pReceiver, String pSenderDisplayName, String pReceiverName, String pSenderName) {
 		String message = (getPrefix() + CONTENT_PATTERN.matcher(PLAYER_PATTERN.matcher(SENDER_NAME_PATTERN.matcher(Main.getInstance()
 				.getMessages().getString("Friends.Command.MSG.SentMessage")).replaceAll(Matcher.quoteReplacement(pSenderDisplayName))).replaceAll(Matcher.quoteReplacement(pReceiverName))).replaceAll(Matcher.quoteReplacement(pContent)));
-		JsonObject jsonObject = Main.getGson().fromJson("{\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"" + REPLY_COMMAND.replace("[PLAYER]", pSenderName) + "\"}}", JsonObject.class);
-		jsonObject.addProperty("text", message);
-
-		pReceiver.sendPacket(new Chat(jsonObject.toString()));
+		pReceiver.sendMessage(message);
 	}
 
 	/**
