@@ -6,8 +6,12 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
 
+import java.util.List;
+import java.util.Random;
+
 public abstract class PAFPlayerClass implements PAFPlayer {
 	private static DisplayNameProvider displayNameProvider = new StandardDisplayNameProvider();
+	private Random randomGenerator = new Random();
 
 	public static DisplayNameProvider getDisplayNameProvider() {
 		return displayNameProvider;
@@ -52,6 +56,23 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 	@Override
 	public String getDisplayName() {
 		return displayNameProvider.getDisplayName(this);
+	}
+
+	@Override
+	public void sendMessage(Object pMessage) {
+		if (pMessage instanceof List) {
+			sendMessage((List<String>) pMessage);
+			return;
+		}
+		if (pMessage instanceof String) {
+			sendMessage((String) pMessage);
+			return;
+		}
+	}
+
+	@Override
+	public void sendMessage(List<String> pMessages) {
+		sendMessage(pMessages.get(randomGenerator.nextInt(pMessages.size())));
 	}
 
 	@Override

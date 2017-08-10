@@ -15,6 +15,10 @@ public interface PAFPlayer {
 
 	UUID getUniqueId();
 
+	void sendMessage(Object pObject);
+
+	void sendMessage(List<String> pMessages);
+
 	void sendMessage(TextComponent pTextComponent);
 
 	void sendMessage(String pText);
