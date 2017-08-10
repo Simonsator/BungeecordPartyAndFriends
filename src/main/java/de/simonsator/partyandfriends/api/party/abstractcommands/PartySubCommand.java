@@ -39,7 +39,13 @@ public abstract class PartySubCommand extends SubCommand {
 		return true;
 	}
 
-	public abstract boolean hasAccess(int pPermissionHeight);
+	public boolean hasAccess(int pPermissionHeight) {
+		return true;
+	}
+
+	public boolean hasAccess(PlayerParty pPlayer, int pPermissionHeight) {
+		return hasAccess(pPermissionHeight);
+	}
 
 	protected boolean isPlayerGiven(OnlinePAFPlayer pPlayer, String[] args) {
 		if (args.length == 0) {

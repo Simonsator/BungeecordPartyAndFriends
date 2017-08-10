@@ -28,6 +28,7 @@ public class LocalPlayerParty extends PlayerParty {
 	 * The leader of the party
 	 */
 	private UUID leader;
+	private boolean privateParty = true;
 
 	/**
 	 * Initials a new party
@@ -36,6 +37,16 @@ public class LocalPlayerParty extends PlayerParty {
 	 */
 	public LocalPlayerParty(OnlinePAFPlayer leader) {
 		this.leader = leader.getUniqueId();
+	}
+
+	@Override
+	public boolean isPrivate() {
+		return privateParty;
+	}
+
+	@Override
+	public void setPrivateState(boolean pIsPrivate) {
+		privateParty = pIsPrivate;
 	}
 
 	@Override
@@ -97,7 +108,7 @@ public class LocalPlayerParty extends PlayerParty {
 	 */
 	@Override
 	public boolean addPlayer(OnlinePAFPlayer pPlayer) {
-		if (!players.contains(pPlayer.getUniqueId()) && (invited.contains(pPlayer.getUniqueId()) || isLeader(pPlayer))) {
+		if (!players.contains(pPlayer.getUniqueId()) && (invited.contains(pPlayer.getUniqueId()) || isLeader(pPlayer) || !privateParty)) {
 			players.add(pPlayer.getUniqueId());
 			PartyManager.getInstance().addPlayerToParty(pPlayer, this);
 			removeFromInvited(pPlayer);
@@ -131,19 +142,6 @@ public class LocalPlayerParty extends PlayerParty {
 	@Override
 	public int getInviteListSize() {
 		return invited.size();
-	}
-
-
-	/**
-	 * Returns true if the player is already invited. Returns false if the
-	 * player is not invited.
-	 *
-	 * @param player The player
-	 * @return Returns true if the player is already invited. Returns false if
-	 * the player is not invited.
-	 */
-	public boolean isInvited(OnlinePAFPlayer player) {
-		return invited.contains(player.getUniqueId());
 	}
 
 	protected boolean needsNewLeader(OnlinePAFPlayer pPlayer) {
