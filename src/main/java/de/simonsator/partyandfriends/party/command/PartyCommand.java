@@ -37,28 +37,28 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		LanguageConfiguration messages = Main.getInstance().getMessages();
 		subCommands.add(
 				new Join(config.getStringList("Commands.Party.SubCommands.Join.Names"),
-						0, messages.getString("Party.CommandUsage.Join"), config.getString("Commands.Party.SubCommands.Join.Permissions")));
+						config.getInt("Commands.Party.SubCommands.Join.Priority"), messages.getString("Party.CommandUsage.Join"), config.getString("Commands.Party.SubCommands.Join.Permissions")));
 		subCommands.add(new Invite(
-				config.getStringList("Commands.Party.SubCommands.Invite.Names"), 1,
+				config.getStringList("Commands.Party.SubCommands.Invite.Names"), config.getInt("Commands.Party.SubCommands.Invite.Priority"),
 				messages.getString("Party.CommandUsage.Invite"), config.getString("Commands.Party.SubCommands.Invite.Permissions")));
 		if (!config.getBoolean("Commands.Party.SubCommands.Kick.Disabled"))
 			subCommands.add(new Kick(
-					config.getStringList("Commands.Party.SubCommands.Kick.Names"), 6,
+					config.getStringList("Commands.Party.SubCommands.Kick.Names"), config.getInt("Commands.Party.SubCommands.Kick.Priority"),
 					messages.getString("Party.CommandUsage.Kick"), config.getString("Commands.Party.SubCommands.Kick.Permissions")));
 		if (!config.getBoolean("Commands.Party.SubCommands.Info.Disabled"))
 			subCommands.add(new Info(
-					config.getStringList("Commands.Party.SubCommands.Info.Names"), 3,
+					config.getStringList("Commands.Party.SubCommands.Info.Names"), config.getInt("Commands.Party.SubCommands.Kick.Priority"),
 					messages.getString("Party.CommandUsage.List"), config.getString("Commands.Party.SubCommands.Info.Permissions")));
 		subCommands.add(new Leave(
-				config.getStringList("Commands.Party.SubCommands.Leave.Names"), 5,
+				config.getStringList("Commands.Party.SubCommands.Leave.Names"), config.getInt("Commands.Party.SubCommands.Leave.Priority"),
 				messages.getString("Party.CommandUsage.Leave"), config.getString("Commands.Party.SubCommands.Leave.Permissions")));
 		if (!config.getBoolean("Commands.Party.SubCommands.Chat.Disabled"))
 			subCommands.add(new Chat(
-					config.getStringList("Commands.Party.SubCommands.Chat.Names"), 4,
+					config.getStringList("Commands.Party.SubCommands.Chat.Names"), config.getInt("Commands.Party.SubCommands.Chat.Priority"),
 					messages.getString("Party.CommandUsage.Chat"), config.getString("Commands.Party.SubCommands.Chat.Permissions")));
 		if (!config.getBoolean("Commands.Party.SubCommands.Leader.Disabled"))
 			subCommands.add(new Leader(
-					config.getStringList("Commands.Party.SubCommands.Leader.Names"), 7,
+					config.getStringList("Commands.Party.SubCommands.Leader.Names"), config.getInt("Commands.Party.SubCommands.Leader.Priority"),
 					messages.getString("Party.CommandUsage.Leader"), config.getString("Commands.Party.SubCommands.Leader.Permissions")));
 	}
 
@@ -87,7 +87,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 				else
 					permissionHeight = PartyAPI.PARTY_MEMBER_PERMISSION_HEIGHT;
 			for (PartySubCommand cmd : subCommands)
-				if (cmd.hasAccess(permissionHeight))
+				if (cmd.hasAccess(party, permissionHeight))
 					cmd.printOutHelp(pPlayer, getName());
 			pPlayer.sendMessage(
 					new TextComponent(Main.getInstance().getMessages().getString("Party.General.HelpEnd")));
@@ -95,8 +95,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		}
 		PartySubCommand sc = getCommand(args[0]);
 		if (sc == null) {
-			pPlayer.sendMessage(getPrefix()
-					+ Main.getInstance().getMessages().getString("Party.Error.CommandNotFound"));
+			pPlayer.sendMessage(Main.getInstance().getMessages().get(getPrefix(), "Party.Error.CommandNotFound"));
 			return;
 		}
 		if (!sc.hasPermission(pPlayer)) {

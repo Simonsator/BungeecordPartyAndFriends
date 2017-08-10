@@ -56,26 +56,35 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Friends.TopCommands.MSG.Disabled", false);
 		set("Commands.Friends.SubCommands.Accept.Names", "accept", "approve");
 		set("Commands.Friends.SubCommands.Accept.Permission", "");
+		set("Commands.Friends.SubCommands.Accept.Priority", 3);
 		set("Commands.Friends.SubCommands.Add.Names", "add", "addfriend");
 		set("Commands.Friends.SubCommands.Add.Permission", "");
+		set("Commands.Friends.SubCommands.Add.Priority", 2);
 		set("Commands.Friends.SubCommands.Deny.Names", "deny", "reject");
 		set("Commands.Friends.SubCommands.Deny.Permission", "");
+		set("Commands.Friends.SubCommands.Deny.Priority", 4);
 		set("Commands.Friends.SubCommands.Jump.Names", "jump", "jumpto");
 		set("Commands.Friends.SubCommands.Jump.Disabled", false);
 		set("Commands.Friends.SubCommands.Jump.Permission", "");
+		set("Commands.Friends.SubCommands.Jump.Priority", 6);
 		set("Commands.Friends.SubCommands.Jump.DisabledServers", "login1", "adminlobby1");
 		set("Commands.Friends.SubCommands.List.Names", "list", "info");
 		set("Commands.Friends.SubCommands.List.Disabled", false);
 		set("Commands.Friends.SubCommands.List.Permission", "");
+		set("Commands.Friends.SubCommands.List.Priority", 0);
 		set("Commands.Friends.SubCommands.List.SortElements", true);
 		set("Commands.Friends.SubCommands.MSG.Names", "msg", "message");
 		set("Commands.Friends.SubCommands.MSG.Disabled", false);
 		set("Commands.Friends.SubCommands.MSG.Permission", "");
-		set("Commands.Friends.SubCommands.Remove.Names", "remove", "delete");
+		set("Commands.Friends.SubCommands.MSG.Priority", 1);
+		set("Commands.Friends.SubCommands.MSG.ReplyCommand", "/friend msg [PLAYER]");
+		set("Commands.Friends.SubCommands.Remove.Names", "remove", "deleteAccount");
 		set("Commands.Friends.SubCommands.Remove.Permission", "");
+		set("Commands.Friends.SubCommands.Remove.Priority", 5);
 		set("Commands.Friends.SubCommands.Settings.Names", "setting", "settings");
 		set("Commands.Friends.SubCommands.Settings.Disabled", false);
 		set("Commands.Friends.SubCommands.Settings.Permission", "");
+		set("Commands.Friends.SubCommands.Settings.Priority", 7);
 		set("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Names", "friendrequest", "receivefriendrequests", "friendrequests");
 		set("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Enabled", true);
 		set("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Permission", "");
@@ -105,22 +114,31 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Party.TopCommands.PartyChat.Disabled", false);
 		set("Commands.Party.SubCommands.Join.Names", "join", "j");
 		set("Commands.Party.SubCommands.Join.Permissions", "");
+		set("Commands.Party.SubCommands.Join.Priority", 0);
 		set("Commands.Party.SubCommands.Invite.Names", "invite", "add");
 		set("Commands.Party.SubCommands.Invite.Permissions", "");
+		set("Commands.Party.SubCommands.Invite.Priority", 1);
 		set("Commands.Party.SubCommands.Kick.Names", "kick", "forcedleave");
 		set("Commands.Party.SubCommands.Kick.Disabled", false);
 		set("Commands.Party.SubCommands.Kick.Permissions", "");
+		set("Commands.Party.SubCommands.Kick.Priority", 6);
 		set("Commands.Party.SubCommands.Info.Names", "info", "list");
 		set("Commands.Party.SubCommands.Info.Disabled", false);
 		set("Commands.Party.SubCommands.Info.Permissions", "");
+		set("Commands.Party.SubCommands.Info.Priority", 3);
 		set("Commands.Party.SubCommands.Leave.Names", "leave", "le");
 		set("Commands.Party.SubCommands.Leave.Permissions", "");
+		set("Commands.Party.SubCommands.Leave.Priority", 5);
 		set("Commands.Party.SubCommands.Chat.Names", "chat", "message", "msg");
+		set("Commands.Party.SubCommands.Chat.ReplyCommand", "chat");
 		set("Commands.Party.SubCommands.Chat.Disabled", false);
 		set("Commands.Party.SubCommands.Chat.Permissions", "");
+		set("Commands.Party.SubCommands.Chat.Priority", 4);
 		set("Commands.Party.SubCommands.Leader.Names", "leader", "lead");
 		set("Commands.Party.SubCommands.Leader.Disabled", false);
 		set("Commands.Party.SubCommands.Leader.Permissions", "");
+		set("Commands.Party.SubCommands.Leader.Priority", 7);
+
 	}
 
 	@Override
