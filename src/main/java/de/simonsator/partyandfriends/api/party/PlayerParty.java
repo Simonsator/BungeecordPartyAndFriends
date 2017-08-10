@@ -38,6 +38,10 @@ public abstract class PlayerParty {
 		return getLeader() != null && player != null && this.getLeader().getUniqueId().equals(player.getUniqueId());
 	}
 
+	public abstract boolean isPrivate();
+
+	public abstract void setPrivateState(boolean pIsPrivate);
+
 	/**
 	 * Returns true if the player is in the party. Returns false if the player
 	 * is not in the party.
@@ -124,8 +128,8 @@ public abstract class PlayerParty {
 
 	public void kickPlayer(OnlinePAFPlayer pPlayer) {
 		removePlayerSilent(pPlayer);
-		pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + Main.getInstance().getMessages()
-				.getString("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer")));
+		pPlayer.sendMessage(Main.getInstance().getMessages()
+				.get(PartyCommand.getInstance().getPrefix(), "Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer"));
 		this.sendMessage((PartyCommand.getInstance().getPrefix()
 				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Party.Command.Kick.KickedPlayerOutOfThePartyOthers"))
 				.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
@@ -138,7 +142,6 @@ public abstract class PlayerParty {
 	 * @param pPlayer The player
 	 */
 	public void invite(final OnlinePAFPlayer pPlayer) {
-		addToInvited(pPlayer);
 		OnlinePAFPlayer lLeader = getLeader();
 		pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance().getMessages()
 				.getString("Party.Command.Invite.YouWereInvitedBY")).replaceAll(Matcher.quoteReplacement(lLeader.getDisplayName()))));
@@ -149,6 +152,9 @@ public abstract class PlayerParty {
 				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
 				+ Main.getInstance().getMessages().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER")
 				+ "\"}]}}}"));
+		if (!isPrivate())
+			return;
+		addToInvited(pPlayer);
 		final PlayerParty party = this;
 		ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {
 			@Override
@@ -188,14 +194,16 @@ public abstract class PlayerParty {
 	public abstract int getInviteListSize();
 
 	/**
-	 * Returns true if the player is already invited. Returns false if the
+	 * Returns true if the player is already invited or if the party is public. Returns false if the
 	 * player is not invited.
 	 *
-	 * @param player The player
+	 * @param pPlayer The player
 	 * @return Returns true if the player is already invited. Returns false if
 	 * the player is not invited.
 	 */
-	public abstract boolean isInvited(OnlinePAFPlayer player);
+	public boolean isInvited(OnlinePAFPlayer pPlayer) {
+		return !isPrivate() || getInvited().contains(pPlayer.getUniqueId());
+	}
 
 	public void sendMessage(TextComponent pText) {
 		for (OnlinePAFPlayer player : getAllPlayers())
@@ -208,7 +216,8 @@ public abstract class PlayerParty {
 	}
 
 	private boolean deleteParty() {
-		if (this.getAllPlayers().size() < 2) {
+		int partyMemberCount = this.getAllPlayers().size();
+		if ((partyMemberCount < 2 && isPrivate()) || partyMemberCount == 0) {
 			sendMessage((PartyCommand.getInstance().getPrefix() + Main.getInstance().getMessages()
 					.getString("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers")));
 			PartyManager.getInstance().deleteParty(this);
@@ -222,4 +231,5 @@ public abstract class PlayerParty {
 	protected abstract boolean needsNewLeader(OnlinePAFPlayer pPlayer);
 
 	protected abstract void findNewLeader();
+
 }

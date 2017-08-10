@@ -104,6 +104,8 @@ public class Invite extends PartySubCommand {
 	}
 
 	private boolean isAlreadyInvited(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pToInvite, PlayerParty pParty) {
+		if (!pParty.isPrivate())
+			return false;
 		if (pParty.isInvited(pToInvite)) {
 			pPlayer.sendMessage(
 					PREFIX + PLAYER_PATTERN
