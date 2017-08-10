@@ -28,7 +28,7 @@ public class MySQL extends PoolSQLCommunication {
 	 *
 	 * @param pMySQLData The MySQL data
 	 */
-	public MySQL(MySQLData pMySQLData, PoolData pPoolData, Object pIgnored) {
+	public MySQL(MySQLData pMySQLData, PoolData pPoolData, Object pIgnore) throws SQLException {
 		super(pMySQLData, pPoolData);
 		this.TABLE_PREFIX = pMySQLData.TABLE_PREFIX;
 		importDatabase();
@@ -90,7 +90,6 @@ public class MySQL extends PoolSQLCommunication {
 		} finally {
 			close(con, prepStmt);
 		}
-		importOfflineMessages();
 		addColumnLastOnline();
 	}
 
@@ -122,23 +121,6 @@ public class MySQL extends PoolSQLCommunication {
 			e.printStackTrace();
 		} finally {
 			close(con, rs, stmt);
-		}
-	}
-
-	/**
-	 * Imports the offlineMessages DATABASE
-	 */
-	private void importOfflineMessages() {
-		Connection con = getConnection();
-		PreparedStatement prepStmt = null;
-		try {
-			prepStmt = con.prepareStatement(
-					"CREATE TABLE IF NOT EXISTS `" + TABLE_PREFIX + "messages` (`message` varchar(253), `sender` INT(8), `reciver` INT(8));");
-			prepStmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(con, prepStmt);
 		}
 	}
 
@@ -541,30 +523,6 @@ public class MySQL extends PoolSQLCommunication {
 			prepStmt = con.prepareStatement("DELETE FROM  " + TABLE_PREFIX
 					+ "settings WHERE player_id = '" + pPlayerID + "' AND settings_id='" + pSettingsID + "' Limit 1");
 			prepStmt.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(con, prepStmt);
-		}
-	}
-
-	/**
-	 * Saves an offline message in MySQL
-	 *
-	 * @param idSender   Sender of the message
-	 * @param idReceiver Receiver of the message
-	 * @param pMessage   The message, that should be send
-	 */
-	public void offlineMessage(int idSender, int idReceiver, String pMessage) {
-		Connection con = getConnection();
-		PreparedStatement prepStmt = null;
-		try {
-			prepStmt = con.prepareStatement(
-					"insert into " + TABLE_PREFIX + "messages	 values (?, ?, ?)");
-			prepStmt.setInt(2, idSender);
-			prepStmt.setInt(3, idReceiver);
-			prepStmt.setString(1, pMessage);
-			prepStmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

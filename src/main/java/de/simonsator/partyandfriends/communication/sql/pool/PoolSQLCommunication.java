@@ -19,20 +19,15 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 	private final Properties connectionProperties;
 	private ComboPooledDataSource cpds;
 
-	public PoolSQLCommunication(MySQLData pMySQLData, PoolData pPoolData) {
+	public PoolSQLCommunication(MySQLData pMySQLData, PoolData pPoolData) throws SQLException {
 		MYSQL_DATA = pMySQLData;
 		POOL_DATA = pPoolData;
 		connectionProperties = new Properties();
 		connectionProperties.setProperty("user", MYSQL_DATA.USERNAME);
 		connectionProperties.setProperty("password", MYSQL_DATA.PASSWORD);
 		connectionProperties.setProperty("useSSL", pMySQLData.USE_SSL + "");
-		try {
-			createDatabase();
-			cpds = createConnection();
-		} catch (SQLException e) {
-			System.out.println("Could not create connection to the MySQL server. Is the MySQL server running and is your password, username and the db name correct?");
-			e.printStackTrace();
-		}
+		createDatabase();
+		cpds = createConnection();
 	}
 
 	private void createDatabase() throws SQLException {

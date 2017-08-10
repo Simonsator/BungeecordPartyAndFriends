@@ -11,16 +11,17 @@ import de.simonsator.partyandfriends.pafplayers.mysql.PAFPlayerMySQL;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class PAFPlayerManagerMySQL extends IDBasedPAFPlayerManager {
 	private static MySQL connection;
 
-	public PAFPlayerManagerMySQL(MySQLData pMySQLData, PoolData pPoolData) {
+	public PAFPlayerManagerMySQL(MySQLData pMySQLData, PoolData pPoolData) throws SQLException {
 		connection = new MySQL(pMySQLData, pPoolData, null);
 	}
 
-	public PAFPlayerManagerMySQL(MySQLData pMySQLData, PoolData pPoolData, Object pJedisPool) {
+	public PAFPlayerManagerMySQL(MySQLData pMySQLData, PoolData pPoolData, Object pJedisPool) throws SQLException {
 		connection = new MySQL(pMySQLData, pPoolData, pJedisPool);
 	}
 

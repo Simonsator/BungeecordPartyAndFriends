@@ -19,11 +19,13 @@ import de.simonsator.partyandfriends.party.partymanager.LocalPartyManager;
 import de.simonsator.partyandfriends.utilities.*;
 import de.simonsator.partyandfriends.utilities.disable.Disabler;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,12 +85,38 @@ public class Main extends Plugin {
 	public void onEnable() {
 		instance = (this);
 		loadConfiguration();
-		initPAFClasses();
-		registerCommands();
-		registerListeners();
+		try {
+			initPAFClasses();
+			registerCommands();
+			registerListeners();
+		} catch (SQLException e) {
+			initError(e);
+		}
 	}
 
-	private void initPAFClasses() {
+	private void initError(SQLException e) {
+		if (!getConfig().getBoolean("Commands.Party.TopCommands.Party.Disabled"))
+			ProxyServer.getInstance().getPluginManager().registerCommand(this, new BootErrorCommand(
+					(getConfig().getStringList("Commands.Party.TopCommands.Party.Names").toArray(new String[0]))));
+		Command partyChatCommand = new BootErrorCommand(
+				(getConfig().getStringList("Commands.Party.TopCommands.PartyChat.Names").toArray(new String[0])));
+		if (!getConfig().getBoolean("Commands.Party.TopCommands.PartyChat.Disabled"))
+			ProxyServer.getInstance().getPluginManager().registerCommand(this, partyChatCommand);
+		if (!getConfig().getBoolean("Commands.Friends.TopCommands.Friend.Disabled"))
+			getProxy().getPluginManager().registerCommand(this, new BootErrorCommand(getConfig().getStringList("Commands.Friends.TopCommands.Friend.Names").toArray(new String[0])));
+		BootErrorCommand msg = new BootErrorCommand(
+				(getConfig().getStringList("Commands.Friends.TopCommands.MSG.Names").toArray(new String[0])));
+		if (!getConfig().getBoolean("Commands.Friends.TopCommands.MSG.Disabled"))
+			getProxy().getPluginManager().registerCommand(this, msg);
+		if (!getConfig().getBoolean("Commands.Friends.TopCommands.Reply.Disabled"))
+			getProxy().getPluginManager().registerCommand(this, new BootErrorCommand(
+					(getConfig().getStringList("Commands.Friends.TopCommands.Reply.Names").toArray(new String[0]))));
+		System.out.println("§cParty and Friends was either not able to connect to the MySQL database or to login into the MySQL database. " +
+				"Please correct your MySQL data in the config.yml. If you need further help contact Simonsator via Skype (live:00pflaume), PM him (https://www.spigotmc.org/conversations/add?to=simonsator) or write an email to him (support@simonsator.de). Please don't forget to send him the Proxy.Log.0 file (bungeecord log file).");
+		e.printStackTrace();
+	}
+
+	private void initPAFClasses() throws SQLException {
 		switch ("MySQL") {
 			case "MySQL":
 				PoolData poolData = new PoolData(Main.getInstance().getConfig().getInt("MySQL.Pool.MinPoolSize"),
