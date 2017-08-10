@@ -74,10 +74,15 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	 * @param args           The arguments which are given by the player.
 	 */
 	@Override
-	public void execute(CommandSender pCommandSender, String[] args) {
+	public void execute(final CommandSender pCommandSender, final String[] args) {
 		if (isPlayer(pCommandSender))
-			if (!isDisabledServer((ProxiedPlayer) pCommandSender))
-				onCommand(PAFPlayerManager.getInstance().getPlayer((ProxiedPlayer) pCommandSender), args);
+			ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), new Runnable() {
+				@Override
+				public void run() {
+					if (!isDisabledServer((ProxiedPlayer) pCommandSender))
+						onCommand(PAFPlayerManager.getInstance().getPlayer((ProxiedPlayer) pCommandSender), args);
+				}
+			});
 	}
 
 	private boolean isDisabledServer(ProxiedPlayer pPlayer) {
@@ -136,6 +141,6 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	}
 
 	public void tabComplete(TabCompleteEvent pEvent) {
-// only premium
+		// only premium
 	}
 }
