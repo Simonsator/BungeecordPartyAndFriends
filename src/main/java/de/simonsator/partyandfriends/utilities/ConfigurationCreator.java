@@ -10,6 +10,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author Simonsator
@@ -61,12 +62,19 @@ public abstract class ConfigurationCreator {
 			if (entry instanceof LinkedHashMap | entry instanceof Configuration)
 				process(pMessagesYML.getSection(key));
 			else if (entry instanceof String) {
-				String stringEntry = (String) entry;
-				stringEntry = ChatColor.translateAlternateColorCodes('&', stringEntry);
-				stringEntry = fixColors(stringEntry);
-				pMessagesYML.set(key, ChatColor.translateAlternateColorCodes('&', stringEntry));
+				pMessagesYML.set(key, process((String) entry));
+			} else if (entry instanceof List) {
+				List<String> messages = (List<String>) entry;
+				for (int i = 0; i < messages.size(); i++)
+					messages.set(i, process(messages.get(i)));
+				pMessagesYML.set(key, messages);
 			}
 		}
+	}
+
+	private String process(String pMessage) {
+		pMessage = ChatColor.translateAlternateColorCodes('&', pMessage);
+		return fixColors(pMessage);
 	}
 
 	private String fixColors(String pInput) {

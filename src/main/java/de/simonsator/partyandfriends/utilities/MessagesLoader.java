@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.utilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * This class loads the Messages.yml
@@ -35,7 +36,7 @@ public class MessagesLoader extends LanguageConfiguration {
 	private void loadEnglishMessages() {
 		set("General.DisabledServer", "&cThis command cannot be executed here.");
 		set("General.UnableToConnectToServerRedisBungee", "&cThe server could not be joined.");
-		set("Party.Error.CommandNotFound", "&cThis command does not exist!");
+		set("Party.Error.CommandNotFound", "&cThis command does not exist!", "&cThis command does not exist!");
 		set("Party.Error.NoPermission", "&cYou don't have the permission to execute this command!");
 		set("Party.CommandUsage.Join", "&8/&5Party join  &8- &7Join a party");
 		set("Party.CommandUsage.Invite", "&8/&5Party invite  &8- &7Invite a player into your party");
@@ -71,13 +72,13 @@ public class MessagesLoader extends LanguageConfiguration {
 				"&cYou are already in a party. Use &6/party leave &cto leave this party.");
 		set("Party.Command.Join.PlayerHasJoined", "&bThe player &6[PLAYER] &bjoined the party.");
 		set("Party.Command.Join.ErrorNoInvitation", "&cYou cannot join this party.");
-		set("Party.Command.Kick.KickedPlayerOutOfThePartyOthers", "&bThe player &6[PLAYER] &bwas kicked out of the party.");
+		set("Party.Command.Kick.KickedPlayerOutOfThePartyOthers", "&bThe player &6[PLAYER] &bwas kicked out of the party.", "&bThe player &6[PLAYER] &bwas kicked out of the party, by the leader.");
 		set("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer", "&bYou have been kicked out of the party.");
 		set("Party.Command.Leader.SenderEqualsGivenPlayer", "&7You cannot make yourself to the new party leader.");
 		set("Party.Command.Leader.NewLeaderIs", "&7The new party leader is &6[NEWLEADER]");
 		set("Party.Command.Leave.NewLeaderIs", "&bThe leader has left the party. The new leader is &e[NEWLEADER].");
-		set("Party.Command.Leave.YouLeftTheParty", "&bYou left your party.");
-		set("Friends.General.CommandNotFound", " &cThe command does not exist.");
+		set("Party.Command.Leave.YouLeftTheParty", Arrays.asList("&bYou left your party."));
+		set("Friends.General.CommandNotFound", " &cThe command does not exist.", " &cI am sorry, but the command you were searching for was not found.");
 		set("Friends.General.NoPermission", " &cYou don't have the permission to execute this command.");
 		set("Friends.General.PlayerIsOffline", " &7The player &e[PLAYER] &7is not online or you are not his friend.");
 		set("Friends.General.NotAFriendOfOrOffline", " &7The player &e[PLAYER] &7is not online or you are not his friend.");

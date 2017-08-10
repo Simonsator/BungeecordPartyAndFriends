@@ -1,6 +1,8 @@
 package de.simonsator.partyandfriends.utilities;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Simonsator
@@ -18,4 +20,15 @@ public abstract class LanguageConfiguration extends ConfigurationCreator {
 		return configuration.getString(pIdentifier);
 	}
 
+	public Object get(String pPrefix, String pIdentifier) {
+		Object entry = configuration.get(pIdentifier);
+		if (entry instanceof List) {
+			List<String> messageList = (List<String>) entry;
+			ArrayList<String> messages = new ArrayList<>(messageList.size());
+			for (int i = 0; i < messageList.size(); i++)
+				messages.add(pPrefix + messageList.get(i));
+			return messages;
+		}
+		return pPrefix + entry;
+	}
 }
