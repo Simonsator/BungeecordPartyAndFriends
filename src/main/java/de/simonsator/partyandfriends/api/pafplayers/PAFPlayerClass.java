@@ -24,6 +24,8 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 
 	@Override
 	public void sendMessage(TextComponent pTextComponent) {
+		/* If the player is offline no message needs to be send. This method should be overwritten
+		 * by a class which extends this class and implements OnlinePAFPlayer*/
 	}
 
 	@Override
@@ -33,9 +35,11 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 			sendMessage(new TextComponent(split));
 	}
 
+
 	@Override
 	public void sendPacket(Chat chat) {
-
+		/* If the player is offline no message needs to be send. This method should be overwritten
+		 * by a class which extends this class and implements OnlinePAFPlayer*/
 	}
 
 	@Override
@@ -64,10 +68,8 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 			sendMessage((List<String>) pMessage);
 			return;
 		}
-		if (pMessage instanceof String) {
+		if (pMessage instanceof String)
 			sendMessage((String) pMessage);
-			return;
-		}
 	}
 
 	@Override

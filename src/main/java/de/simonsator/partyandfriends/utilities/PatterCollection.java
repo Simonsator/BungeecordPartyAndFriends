@@ -15,5 +15,6 @@ public final class PatterCollection {
 	public static final Pattern SPACE_PATTERN = Pattern.compile(" ", Pattern.LITERAL);
 	public static final Pattern CONTENT_PATTERN = Pattern.compile("[CONTENT]", Pattern.LITERAL);
 	public static final Pattern LAST_ONLINE_PATTERN = Pattern.compile("[LAST_ONLINE]", Pattern.LITERAL);
+	public static final Pattern PAGE_PATTERN = Pattern.compile("[PAGE]", Pattern.LITERAL);
 
 }

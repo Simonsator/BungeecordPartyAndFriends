@@ -49,14 +49,16 @@ public class Join extends PartySubCommand {
 		PlayerParty party = PartyManager.getInstance().getParty(onlinePAFPlayer);
 		if (hasNoParty(pPlayer, party))
 			return;
-		if (party.addPlayer(pPlayer))
+		if (party.addPlayer(pPlayer)) {
 			party.sendMessage(
 					new TextComponent(
 							PREFIX + PLAYER_PATTERN
 									.matcher(Main.getInstance().getMessages()
 											.getString("Party.Command.Join.PlayerHasJoined"))
 									.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
-		else
+			if (Main.getInstance().getConfig().getBoolean("Commands.Party.SubCommands.Join.AutoJoinLeaderServer"))
+				pPlayer.connect(party.getLeader().getServer());
+		} else
 			pPlayer.sendMessage(new TextComponent(PREFIX
 					+ Main.getInstance().getMessages().getString("Party.Command.Join.ErrorNoInvitation")));
 	}

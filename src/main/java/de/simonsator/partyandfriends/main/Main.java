@@ -91,7 +91,6 @@ public class Main extends Plugin {
 				UpdateSearcher searcher = new UpdateSearcher("Party-and-Friends-Free", getDescription().getVersion());
 				ProxyServer.getInstance().getConsole().sendMessage(new TextComponent(searcher.checkForUpdate()));
 			}
-
 		} catch (SQLException e) {
 			initError(e);
 		}
@@ -120,19 +119,15 @@ public class Main extends Plugin {
 	}
 
 	private void initPAFClasses() throws SQLException {
-		switch ("MySQL") {
-			case "MySQL":
-				PoolData poolData = new PoolData(Main.getInstance().getConfig().getInt("MySQL.Pool.MinPoolSize"),
-						Main.getInstance().getConfig().getInt("MySQL.Pool.MaxPoolSize"),
-						Main.getInstance().getConfig().getInt("MySQL.Pool.InitialPoolSize"));
-				MySQLData mySQLData = new MySQLData(getConfig().getString("MySQL.Host"),
-						getConfig().getString("MySQL.Username"), getConfig().getString("MySQL.Password"),
-						getConfig().getInt("MySQL.Port"), getConfig().getString("MySQL.Database"),
-						getConfig().getString("MySQL.TablePrefix"), getConfig().getBoolean("MySQL.UseSSL"));
-				new PAFPlayerManagerMySQL(mySQLData, poolData);
-				new LocalPartyManager();
-				break;
-		}
+		PoolData poolData = new PoolData(Main.getInstance().getConfig().getInt("MySQL.Pool.MinPoolSize"),
+				Main.getInstance().getConfig().getInt("MySQL.Pool.MaxPoolSize"),
+				Main.getInstance().getConfig().getInt("MySQL.Pool.InitialPoolSize"), Main.getInstance().getConfig().getInt("MySQL.Pool.IdleConnectionTestPeriod"), Main.getInstance().getConfig().getBoolean("MySQL.Pool.TestConnectionOnCheckin"));
+		MySQLData mySQLData = new MySQLData(getConfig().getString("MySQL.Host"),
+				getConfig().getString("MySQL.Username"), getConfig().get("MySQL.Password").toString(),
+				getConfig().getInt("MySQL.Port"), getConfig().getString("MySQL.Database"),
+				getConfig().getString("MySQL.TablePrefix"), getConfig().getBoolean("MySQL.UseSSL"));
+		new PAFPlayerManagerMySQL(mySQLData, poolData);
+		new LocalPartyManager();
 		new StandardPermissionProvider();
 	}
 
@@ -144,7 +139,7 @@ public class Main extends Plugin {
 	}
 
 	/**
-	 * Loads the configurations(config.yml and messages.yml)
+	 * Loads the configuration files(config.yml and messages.yml)
 	 */
 	private void loadConfiguration() {
 		try {
@@ -152,13 +147,17 @@ public class Main extends Plugin {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		language = Language.valueOf(getConfig().getString("General.Language").toUpperCase());
-		if (getConfig().getBoolean("General.UseOwnLanguageFile"))
-			language = Language.OWN;
 		try {
-			if (messages == null)
-				messages = new MessagesLoader(language, new File(getDataFolder(), "messages.yml"));
-			else messages.reloadConfiguration();
+			language = Language.valueOf(getConfig().getString("General.Language").toUpperCase());
+		} catch (IllegalArgumentException e) {
+			getProxy().getConsole().sendMessage(new TextComponent("&4The given language is not supported by Party and Friends. English will be used instead."));
+			language = Language.ENGLISH;
+			e.printStackTrace();
+		}
+		try {
+			messages = new MessagesLoader(language, getConfig().getBoolean("General.UseOwnLanguageFile"), new File(getDataFolder(), "messages.yml"));
+			if (getConfig().getBoolean("General.UseOwnLanguageFile"))
+				language = Language.OWN;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

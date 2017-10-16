@@ -32,15 +32,18 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("MySQL.Pool.InitialPoolSize", 3);
 		set("MySQL.Pool.MinPoolSize", 3);
 		set("MySQL.Pool.MaxPoolSize", 15);
+		set("MySQL.Pool.IdleConnectionTestPeriod", 290);
+		set("MySQL.Pool.TestConnectionOnCheckin", false);
 		set("General.UseOwnLanguageFile", false);
 		set("General.CheckForUpdates", true);
-		set("General.Language", "english");
+		set("General.Language", "English");
 		set("General.Time.LanguageTag", "US");
 		set("General.Time.TimeZone", TimeZone.getDefault().getID());
 		set("General.Time.Format", "dd/MM/yyyy HH:mm:ss");
 		set("General.PartyDoNotJoinTheseServers", "lobby", "lobby1", "lobby2");
 		set("General.DisabledServers", "login1", "login2");
 		set("General.MaxPlayersInParty", 0);
+		set("General.Deactivated.OfflineMessages", false);
 		set("General.TabComplete.General", true);
 		set("General.TabComplete.Player", true);
 		set("Extensions.UseExtensionFolderAsConfigFolder", false);
@@ -73,6 +76,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Friends.SubCommands.List.Permission", "");
 		set("Commands.Friends.SubCommands.List.Priority", 0);
 		set("Commands.Friends.SubCommands.List.SortElements", true);
+		set("Commands.Friends.SubCommands.List.EntriesPerPage", 10);
 		set("Commands.Friends.SubCommands.MSG.Names", "msg", "message");
 		set("Commands.Friends.SubCommands.MSG.Disabled", false);
 		set("Commands.Friends.SubCommands.MSG.Permission", "");
@@ -115,6 +119,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Party.SubCommands.Join.Names", "join", "j");
 		set("Commands.Party.SubCommands.Join.Permissions", "");
 		set("Commands.Party.SubCommands.Join.Priority", 0);
+		set("Commands.Party.SubCommands.Join.AutoJoinLeaderServer", true);
 		set("Commands.Party.SubCommands.Invite.Names", "invite", "add");
 		set("Commands.Party.SubCommands.Invite.Permissions", "");
 		set("Commands.Party.SubCommands.Invite.Priority", 1);

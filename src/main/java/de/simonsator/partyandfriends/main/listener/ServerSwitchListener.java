@@ -54,14 +54,12 @@ public class ServerSwitchListener implements Listener {
 			return;
 		OnlinePAFPlayer player = PAFPlayerManager.getInstance().getPlayer(pEvent.getPlayer());
 		PlayerParty party = PartyManager.getInstance().getParty(player);
-		if (party != null) {
-			if (party.isLeader(player)) {
-				for (OnlinePAFPlayer p : party.getPlayers())
-					p.connect(server);
-				party.sendMessage((PartyCommand.getInstance().getPrefix()
-						+ Main.getInstance().getMessages().getString("Party.Command.General.ServerSwitched")
-						.replace("[SERVER]", server.getName())));
-			}
+		if (party != null && party.isLeader(player)) {
+			for (OnlinePAFPlayer p : party.getPlayers())
+				p.connect(server);
+			party.sendMessage((PartyCommand.getInstance().getPrefix()
+					+ Main.getInstance().getMessages().getString("Party.Command.General.ServerSwitched")
+					.replace("[SERVER]", server.getName())));
 		}
 	}
 }

@@ -7,6 +7,7 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
+import de.simonsator.partyandfriends.utilities.OfflineMessage;
 import net.md_5.bungee.api.ProxyServer;
 
 import java.sql.Timestamp;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
-	final int ID;
+	private final int ID;
 
 	public PAFPlayerMySQL(int pID) {
 		ID = pID;
@@ -67,9 +68,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public boolean hasPermission(String pPermission) {
-		if (pPermission == null)
-			return true;
-		if (pPermission.equals(""))
+		if (pPermission == null || pPermission.isEmpty())
 			return true;
 		return PermissionProvider.getInstance().hasPermission(this, pPermission);
 	}
@@ -125,6 +124,11 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	public void setLastPlayerWroteFrom(PAFPlayer pLastWroteTo) {
 		PAFPlayerManagerMySQL.getConnection().setLastPlayerWroteTo(ID, ((PAFPlayerMySQL) pLastWroteTo.getPAFPlayer())
 				.getPlayerID(), 0);
+	}
+
+	@Override
+	public void addOfflineMessage(OfflineMessage pMessage) {
+		PAFPlayerManagerMySQL.getConnection().offlineMessage(ID, ((PAFPlayerMySQL) pMessage.SENDER).getPlayerID(), pMessage.MESSAGE);
 	}
 
 	@Override

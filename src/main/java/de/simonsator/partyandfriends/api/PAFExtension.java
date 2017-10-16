@@ -17,7 +17,10 @@ public abstract class PAFExtension extends Plugin {
 
 	public File getConfigFolder() {
 		if (Main.getInstance().getConfig().getBoolean("Extensions.UseExtensionFolderAsConfigFolder")) {
-			File configFolder = new File(Main.getInstance().getDataFolder(), "extensions/" + getDescription().getName());
+			File configFolder = new File(Main.getInstance().getDataFolder(), "extensions/");
+			if (!configFolder.exists())
+				configFolder.mkdir();
+			configFolder = new File(configFolder, getDescription().getName());
 			if (!configFolder.exists())
 				configFolder.mkdir();
 			return configFolder;
@@ -30,7 +33,11 @@ public abstract class PAFExtension extends Plugin {
 		getProxy().getPluginManager().unregisterListeners(this);
 	}
 
-	private void registerAsExtension() {
+	protected void registerAsExtension() {
 		Main.getInstance().registerExtension(this);
+	}
+
+	protected void unregisterExtension() {
+		Main.getInstance().unregisterExtension(this);
 	}
 }

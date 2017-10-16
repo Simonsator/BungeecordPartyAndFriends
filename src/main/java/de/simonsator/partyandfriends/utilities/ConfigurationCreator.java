@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.utilities;
 
 import com.google.common.base.Charsets;
+import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -96,6 +97,21 @@ public abstract class ConfigurationCreator {
 		if (pInput.endsWith(" "))
 			composited += (' ');
 		return composited;
+	}
+
+	protected boolean copyFromJar() throws IOException {
+		if (FILE.exists())
+			return false;
+		InputStream in = Main.getInstance().getResourceAsStream(FILE.getName());
+		OutputStream out = new FileOutputStream(FILE);
+		byte[] buf = new byte[1024];
+		int len;
+		while ((len = in.read(buf)) > 0) {
+			out.write(buf, 0, len);
+		}
+		out.close();
+		in.close();
+		return true;
 	}
 
 }

@@ -1,7 +1,6 @@
 package de.simonsator.partyandfriends.utilities;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 
 /**
@@ -11,14 +10,14 @@ import java.util.Arrays;
  * @version 1.0.1
  */
 public class MessagesLoader extends LanguageConfiguration {
+	private final boolean USE_CUSTOM_MESSAGES;
 
-	public MessagesLoader(Language pLanguage, File pFile) throws IOException {
+	public MessagesLoader(Language pLanguage, boolean useCustomMessages, File pFile) throws IOException {
 		super(pLanguage, pFile);
+		USE_CUSTOM_MESSAGES = useCustomMessages;
+		copyFromJar();
+		readFile();
 		switch (pLanguage) {
-			case OWN:
-				if (!pFile.exists()) pFile.createNewFile();
-				readFile();
-				break;
 			case GERMAN:
 				loadGermanMessages();
 				break;
@@ -27,11 +26,10 @@ public class MessagesLoader extends LanguageConfiguration {
 		}
 		loadEnglishMessages();
 		loadSharedMessages();
-		if (pLanguage == Language.OWN)
+		if (USE_CUSTOM_MESSAGES)
 			saveFile();
 		process(configuration);
 	}
-
 
 	private void loadEnglishMessages() {
 		set("General.DisabledServer", "&cThis command cannot be executed here.");
@@ -156,12 +154,15 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Jump.CanNotJump", " &7You cannot jump to this person.");
 		set("Friends.Command.List.NoFriendsAdded", " &7Until now, you did not add friends.");
 		set("Friends.Command.List.FriendsList", " &7These are your friends:LINE_BREAK &7- ");
+		set("Friends.Command.List.PageDoesNotExist", " &7The given page does not exist.");
+		set("Friends.Command.List.NextPage", " &7To see more friends use /friend list [PAGE].");
 		set("Friends.Command.List.OnlineTitle", " &a(online)&7, currently playing on [SERVER_ON]");
 		set("Friends.Command.List.OfflineTitle", " &c(offline)&7, last seen at [LAST_ONLINE]");
 		set("Friends.Command.List.TimeColor", "&7");
 		set("Friends.Command.MSG.CanNotWriteToHim", " &7You cannot message this player.");
 		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7No player ever messaged you.");
 		set("Friends.Command.MSG.PlayerAndMessageMissing", " &7You need to give a message.");
+		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7The player will receive the message when he goes online.");
 		set("Friends.Command.Remove.Removed", " &7You removed the friend &e[PLAYER]&7.");
 	}
 
@@ -253,6 +254,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Settings.NowYourFriendsCanJump", " &7Freunde können jetzt zu dir &aspringen&7.");
 		set("Friends.Command.Settings.NowYourFriendsCanNotJump", " &7Freunde können jetzt &cnicht &7zu dir springen.");
 		set("Friends.Command.MSG.CanNotWriteToHim", " &7Du kannst diesem Spieler nicht schreiben.");
+		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7Der Spieler erhält die Nachricht, sobald er online geht.");
 		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7Noch kein Spieler hat dich angeschrieben.");
 		set("Friends.Command.MSG.PlayerAndMessageMissing", " &7Du hast keine Nachricht und keinen Spieler angegeben.");
 		set("Party.Command.Leader.SenderEqualsGivenPlayer", "&7Du kannst dich nicht selber zum neuen Party Leader machen.");
@@ -329,6 +331,6 @@ public class MessagesLoader extends LanguageConfiguration {
 
 	@Override
 	public void reloadConfiguration() throws IOException {
-		configuration = (new MessagesLoader(LANGUAGE, FILE)).getCreatedConfiguration();
+		configuration = (new MessagesLoader(LANGUAGE, USE_CUSTOM_MESSAGES, FILE)).getCreatedConfiguration();
 	}
 }

@@ -120,16 +120,16 @@ public class Invite extends PartySubCommand {
 	private boolean canInvite(OnlinePAFPlayer pPlayer, PlayerParty pParty) {
 		if (!pPlayer.getPlayer()
 				.hasPermission(Main.getInstance().getConfig().getString("Permissions.NoPlayerLimitForParties")))
-			if (Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") > 1)
-				if (Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") < pParty.getAllPlayers().size()
-						+ pParty.getInviteListSize() + 1) {
-					pPlayer.sendMessage(PREFIX + MAX_PLAYERS_IN_PARTY_PATTERN
-							.matcher(Main.getInstance().getMessages()
-									.getString("Party.Command.Invite.MaxPlayersInPartyReached"))
-							.replaceAll(Matcher.quoteReplacement(
-									Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") + "")));
-					return false;
-				}
+			if (Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") > 1 &&
+					Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") < pParty.getAllPlayers().size()
+							+ pParty.getInviteListSize() + 1) {
+				pPlayer.sendMessage(PREFIX + MAX_PLAYERS_IN_PARTY_PATTERN
+						.matcher(Main.getInstance().getMessages()
+								.getString("Party.Command.Invite.MaxPlayersInPartyReached"))
+						.replaceAll(Matcher.quoteReplacement(
+								Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") + "")));
+				return false;
+			}
 		return true;
 	}
 

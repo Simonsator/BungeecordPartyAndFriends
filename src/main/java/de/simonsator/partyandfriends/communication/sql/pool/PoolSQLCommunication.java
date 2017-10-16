@@ -51,6 +51,8 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 			cpds.setInitialPoolSize(POOL_DATA.INITIAL_POOL_SIZE);
 			cpds.setMinPoolSize(POOL_DATA.MIN_POOL_SIZE);
 			cpds.setMaxPoolSize(POOL_DATA.MAX_POOL_SIZE);
+			cpds.setTestConnectionOnCheckin(POOL_DATA.TEST_CONNECTION_ON_CHECKIN);
+			cpds.setIdleConnectionTestPeriod(POOL_DATA.IDLE_CONNECTION_TEST_PERIOD);
 			return cpds;
 		} catch (PropertyVetoException e) {
 			e.printStackTrace();

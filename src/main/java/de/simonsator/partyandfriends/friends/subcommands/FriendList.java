@@ -1,7 +1,10 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
+import de.simonsator.partyandfriends.api.pagesmanager.PageAsListContainer;
+import de.simonsator.partyandfriends.api.pagesmanager.PageCreator;
 import de.simonsator.partyandfriends.api.TextReplacer;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
+import de.simonsator.partyandfriends.api.pagesmanager.PageEntriesAsTextContainer;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
@@ -19,12 +22,13 @@ import java.util.regex.Matcher;
  * @author Simonsator
  * @version 1.0.0
  */
-public class FriendList extends FriendSubCommand {
+public class FriendList extends FriendSubCommand implements PageCreator<PlayerListElement> {
 	private final String LAST_ONLINE_COLOR = Main.getInstance().getMessages().getString("Friends.Command.List.TimeColor");
 	private boolean sortElements;
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(Main.getInstance().getConfig().getString("General.Time.Format"),
 			Locale.forLanguageTag(Main.getInstance().getConfig().getString("General.Time.LanguageTag")));
 	private List<TextReplacer> replacerList = new ArrayList<>();
+	private final int ENTRIES_PER_PAGE = Main.getInstance().getConfig().getInt("Commands.Friends.SubCommands.List.EntriesPerPage");
 
 	public FriendList(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
 		super(pCommands, pPriority, pHelp, pPermission);
@@ -34,19 +38,30 @@ public class FriendList extends FriendSubCommand {
 
 	@Override
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
-		java.util.List<PAFPlayer> friends = pPlayer.getFriends();
+		List<PAFPlayer> friends = pPlayer.getFriends();
 		if (!hasFriends(pPlayer, friends))
 			return;
+		PageEntriesAsTextContainer friendsCombined = getFriendsCombined(friends, args);
+		if (friendsCombined == null) {
+			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessages().getString("Friends.Command.List.PageDoesNotExist"));
+			return;
+		}
 		pPlayer.sendMessage(PREFIX
 				+ Main.getInstance().getMessages().getString("Friends.Command.List.FriendsList")
-				+ getFriendsCombined(friends));
+				+ friendsCombined.getLimitedTextList());
+		if (friendsCombined.doesFurtherItemsExist())
+			pPlayer.sendMessage(PREFIX + PatterCollection.PAGE_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.List.NextPage")).replaceFirst("" + (friendsCombined.getPage() + 1)));
 	}
 
-	private String getFriendsCombined(List<PAFPlayer> pFriends) {
+	private PageEntriesAsTextContainer getFriendsCombined(List<PAFPlayer> pFriends, String[] args) {
 		StringBuilder friendsCombined = new StringBuilder();
 		List<PlayerListElement> playerListElements = toList(pFriends);
 		if (sortElements)
 			Collections.sort(playerListElements);
+		PageAsListContainer<PlayerListElement> playerListElementsContainer = createPage(playerListElements, args, ENTRIES_PER_PAGE);
+		if (playerListElementsContainer == null)
+			return null;
+		playerListElements = playerListElementsContainer.getLimitedList();
 		for (int i = 0; i < playerListElements.size(); i++) {
 			StringBuilder builder = new StringBuilder();
 			String additive;
@@ -75,7 +90,7 @@ public class FriendList extends FriendSubCommand {
 			String processed = process(playerListElements.get(i).getPlayer(), builder.toString());
 			friendsCombined.append(processed);
 		}
-		return friendsCombined.toString();
+		return new PageEntriesAsTextContainer(playerListElementsContainer.doesFurtherItemsExist(), friendsCombined.toString(), playerListElementsContainer.getPage());
 	}
 
 	private boolean hasFriends(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriends) {
@@ -104,9 +119,10 @@ public class FriendList extends FriendSubCommand {
 	}
 
 	private String process(PAFPlayer pPlayer, String pMessage) {
+		String message = pMessage;
 		for (TextReplacer replacer : replacerList)
-			pMessage = replacer.onProecess(pPlayer, pMessage);
-		return pMessage;
+			message = replacer.onProecess(pPlayer, pMessage);
+		return message;
 	}
 
 	public void registerTextReplacer(TextReplacer pTextReplacer) {

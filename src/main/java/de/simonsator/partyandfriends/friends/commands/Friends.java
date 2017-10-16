@@ -25,7 +25,7 @@ public class Friends extends TopCommand<FriendSubCommand> {
 	 *
 	 * @param pCommandNames The alias for the /friend command
 	 */
-	public Friends(java.util.List<String> pCommandNames, String pPrefix) {
+	public Friends(List<String> pCommandNames, String pPrefix) {
 		super(pCommandNames.toArray(new String[0]),
 				Main.getInstance().getConfig().getString("Commands.Friends.TopCommands.Friend.Permissions"), pPrefix);
 		instance = this;
