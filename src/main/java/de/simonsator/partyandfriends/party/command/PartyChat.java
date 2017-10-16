@@ -1,6 +1,5 @@
 package de.simonsator.partyandfriends.party.command;
 
-import com.google.gson.JsonObject;
 import de.simonsator.partyandfriends.api.OnlyTopCommand;
 import de.simonsator.partyandfriends.api.events.message.PartyMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
@@ -11,7 +10,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.TabCompleteEvent;
 import net.md_5.bungee.event.EventHandler;
-import net.md_5.bungee.protocol.packet.Chat;
 
 import java.util.regex.Matcher;
 
@@ -64,10 +62,8 @@ public class PartyChat extends OnlyTopCommand {
 								.getString("Party.Command.Chat.PartyChatOutput"))
 						.replaceAll(Matcher.quoteReplacement(pSenderDisplayName)))
 				.replaceAll(Matcher.quoteReplacement(pContent));
-		JsonObject jsonObject = Main.getGson().fromJson("{\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/" + PartyCommand.getInstance().getName() + " " + Main.getInstance().getConfig().getString("Commands.Party.SubCommands.Chat.ReplyCommand") + " \"}}", JsonObject.class);
-		jsonObject.addProperty("text", message);
 		for (OnlinePAFPlayer receiver : pParty.getAllPlayers())
-			receiver.sendPacket(new Chat(jsonObject.toString()));
+			receiver.sendMessage(message);
 	}
 
 	private boolean messageGiven(OnlinePAFPlayer pPlayer, String[] args) {

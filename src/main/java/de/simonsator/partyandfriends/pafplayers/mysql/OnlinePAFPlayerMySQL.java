@@ -2,14 +2,12 @@ package de.simonsator.partyandfriends.pafplayers.mysql;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
-import de.simonsator.partyandfriends.utilities.OfflineMessage;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Chat;
 
-import java.util.List;
 import java.util.UUID;
 
 public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPlayer {
@@ -82,11 +80,6 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 		} else if (!PLAYER.getName().equals(PAFPlayerManagerMySQL.getConnection().getName(getPlayerID()))
 				&& !PLAYER.getUniqueId().equals(PAFPlayerManagerMySQL.getConnection().getUUID(getPlayerID())))
 			PAFPlayerManagerMySQL.getConnection().updateUUID(getPlayerID(), PLAYER.getUniqueId());
-	}
-
-	@Override
-	public List<OfflineMessage> getOfflineMessages() {
-		return PAFPlayerManagerMySQL.getConnection().getOfflineMessages(PLAYER);
 	}
 
 	@Override
