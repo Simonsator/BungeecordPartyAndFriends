@@ -43,8 +43,6 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("General.PartyDoNotJoinTheseServers", "lobby", "lobby1", "lobby2");
 		set("General.DisabledServers", "login1", "login2");
 		set("General.MaxPlayersInParty", 0);
-		set("General.TabComplete.General", true);
-		set("General.TabComplete.Player", true);
 		set("Extensions.UseExtensionFolderAsConfigFolder", false);
 		set("Permissions.NoPlayerLimitForParties", "");
 		set("GUI.ChangedHideModeMessage", true);

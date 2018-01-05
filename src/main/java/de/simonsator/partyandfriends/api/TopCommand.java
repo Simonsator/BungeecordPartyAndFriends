@@ -32,7 +32,6 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	 * The prefix which gets returned by the method {@link #getPrefix()}
 	 */
 	private final String PREFIX;
-	private boolean disablePlayerComplete;
 
 	/**
 	 * @param pCommandNames The command name and the different aliases of this command.
@@ -45,9 +44,6 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	protected TopCommand(String[] pCommandNames, String pPermission, String pPrefix) {
 		super(pCommandNames[0], pPermission, pCommandNames);
 		PREFIX = pPrefix;
-		if (Main.getInstance().getConfig().getBoolean("General.TabComplete.General"))
-			ProxyServer.getInstance().getPluginManager().registerListener(Main.getInstance(), this);
-		disablePlayerComplete = !Main.getInstance().getConfig().getBoolean("General.TabComplete.Player");
 	}
 
 	/**
@@ -141,21 +137,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	}
 
 	public void tabComplete(TabCompleteEvent pEvent) {
-		if (!pEvent.getCursor().startsWith("/"))
-			return;
-		switch (count(pEvent.getCursor())) {
-			case 0:
-				topCommandComplete(pEvent);
-				break;
-			case 1:
-				subCommandComplete(pEvent);
-				break;
-			case 2:
-				playerComplete(pEvent);
-				break;
-			default:
-				break;
-		}
+		
 	}
 
 	private void subCommandComplete(TabCompleteEvent pEvent) {
@@ -172,37 +154,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 		}
 	}
 
-	protected void topCommandComplete(TabCompleteEvent pEvent) {
-		for (String commandName : getAliases()) {
-			commandName = ("/" + getName()).toLowerCase();
-			if (commandName.startsWith(pEvent.getCursor().toLowerCase()))
-				pEvent.getSuggestions().add(commandName);
-		}
-	}
-
-	protected void playerComplete(TabCompleteEvent pEvent) {
-		if (disablePlayerComplete)
-			return;
-		String partialPlayerName = pEvent.getCursor().toLowerCase();
-		if (!isThisCommand(partialPlayerName))
-			return;
-		int lastSpaceIndex = partialPlayerName.lastIndexOf(' ');
-		if (lastSpaceIndex >= 0)
-			partialPlayerName = partialPlayerName.substring(lastSpaceIndex + 1);
-		for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers())
-			if (p.getName().toLowerCase().startsWith(partialPlayerName))
-				pEvent.getSuggestions().add(p.getName());
-	}
-
 	private boolean isThisCommand(String cursor) {
 		return cursor.startsWith("/" + getName().toLowerCase());
-	}
-
-	protected int count(String pString) {
-		int counter = 0;
-		for (int i = 0; i < pString.length() && counter < 3; i++)
-			if (pString.charAt(i) == ' ')
-				counter++;
-		return counter;
 	}
 }
