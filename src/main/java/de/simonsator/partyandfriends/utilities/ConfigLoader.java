@@ -45,8 +45,6 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("General.MaxPlayersInParty", 0);
 		set("Extensions.UseExtensionFolderAsConfigFolder", false);
 		set("Permissions.NoPlayerLimitForParties", "");
-		set("GUI.ChangedHideModeMessage", true);
-		set("GUI.OpenFriendRequestMenuWithoutHavingRequests", true);
 		set("Commands.Friends.General.PrintOutHelpOnError", true);
 		set("Commands.Friends.TopCommands.Friend.Names", "friend", "friends");
 		set("Commands.Friends.TopCommands.Friend.Permissions", "");
