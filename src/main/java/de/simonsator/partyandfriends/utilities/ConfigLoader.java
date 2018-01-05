@@ -43,12 +43,12 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("General.PartyDoNotJoinTheseServers", "lobby", "lobby1", "lobby2");
 		set("General.DisabledServers", "login1", "login2");
 		set("General.MaxPlayersInParty", 0);
-		set("General.Deactivated.OfflineMessages", false);
 		set("General.TabComplete.General", true);
 		set("General.TabComplete.Player", true);
 		set("Extensions.UseExtensionFolderAsConfigFolder", false);
 		set("Permissions.NoPlayerLimitForParties", "");
 		set("GUI.ChangedHideModeMessage", true);
+		set("GUI.OpenFriendRequestMenuWithoutHavingRequests", true);
 		set("Commands.Friends.General.PrintOutHelpOnError", true);
 		set("Commands.Friends.TopCommands.Friend.Names", "friend", "friends");
 		set("Commands.Friends.TopCommands.Friend.Permissions", "");

@@ -141,6 +141,68 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	}
 
 	public void tabComplete(TabCompleteEvent pEvent) {
-		// only premium
+		if (!pEvent.getCursor().startsWith("/"))
+			return;
+		switch (count(pEvent.getCursor())) {
+			case 0:
+				topCommandComplete(pEvent);
+				break;
+			case 1:
+				subCommandComplete(pEvent);
+				break;
+			case 2:
+				playerComplete(pEvent);
+				break;
+			default:
+				break;
+		}
+	}
+
+	private void subCommandComplete(TabCompleteEvent pEvent) {
+		String partialSubCommand = pEvent.getCursor().toLowerCase();
+		if (!isThisCommand(partialSubCommand))
+			return;
+		int lastSpaceIndex = partialSubCommand.lastIndexOf(' ');
+		if (lastSpaceIndex >= 0)
+			partialSubCommand = partialSubCommand.substring(lastSpaceIndex + 1);
+		for (T subCommand : subCommands) {
+			for (String commandName : subCommand.getCommandNames())
+				if (commandName.toLowerCase().startsWith(partialSubCommand))
+					pEvent.getSuggestions().add(commandName);
+		}
+	}
+
+	protected void topCommandComplete(TabCompleteEvent pEvent) {
+		for (String commandName : getAliases()) {
+			commandName = ("/" + getName()).toLowerCase();
+			if (commandName.startsWith(pEvent.getCursor().toLowerCase()))
+				pEvent.getSuggestions().add(commandName);
+		}
+	}
+
+	protected void playerComplete(TabCompleteEvent pEvent) {
+		if (disablePlayerComplete)
+			return;
+		String partialPlayerName = pEvent.getCursor().toLowerCase();
+		if (!isThisCommand(partialPlayerName))
+			return;
+		int lastSpaceIndex = partialPlayerName.lastIndexOf(' ');
+		if (lastSpaceIndex >= 0)
+			partialPlayerName = partialPlayerName.substring(lastSpaceIndex + 1);
+		for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers())
+			if (p.getName().toLowerCase().startsWith(partialPlayerName))
+				pEvent.getSuggestions().add(p.getName());
+	}
+
+	private boolean isThisCommand(String cursor) {
+		return cursor.startsWith("/" + getName().toLowerCase());
+	}
+
+	protected int count(String pString) {
+		int counter = 0;
+		for (int i = 0; i < pString.length() && counter < 3; i++)
+			if (pString.charAt(i) == ' ')
+				counter++;
+		return counter;
 	}
 }

@@ -9,8 +9,8 @@ import net.md_5.bungee.api.plugin.Event;
  * @version 1.0.0 30.05.17
  */
 public class PAFAccountDeleteEvent extends Event implements Cancellable {
-	private boolean isCancelled = false;
 	private final PAFPlayer ACCOUNT_TO_DELETE;
+	private boolean isCancelled = false;
 
 	public PAFAccountDeleteEvent(PAFPlayer pPlayer) {
 		ACCOUNT_TO_DELETE = pPlayer;

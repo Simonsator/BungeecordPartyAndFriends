@@ -30,6 +30,10 @@ public class PartyChat extends OnlyTopCommand {
 		instance = this;
 	}
 
+	public static PartyChat getInstance() {
+		return instance;
+	}
+
 	@Override
 	protected void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
 		send(pPlayer, args);
@@ -88,9 +92,5 @@ public class PartyChat extends OnlyTopCommand {
 	@EventHandler
 	public void onTabComplete(TabCompleteEvent pEvent) {
 		tabComplete(pEvent);
-	}
-
-	public static PartyChat getInstance() {
-		return instance;
 	}
 }

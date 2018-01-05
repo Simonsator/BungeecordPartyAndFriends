@@ -119,8 +119,8 @@ public class Add extends FriendSubCommand {
 	}
 
 	private boolean allowsFriendRequests(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
-		if (pGivenPlayer.getSettingsWorth(0) == 0) {
-			sendError(pPlayer, new TextComponent(PREFIX + PLAYER_PATTERN.matcher(Main.getInstance().getConfig().getString("Friends.Command.Add.CanNotSendThisPlayer")).replaceFirst(pGivenPlayer.getName())));
+		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Enabled") && pGivenPlayer.getSettingsWorth(0) == 0) {
+			sendError(pPlayer, new TextComponent(PREFIX + PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.CanNotSendThisPlayer")).replaceFirst(pGivenPlayer.getName())));
 			return false;
 		}
 		return true;

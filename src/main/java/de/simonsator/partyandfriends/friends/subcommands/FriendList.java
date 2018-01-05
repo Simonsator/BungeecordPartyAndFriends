@@ -1,12 +1,12 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
-import de.simonsator.partyandfriends.api.pagesmanager.PageAsListContainer;
-import de.simonsator.partyandfriends.api.pagesmanager.PageCreator;
 import de.simonsator.partyandfriends.api.TextReplacer;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
-import de.simonsator.partyandfriends.api.pagesmanager.PageEntriesAsTextContainer;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pagesmanager.PageAsListContainer;
+import de.simonsator.partyandfriends.api.pagesmanager.PageCreator;
+import de.simonsator.partyandfriends.api.pagesmanager.PageEntriesAsTextContainer;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import de.simonsator.partyandfriends.utilities.PlayerListElement;
@@ -24,11 +24,11 @@ import java.util.regex.Matcher;
  */
 public class FriendList extends FriendSubCommand implements PageCreator<PlayerListElement> {
 	private final String LAST_ONLINE_COLOR = Main.getInstance().getMessages().getString("Friends.Command.List.TimeColor");
+	private final int ENTRIES_PER_PAGE = Main.getInstance().getConfig().getInt("Commands.Friends.SubCommands.List.EntriesPerPage");
 	private boolean sortElements;
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(Main.getInstance().getConfig().getString("General.Time.Format"),
 			Locale.forLanguageTag(Main.getInstance().getConfig().getString("General.Time.LanguageTag")));
 	private List<TextReplacer> replacerList = new ArrayList<>();
-	private final int ENTRIES_PER_PAGE = Main.getInstance().getConfig().getInt("Commands.Friends.SubCommands.List.EntriesPerPage");
 
 	public FriendList(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
 		super(pCommands, pPriority, pHelp, pPermission);

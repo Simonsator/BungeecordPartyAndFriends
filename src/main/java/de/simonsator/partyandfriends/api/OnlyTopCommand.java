@@ -21,8 +21,18 @@ public abstract class OnlyTopCommand extends TopCommand {
 
 	@Override
 	public void tabComplete(TabCompleteEvent pEvent) {
-// Only important for Extended version
-		return;
+		if (!pEvent.getCursor().startsWith("/"))
+			return;
+		switch (count(pEvent.getCursor())) {
+			case 0:
+				topCommandComplete(pEvent);
+				break;
+			case 1:
+				playerComplete(pEvent);
+				break;
+			default:
+				break;
+		}
 	}
 
 }

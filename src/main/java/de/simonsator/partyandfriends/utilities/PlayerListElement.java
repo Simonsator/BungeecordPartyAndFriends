@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.utilities;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.config.ServerInfo;
 
 /**
@@ -17,7 +18,7 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 
 	public PlayerListElement(PAFPlayer pPlayer) {
 		PLAYER = pPlayer;
-		boolean isOnline = pPlayer.isOnline() && pPlayer.getSettingsWorth(3) == 0;
+		boolean isOnline = pPlayer.isOnline() && (!Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Offline.Enabled") || pPlayer.getSettingsWorth(3) == 0);
 		IS_ONLINE = isOnline;
 		DISPLAY_NAME = pPlayer.getDisplayName();
 		if (!isOnline) {
@@ -44,8 +45,9 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 				return -1;
 			case -1:
 				return 1;
+			default:
+				return 0;
 		}
-		return 0;
 	}
 
 	public String getDisplayName() {

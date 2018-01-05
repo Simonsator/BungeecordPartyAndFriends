@@ -8,9 +8,7 @@ import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.utilities.PatterCollection.NEW_LEADER_PATTERN;
@@ -29,6 +27,7 @@ public class LocalPlayerParty extends PlayerParty {
 	 */
 	private UUID leader;
 	private boolean privateParty = true;
+	private Set<UUID> bannedPlayers = new HashSet<>();
 
 	/**
 	 * Initials a new party
@@ -37,6 +36,19 @@ public class LocalPlayerParty extends PlayerParty {
 	 */
 	public LocalPlayerParty(OnlinePAFPlayer leader) {
 		this.leader = leader.getUniqueId();
+	}
+
+	@Override
+	public boolean isBanned(OnlinePAFPlayer pPlayer) {
+		Boolean isBanned = bannedPlayers.contains(pPlayer.getUniqueId());
+		return isBanned != null && isBanned;
+	}
+
+	@Override
+	public void setBanned(OnlinePAFPlayer pPlayer, boolean pIsBanned) {
+		if (pIsBanned)
+			bannedPlayers.add(pPlayer.getUniqueId());
+		else bannedPlayers.remove(pPlayer.getUniqueId());
 	}
 
 	@Override
@@ -108,7 +120,7 @@ public class LocalPlayerParty extends PlayerParty {
 	 */
 	@Override
 	public boolean addPlayer(OnlinePAFPlayer pPlayer) {
-		if (!players.contains(pPlayer.getUniqueId()) && (invited.contains(pPlayer.getUniqueId()) || isLeader(pPlayer) || !privateParty)) {
+		if ((!players.contains(pPlayer.getUniqueId()) && (invited.contains(pPlayer.getUniqueId()) || isLeader(pPlayer) || !privateParty)) && !isBanned(pPlayer)) {
 			players.add(pPlayer.getUniqueId());
 			PartyManager.getInstance().addPlayerToParty(pPlayer, this);
 			removeFromInvited(pPlayer);

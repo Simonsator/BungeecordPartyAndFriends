@@ -8,6 +8,7 @@ import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -24,6 +25,15 @@ import java.util.regex.Matcher;
  */
 public class JoinEvent implements Listener {
 	private final int PLAYER_SPLIT_LENGTH = Main.getInstance().getMessages().getString("Friends.Command.List.PlayerSplit").length();
+
+	public Exception verify() {
+		try {
+			ProxiedPlayer.class.getMethod("isConnected", (Class<?>[]) null);
+		} catch (NoSuchMethodException | SecurityException e) {
+			return e;
+		}
+		return null;
+	}
 
 	/**
 	 * Will be execute if somebody logs in into server

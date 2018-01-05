@@ -1,15 +1,20 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
+import de.simonsator.partyandfriends.api.events.command.JumpToFriendEvent;
 import de.simonsator.partyandfriends.api.friends.ServerConnector;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import de.simonsator.partyandfriends.utilities.StandardConnector;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.main.Main.getInstance;
@@ -22,6 +27,7 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
  */
 public class Jump extends FriendSubCommand {
 	private static ServerConnector connector = new StandardConnector();
+	private Set<ServerInfo> notCheckSameServer = new HashSet<>();
 
 	public Jump(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
 		super(pCommands, pPriority, pHelp, pPermission);
@@ -49,13 +55,19 @@ public class Jump extends FriendSubCommand {
 		ServerInfo toJoin = friend.getServer();
 		if (!serverExists(pPlayer, toJoin))
 			return;
-		if (isAlreadyOnServer(pPlayer, toJoin))
-			return;
+		if (!notCheckSameServer.contains(toJoin))
+			if (isAlreadyOnServer(pPlayer, toJoin))
+				return;
 		if (!allowsJumps(pPlayer, friend))
 			return;
 		if (isDisabled(pPlayer, toJoin))
 			return;
-		connector.connect(pPlayer.getPlayer(), toJoin);
+		JumpToFriendEvent event = new JumpToFriendEvent(pPlayer, friend, args, this);
+		ProxyServer.getInstance().getPluginManager().callEvent(event);
+		if (event.isCancelled())
+			return;
+		if (!toJoin.equals(pPlayer.getServer()))
+			connector.connect(pPlayer.getPlayer(), toJoin);
 		pPlayer.sendMessage(
 				(
 						PREFIX + PatterCollection.PLAYER_PATTERN
@@ -72,7 +84,7 @@ public class Jump extends FriendSubCommand {
 	}
 
 	private boolean allowsJumps(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pQueryPlayer) {
-		if (pQueryPlayer.getSettingsWorth(4) == 1) {
+		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Jump.Enabled") && pQueryPlayer.getSettingsWorth(4) == 1) {
 			sendError(pPlayer, "Friends.Command.Jump.CanNotJump");
 			return false;
 		}
@@ -101,5 +113,13 @@ public class Jump extends FriendSubCommand {
 			return true;
 		}
 		return false;
+	}
+
+	public void checkForSameServer(ServerInfo pServer) {
+		notCheckSameServer.remove(pServer);
+	}
+
+	public void doNotCheckForSameServer(ServerInfo pServer) {
+		notCheckSameServer.add(pServer);
 	}
 }

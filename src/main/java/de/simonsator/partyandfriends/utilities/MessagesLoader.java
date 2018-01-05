@@ -1,6 +1,10 @@
 package de.simonsator.partyandfriends.utilities;
 
-import java.io.*;
+import de.simonsator.partyandfriends.main.Main;
+import net.md_5.bungee.api.plugin.Plugin;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -12,8 +16,8 @@ import java.util.Arrays;
 public class MessagesLoader extends LanguageConfiguration {
 	private final boolean USE_CUSTOM_MESSAGES;
 
-	public MessagesLoader(Language pLanguage, boolean useCustomMessages, File pFile) throws IOException {
-		super(pLanguage, pFile);
+	public MessagesLoader(Language pLanguage, boolean useCustomMessages, File pFile, Plugin pPlugin) throws IOException {
+		super(pLanguage, pFile, pPlugin);
 		USE_CUSTOM_MESSAGES = useCustomMessages;
 		copyFromJar();
 		readFile();
@@ -70,7 +74,7 @@ public class MessagesLoader extends LanguageConfiguration {
 				"&cYou are already in a party. Use &6/party leave &cto leave this party.");
 		set("Party.Command.Join.PlayerHasJoined", "&bThe player &6[PLAYER] &bjoined the party.");
 		set("Party.Command.Join.ErrorNoInvitation", "&cYou cannot join this party.");
-		set("Party.Command.Kick.KickedPlayerOutOfThePartyOthers", "&bThe player &6[PLAYER] &bwas kicked out of the party.", "&bThe player &6[PLAYER] &bwas kicked out of the party, by the leader.");
+		set("Party.Command.Kick.KickedPlayerOutOfThePartyOthers", "&bThe player &6[PLAYER] &bwas kicked out of the party.");
 		set("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer", "&bYou have been kicked out of the party.");
 		set("Party.Command.Leader.SenderEqualsGivenPlayer", "&7You cannot make yourself to the new party leader.");
 		set("Party.Command.Leader.NewLeaderIs", "&7The new party leader is &6[NEWLEADER]");
@@ -331,6 +335,6 @@ public class MessagesLoader extends LanguageConfiguration {
 
 	@Override
 	public void reloadConfiguration() throws IOException {
-		configuration = (new MessagesLoader(LANGUAGE, USE_CUSTOM_MESSAGES, FILE)).getCreatedConfiguration();
+		configuration = (new MessagesLoader(LANGUAGE, USE_CUSTOM_MESSAGES, FILE, Main.getInstance())).getCreatedConfiguration();
 	}
 }

@@ -143,9 +143,8 @@ public class Invite extends PartySubCommand {
 	}
 
 	private boolean allowsInvitation(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pQueryPlayer) {
-		if (pQueryPlayer.getSettingsWorth(1) == 1 && !pPlayer.isAFriendOf(pQueryPlayer)) {
-			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessages().getString("Party.Command.Invite.CanNotInviteThisPlayer"))
-			;
+		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Enabled") && pQueryPlayer.getSettingsWorth(1) == 1 && !pPlayer.isAFriendOf(pQueryPlayer)) {
+			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessages().getString("Party.Command.Invite.CanNotInviteThisPlayer"));
 			return false;
 		}
 		return true;

@@ -1,8 +1,8 @@
 package de.simonsator.partyandfriends.utilities;
 
 import com.google.common.base.Charsets;
-import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
@@ -19,10 +19,24 @@ import java.util.List;
  */
 public abstract class ConfigurationCreator {
 	protected final File FILE;
+	private final Plugin PLUGIN;
 	protected Configuration configuration = new Configuration();
 
+	@Deprecated
 	protected ConfigurationCreator(File file) {
 		this.FILE = file;
+		PLUGIN = null;
+	}
+
+	protected ConfigurationCreator(File file, Plugin pPlugin) {
+		this.FILE = file;
+		PLUGIN = pPlugin;
+	}
+
+	private void createParentFolder() {
+		File parent = FILE.getParentFile();
+		if (!parent.exists())
+			parent.mkdir();
 	}
 
 	protected void readFile() throws IOException {
@@ -36,7 +50,10 @@ public abstract class ConfigurationCreator {
 		}
 	}
 
-	public abstract void reloadConfiguration() throws IOException;
+	@Deprecated
+	public void reloadConfiguration() throws IOException {
+		throw new UnsupportedOperationException("This method was not implemented");
+	}
 
 	public Configuration getCreatedConfiguration() {
 		return configuration;
@@ -100,9 +117,12 @@ public abstract class ConfigurationCreator {
 	}
 
 	protected boolean copyFromJar() throws IOException {
+		if (PLUGIN == null)
+			throw new UnsupportedOperationException("Deprecated constructor was used to initialise the Object.");
 		if (FILE.exists())
 			return false;
-		InputStream in = Main.getInstance().getResourceAsStream(FILE.getName());
+		createParentFolder();
+		InputStream in = PLUGIN.getResourceAsStream(FILE.getName());
 		OutputStream out = new FileOutputStream(FILE);
 		byte[] buf = new byte[1024];
 		int len;

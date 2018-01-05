@@ -38,6 +38,10 @@ public abstract class PlayerParty {
 		return getLeader() != null && player != null && this.getLeader().getUniqueId().equals(player.getUniqueId());
 	}
 
+	public abstract boolean isBanned(OnlinePAFPlayer pPlayer);
+
+	public abstract void setBanned(OnlinePAFPlayer pPlayer, boolean pIsBanned);
+
 	public abstract boolean isPrivate();
 
 	public abstract void setPrivateState(boolean pIsPrivate);
@@ -142,6 +146,7 @@ public abstract class PlayerParty {
 	 * @param pPlayer The player
 	 */
 	public void invite(final OnlinePAFPlayer pPlayer) {
+		setBanned(pPlayer, false);
 		OnlinePAFPlayer lLeader = getLeader();
 		pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance().getMessages()
 				.getString("Party.Command.Invite.YouWereInvitedBY")).replaceAll(Matcher.quoteReplacement(lLeader.getDisplayName()))));

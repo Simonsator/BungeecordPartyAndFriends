@@ -11,6 +11,8 @@ import de.simonsator.partyandfriends.friends.commands.Reply;
 import de.simonsator.partyandfriends.main.listener.JoinEvent;
 import de.simonsator.partyandfriends.main.listener.PlayerDisconnectListener;
 import de.simonsator.partyandfriends.main.listener.ServerSwitchListener;
+import de.simonsator.partyandfriends.main.startup.error.BootErrorType;
+import de.simonsator.partyandfriends.main.startup.error.ErrorReporter;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 import de.simonsator.partyandfriends.party.command.PartyChat;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
@@ -18,6 +20,7 @@ import de.simonsator.partyandfriends.party.partymanager.LocalPartyManager;
 import de.simonsator.partyandfriends.utilities.*;
 import de.simonsator.partyandfriends.utilities.disable.Disabler;
 import de.simonsator.updatechecker.UpdateSearcher;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
@@ -37,7 +40,7 @@ import java.util.List;
  * @author Simonsator
  * @version 1.0.0
  */
-public class Main extends Plugin {
+public class Main extends Plugin implements ErrorReporter {
 	/**
 	 * The main instance of this plugin
 	 */
@@ -92,29 +95,29 @@ public class Main extends Plugin {
 				ProxyServer.getInstance().getConsole().sendMessage(new TextComponent(searcher.checkForUpdate()));
 			}
 		} catch (SQLException e) {
-			initError(e);
+			initError(e, BootErrorType.MYSQL_CONNECTION_PROBLEM);
 		}
 	}
 
-	private void initError(SQLException e) {
+	private void initError(Exception e, BootErrorType pType) {
 		if (!getConfig().getBoolean("Commands.Party.TopCommands.Party.Disabled"))
 			ProxyServer.getInstance().getPluginManager().registerCommand(this, new BootErrorCommand(
-					(getConfig().getStringList("Commands.Party.TopCommands.Party.Names").toArray(new String[0]))));
+					(getConfig().getStringList("Commands.Party.TopCommands.Party.Names").toArray(new String[0])), pType));
 		Command partyChatCommand = new BootErrorCommand(
-				(getConfig().getStringList("Commands.Party.TopCommands.PartyChat.Names").toArray(new String[0])));
+				(getConfig().getStringList("Commands.Party.TopCommands.PartyChat.Names").toArray(new String[0])), pType);
 		if (!getConfig().getBoolean("Commands.Party.TopCommands.PartyChat.Disabled"))
 			ProxyServer.getInstance().getPluginManager().registerCommand(this, partyChatCommand);
 		if (!getConfig().getBoolean("Commands.Friends.TopCommands.Friend.Disabled"))
-			getProxy().getPluginManager().registerCommand(this, new BootErrorCommand(getConfig().getStringList("Commands.Friends.TopCommands.Friend.Names").toArray(new String[0])));
+			getProxy().getPluginManager().registerCommand(this, new BootErrorCommand(getConfig().getStringList("Commands.Friends.TopCommands.Friend.Names").toArray(new String[0]), pType));
 		BootErrorCommand msg = new BootErrorCommand(
-				(getConfig().getStringList("Commands.Friends.TopCommands.MSG.Names").toArray(new String[0])));
+				(getConfig().getStringList("Commands.Friends.TopCommands.MSG.Names").toArray(new String[0])), pType);
 		if (!getConfig().getBoolean("Commands.Friends.TopCommands.MSG.Disabled"))
 			getProxy().getPluginManager().registerCommand(this, msg);
 		if (!getConfig().getBoolean("Commands.Friends.TopCommands.Reply.Disabled"))
 			getProxy().getPluginManager().registerCommand(this, new BootErrorCommand(
-					(getConfig().getStringList("Commands.Friends.TopCommands.Reply.Names").toArray(new String[0]))));
-		System.out.println("§cParty and Friends was either not able to connect to the MySQL database or to login into the MySQL database. " +
-				"Please correct your MySQL data in the config.yml. If you need further help contact Simonsator via Skype (live:00pflaume), PM him (https://www.spigotmc.org/conversations/add?to=simonsator) or write an email to him (support@simonsator.de). Please don't forget to send him the Proxy.Log.0 file (bungeecord log file).");
+					(getConfig().getStringList("Commands.Friends.TopCommands.Reply.Names").toArray(new String[0])), pType));
+		CommandSender console = ProxyServer.getInstance().getConsole();
+		reportError(console, pType);
 		e.printStackTrace();
 	}
 
@@ -155,7 +158,7 @@ public class Main extends Plugin {
 			e.printStackTrace();
 		}
 		try {
-			messages = new MessagesLoader(language, getConfig().getBoolean("General.UseOwnLanguageFile"), new File(getDataFolder(), "messages.yml"));
+			messages = new MessagesLoader(language, getConfig().getBoolean("General.UseOwnLanguageFile"), new File(getDataFolder(), "messages.yml"), this);
 			if (getConfig().getBoolean("General.UseOwnLanguageFile"))
 				language = Language.OWN;
 		} catch (IOException e) {
@@ -172,7 +175,11 @@ public class Main extends Plugin {
 	private void registerListeners() {
 		ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerDisconnectListener());
 		ProxyServer.getInstance().getPluginManager().registerListener(this, new ServerSwitchListener());
-		ProxyServer.getInstance().getPluginManager().registerListener(this, new JoinEvent());
+		JoinEvent joinEventListener;
+		ProxyServer.getInstance().getPluginManager().registerListener(this, joinEventListener = new JoinEvent());
+		Exception e = joinEventListener.verify();
+		if (e != null)
+			initError(e, BootErrorType.TOO_OLD_VERSION);
 	}
 
 	/**

@@ -22,8 +22,8 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.*;
  * @version 1.0.0
  */
 public class MSG extends OnlyTopCommand {
-	private final String REPLY_COMMAND = Main.getInstance().getConfig().getString("Commands.Friends.SubCommands.MSG.ReplyCommand");
 	private static MSG instance;
+	private final String REPLY_COMMAND = Main.getInstance().getConfig().getString("Commands.Friends.SubCommands.MSG.ReplyCommand");
 
 	/**
 	 * Initials the command
@@ -42,6 +42,10 @@ public class MSG extends OnlyTopCommand {
 			return false;
 		}
 		return true;
+	}
+
+	public static MSG getInstance() {
+		return instance;
 	}
 
 	@Override
@@ -109,7 +113,7 @@ public class MSG extends OnlyTopCommand {
 	}
 
 	private boolean allowsWriteTo(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
-		if (pQueryPlayer.getSettingsWorth(2) == 1) {
+		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PM.Enabled") && pQueryPlayer.getSettingsWorth(2) == 1) {
 			pPlayer.sendMessage((getPrefix()
 					+ Main.getInstance().getMessages().getString("Friends.Command.MSG.CanNotWriteToHim")));
 			return false;
@@ -172,9 +176,5 @@ public class MSG extends OnlyTopCommand {
 	@EventHandler
 	public void onTabComplete(TabCompleteEvent pEvent) {
 		tabComplete(pEvent);
-	}
-
-	public static MSG getInstance() {
-		return instance;
 	}
 }
