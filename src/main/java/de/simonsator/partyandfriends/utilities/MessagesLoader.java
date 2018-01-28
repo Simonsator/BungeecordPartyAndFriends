@@ -297,7 +297,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.Kick.KickedPlayerOutOfThePartyOthers", "&bDer Spieler &6[PLAYER] &bwurde aus der Party gekickt.");
 		set("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer", "&bDu wurdest aus der Party gekickt.");
 		set("Party.Command.Kick.Party.Command.Leader.NewLeaderIs", "&7Der neue Party Leader ist &6[NEWLEADER].");
-		set("Party.Command.Leader.NewLeaderIs", "&7Der neue Party Leader ist &6[PLAYER].");
+		set("Party.Command.Leader.NewLeaderIs", "&7Der neue Party Leader ist &6[NEWLEADER].");
 		set("Party.Command.Leave.YouLeftTheParty", "&bDu hast deine Party verlassen.");
 		set("Party.Command.Leave.NewLeaderIs", "&bDer Leader hat die Party verlassen. Der neue Leader ist &e[NEWLEADER].");
 		set("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE", "&5Tritt der Party mit &6/party join [PLAYER] &5bei!");

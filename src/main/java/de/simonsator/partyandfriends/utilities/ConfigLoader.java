@@ -53,6 +53,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Friends.TopCommands.Reply.Disabled", false);
 		set("Commands.Friends.TopCommands.MSG.Names", "msg", "fmsg");
 		set("Commands.Friends.TopCommands.MSG.Disabled", false);
+		set("Commands.Friends.TopCommands.MSG.MSGNonFriendsPermission", "de.simonsator.partyandfriends.msg.msgnonfriends");
 		set("Commands.Friends.SubCommands.Accept.Names", "accept", "approve");
 		set("Commands.Friends.SubCommands.Accept.Permission", "");
 		set("Commands.Friends.SubCommands.Accept.Priority", 3);

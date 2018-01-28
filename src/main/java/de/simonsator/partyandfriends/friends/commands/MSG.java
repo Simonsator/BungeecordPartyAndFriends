@@ -60,6 +60,7 @@ public class MSG extends OnlyTopCommand {
 	 * @param args    Arguments
 	 * @param type    The type of the used command either 0 if the player used the
 	 *                command /friend msg or 1 if the player used the command /msg
+	 *                command /friend msg or 1 if the player used the command /msg
 	 */
 	public void send(OnlinePAFPlayer pPlayer, String[] args, int type) {
 		int begin = 1;
@@ -102,7 +103,7 @@ public class MSG extends OnlyTopCommand {
 		}
 		return true;
 	}
-
+	
 	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (!pQueryPlayer.isOnline()) {
 			pPlayer.sendMessage((getPrefix()
@@ -122,7 +123,7 @@ public class MSG extends OnlyTopCommand {
 	}
 
 	private boolean isFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
-		if (!pPlayer.isAFriendOf(pQueryPlayer)) {
+		if (!pPlayer.isAFriendOf(pQueryPlayer) && !pPlayer.hasPermission(Main.getInstance().getConfig().getString("Commands.Friends.TopCommands.MSG.MSGNonFriendsPermission"))) {
 			pPlayer.sendMessage((getPrefix()
 					+ Main.getInstance().getMessages().getString("Friends.Command.MSG.CanNotWriteToHim")));
 			return false;

@@ -4,6 +4,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import de.simonsator.partyandfriends.communication.sql.DBCommunication;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
 import de.simonsator.partyandfriends.utilities.disable.Deactivated;
+import de.simonsator.partyandfriends.utilities.disable.Disabler;
 
 import java.beans.PropertyVetoException;
 import java.sql.*;
@@ -28,6 +29,7 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 		connectionProperties.setProperty("useSSL", pMySQLData.USE_SSL + "");
 		createDatabase();
 		cpds = createConnection();
+		Disabler.getInstance().registerDeactivated(this);
 	}
 
 	private void createDatabase() throws SQLException {
