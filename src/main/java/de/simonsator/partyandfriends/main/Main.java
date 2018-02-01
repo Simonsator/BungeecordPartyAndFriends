@@ -136,6 +136,7 @@ public class Main extends Plugin implements ErrorReporter {
 
 	@Override
 	public void onDisable() {
+		getProxy().getScheduler().cancel(this);
 		Disabler.getInstance().disableAll();
 		ProxyServer.getInstance().getPluginManager().unregisterListeners(this);
 		ProxyServer.getInstance().getPluginManager().unregisterCommands(this);
