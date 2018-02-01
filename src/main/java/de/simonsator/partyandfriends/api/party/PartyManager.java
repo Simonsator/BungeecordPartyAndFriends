@@ -1,10 +1,12 @@
 package de.simonsator.partyandfriends.api.party;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.utilities.disable.Deactivated;
 import de.simonsator.partyandfriends.utilities.disable.Disabler;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * This class manages the parties.
@@ -31,7 +33,17 @@ public abstract class PartyManager implements Deactivated {
 	 * @return Returns the party in which a player is or null if he isn't in a
 	 * party.
 	 */
-	public abstract PlayerParty getParty(OnlinePAFPlayer player);
+	public PlayerParty getParty(OnlinePAFPlayer player) {
+		return getParty(player.getUniqueId());
+	}
+
+	/**
+	 * A player cannot have an party when he is offline. This is only for the case that the player has left the server before the async disconnect was executed
+	 *
+	 * @param pUUID The uuid of the player
+	 * @return Returns the party of the player, if he has one, else it is returning null.
+	 */
+	public abstract PlayerParty getParty(UUID pUUID);
 
 	/**
 	 * Creates a party if the player is not already in a party.
@@ -63,7 +75,7 @@ public abstract class PartyManager implements Deactivated {
 	 *
 	 * @param player The Player
 	 */
-	public abstract void removePlayerFromParty(OnlinePAFPlayer player);
+	public abstract void removePlayerFromParty(PAFPlayer player);
 
 	@Override
 	public void onDisable() {

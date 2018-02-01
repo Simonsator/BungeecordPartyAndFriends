@@ -1,6 +1,5 @@
 package de.simonsator.partyandfriends.api.events;
 
-import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import net.md_5.bungee.api.plugin.Cancellable;
 import net.md_5.bungee.api.plugin.Event;
@@ -12,18 +11,18 @@ import java.util.List;
  * @version 1.0.0 29.12.16
  */
 public class OnlineStatusChangedMessageEvent extends Event implements Cancellable {
-	private final OnlinePAFPlayer PLAYER;
+	private final PAFPlayer PLAYER;
 	private boolean cancelled = false;
 	private String message;
 	private List<PAFPlayer> friends;
 
-	public OnlineStatusChangedMessageEvent(OnlinePAFPlayer pPlayer, String pMessage, List<PAFPlayer> pFriends) {
+	public OnlineStatusChangedMessageEvent(PAFPlayer pPlayer, String pMessage, List<PAFPlayer> pFriends) {
 		PLAYER = pPlayer;
 		message = pMessage;
 		friends = pFriends;
 	}
 
-	public OnlinePAFPlayer getPlayer() {
+	public PAFPlayer getPlayer() {
 		return PLAYER;
 	}
 

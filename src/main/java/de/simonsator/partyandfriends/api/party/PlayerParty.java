@@ -34,7 +34,7 @@ public abstract class PlayerParty {
 	 * @return Returns a true if the given player is the leader of this party,
 	 * and it will returns false if he is not the leader, of this party
 	 */
-	public boolean isLeader(OnlinePAFPlayer player) {
+	public boolean isLeader(PAFPlayer player) {
 		return getLeader() != null && player != null && this.getLeader().getUniqueId().equals(player.getUniqueId());
 	}
 
@@ -96,13 +96,13 @@ public abstract class PlayerParty {
 	 *
 	 * @param pPlayer The player
 	 */
-	private void removePlayer(OnlinePAFPlayer pPlayer) {
+	private void removePlayer(PAFPlayer pPlayer) {
 		removePlayerSilent(pPlayer);
 		sendMessage((PartyCommand.getInstance().getPrefix()
 				+ PatterCollection.PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Party.Command.General.PlayerHasLeftTheParty")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 	}
 
-	protected abstract void removePlayerSilent(OnlinePAFPlayer pPlayer);
+	protected abstract void removePlayerSilent(PAFPlayer pPlayer);
 
 	/**
 	 * Returns the "normal" players who are in the party.
@@ -120,7 +120,7 @@ public abstract class PlayerParty {
 	 */
 	public abstract boolean addPlayer(OnlinePAFPlayer pPlayer);
 
-	public void leaveParty(OnlinePAFPlayer pPlayer) {
+	public void leaveParty(PAFPlayer pPlayer) {
 		removePlayer(pPlayer);
 		boolean needsNewLeader = needsNewLeader(pPlayer);
 		if (deleteParty())
@@ -161,23 +161,20 @@ public abstract class PlayerParty {
 			return;
 		addToInvited(pPlayer);
 		final PlayerParty party = this;
-		ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {
-			@Override
-			public void run() {
-				if (isInvited(pPlayer)) {
-					removeFromInvited(pPlayer);
-					OnlinePAFPlayer lLeader = getLeader();
-					pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance()
-							.getMessages().getString("Party.Command.Invite.InvitationTimedOutInvited")).replaceAll(Matcher.quoteReplacement(lLeader.getDisplayName()))));
-					lLeader.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance()
-							.getMessages().getString("Party.Command.Invite.InvitationTimedOutLeader")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
-					if (isPartyEmpty()) {
-						lLeader.sendMessage(
-								(PartyCommand.getInstance().getPrefix()
-										+ Main.getInstance().getMessages().getString(
-										"Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers")));
-						PartyManager.getInstance().deleteParty(party);
-					}
+		ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), () -> {
+			if (isInvited(pPlayer)) {
+				removeFromInvited(pPlayer);
+				OnlinePAFPlayer lLeader1 = getLeader();
+				pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance()
+						.getMessages().getString("Party.Command.Invite.InvitationTimedOutInvited")).replaceAll(Matcher.quoteReplacement(lLeader1.getDisplayName()))));
+				lLeader1.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance()
+						.getMessages().getString("Party.Command.Invite.InvitationTimedOutLeader")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
+				if (isPartyEmpty()) {
+					lLeader1.sendMessage(
+							(PartyCommand.getInstance().getPrefix()
+									+ Main.getInstance().getMessages().getString(
+									"Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers")));
+					PartyManager.getInstance().deleteParty(party);
 				}
 			}
 		}, 60L, TimeUnit.SECONDS);
@@ -233,7 +230,7 @@ public abstract class PlayerParty {
 		return false;
 	}
 
-	protected abstract boolean needsNewLeader(OnlinePAFPlayer pPlayer);
+	protected abstract boolean needsNewLeader(PAFPlayer pPlayer);
 
 	protected abstract void findNewLeader();
 

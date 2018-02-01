@@ -143,4 +143,9 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 		}
 		return false;
 	}
+
+	@Override
+	public void updateLastOnline() {
+		PAFPlayerManagerMySQL.getConnection().updateLastOnline(getPlayerID());
+	}
 }

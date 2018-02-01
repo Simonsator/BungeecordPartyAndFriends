@@ -58,4 +58,6 @@ public interface PAFPlayer {
 	long getLastOnline();
 
 	boolean deleteAccount();
+
+	void updateLastOnline();
 }

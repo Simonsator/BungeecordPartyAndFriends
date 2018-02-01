@@ -81,9 +81,4 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 				&& !PLAYER.getUniqueId().equals(PAFPlayerManagerMySQL.getConnection().getUUID(getPlayerID())))
 			PAFPlayerManagerMySQL.getConnection().updateUUID(getPlayerID(), PLAYER.getUniqueId());
 	}
-
-	@Override
-	public void updateLastOnline() {
-		PAFPlayerManagerMySQL.getConnection().updateLastOnline(getPlayerID());
-	}
 }

@@ -28,8 +28,6 @@ public interface OnlinePAFPlayer extends PAFPlayer {
 	 */
 	ProxiedPlayer getPlayer();
 
-	void updateLastOnline();
-
 	default PlayerParty getParty() {
 		return PartyManager.getInstance().getParty(this);
 	}

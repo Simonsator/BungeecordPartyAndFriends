@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.party.partymanager;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.party.playerpartys.LocalPlayerParty;
@@ -15,9 +16,8 @@ public class LocalPartyManager extends PartyManager {
 	 */
 	private static HashMap<UUID, PlayerParty> parties = new HashMap<>();
 
-	@Override
-	public PlayerParty getParty(OnlinePAFPlayer player) {
-		return parties.get(player.getUniqueId());
+	public PlayerParty getParty(UUID pUUID) {
+		return parties.get(pUUID);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class LocalPartyManager extends PartyManager {
 	 * @param player The Player
 	 */
 	@Override
-	public void removePlayerFromParty(OnlinePAFPlayer player) {
+	public void removePlayerFromParty(PAFPlayer player) {
 		parties.remove(player.getUniqueId());
 	}
 }

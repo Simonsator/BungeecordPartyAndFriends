@@ -141,7 +141,7 @@ public class LocalPlayerParty extends PlayerParty {
 	}
 
 	@Override
-	protected void removePlayerSilent(OnlinePAFPlayer pPlayer) {
+	protected void removePlayerSilent(PAFPlayer pPlayer) {
 		players.remove(pPlayer.getUniqueId());
 		PartyManager.getInstance().removePlayerFromParty(pPlayer);
 	}
@@ -156,7 +156,8 @@ public class LocalPlayerParty extends PlayerParty {
 		return invited.size();
 	}
 
-	protected boolean needsNewLeader(OnlinePAFPlayer pPlayer) {
+	@Override
+	protected boolean needsNewLeader(PAFPlayer pPlayer) {
 		if (isLeader(pPlayer)) {
 			leader = null;
 			return true;

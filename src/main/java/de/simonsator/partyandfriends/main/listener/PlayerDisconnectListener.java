@@ -1,7 +1,6 @@
 package de.simonsator.partyandfriends.main.listener;
 
 import de.simonsator.partyandfriends.api.events.OnlineStatusChangedMessageEvent;
-import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
@@ -13,6 +12,7 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
+import java.util.UUID;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
@@ -34,17 +34,13 @@ public class PlayerDisconnectListener implements Listener {
 	public void onPlayerDisconnect(final PlayerDisconnectEvent pEvent) {
 		if (pEvent.getPlayer().getServer() == null)
 			return;
-		ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), new Runnable() {
-			@Override
-			public void run() {
-				playerDisconnected(pEvent);
-			}
-		});
+		final UUID uuid = pEvent.getPlayer().getUniqueId();
+		ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> playerDisconnected(pEvent, uuid));
 	}
 
-	private void playerDisconnected(PlayerDisconnectEvent pEvent) {
-		OnlinePAFPlayer player = PAFPlayerManager.getInstance().getPlayer(pEvent.getPlayer());
-		PlayerParty party = PartyManager.getInstance().getParty(player);
+	private void playerDisconnected(PlayerDisconnectEvent pEvent, UUID pUUID) {
+		PAFPlayer player = PAFPlayerManager.getInstance().getPlayer(pUUID);
+		PlayerParty party = PartyManager.getInstance().getParty(pUUID);
 		if (party != null)
 			party.leaveParty(player);
 		String message = Friends.getInstance().getPrefix() + PLAYER_PATTERN
