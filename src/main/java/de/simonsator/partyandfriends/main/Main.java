@@ -26,7 +26,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
-import org.bstats.Metrics;
+import org.bstats.bungeecord.Metrics;
 
 import java.io.File;
 import java.io.IOException;
