@@ -49,7 +49,7 @@ public abstract class SQLCommunication extends DBCommunication {
 		connectionProperties.setProperty("password", pMySQLData.PASSWORD);
 		connectionProperties.setProperty("useSSL", pMySQLData.USE_SSL + "");
 		Connection con = createConnection();
-		PreparedStatement prepStmt = null;
+		PreparedStatement prepStmt;
 		try {
 			prepStmt = con.prepareStatement("CREATE DATABASE IF NOT EXISTS `" + DATABASE + "`");
 			prepStmt.executeUpdate();

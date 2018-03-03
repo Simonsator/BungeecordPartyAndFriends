@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.api.party;
 
+import de.simonsator.partyandfriends.api.events.party.LeftPartyEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
@@ -122,6 +123,7 @@ public abstract class PlayerParty {
 
 	public void leaveParty(PAFPlayer pPlayer) {
 		removePlayer(pPlayer);
+		ProxyServer.getInstance().getPluginManager().callEvent(new LeftPartyEvent(this, pPlayer));
 		boolean needsNewLeader = needsNewLeader(pPlayer);
 		if (deleteParty())
 			return;

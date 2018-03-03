@@ -33,8 +33,8 @@ public abstract class LanguageConfiguration extends ConfigurationCreator {
 		if (entry instanceof List) {
 			List<String> messageList = (List<String>) entry;
 			ArrayList<String> messages = new ArrayList<>(messageList.size());
-			for (int i = 0; i < messageList.size(); i++)
-				messages.add(pPrefix + messageList.get(i));
+			for (String message : messageList)
+				messages.add(pPrefix + message);
 			return messages;
 		}
 		return pPrefix + entry;

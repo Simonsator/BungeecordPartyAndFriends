@@ -170,11 +170,13 @@ public class MySQL extends PoolSQLCommunication {
 		if (playerID != null)
 			return playerID;
 		Connection con = getConnection();
-		Statement stmt = null;
 		ResultSet rs = null;
+		PreparedStatement prepStmt = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select player_id, player_uuid from " + TABLE_PREFIX
-					+ "players WHERE player_name='" + pPlayerName + "' LIMIT 1");
+			prepStmt = con.prepareStatement("select player_id, player_uuid from " + TABLE_PREFIX
+					+ "players WHERE player_name=? LIMIT 1");
+			prepStmt.setString(1, pPlayerName);
+			rs = prepStmt.executeQuery();
 			if (rs.next()) {
 				UUID uuid = UUID.fromString(rs.getString("player_uuid"));
 				playerID = rs.getInt("player_id");
@@ -184,7 +186,7 @@ public class MySQL extends PoolSQLCommunication {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(con, rs, stmt);
+			close(con, rs, prepStmt);
 		}
 		return -1;
 	}
@@ -292,8 +294,8 @@ public class MySQL extends PoolSQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("UPDATE " + TABLE_PREFIX + "players set player_name='"
-					+ pNewPlayerName + "' WHERE player_id='" + pPlayerID + "' LIMIT 1");
+			prepStmt = con.prepareStatement("UPDATE " + TABLE_PREFIX + "players set player_name=? WHERE player_id='" + pPlayerID + "' LIMIT 1");
+			prepStmt.setString(1, pNewPlayerName);
 			prepStmt.executeUpdate();
 			cache.updateName(pPlayerID, pNewPlayerName);
 		} catch (SQLException e) {

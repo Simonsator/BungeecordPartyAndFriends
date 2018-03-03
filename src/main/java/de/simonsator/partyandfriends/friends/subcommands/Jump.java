@@ -10,6 +10,7 @@ import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import de.simonsator.partyandfriends.utilities.StandardConnector;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 
 import java.util.HashSet;
@@ -101,7 +102,8 @@ public class Jump extends FriendSubCommand {
 
 	private boolean isPlayerOnline(OnlinePAFPlayer pSender, PAFPlayer pQueryPlayer) {
 		if (!pQueryPlayer.isOnline()) {
-			sendError(pSender, "Friends.General.PlayerIsOffline");
+			sendError(pSender, new TextComponent(Main.getInstance().getMessages().getString("Friends.General.PlayerIsOffline").
+					replace("[PLAYER]", pQueryPlayer.getDisplayName())));
 			return false;
 		}
 		return true;

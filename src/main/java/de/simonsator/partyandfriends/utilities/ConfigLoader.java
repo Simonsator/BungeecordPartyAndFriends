@@ -1,5 +1,7 @@
 package de.simonsator.partyandfriends.utilities;
 
+import de.simonsator.partyandfriends.main.Main;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.TimeZone;
@@ -12,7 +14,7 @@ import java.util.TimeZone;
  */
 public class ConfigLoader extends ConfigurationCreator {
 	public ConfigLoader(File file) throws IOException {
-		super(file);
+		super(file, Main.getInstance());
 		readFile();
 		loadDefaultValues();
 		saveFile();

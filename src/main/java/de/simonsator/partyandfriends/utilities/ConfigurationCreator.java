@@ -82,7 +82,7 @@ public abstract class ConfigurationCreator {
 			else if (entry instanceof String) {
 				pMessagesYML.set(key, process((String) entry));
 			} else if (entry instanceof List) {
-				List<String> messages = (List<String>) entry;
+				List<String> messages = new ArrayList<>((List<String>) entry);
 				for (int i = 0; i < messages.size(); i++)
 					messages.set(i, process(messages.get(i)));
 				pMessagesYML.set(key, messages);

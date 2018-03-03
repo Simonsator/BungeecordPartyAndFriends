@@ -67,9 +67,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public boolean hasPermission(String pPermission) {
-		if (pPermission == null || pPermission.isEmpty())
-			return true;
-		return PermissionProvider.getInstance().hasPermission(this, pPermission);
+		return pPermission == null || pPermission.isEmpty() || PermissionProvider.getInstance().hasPermission(this, pPermission);
 	}
 
 	@Override

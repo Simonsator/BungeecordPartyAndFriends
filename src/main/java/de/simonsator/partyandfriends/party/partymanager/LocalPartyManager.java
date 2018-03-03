@@ -16,6 +16,7 @@ public class LocalPartyManager extends PartyManager {
 	 */
 	private static HashMap<UUID, PlayerParty> parties = new HashMap<>();
 
+	@Override
 	public PlayerParty getParty(UUID pUUID) {
 		return parties.get(pUUID);
 	}

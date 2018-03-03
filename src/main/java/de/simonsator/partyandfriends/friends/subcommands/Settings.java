@@ -76,9 +76,9 @@ public class Settings extends FriendSubCommand {
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
 		if (args.length <= 1) {
 			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessages().getString("Friends.Command.Settings.Introduction"));
-			for (int i = 0; i < SETTINGS.size(); i++) {
+			for (Setting setting : SETTINGS) {
 				pPlayer.sendMessage(Main.getInstance().getMessages().getString("Friends.Command.Settings.SplitLine"));
-				SETTINGS.get(i).outputMessage(pPlayer);
+				setting.outputMessage(pPlayer);
 			}
 		} else if (!changeSetting(pPlayer, args))
 			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessages().getString("Friends.Command.Settings.NotFound"));

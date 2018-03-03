@@ -43,12 +43,7 @@ public class JoinEvent implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPostLogin(final PostLoginEvent pEvent) {
 		if (pEvent.getPlayer().isConnected())
-			Main.getInstance().getProxy().getScheduler().runAsync(Main.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					sbLoggedIn(pEvent);
-				}
-			});
+			Main.getInstance().getProxy().getScheduler().runAsync(Main.getInstance(), () -> sbLoggedIn(pEvent));
 	}
 
 	private void sbLoggedIn(PostLoginEvent pEvent) {

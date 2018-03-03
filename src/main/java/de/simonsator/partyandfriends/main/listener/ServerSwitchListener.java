@@ -25,12 +25,14 @@ public class ServerSwitchListener implements Listener {
 	 * The list of the servers which the party will not join.
 	 */
 	private final List<String> notJoinServers;
+	private static ServerSwitchListener instance;
 
 	/**
 	 * Initials the object
 	 */
 	public ServerSwitchListener() {
 		notJoinServers = Main.getInstance().getConfig().getStringList("General.PartyDoNotJoinTheseServers");
+		instance = this;
 	}
 
 	/**
@@ -40,12 +42,11 @@ public class ServerSwitchListener implements Listener {
 	 */
 	@EventHandler
 	public void onServerSwitch(final ServerSwitchEvent pEvent) {
-		ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), new Runnable() {
-			@Override
-			public void run() {
-				moveParty(pEvent);
-			}
-		});
+		ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> moveParty(pEvent));
+	}
+
+	public static ServerSwitchListener getInstance() {
+		return instance;
 	}
 
 	private void moveParty(ServerSwitchEvent pEvent) {

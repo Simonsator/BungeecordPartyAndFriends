@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
 
 public abstract class RequestReactionsCommands extends FriendSubCommand {
-	protected Matcher playerMatcher = PLAYER_PATTERN.matcher(Main.getInstance().getMessages()
+	protected final Matcher PLAYER_MATCHER = PLAYER_PATTERN.matcher(Main.getInstance().getMessages()
 			.getString("Friends.Command.Accept.ErrorNoFriendShipInvitation"));
 
 	protected RequestReactionsCommands(String[] pCommands, int pPriority, String pHelp) {
@@ -25,7 +25,7 @@ public abstract class RequestReactionsCommands extends FriendSubCommand {
 
 	protected boolean hasNoRequest(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if ((!pPlayer.hasRequestFrom(pQueryPlayer))) {
-			sendError(pPlayer, new TextComponent(Friends.getInstance().getPrefix() + playerMatcher.replaceFirst(pQueryPlayer.getName())));
+			sendError(pPlayer, new TextComponent(Friends.getInstance().getPrefix() + PLAYER_MATCHER.replaceFirst(pQueryPlayer.getName())));
 			return true;
 		}
 		return false;

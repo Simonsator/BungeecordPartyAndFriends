@@ -11,7 +11,7 @@ import java.util.Random;
 
 public abstract class PAFPlayerClass implements PAFPlayer {
 	private static DisplayNameProvider displayNameProvider = new StandardDisplayNameProvider();
-	private Random randomGenerator = new Random();
+	private final Random RANDOM_GENERATOR = new Random();
 
 	public static DisplayNameProvider getDisplayNameProvider() {
 		return displayNameProvider;
@@ -74,7 +74,7 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 
 	@Override
 	public void sendMessage(List<String> pMessages) {
-		sendMessage(pMessages.get(randomGenerator.nextInt(pMessages.size())));
+		sendMessage(pMessages.get(RANDOM_GENERATOR.nextInt(pMessages.size())));
 	}
 
 	@Override

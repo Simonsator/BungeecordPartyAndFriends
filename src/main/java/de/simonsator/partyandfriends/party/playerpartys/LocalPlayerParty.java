@@ -40,8 +40,7 @@ public class LocalPlayerParty extends PlayerParty {
 
 	@Override
 	public boolean isBanned(OnlinePAFPlayer pPlayer) {
-		Boolean isBanned = bannedPlayers.contains(pPlayer.getUniqueId());
-		return isBanned != null && isBanned;
+		return bannedPlayers.contains(pPlayer.getUniqueId());
 	}
 
 	@Override

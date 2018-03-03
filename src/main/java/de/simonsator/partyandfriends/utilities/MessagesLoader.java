@@ -5,7 +5,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * This class loads the Messages.yml
@@ -79,7 +79,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.Leader.SenderEqualsGivenPlayer", "&7You cannot make yourself to the new party leader.");
 		set("Party.Command.Leader.NewLeaderIs", "&7The new party leader is &6[NEWLEADER]");
 		set("Party.Command.Leave.NewLeaderIs", "&bThe leader has left the party. The new leader is &e[NEWLEADER].");
-		set("Party.Command.Leave.YouLeftTheParty", Arrays.asList("&bYou left your party."));
+		set("Party.Command.Leave.YouLeftTheParty", Collections.singletonList("&bYou left your party."));
 		set("Friends.General.CommandNotFound", " &cThe command does not exist.", " &cI am sorry, but the command you were searching for was not found.");
 		set("Friends.General.NoPermission", " &cYou don't have the permission to execute this command.");
 		set("Friends.General.PlayerIsOffline", " &7The player &e[PLAYER] &7is not online or you are not his friend.");
