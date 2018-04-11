@@ -72,7 +72,7 @@ public abstract class SubCommand implements Comparable<SubCommand> {
 
 	@Override
 	public int compareTo(SubCommand o) {
-		return ((Integer) PRIORITY).compareTo(o.PRIORITY);
+		return Integer.compare(PRIORITY, o.PRIORITY);
 	}
 
 	public String getCommandName() {

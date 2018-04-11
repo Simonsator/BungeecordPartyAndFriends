@@ -8,8 +8,6 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.event.TabCompleteEvent;
-import net.md_5.bungee.event.EventHandler;
 
 import java.util.regex.Matcher;
 
@@ -23,7 +21,6 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.*;
  */
 public class MSG extends OnlyTopCommand {
 	private static MSG instance;
-	private final String REPLY_COMMAND = Main.getInstance().getConfig().getString("Commands.Friends.SubCommands.MSG.ReplyCommand");
 
 	/**
 	 * Initials the command
@@ -36,7 +33,7 @@ public class MSG extends OnlyTopCommand {
 	}
 
 	private static boolean playerExists(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
-		if (!pPlayerQuery.doesExist()) {
+		if (!pPlayerQuery.doesExist() || pPlayer.equals(pPlayerQuery)) {
 			pPlayer.sendMessage((Friends.getInstance().getPrefix()
 					+ Main.getInstance().getMessages().getString("Friends.Command.MSG.CanNotWriteToHim")));
 			return false;
@@ -59,7 +56,6 @@ public class MSG extends OnlyTopCommand {
 	 * @param pPlayer Sender
 	 * @param args    Arguments
 	 * @param type    The type of the used command either 0 if the player used the
-	 *                command /friend msg or 1 if the player used the command /msg
 	 *                command /friend msg or 1 if the player used the command /msg
 	 */
 	public void send(OnlinePAFPlayer pPlayer, String[] args, int type) {
@@ -172,10 +168,5 @@ public class MSG extends OnlyTopCommand {
 			content.append(args[n]);
 		}
 		return content.toString();
-	}
-
-	@EventHandler
-	public void onTabComplete(TabCompleteEvent pEvent) {
-		tabComplete(pEvent);
 	}
 }

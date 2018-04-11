@@ -17,6 +17,10 @@ public abstract class SimpleSetting extends Setting {
 		super(pSettingNames, pPermission, pPriority);
 	}
 
+	public SimpleSetting(List<String> pSettingNames, String pPermission, int pPriority, String pIdentifier) {
+		super(pSettingNames, pPermission, pPriority, pIdentifier);
+	}
+
 	protected abstract String getMessage(OnlinePAFPlayer pPlayer);
 
 	@Override

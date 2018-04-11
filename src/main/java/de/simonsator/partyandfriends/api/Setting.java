@@ -19,6 +19,12 @@ public abstract class Setting implements Comparable<Setting> {
 		PERMISSION = pPermission;
 	}
 
+	public Setting(List<String> pSettingNames, String pPermission, int pPriority, String pIdentifier) {
+		SETTING_NAMES = pSettingNames;
+		PRIORITY = pPriority;
+		PERMISSION = pPermission;
+	}
+
 	public boolean isApplicable(OnlinePAFPlayer pPlayer, String pSettingName) {
 		return SETTING_NAMES.contains(pSettingName.toLowerCase()) && pPlayer.hasPermission(PERMISSION);
 	}
