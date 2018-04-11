@@ -1,5 +1,15 @@
 package de.simonsator.partyandfriends.party.playerpartys;
 
+import static de.simonsator.partyandfriends.utilities.PatterCollection.NEW_LEADER_PATTERN;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.regex.Matcher;
+
+import de.simonsator.partyandfriends.api.events.party.PartyLeaderChangeEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
@@ -7,11 +17,7 @@ import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
-
-import java.util.*;
-import java.util.regex.Matcher;
-
-import static de.simonsator.partyandfriends.utilities.PatterCollection.NEW_LEADER_PATTERN;
+import net.md_5.bungee.api.ProxyServer;
 
 public class LocalPlayerParty extends PlayerParty {
 	/**
@@ -93,8 +99,9 @@ public class LocalPlayerParty extends PlayerParty {
 	@Override
 	public void setLeader(OnlinePAFPlayer player) {
 		leader = player.getUniqueId();
-		PartyManager.getInstance().addPlayerToParty(player, this);
+		PartyManager.getInstance().addPlayerToParty(player, this, false);
 		players.remove(player.getUniqueId());
+		ProxyServer.getInstance().getPluginManager().callEvent(new PartyLeaderChangeEvent(this));
 	}
 
 	/**
@@ -121,7 +128,7 @@ public class LocalPlayerParty extends PlayerParty {
 	public boolean addPlayer(OnlinePAFPlayer pPlayer) {
 		if ((!players.contains(pPlayer.getUniqueId()) && (invited.contains(pPlayer.getUniqueId()) || isLeader(pPlayer) || !privateParty)) && !isBanned(pPlayer)) {
 			players.add(pPlayer.getUniqueId());
-			PartyManager.getInstance().addPlayerToParty(pPlayer, this);
+			PartyManager.getInstance().addPlayerToParty(pPlayer, this, true);
 			removeFromInvited(pPlayer);
 			return true;
 		} else {

@@ -1,13 +1,16 @@
 package de.simonsator.partyandfriends.party.partymanager;
 
+import java.util.HashMap;
+import java.util.UUID;
+
+import de.simonsator.partyandfriends.api.events.party.CreatePartyEvent;
+import de.simonsator.partyandfriends.api.events.party.JoinPartyEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.party.playerpartys.LocalPlayerParty;
-
-import java.util.HashMap;
-import java.util.UUID;
+import net.md_5.bungee.api.ProxyServer;
 
 
 public class LocalPartyManager extends PartyManager {
@@ -64,7 +67,14 @@ public class LocalPartyManager extends PartyManager {
 	 * @param party  The Party
 	 */
 	@Override
-	public void addPlayerToParty(OnlinePAFPlayer player, PlayerParty party) {
+	public void addPlayerToParty(OnlinePAFPlayer player, PlayerParty party, boolean createParty) {
+		if (party.getAllPlayers().size() > 2) {
+			ProxyServer.getInstance().getPluginManager().callEvent(new JoinPartyEvent(party, player));
+		}else if (party.getAllPlayers().size() == 2) {
+			if (createParty) {
+				ProxyServer.getInstance().getPluginManager().callEvent(new CreatePartyEvent(party));
+			}
+		}
 		parties.put(player.getUniqueId(), party);
 	}
 

@@ -4,6 +4,7 @@ package de.simonsator.partyandfriends.api;
  * @author Simonsator
  * @version 1.0.0 24.01.17
  */
+@SuppressWarnings("rawtypes")
 public abstract class OnlyTopCommand extends TopCommand {
 	/**
 	 * @param pCommandNames The command name and the different aliases of this command.
