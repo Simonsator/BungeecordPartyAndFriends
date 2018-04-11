@@ -68,7 +68,7 @@ public abstract class PartyManager implements Deactivated {
 	 * @param player The Player
 	 * @param party  The Party
 	 */
-	public abstract void addPlayerToParty(OnlinePAFPlayer player, PlayerParty party);
+	public abstract void addPlayerToParty(OnlinePAFPlayer player, PlayerParty party, boolean createParty);
 
 	/**
 	 * Removes the player party link from the {@link HashMap}

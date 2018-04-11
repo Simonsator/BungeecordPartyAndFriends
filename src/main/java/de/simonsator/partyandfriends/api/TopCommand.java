@@ -50,6 +50,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	 * @param pCommandSender The sender of the command.
 	 * @return Returns true if the sender of the command is a player. If not it returns false and reloads the plugin.
 	 */
+	@SuppressWarnings("deprecation")
 	public static boolean isPlayer(CommandSender pCommandSender) {
 		if (!(pCommandSender instanceof ProxiedPlayer)) {
 			Main.getInstance().reload();
@@ -81,6 +82,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 			});
 	}
 
+	@SuppressWarnings("deprecation")
 	private boolean isDisabledServer(ProxiedPlayer pPlayer) {
 		if (Main.getInstance().getConfig().getStringList("General.DisabledServers").contains(pPlayer.getServer().getInfo().getName())) {
 			pPlayer.sendMessage((Main.getInstance().getMessages().getString("General.DisabledServer")));
@@ -140,6 +142,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 		
 	}
 
+	@SuppressWarnings("unused")
 	private void subCommandComplete(TabCompleteEvent pEvent) {
 		String partialSubCommand = pEvent.getCursor().toLowerCase();
 		if (!isThisCommand(partialSubCommand))

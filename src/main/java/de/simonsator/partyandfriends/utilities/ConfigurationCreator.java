@@ -74,6 +74,7 @@ public abstract class ConfigurationCreator {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void process(Configuration pMessagesYML) {
 		for (String key : pMessagesYML.getKeys()) {
 			Object entry = pMessagesYML.get(key);

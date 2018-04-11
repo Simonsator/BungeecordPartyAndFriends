@@ -124,6 +124,7 @@ public class MySQL extends PoolSQLCommunication {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public int getPlayerID(ProxiedPlayer pPlayer) {
 		if (ProxyServer.getInstance().getConfig().isOnlineMode())
 			return getPlayerID(pPlayer.getUniqueId());

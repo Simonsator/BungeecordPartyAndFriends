@@ -73,6 +73,7 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 		return getDisplayNameProvider().getDisplayName(this);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void update() {
 		if (ProxyServer.getInstance().getConfig().isOnlineMode()) {

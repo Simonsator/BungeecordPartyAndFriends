@@ -145,6 +145,7 @@ public class Main extends Plugin implements ErrorReporter {
 	/**
 	 * Loads the configuration files(config.yml and messages.yml)
 	 */
+	@SuppressWarnings("deprecation")
 	private void loadConfiguration() {
 		try {
 			config = new ConfigLoader(new File(Main.getInstance().getDataFolder(), "config.yml"));

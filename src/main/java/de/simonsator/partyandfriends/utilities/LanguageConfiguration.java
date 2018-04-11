@@ -28,6 +28,7 @@ public abstract class LanguageConfiguration extends ConfigurationCreator {
 		return configuration.getString(pIdentifier);
 	}
 
+	@SuppressWarnings("unchecked")
 	public Object get(String pPrefix, String pIdentifier) {
 		Object entry = configuration.get(pIdentifier);
 		if (entry instanceof List) {

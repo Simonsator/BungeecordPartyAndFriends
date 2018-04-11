@@ -62,6 +62,7 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 		return displayNameProvider.getDisplayName(this);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void sendMessage(Object pMessage) {
 		if (pMessage instanceof List) {
