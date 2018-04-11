@@ -100,8 +100,8 @@ public class LocalPlayerParty extends PlayerParty {
 	public void setLeader(OnlinePAFPlayer player) {
 		leader = player.getUniqueId();
 		PartyManager.getInstance().addPlayerToParty(player, this, false);
-		ProxyServer.getInstance().getPluginManager().callEvent(new PartyLeaderChangeEvent(this));
 		players.remove(player.getUniqueId());
+		ProxyServer.getInstance().getPluginManager().callEvent(new PartyLeaderChangeEvent(this));
 	}
 
 	/**
