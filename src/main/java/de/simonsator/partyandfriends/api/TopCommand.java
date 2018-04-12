@@ -137,24 +137,6 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	}
 
 	public void tabComplete(TabCompleteEvent pEvent) {
-		
-	}
 
-	private void subCommandComplete(TabCompleteEvent pEvent) {
-		String partialSubCommand = pEvent.getCursor().toLowerCase();
-		if (!isThisCommand(partialSubCommand))
-			return;
-		int lastSpaceIndex = partialSubCommand.lastIndexOf(' ');
-		if (lastSpaceIndex >= 0)
-			partialSubCommand = partialSubCommand.substring(lastSpaceIndex + 1);
-		for (T subCommand : subCommands) {
-			for (String commandName : subCommand.getCommandNames())
-				if (commandName.toLowerCase().startsWith(partialSubCommand))
-					pEvent.getSuggestions().add(commandName);
-		}
-	}
-
-	private boolean isThisCommand(String cursor) {
-		return cursor.startsWith("/" + getName().toLowerCase());
 	}
 }
