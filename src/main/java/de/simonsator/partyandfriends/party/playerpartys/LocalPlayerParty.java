@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.party.playerpartys;
 
+import de.simonsator.partyandfriends.api.events.party.PartyJoinEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
@@ -7,6 +8,7 @@ import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
+import net.md_5.bungee.api.ProxyServer;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -120,6 +122,10 @@ public class LocalPlayerParty extends PlayerParty {
 	@Override
 	public boolean addPlayer(OnlinePAFPlayer pPlayer) {
 		if ((!players.contains(pPlayer.getUniqueId()) && (invited.contains(pPlayer.getUniqueId()) || isLeader(pPlayer) || !privateParty)) && !isBanned(pPlayer)) {
+			PartyJoinEvent partyJoinEvent = new PartyJoinEvent(this);
+			ProxyServer.getInstance().getPluginManager().callEvent(partyJoinEvent);
+			if (partyJoinEvent.isCancelled())
+				return false;
 			players.add(pPlayer.getUniqueId());
 			PartyManager.getInstance().addPlayerToParty(pPlayer, this);
 			removeFromInvited(pPlayer);
