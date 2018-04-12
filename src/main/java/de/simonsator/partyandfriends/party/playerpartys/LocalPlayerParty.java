@@ -109,8 +109,11 @@ public class LocalPlayerParty extends PlayerParty {
 	@Override
 	public List<OnlinePAFPlayer> getPlayers() {
 		List<OnlinePAFPlayer> lPlayers = new ArrayList<>();
-		for (UUID player : players)
-			lPlayers.add((OnlinePAFPlayer) PAFPlayerManager.getInstance().getPlayer(player));
+		for (UUID player : players) {
+			PAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(player);
+			if (pafPlayer instanceof OnlinePAFPlayer)
+				lPlayers.add((OnlinePAFPlayer) pafPlayer);
+		}
 		return lPlayers;
 	}
 
