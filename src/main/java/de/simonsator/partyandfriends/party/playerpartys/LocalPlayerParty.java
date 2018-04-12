@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.party.playerpartys;
 
 import de.simonsator.partyandfriends.api.events.party.PartyJoinEvent;
+import de.simonsator.partyandfriends.api.events.party.PartyLeaderChangedEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
@@ -97,6 +98,7 @@ public class LocalPlayerParty extends PlayerParty {
 		leader = player.getUniqueId();
 		PartyManager.getInstance().addPlayerToParty(player, this);
 		players.remove(player.getUniqueId());
+		ProxyServer.getInstance().getPluginManager().callEvent(new PartyLeaderChangedEvent(this, player));
 	}
 
 	/**
