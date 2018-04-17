@@ -57,7 +57,7 @@ public abstract class PartySubCommand extends SubCommand {
 	}
 
 	@Override
-	protected void sendError(OnlinePAFPlayer pPlayer, TextComponent pMessage) {
+	public void sendError(OnlinePAFPlayer pPlayer, TextComponent pMessage) {
 		pPlayer.sendMessage(pMessage);
 		if (Main.getInstance().getConfig().getBoolean("Commands.Party.General.PrintOutHelpOnError"))
 			printOutHelp(pPlayer, PartyCommand.getInstance().getName());

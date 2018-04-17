@@ -59,7 +59,7 @@ public abstract class SubCommand implements Comparable<SubCommand> {
 		return isApplicable(pCommand) && hasPermission(pPlayer);
 	}
 
-	protected void sendError(OnlinePAFPlayer pPlayer, TextComponent pMessage) {
+	public void sendError(OnlinePAFPlayer pPlayer, TextComponent pMessage) {
 		pPlayer.sendMessage(pMessage);
 		pPlayer.sendMessage(HELP);
 	}
