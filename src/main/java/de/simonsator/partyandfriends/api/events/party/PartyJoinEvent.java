@@ -1,13 +1,20 @@
 package de.simonsator.partyandfriends.api.events.party;
 
+import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import net.md_5.bungee.api.plugin.Cancellable;
 
 public class PartyJoinEvent extends PartyEvent implements Cancellable {
 	private boolean isCancelled = false;
+	private final OnlinePAFPlayer PLAYER;
 
-	public PartyJoinEvent(PlayerParty pParty) {
+	public PartyJoinEvent(PlayerParty pParty, OnlinePAFPlayer pPlayer) {
 		super(pParty);
+		PLAYER = pPlayer;
+	}
+
+	public OnlinePAFPlayer getPlayer() {
+		return PLAYER;
 	}
 
 	@Override

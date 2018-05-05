@@ -39,6 +39,10 @@ public abstract class PlayerParty {
 		return getLeader() != null && player != null && this.getLeader().getUniqueId().equals(player.getUniqueId());
 	}
 
+	public boolean isLeader(OnlinePAFPlayer player) {
+		return isLeader((PAFPlayer) player);
+	}
+
 	public abstract boolean isBanned(OnlinePAFPlayer pPlayer);
 
 	public abstract void setBanned(OnlinePAFPlayer pPlayer, boolean pIsBanned);
@@ -121,6 +125,10 @@ public abstract class PlayerParty {
 	 */
 	public abstract boolean addPlayer(OnlinePAFPlayer pPlayer);
 
+	public void leaveParty(OnlinePAFPlayer pPlayer) {
+		leaveParty((PAFPlayer) pPlayer);
+	}
+
 	public void leaveParty(PAFPlayer pPlayer) {
 		removePlayer(pPlayer);
 		ProxyServer.getInstance().getPluginManager().callEvent(new LeftPartyEvent(this, pPlayer));
@@ -183,6 +191,10 @@ public abstract class PlayerParty {
 	}
 
 	public abstract void removeFromInvited(PAFPlayer pPlayer);
+
+	public void removeFromInvited(OnlinePAFPlayer pPlayer) {
+		removeFromInvited((PAFPlayer) pPlayer);
+	}
 
 	protected abstract void addToInvited(OnlinePAFPlayer pPlayer);
 
