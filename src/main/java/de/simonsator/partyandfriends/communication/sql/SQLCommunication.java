@@ -32,6 +32,7 @@ public abstract class SQLCommunication extends DBCommunication {
 		connection = createConnection();
 	}
 
+	@Deprecated
 	protected SQLCommunication(String pDatabase, String pURL, String pUserName, String pPassword) {
 		this.DATABASE = pDatabase;
 		this.url = pURL;

@@ -7,7 +7,6 @@ import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.LeaderNeededCommand;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -43,10 +42,9 @@ public class Leader extends LeaderNeededCommand {
 		party.addPlayer(pPlayer);
 		party.setLeader((OnlinePAFPlayer) player);
 		party.sendMessage(
-				new TextComponent(
-						PREFIX + NEW_LEADER_PATTERN
-								.matcher(Main.getInstance().getMessages()
-										.getString("Party.Command.Leader.NewLeaderIs"))
-								.replaceAll(Matcher.quoteReplacement(player.getDisplayName()))));
+				PREFIX + NEW_LEADER_PATTERN
+						.matcher(Main.getInstance().getMessages()
+								.getString("Party.Command.Leader.NewLeaderIs"))
+						.replaceAll(Matcher.quoteReplacement(player.getDisplayName())));
 	}
 }

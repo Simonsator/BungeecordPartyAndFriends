@@ -127,7 +127,7 @@ public class LocalPlayerParty extends PlayerParty {
 	@Override
 	public boolean addPlayer(OnlinePAFPlayer pPlayer) {
 		if ((!players.contains(pPlayer.getUniqueId()) && (invited.contains(pPlayer.getUniqueId()) || isLeader(pPlayer) || !privateParty)) && !isBanned(pPlayer)) {
-			PartyJoinEvent partyJoinEvent = new PartyJoinEvent(this);
+			PartyJoinEvent partyJoinEvent = new PartyJoinEvent(this, pPlayer);
 			ProxyServer.getInstance().getPluginManager().callEvent(partyJoinEvent);
 			if (partyJoinEvent.isCancelled())
 				return false;

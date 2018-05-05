@@ -9,7 +9,6 @@ import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.subcommand.*;
 import de.simonsator.partyandfriends.utilities.LanguageConfiguration;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.TabCompleteEvent;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
@@ -79,7 +78,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		if (args.length == 0) {
 			PlayerParty party = PartyManager.getInstance().getParty(pPlayer);
 			pPlayer.sendMessage(
-					new TextComponent(Main.getInstance().getMessages().getString("Party.General.HelpBegin")));
+					Main.getInstance().getMessages().getString("Party.General.HelpBegin"));
 			int permissionHeight = PartyAPI.NO_PARTY_PERMISSION_HEIGHT;
 			if (party != null)
 				if (party.isLeader(pPlayer))
@@ -90,7 +89,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 				if (cmd.hasAccess(party, permissionHeight))
 					cmd.printOutHelp(pPlayer, getName());
 			pPlayer.sendMessage(
-					new TextComponent(Main.getInstance().getMessages().getString("Party.General.HelpEnd")));
+					Main.getInstance().getMessages().getString("Party.General.HelpEnd"));
 			return;
 		}
 		PartySubCommand sc = getCommand(args[0]);

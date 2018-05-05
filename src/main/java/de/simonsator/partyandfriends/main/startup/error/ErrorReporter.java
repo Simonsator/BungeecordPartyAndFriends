@@ -13,6 +13,9 @@ public interface ErrorReporter {
 			case TOO_OLD_VERSION:
 				pSender.sendMessage(TextComponent.fromLegacyText("§cYour BungeeCord is too old to run Party and Friends correctly. Please update your bungeecord, by downloading the newest version from https://ci.md-5.net/job/BungeeCord/ or if you need 1.7 support download this modified version of BungeeCord https://github.com/HexagonMC/BungeeCord/releases"));
 				break;
+			case SHA_ENCRYPTED_PASSWORD:
+				pSender.sendMessage(TextComponent.fromLegacyText("§cBungeecord does not support support SHA encrypted MySQL passwords till now, since it is using an old MySQL driver. Please use the command \"ALTER USER 'yourusername'@'localhost' IDENTIFIED WITH mysql_native_password BY 'youpassword';\" in MySQL to fix this issue."));
+				break;
 			default:
 				pSender.sendMessage(TextComponent.fromLegacyText("§cParty and Friends was not able to boot up correctly."));
 				break;

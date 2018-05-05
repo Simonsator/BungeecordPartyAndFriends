@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.party.command;
 
+import com.google.gson.JsonObject;
 import de.simonsator.partyandfriends.api.OnlyTopCommand;
 import de.simonsator.partyandfriends.api.events.message.PartyMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
@@ -10,6 +11,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.TabCompleteEvent;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.protocol.packet.Chat;
 
 import java.util.regex.Matcher;
 
@@ -73,8 +75,8 @@ public class PartyChat extends OnlyTopCommand {
 	private boolean messageGiven(OnlinePAFPlayer pPlayer, String[] args) {
 		if (args.length == 0) {
 			pPlayer.sendMessage(
-					new TextComponent(Main.getInstance().getMessages().getString("Party.Command.Chat.Prefix")
-							+ Main.getInstance().getMessages().getString("Party.Command.Chat.ErrorNoMessage")));
+					Main.getInstance().getMessages().getString("Party.Command.Chat.Prefix")
+							+ Main.getInstance().getMessages().getString("Party.Command.Chat.ErrorNoMessage"));
 			return false;
 		}
 		return true;

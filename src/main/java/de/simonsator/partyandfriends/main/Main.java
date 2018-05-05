@@ -95,7 +95,10 @@ public class Main extends Plugin implements ErrorReporter {
 				ProxyServer.getInstance().getConsole().sendMessage(new TextComponent(searcher.checkForUpdate()));
 			}
 		} catch (SQLException e) {
-			initError(e, BootErrorType.MYSQL_CONNECTION_PROBLEM);
+			if (e.getMessage().contains("Unable to load authentication plugin 'caching_sha2_password'."))
+				initError(e, BootErrorType.SHA_ENCRYPTED_PASSWORD);
+			else
+				initError(e, BootErrorType.MYSQL_CONNECTION_PROBLEM);
 		}
 	}
 

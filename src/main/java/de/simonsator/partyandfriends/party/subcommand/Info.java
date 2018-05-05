@@ -54,10 +54,10 @@ public class Info extends PartySubCommand {
 					.lastIndexOf(Main.getInstance().getMessages().getString("Party.Command.Info.PlayersCut")));
 		}
 		pPlayer.sendMessage(
-				new TextComponent(Main.getInstance().getMessages().getString("Party.General.HelpBegin")));
-		pPlayer.sendMessage(new TextComponent(PREFIX + leader));
-		pPlayer.sendMessage(new TextComponent(PREFIX + players));
-		pPlayer.sendMessage(new TextComponent(Main.getInstance().getMessages().getString("Party.General.HelpEnd")));
+				Main.getInstance().getMessages().getString("Party.General.HelpBegin"));
+		pPlayer.sendMessage(PREFIX + leader);
+		pPlayer.sendMessage(PREFIX + players);
+		pPlayer.sendMessage(Main.getInstance().getMessages().getString("Party.General.HelpEnd"));
 	}
 
 	@Override

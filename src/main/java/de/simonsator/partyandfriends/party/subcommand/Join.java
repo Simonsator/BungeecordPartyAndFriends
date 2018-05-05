@@ -42,8 +42,8 @@ public class Join extends PartySubCommand {
 			return;
 		PAFPlayer pl = PAFPlayerManager.getInstance().getPlayer(args[0]);
 		if (!pl.isOnline()) {
-			pPlayer.sendMessage(new TextComponent(PREFIX
-					+ Main.getInstance().getMessages().getString("Party.Command.Join.PlayerHasNoParty")));
+			pPlayer.sendMessage(PREFIX
+					+ Main.getInstance().getMessages().getString("Party.Command.Join.PlayerHasNoParty"));
 			return;
 		}
 		OnlinePAFPlayer onlinePAFPlayer = (OnlinePAFPlayer) pl;
@@ -52,19 +52,19 @@ public class Join extends PartySubCommand {
 			return;
 		if (party.addPlayer(pPlayer)) {
 			party.sendMessage(
-					new TextComponent(
+
 							PREFIX + PLAYER_PATTERN
 									.matcher(Main.getInstance().getMessages()
 											.getString("Party.Command.Join.PlayerHasJoined"))
-									.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
+									.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())));
 			if (Main.getInstance().getConfig().getBoolean("Commands.Party.SubCommands.Join.AutoJoinLeaderServer")) {
 				ServerInfo leaderServer = party.getLeader().getServer();
 				if (!leaderServer.equals(pPlayer.getServer()))
 					pPlayer.connect(leaderServer);
 			}
 		} else
-			pPlayer.sendMessage(new TextComponent(PREFIX
-					+ Main.getInstance().getMessages().getString("Party.Command.Join.ErrorNoInvitation")));
+			pPlayer.sendMessage(PREFIX
+					+ Main.getInstance().getMessages().getString("Party.Command.Join.ErrorNoInvitation"));
 	}
 
 	@Override
@@ -74,8 +74,8 @@ public class Join extends PartySubCommand {
 
 	private boolean hasNoParty(OnlinePAFPlayer pPlayer, PlayerParty pParty) {
 		if (pParty == null) {
-			pPlayer.sendMessage(new TextComponent(PREFIX
-					+ Main.getInstance().getMessages().getString("Party.Command.Join.PlayerHasNoParty")));
+			pPlayer.sendMessage(PREFIX
+					+ Main.getInstance().getMessages().getString("Party.Command.Join.PlayerHasNoParty"));
 			return true;
 		}
 		return false;
@@ -83,8 +83,8 @@ public class Join extends PartySubCommand {
 
 	private boolean isInParty(OnlinePAFPlayer pPlayer) {
 		if (PartyManager.getInstance().getParty(pPlayer) != null) {
-			pPlayer.sendMessage(new TextComponent(PREFIX
-					+ Main.getInstance().getMessages().getString("Party.Command.Join.AlreadyInAPartyError")));
+			pPlayer.sendMessage(PREFIX
+					+ Main.getInstance().getMessages().getString("Party.Command.Join.AlreadyInAPartyError"));
 			return true;
 		}
 		return false;
