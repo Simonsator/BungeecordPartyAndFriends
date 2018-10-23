@@ -43,9 +43,9 @@ public abstract class PlayerParty {
 		return isLeader((PAFPlayer) player);
 	}
 
-	public abstract boolean isBanned(OnlinePAFPlayer pPlayer);
+	public abstract boolean isBanned(PAFPlayer pPlayer);
 
-	public abstract void setBanned(OnlinePAFPlayer pPlayer, boolean pIsBanned);
+	public abstract void setBanned(PAFPlayer pPlayer, boolean pIsBanned);
 
 	public abstract boolean isPrivate();
 
