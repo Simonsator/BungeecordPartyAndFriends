@@ -91,11 +91,6 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.General.RequestInfoOnJoin", " &7You &7have &7friend &7requests &7from: [FRIENDREQUESTS]");
 		set("Friends.General.DoesNotExist", " &7The given player &7does not &7exist");
 		set("Friends.General.GivenPlayerEqualsSender", " &7You cannot specify yourself as player argument.");
-		set("Friends.GUI.Hide.ShowAllPlayers", " &aNow all players will be shown.");
-		set("Friends.GUI.Hide.ShowOnlyFriendsAndPeopleFromTheServer", " &eNow only friends and people of server team will be shown.");
-		set("Friends.GUI.Hide.ShowOnlyFriends", " &6Now only your friends will be shown.");
-		set("Friends.GUI.Hide.ShowOnlyPeopleFromTheServer", " &5Now only players from the server team will be shown.");
-		set("Friends.GUI.Hide.ShowNobody", " &cNow no players will be shown.");
 		set("Friends.CommandUsage.List", "&8/&5friend list &8- &7Lists all your friends");
 		set("Friends.CommandUsage.MSG", "&8/&5friend msg [name of the friend] [message]&r &8- &7Send a message to a friend");
 		set("Friends.CommandUsage.ADD", "&8/&5friend add [name of the player]&r &8- &7Add a friend");
@@ -117,6 +112,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Add.CanNotSendThisPlayer", " &7You cannot send the player &e[PLAYER] &7a friend request.");
 		set("Friends.Command.Add.HowToAccept", " &7Accept the friend request with &6/friend accept [PLAYER]&7.");
 		set("Friends.Command.Add.AlreadyFriends", " &7You and &e[PLAYER] &7are already friends.");
+		set("Friends.Command.Add.FriendRequestTimedOut", " &7The Friend request from &e[PLAYER] &7has timed out.");
 		set("Friends.Command.Deny.HasDenied", " &7You have denied &e[PLAYER]s&7 friend request.");
 		set("Friends.Command.Deny.NoFriendRequest", " &7You did not receive a friend request from &e[PLAYER]&7.");
 		set("Friends.Command.Settings.NowYouCanGetInvitedByEveryone", " &7Now you can get invited into a party by &aevery &7player.");
@@ -168,6 +164,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.MSG.PlayerAndMessageMissing", " &7You need to give a message.");
 		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7The player will receive the message when he goes online.");
 		set("Friends.Command.Remove.Removed", " &7You removed the friend &e[PLAYER]&7.");
+		set("Friends.Command.Remove.FriendRemovedYou", " &e[PLAYER]&7 removed you from his friend list.");
 	}
 
 	private void loadGermanMessages() {
@@ -185,11 +182,6 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.General.PlayerIsNowOffline", " &7Der Freund &e[PLAYER] &7ist nun &coffline&7.");
 		set("Friends.General.DoesNotExist", " &7Der gegebene Spieler existiert nicht.");
 		set("Friends.General.GivenPlayerEqualsSender", " &7Du kannst dich nicht selber als Spieler Argument angeben.");
-		set("Friends.GUI.Hide.ShowAllPlayers", " &aDir werden jetzt alle Spieler angezeigt.");
-		set("Friends.GUI.Hide.ShowOnlyFriendsAndPeopleFromTheServer", " &eDir werden jetzt nur noch Freunde und Leute vom Server angezeigt.");
-		set("Friends.GUI.Hide.ShowOnlyFriends", " &6Dir werden jetzt nur noch deine Freunde angezeigt.");
-		set("Friends.GUI.Hide.ShowOnlyPeopleFromTheServer", " &5Dir werden jetzt nur noch Spieler vom Server Team angezeigt.");
-		set("Friends.GUI.Hide.ShowNobody", " &cDir werden jetzt keine Spieler mehr angezeigt.");
 		set("Friends.CommandUsage.List", "&8/&5friend list&r &8- &7Listet deine Freunde auf");
 		set("Friends.CommandUsage.MSG", "&8/&5friend msg [Name des Freundes] [Nachricht]&r &8- &7schickt einem Freund eine private Nachricht");
 		set("Friends.CommandUsage.ADD", "&8/&5friend add [Name des Spielers]&r &8- &7Fügt einen Freund hinzu");
@@ -208,6 +200,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Add.AlreadyFriends", " &7Du bist schon mit &e[PLAYER] &7befreundet.");
 		set("Friends.Command.Add.CanNotSendThisPlayer", " &7Du kannst dem Spieler &e[PLAYER] &7keine Freundschaftsanfrage senden.");
 		set("Friends.Command.Add.SenderEqualsReceiver", " &7Du kannst dir nicht selbst eine Freundschaftsanfrage schicken.");
+		set("Friends.Command.Add.FriendRequestTimedOut", " &7Die Freundschaftsanfrage von &e[PLAYER] &7ist ausgetimet.");
 		set("Friends.Command.Accept.ErrorSenderEqualsReceiver", " &7Du kannst dir nicht selber eine Freundschaftsanfrage senden.");
 		set("Friends.Command.Deny.HasDenied", " &7Du hast die Anfrage von &e[PLAYER] &7abgelehnt.");
 		set("Friends.Command.Jump.CanNotJump", " &7Du kannst nicht zu dieser Person springen.");
@@ -218,6 +211,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.List.OnlineTitle", " &a(online)&7, spielt gerade auf [SERVER_ON]");
 		set("Friends.Command.List.OfflineTitle", " &c(offline)&7, zuletzt online [LAST_ONLINE]");
 		set("Friends.Command.Remove.Removed", " &7Du hast den Freund &e[PLAYER] &7entfernt.");
+		set("Friends.Command.Remove.FriendRemovedYou", " &e[PLAYER]&7 hat dich von seiner Freundesliste entfernt.");
 		set("Friends.Command.Settings.Introduction",
 				" &7Dies sind deine Einstellungen:");
 		set("Friends.Command.Settings.FriendRequestSettingEveryone",

@@ -12,6 +12,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
@@ -60,6 +61,18 @@ public class Add extends FriendSubCommand {
 		if (!allowsFriendRequests(pPlayer, playerQuery))
 			return;
 		sendFriendRequest(pPlayer, playerQuery, args);
+		if (Main.getInstance().getConfig().getInt("Commands.Friends.SubCommands.Add.FriendRequestTimeout") > 0) {
+			ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {
+				@Override
+				public void run() {
+					if (playerQuery.getRequests().contains(pPlayer)) {
+						playerQuery.denyRequest(pPlayer);
+						playerQuery.sendMessage((PREFIX + PLAYER_PATTERN.matcher(Main.getInstance()
+								.getMessages().getString("Friends.Command.Add.FriendRequestTimedOut")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
+					}
+				}
+			}, Main.getInstance().getConfig().getInt("Commands.Friends.SubCommands.Add.FriendRequestTimeout"), TimeUnit.SECONDS);
+		}
 	}
 
 	private void sendFriendRequest(OnlinePAFPlayer pSender, PAFPlayer pReceiver, String[] args) {
@@ -70,7 +83,7 @@ public class Add extends FriendSubCommand {
 		pReceiver.sendFriendRequest(pSender);
 		sendRequest(pSender, pReceiver);
 		pSender.sendMessage((PREFIX + PLAYER_PATTERN.matcher(Main.getInstance()
-				.getMessages().getString("Friends.Command.Add.SentAFriendRequest")).replaceAll(Matcher.quoteReplacement(args[1]))));
+				.getMessages().getString("Friends.Command.Add.SentAFriendRequest")).replaceAll(Matcher.quoteReplacement(pReceiver.getDisplayName()))));
 	}
 
 	private void sendRequest(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {

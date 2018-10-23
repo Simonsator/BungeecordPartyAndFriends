@@ -6,6 +6,7 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.friends.commands.Friends;
+import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -47,7 +48,7 @@ public class Accept extends RequestReactionsCommands {
 		pPlayer.denyRequest(playerQuery);
 		pPlayer.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance()
 				.getMessages().getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(playerQuery.getDisplayName())));
-		if (!playerQuery.isOnline())
+		if (!playerQuery.isOnline() || !Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Accept.SendTextIsNowOnline"))
 			return;
 		OnlinePAFPlayer friend = (OnlinePAFPlayer) playerQuery;
 		friend.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessages()

@@ -59,9 +59,11 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Friends.SubCommands.Accept.Names", "accept", "approve");
 		set("Commands.Friends.SubCommands.Accept.Permission", "");
 		set("Commands.Friends.SubCommands.Accept.Priority", 3);
+		set("Commands.Friends.SubCommands.Accept.SendTextIsNowOnline", true);
 		set("Commands.Friends.SubCommands.Add.Names", "add", "addfriend");
 		set("Commands.Friends.SubCommands.Add.Permission", "");
 		set("Commands.Friends.SubCommands.Add.Priority", 2);
+		set("Commands.Friends.SubCommands.Add.FriendRequestTimeout", 0);
 		set("Commands.Friends.SubCommands.Deny.Names", "deny", "reject");
 		set("Commands.Friends.SubCommands.Deny.Permission", "");
 		set("Commands.Friends.SubCommands.Deny.Priority", 4);
@@ -84,6 +86,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Friends.SubCommands.Remove.Names", "remove", "deleteAccount");
 		set("Commands.Friends.SubCommands.Remove.Permission", "");
 		set("Commands.Friends.SubCommands.Remove.Priority", 5);
+		set("Commands.Friends.SubCommands.Remove.UseFriendRemovedYouMessage", false);
 		set("Commands.Friends.SubCommands.Settings.Names", "setting", "settings");
 		set("Commands.Friends.SubCommands.Settings.Disabled", false);
 		set("Commands.Friends.SubCommands.Settings.Permission", "");
@@ -109,6 +112,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Permission", "");
 		set("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Priority", 4);
 		set("Commands.Party.General.PrintOutHelpOnError", true);
+		set("Commands.Party.General.PrintOnlyExecutableSubCommandsOut", true);
 		set("Commands.Party.TopCommands.Party.Names", "party", "parties");
 		set("Commands.Party.TopCommands.Party.Permissions", "");
 		set("Commands.Party.TopCommands.Party.Disabled", false);

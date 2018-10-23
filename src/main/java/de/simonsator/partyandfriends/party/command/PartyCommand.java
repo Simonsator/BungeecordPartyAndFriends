@@ -86,7 +86,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 				else
 					permissionHeight = PartyAPI.PARTY_MEMBER_PERMISSION_HEIGHT;
 			for (PartySubCommand cmd : subCommands)
-				if (cmd.hasAccess(party, permissionHeight))
+				if (cmd.hasAccess(party, permissionHeight) || !Main.getInstance().getConfig().getBoolean("Commands.Party.General.PrintOnlyExecutableSubCommandsOut"))
 					cmd.printOutHelp(pPlayer, getName());
 			pPlayer.sendMessage(
 					Main.getInstance().getMessages().getString("Party.General.HelpEnd"));
