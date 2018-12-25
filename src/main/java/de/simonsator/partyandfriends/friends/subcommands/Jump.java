@@ -5,10 +5,10 @@ import de.simonsator.partyandfriends.api.friends.ServerConnector;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
-import de.simonsator.partyandfriends.utilities.StandardConnector;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -27,7 +27,6 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
  * @version 1.0.0
  */
 public class Jump extends FriendSubCommand {
-	private static ServerConnector connector = new StandardConnector();
 	private Set<ServerInfo> notCheckSameServer = new HashSet<>();
 
 	public Jump(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
@@ -36,11 +35,13 @@ public class Jump extends FriendSubCommand {
 
 	/**
 	 * Sets the server connector, which will be used to join a server.
+	 * Please use instead {@link de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass#getServerConnector label}
 	 *
 	 * @param pConnector The connector
 	 */
+	@Deprecated
 	public static void setServerConnector(ServerConnector pConnector) {
-		connector = pConnector;
+		PAFPlayerClass.setServerConnector(pConnector);
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class Jump extends FriendSubCommand {
 		if (event.isCancelled())
 			return;
 		if (!toJoin.equals(pPlayer.getServer()))
-			connector.connect(pPlayer.getPlayer(), toJoin);
+			pPlayer.connect(toJoin);
 		pPlayer.sendMessage(
 				(
 						PREFIX + PatterCollection.PLAYER_PATTERN

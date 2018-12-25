@@ -35,7 +35,7 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 
 	@Override
 	public void connect(ServerInfo pInfo) {
-		PLAYER.connect(pInfo);
+		getServerConnector().connect(PLAYER, pInfo);
 	}
 
 	@Override

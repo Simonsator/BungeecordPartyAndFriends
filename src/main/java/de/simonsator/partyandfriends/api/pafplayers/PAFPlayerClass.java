@@ -1,6 +1,8 @@
 package de.simonsator.partyandfriends.api.pafplayers;
 
 import de.simonsator.partyandfriends.api.events.DisplayNameProviderChangedEvent;
+import de.simonsator.partyandfriends.api.friends.ServerConnector;
+import de.simonsator.partyandfriends.utilities.StandardConnector;
 import de.simonsator.partyandfriends.utilities.StandardDisplayNameProvider;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -12,6 +14,20 @@ import java.util.Random;
 public abstract class PAFPlayerClass implements PAFPlayer {
 	private static DisplayNameProvider displayNameProvider = new StandardDisplayNameProvider();
 	private final Random RANDOM_GENERATOR = new Random();
+	private static ServerConnector serverConnector = new StandardConnector();
+
+	/**
+	 * Sets the server connector, which will be used to join a server.
+	 *
+	 * @param pServerConnector The connector
+	 */
+	public static void setServerConnector(ServerConnector pServerConnector) {
+		serverConnector = pServerConnector;
+	}
+
+	public static ServerConnector getServerConnector() {
+		return serverConnector;
+	}
 
 	public static DisplayNameProvider getDisplayNameProvider() {
 		return displayNameProvider;
