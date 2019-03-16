@@ -18,7 +18,7 @@ public class PAFPlayerManagerMySQL extends IDBasedPAFPlayerManager {
 	private static MySQL connection;
 
 	public PAFPlayerManagerMySQL(MySQLData pMySQLData, PoolData pPoolData) throws SQLException {
-		connection = new MySQL(pMySQLData, pPoolData, null);
+		this(pMySQLData, pPoolData, null);
 	}
 
 	public PAFPlayerManagerMySQL(MySQLData pMySQLData, PoolData pPoolData, Object pJedisPool) throws SQLException {

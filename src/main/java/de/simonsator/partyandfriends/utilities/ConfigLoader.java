@@ -39,6 +39,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("General.UseOwnLanguageFile", false);
 		set("General.CheckForUpdates", true);
 		set("General.Language", "English");
+		set("General.MultiCoreEnhancement", true);
 		set("General.Time.LanguageTag", "US");
 		set("General.Time.TimeZone", TimeZone.getDefault().getID());
 		set("General.Time.Format", "dd/MM/yyyy HH:mm:ss");

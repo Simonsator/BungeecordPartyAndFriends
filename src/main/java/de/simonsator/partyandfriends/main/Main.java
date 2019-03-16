@@ -14,6 +14,7 @@ import de.simonsator.partyandfriends.main.listener.ServerSwitchListener;
 import de.simonsator.partyandfriends.main.startup.error.BootErrorType;
 import de.simonsator.partyandfriends.main.startup.error.ErrorReporter;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
+import de.simonsator.partyandfriends.pafplayers.mysql.PAFPlayerMySQL;
 import de.simonsator.partyandfriends.party.command.PartyChat;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.party.partymanager.LocalPartyManager;
@@ -133,6 +134,10 @@ public class Main extends Plugin implements ErrorReporter {
 				getConfig().getInt("MySQL.Port"), getConfig().getString("MySQL.Database"),
 				getConfig().getString("MySQL.TablePrefix"), getConfig().getBoolean("MySQL.UseSSL"));
 		new PAFPlayerManagerMySQL(mySQLData, poolData);
+		if (getConfig().getBoolean("General.MultiCoreEnhancement")) {
+			PAFPlayerMySQL.setMultiCoreEnhancement(true);
+			getProxy().getConsole().sendMessage(new TextComponent("Multi Core Enhancement is activated."));
+		}
 		new LocalPartyManager();
 		new StandardPermissionProvider();
 	}

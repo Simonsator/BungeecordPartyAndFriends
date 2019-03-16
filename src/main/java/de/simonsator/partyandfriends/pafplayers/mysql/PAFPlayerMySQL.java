@@ -6,6 +6,7 @@ import de.simonsator.partyandfriends.api.pafplayers.IDBasedPAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 import net.md_5.bungee.api.ProxyServer;
 
@@ -16,9 +17,14 @@ import java.util.UUID;
 
 public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	private final int ID;
+	private static boolean multiCoreEnhancement = false;
 
 	public PAFPlayerMySQL(int pID) {
 		ID = pID;
+	}
+
+	public static void setMultiCoreEnhancement(boolean pUseMultiCoreEnhancment) {
+		multiCoreEnhancement = pUseMultiCoreEnhancment;
 	}
 
 	@Override
@@ -72,6 +78,13 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public void denyRequest(PAFPlayer pPlayer) {
+		if (multiCoreEnhancement)
+			ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> denyRequestNoMultiCoreEnhancement(pPlayer));
+		else
+			denyRequestNoMultiCoreEnhancement(pPlayer);
+	}
+
+	public void denyRequestNoMultiCoreEnhancement(PAFPlayer pPlayer) {
 		PAFPlayerManagerMySQL.getConnection().denyRequest(ID, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
 	}
 
@@ -93,12 +106,26 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	}
 
 	@Override
-	public void sendFriendRequest(PAFPlayer pSender) {
+	public void sendFriendRequest(PAFPlayer pPlayer) {
+		if (multiCoreEnhancement)
+			ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> sendFriendRequestNoMultiCoreEnhancement(pPlayer));
+		else
+			sendFriendRequestNoMultiCoreEnhancement(pPlayer);
+	}
+
+	public void sendFriendRequestNoMultiCoreEnhancement(PAFPlayer pSender) {
 		PAFPlayerManagerMySQL.getConnection().sendFriendRequest(((PAFPlayerMySQL) pSender).getPlayerID(), ID);
 	}
 
 	@Override
 	public void addFriend(PAFPlayer pPlayer) {
+		if (multiCoreEnhancement)
+			ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> addFriendNoMultiCoreEnhancement(pPlayer));
+		else
+			addFriendNoMultiCoreEnhancement(pPlayer);
+	}
+
+	public void addFriendNoMultiCoreEnhancement(PAFPlayer pPlayer) {
 		PAFPlayerManagerMySQL.getConnection().addFriend(((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID(), ID);
 	}
 
@@ -109,6 +136,13 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public void removeFriend(PAFPlayer pPlayer) {
+		if (multiCoreEnhancement)
+			ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> removeFriendNoMultiCoreEnhancement(pPlayer));
+		else
+			removeFriendNoMultiCoreEnhancement(pPlayer);
+	}
+
+	public void removeFriendNoMultiCoreEnhancement(PAFPlayer pPlayer) {
 		PAFPlayerManagerMySQL.getConnection().deleteFriend(((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID(), ID);
 	}
 
