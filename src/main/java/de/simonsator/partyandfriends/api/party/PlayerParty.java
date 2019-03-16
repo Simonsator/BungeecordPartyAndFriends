@@ -175,6 +175,8 @@ public abstract class PlayerParty {
 			if (isInvited(pPlayer)) {
 				removeFromInvited(pPlayer);
 				OnlinePAFPlayer lLeader1 = getLeader();
+				if (lLeader1 == null)
+					return;
 				pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance()
 						.getMessages().getString("Party.Command.Invite.InvitationTimedOutInvited")).replaceAll(Matcher.quoteReplacement(lLeader1.getDisplayName()))));
 				lLeader1.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance()
