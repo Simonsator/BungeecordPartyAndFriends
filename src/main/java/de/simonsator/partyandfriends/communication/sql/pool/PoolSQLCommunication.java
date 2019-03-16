@@ -27,6 +27,7 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 		connectionProperties.setProperty("user", MYSQL_DATA.USERNAME);
 		connectionProperties.setProperty("password", MYSQL_DATA.PASSWORD);
 		connectionProperties.setProperty("useSSL", pMySQLData.USE_SSL + "");
+		connectionProperties.setProperty("allowPublicKeyRetrieval", !pMySQLData.USE_SSL + "");
 		createDatabase();
 		cpds = createConnection();
 		Disabler.getInstance().registerDeactivated(this);
