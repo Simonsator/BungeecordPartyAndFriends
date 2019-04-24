@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.simonsator</groupId>
 	<artifactId>BungeecordPartyAndFriends</artifactId>
-	<version>1.0.71</version>
+	<version>1.0.72</version>
 	<name>BungeecordPartyAndFriends</name>
 	<packaging>jar</packaging>
 	<description>BungeecordPartyAndFriends</description>
@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>com.mchange</groupId>
 			<artifactId>c3p0</artifactId>
-			<version>0.9.5.2</version>
+			<version>0.9.5.4</version>
 		</dependency>
 		<dependency>
 			<groupId>de.simonsator</groupId>
