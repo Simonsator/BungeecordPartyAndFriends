@@ -19,6 +19,16 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 	}
 
 	@Override
+	public boolean teleportTo(OnlinePAFPlayer pPlayer) {
+		ServerInfo serverInfo = pPlayer.getServer();
+		if (serverInfo != null && !getServer().equals(serverInfo)) {
+			connect(pPlayer.getServer());
+			return true;
+		}
+		return false;
+	}
+
+	@Override
 	public void createEntry() {
 		PAFPlayerManagerMySQL.getConnection().firstJoin(PLAYER);
 	}

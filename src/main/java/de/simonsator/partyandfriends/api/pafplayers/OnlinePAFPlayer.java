@@ -18,6 +18,8 @@ public interface OnlinePAFPlayer extends PAFPlayer {
 
 	int changeSettingsWorth(int pSettingsID);
 
+	boolean teleportTo(OnlinePAFPlayer pPlayer);
+
 	void sendPacket(Chat chat);
 
 	void update();

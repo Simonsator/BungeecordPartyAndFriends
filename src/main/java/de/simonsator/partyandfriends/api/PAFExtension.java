@@ -1,6 +1,8 @@
 package de.simonsator.partyandfriends.api;
 
 import de.simonsator.partyandfriends.main.Main;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.File;
@@ -39,5 +41,9 @@ public abstract class PAFExtension extends Plugin {
 
 	protected void unregisterExtension() {
 		Main.getInstance().unregisterExtension(this);
+	}
+
+	public void registerCommand(Command pCommand) {
+		ProxyServer.getInstance().getPluginManager().registerCommand(this, pCommand);
 	}
 }
