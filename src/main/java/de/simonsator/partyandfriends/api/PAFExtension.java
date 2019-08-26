@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.api;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Command;
@@ -12,6 +13,8 @@ import java.io.File;
  * @version 1.0.0 12.02.17
  */
 public abstract class PAFExtension extends Plugin {
+	private BukkitBungeeAdapter adapter = new BukkitBungeeAdapter(this);
+
 	public void reload() {
 		onDisable();
 		onEnable();
@@ -45,5 +48,9 @@ public abstract class PAFExtension extends Plugin {
 
 	public void registerCommand(Command pCommand) {
 		ProxyServer.getInstance().getPluginManager().registerCommand(this, pCommand);
+	}
+
+	public BukkitBungeeAdapter getAdapter() {
+		return adapter;
 	}
 }
