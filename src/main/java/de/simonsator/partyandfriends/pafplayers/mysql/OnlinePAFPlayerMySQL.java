@@ -1,5 +1,7 @@
 package de.simonsator.partyandfriends.pafplayers.mysql;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
+import de.simonsator.partyandfriends.api.events.PAFAccountCreateEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 import net.md_5.bungee.api.ProxyServer;
@@ -31,6 +33,7 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 	@Override
 	public void createEntry() {
 		PAFPlayerManagerMySQL.getConnection().firstJoin(PLAYER);
+		BukkitBungeeAdapter.getInstance().callEvent(new PAFAccountCreateEvent(this));
 	}
 
 	@Override

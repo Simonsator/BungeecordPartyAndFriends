@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.main;
 
 import de.simonsator.partyandfriends.api.PAFExtension;
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
@@ -64,6 +65,7 @@ public class Main extends Plugin implements ErrorReporter {
 	private Language language;
 	private Friends friendCommand;
 	private List<PAFExtension> pafExtensions = new ArrayList<>();
+	private BukkitBungeeAdapter bukkitBungeeAdapter = new BukkitBungeeAdapter(this);
 
 	public static Main getInstance() {
 		return instance;
@@ -280,5 +282,9 @@ public class Main extends Plugin implements ErrorReporter {
 		pafExtensions.clear();
 		for (PAFExtension extension : toReload)
 			extension.reload();
+	}
+
+	public BukkitBungeeAdapter getBukkitBungeeAdapter() {
+		return bukkitBungeeAdapter;
 	}
 }
