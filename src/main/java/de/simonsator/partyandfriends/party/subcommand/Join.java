@@ -8,7 +8,6 @@ import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 
 import java.util.List;
@@ -53,10 +52,10 @@ public class Join extends PartySubCommand {
 		if (party.addPlayer(pPlayer)) {
 			party.sendMessage(
 
-							PREFIX + PLAYER_PATTERN
-									.matcher(Main.getInstance().getMessages()
-											.getString("Party.Command.Join.PlayerHasJoined"))
-									.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())));
+					PREFIX + PLAYER_PATTERN
+							.matcher(Main.getInstance().getMessages()
+									.getString("Party.Command.Join.PlayerHasJoined"))
+							.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())));
 			if (Main.getInstance().getConfig().getBoolean("Commands.Party.SubCommands.Join.AutoJoinLeaderServer")) {
 				ServerInfo leaderServer = party.getLeader().getServer();
 				if (!leaderServer.equals(pPlayer.getServer()))

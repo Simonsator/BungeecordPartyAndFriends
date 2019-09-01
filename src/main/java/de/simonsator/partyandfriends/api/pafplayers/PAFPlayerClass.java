@@ -13,8 +13,12 @@ import java.util.Random;
 
 public abstract class PAFPlayerClass implements PAFPlayer {
 	private static DisplayNameProvider displayNameProvider = new StandardDisplayNameProvider();
-	private final Random RANDOM_GENERATOR = new Random();
 	private static ServerConnector serverConnector = new StandardConnector();
+	private final Random RANDOM_GENERATOR = new Random();
+
+	public static ServerConnector getServerConnector() {
+		return serverConnector;
+	}
 
 	/**
 	 * Sets the server connector, which will be used to join a server.
@@ -23,10 +27,6 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 	 */
 	public static void setServerConnector(ServerConnector pServerConnector) {
 		serverConnector = pServerConnector;
-	}
-
-	public static ServerConnector getServerConnector() {
-		return serverConnector;
 	}
 
 	public static DisplayNameProvider getDisplayNameProvider() {

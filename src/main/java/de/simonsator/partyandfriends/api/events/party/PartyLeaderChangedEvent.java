@@ -10,6 +10,7 @@ public class PartyLeaderChangedEvent extends PartyEvent {
 		super(pParty);
 		NEW_LEADER = pNewLeader;
 	}
+
 	public OnlinePAFPlayer getNewLeader() {
 		return NEW_LEADER;
 	}

@@ -96,7 +96,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	 * @param pPlayer The player who executed the command.
 	 * @param args    The arguments which were given by the player.
 	 */
-	protected abstract void onCommand(OnlinePAFPlayer pPlayer, String args[]);
+	protected abstract void onCommand(OnlinePAFPlayer pPlayer, String[] args);
 
 	/**
 	 * Adds a subcommand to the {@link #subCommands} list

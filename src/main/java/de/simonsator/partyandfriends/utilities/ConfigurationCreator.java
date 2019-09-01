@@ -102,7 +102,7 @@ public abstract class ConfigurationCreator {
 
 	private String fixColors(String pInput) {
 		String[] split = pInput.split(" ");
-		StringBuilder composite = new StringBuilder("");
+		StringBuilder composite = new StringBuilder();
 		String colorCode = "";
 		for (String input : split) {
 			if (!input.startsWith("§"))
