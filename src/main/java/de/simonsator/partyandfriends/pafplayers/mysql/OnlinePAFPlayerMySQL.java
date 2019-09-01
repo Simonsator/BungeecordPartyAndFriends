@@ -21,18 +21,8 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 	}
 
 	@Override
-	public boolean teleportTo(OnlinePAFPlayer pPlayer) {
-		ServerInfo serverInfo = pPlayer.getServer();
-		if (serverInfo != null && !getServer().equals(serverInfo)) {
-			connect(pPlayer.getServer());
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public void createEntry() {
-		PAFPlayerManagerMySQL.getConnection().firstJoin(PLAYER);
+		id = PAFPlayerManagerMySQL.getConnection().firstJoin(PLAYER);
 		BukkitBungeeAdapter.getInstance().callEvent(new PAFAccountCreateEvent(this));
 	}
 
@@ -54,6 +44,16 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 	@Override
 	public void sendMessage(TextComponent pTextComponent) {
 		PLAYER.sendMessage(pTextComponent);
+	}
+
+	@Override
+	public boolean teleportTo(OnlinePAFPlayer pPlayer) {
+		ServerInfo serverInfo = pPlayer.getServer();
+		if (serverInfo != null && !getServer().equals(serverInfo)) {
+			connect(pPlayer.getServer());
+			return true;
+		}
+		return false;
 	}
 
 	@Override

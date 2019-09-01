@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.UUID;
 
 public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
-	private final int ID;
 	private static boolean multiCoreEnhancement = false;
+	protected int id;
 
 	public PAFPlayerMySQL(int pID) {
-		ID = pID;
+		id = pID;
 	}
 
 	public static void setMultiCoreEnhancement(boolean pUseMultiCoreEnhancment) {
@@ -29,21 +29,21 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public String getName() {
-		return PAFPlayerManagerMySQL.getConnection().getName(ID);
+		return PAFPlayerManagerMySQL.getConnection().getName(id);
 	}
 
 	public int getPlayerID() {
-		return ID;
+		return id;
 	}
 
 	@Override
 	public List<PAFPlayer> getFriends() {
-		return idListToPAFPlayerList(PAFPlayerManagerMySQL.getConnection().getFriends(ID));
+		return idListToPAFPlayerList(PAFPlayerManagerMySQL.getConnection().getFriends(id));
 	}
 
 	@Override
 	public UUID getUniqueId() {
-		return PAFPlayerManagerMySQL.getConnection().getUUID(ID);
+		return PAFPlayerManagerMySQL.getConnection().getUUID(id);
 	}
 
 	@Override
@@ -53,22 +53,22 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public boolean doesExist() {
-		return ID > 0;
+		return id > 0;
 	}
 
 	@Override
 	public int getSettingsWorth(int pSettingsID) {
-		return PAFPlayerManagerMySQL.getConnection().getSettingsWorth(ID, pSettingsID);
+		return PAFPlayerManagerMySQL.getConnection().getSettingsWorth(id, pSettingsID);
 	}
 
 	@Override
 	public List<PAFPlayer> getRequests() {
-		return idListToPAFPlayerList(PAFPlayerManagerMySQL.getConnection().getRequests(ID));
+		return idListToPAFPlayerList(PAFPlayerManagerMySQL.getConnection().getRequests(id));
 	}
 
 	@Override
 	public boolean hasRequestFrom(PAFPlayer pPlayer) {
-		return PAFPlayerManagerMySQL.getConnection().hasRequestFrom(ID, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
+		return PAFPlayerManagerMySQL.getConnection().hasRequestFrom(id, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
 	}
 
 	@Override
@@ -85,12 +85,12 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	}
 
 	public void denyRequestNoMultiCoreEnhancement(PAFPlayer pPlayer) {
-		PAFPlayerManagerMySQL.getConnection().denyRequest(ID, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
+		PAFPlayerManagerMySQL.getConnection().denyRequest(id, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
 	}
 
 	@Override
 	public boolean isAFriendOf(PAFPlayer pPlayer) {
-		return PAFPlayerManagerMySQL.getConnection().isAFriendOf(ID, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
+		return PAFPlayerManagerMySQL.getConnection().isAFriendOf(id, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
 	}
 
 	private List<PAFPlayer> idListToPAFPlayerList(List<Integer> pList) {
@@ -102,7 +102,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public PAFPlayer getLastPlayerWroteTo() {
-		return ((PAFPlayerManagerMySQL) PAFPlayerManager.getInstance()).getPlayer(PAFPlayerManagerMySQL.getConnection().getLastPlayerWroteTo(ID));
+		return ((PAFPlayerManagerMySQL) PAFPlayerManager.getInstance()).getPlayer(PAFPlayerManagerMySQL.getConnection().getLastPlayerWroteTo(id));
 	}
 
 	@Override
@@ -114,7 +114,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	}
 
 	public void sendFriendRequestNoMultiCoreEnhancement(PAFPlayer pSender) {
-		PAFPlayerManagerMySQL.getConnection().sendFriendRequest(((PAFPlayerMySQL) pSender).getPlayerID(), ID);
+		PAFPlayerManagerMySQL.getConnection().sendFriendRequest(((PAFPlayerMySQL) pSender).getPlayerID(), id);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	}
 
 	public void addFriendNoMultiCoreEnhancement(PAFPlayer pPlayer) {
-		PAFPlayerManagerMySQL.getConnection().addFriend(((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID(), ID);
+		PAFPlayerManagerMySQL.getConnection().addFriend(((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID(), id);
 	}
 
 	@Override
@@ -143,23 +143,23 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	}
 
 	public void removeFriendNoMultiCoreEnhancement(PAFPlayer pPlayer) {
-		PAFPlayerManagerMySQL.getConnection().deleteFriend(((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID(), ID);
+		PAFPlayerManagerMySQL.getConnection().deleteFriend(((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID(), id);
 	}
 
 	@Override
 	public void setSetting(int pSettingsID, int pNewWorth) {
-		PAFPlayerManagerMySQL.getConnection().setSetting(ID, pSettingsID, pNewWorth);
+		PAFPlayerManagerMySQL.getConnection().setSetting(id, pSettingsID, pNewWorth);
 	}
 
 	@Override
 	public void setLastPlayerWroteFrom(PAFPlayer pLastWroteTo) {
-		PAFPlayerManagerMySQL.getConnection().setLastPlayerWroteTo(ID, ((PAFPlayerMySQL) pLastWroteTo.getPAFPlayer())
+		PAFPlayerManagerMySQL.getConnection().setLastPlayerWroteTo(id, ((PAFPlayerMySQL) pLastWroteTo.getPAFPlayer())
 				.getPlayerID(), 0);
 	}
 
 	@Override
 	public long getLastOnline() {
-		Timestamp time = PAFPlayerManagerMySQL.getConnection().getLastOnline(ID);
+		Timestamp time = PAFPlayerManagerMySQL.getConnection().getLastOnline(id);
 		if (time != null)
 			return time.getTime();
 		return 0;
@@ -170,7 +170,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 		PAFAccountDeleteEvent event = new PAFAccountDeleteEvent(this);
 		ProxyServer.getInstance().getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
-			PAFPlayerManagerMySQL.getConnection().deletePlayerEntry(ID);
+			PAFPlayerManagerMySQL.getConnection().deletePlayerEntry(id);
 			return true;
 		}
 		return false;

@@ -196,9 +196,10 @@ public class MySQL extends PoolSQLCommunication {
 	 *
 	 * @param pPlayer The player
 	 */
-	public void firstJoin(ProxiedPlayer pPlayer) {
+	public int firstJoin(ProxiedPlayer pPlayer) {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
+		int id = 0;
 		try {
 			prepStmt = con.prepareStatement(
 					"insert into  " + TABLE_PREFIX + "players values (?, ?, ?, ?)",
@@ -210,7 +211,7 @@ public class MySQL extends PoolSQLCommunication {
 			prepStmt.executeUpdate();
 			ResultSet rs = prepStmt.getGeneratedKeys();
 			if (rs.next()) {
-				int id = rs.getInt(1);
+				id = rs.getInt(1);
 				cache.add(pPlayer.getName(), pPlayer.getUniqueId(), id);
 				setStandardSettings(id);
 			}
@@ -220,6 +221,7 @@ public class MySQL extends PoolSQLCommunication {
 		} finally {
 			close(con, prepStmt);
 		}
+		return id;
 	}
 
 	private void setStandardSettings(int pPlayerID) {
