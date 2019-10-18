@@ -26,4 +26,8 @@ public class BukkitBungeeAdapter {
 	public void callEvent(Object pEvent) {
 		ProxyServer.getInstance().getPluginManager().callEvent((Event) pEvent);
 	}
+
+	public ServerSoftware getServerSoftware() {
+		return ServerSoftware.BUNGEECORD;
+	}
 }
