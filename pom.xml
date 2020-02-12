@@ -86,26 +86,26 @@
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
-			<version>1.14-SNAPSHOT</version>
+			<version>1.15-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
-			<version>1.14-SNAPSHOT</version>
+			<version>1.15-SNAPSHOT</version>
 			<type>javadoc</type>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.bstats</groupId>
 			<artifactId>bstats-bungeecord</artifactId>
-			<version>1.5</version>
+			<version>1.7</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mchange</groupId>
 			<artifactId>c3p0</artifactId>
-			<version>0.9.5.4</version>
+			<version>0.9.5.5</version>
 		</dependency>
 		<dependency>
 			<groupId>de.simonsator</groupId>

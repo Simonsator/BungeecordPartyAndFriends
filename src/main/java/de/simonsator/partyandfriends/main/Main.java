@@ -92,7 +92,7 @@ public class Main extends Plugin implements ErrorReporter {
 			initPAFClasses();
 			registerCommands();
 			registerListeners();
-			new Metrics(this);
+			new Metrics(this, 508);
 			if (getConfig().getBoolean("General.CheckForUpdates")) {
 				UpdateSearcher searcher = new UpdateSearcher("Party-and-Friends-Free", getDescription().getVersion());
 				ProxyServer.getInstance().getConsole().sendMessage(new TextComponent(searcher.checkForUpdate()));
