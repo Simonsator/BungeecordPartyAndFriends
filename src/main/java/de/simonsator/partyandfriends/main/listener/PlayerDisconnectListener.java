@@ -43,16 +43,17 @@ public class PlayerDisconnectListener implements Listener {
 		PlayerParty party = PartyManager.getInstance().getParty(pUUID);
 		if (party != null)
 			party.leaveParty(player);
-		String message = Friends.getInstance().getPrefix() + PLAYER_PATTERN
-				.matcher(Main.getInstance().getMessages()
-						.getString("Friends.General.PlayerIsNowOffline"))
-				.replaceAll(Matcher.quoteReplacement(player.getDisplayName()));
-		OnlineStatusChangedMessageEvent event = new OnlineStatusChangedMessageEvent(player, message, player.getFriends());
-		ProxyServer.getInstance().getPluginManager().callEvent(event);
-		if (!event.isCancelled())
-			for (PAFPlayer friend : event.getFriends())
-				friend.sendMessage((event.getMessage()));
-		if (player.getSettingsWorth(3) != 1)
+		if (player.getSettingsWorth(3) != 1) {
+			String message = Friends.getInstance().getPrefix() + PLAYER_PATTERN
+					.matcher(Main.getInstance().getMessages()
+							.getString("Friends.General.PlayerIsNowOffline"))
+					.replaceAll(Matcher.quoteReplacement(player.getDisplayName()));
+			OnlineStatusChangedMessageEvent event = new OnlineStatusChangedMessageEvent(player, message, player.getFriends());
+			ProxyServer.getInstance().getPluginManager().callEvent(event);
+			if (!event.isCancelled())
+				for (PAFPlayer friend : event.getFriends())
+					friend.sendMessage((event.getMessage()));
 			player.updateLastOnline();
+		}
 	}
 }
