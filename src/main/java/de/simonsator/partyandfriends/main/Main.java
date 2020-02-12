@@ -134,7 +134,7 @@ public class Main extends Plugin implements ErrorReporter {
 		MySQLData mySQLData = new MySQLData(getConfig().getString("MySQL.Host"),
 				getConfig().getString("MySQL.Username"), getConfig().get("MySQL.Password").toString(),
 				getConfig().getInt("MySQL.Port"), getConfig().getString("MySQL.Database"),
-				getConfig().getString("MySQL.TablePrefix"), getConfig().getBoolean("MySQL.UseSSL"));
+				getConfig().getString("MySQL.TablePrefix"), getConfig().getBoolean("MySQL.UseSSL"),getConfig().getBoolean("MySQL.Cache"));
 		new PAFPlayerManagerMySQL(mySQLData, poolData);
 		if (getConfig().getBoolean("General.MultiCoreEnhancement")) {
 			PAFPlayerMySQL.setMultiCoreEnhancement(true);
