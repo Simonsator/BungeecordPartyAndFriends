@@ -31,6 +31,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("MySQL.Password", "Password");
 		set("MySQL.Database", "friends");
 		set("MySQL.TablePrefix", "fr_");
+		set("MySQL.Cache", true);
 		set("MySQL.Pool.InitialPoolSize", 3);
 		set("MySQL.Pool.MinPoolSize", 3);
 		set("MySQL.Pool.MaxPoolSize", 15);

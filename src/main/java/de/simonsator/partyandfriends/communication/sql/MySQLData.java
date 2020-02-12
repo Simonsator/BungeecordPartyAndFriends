@@ -12,6 +12,7 @@ public class MySQLData {
 	public final String DATABASE;
 	public final String TABLE_PREFIX;
 	public final boolean USE_SSL;
+	public final boolean CACHE;
 
 	public MySQLData(String host, String username, String password, int port, String database, String pTablePrefix) {
 		HOST = host;
@@ -21,6 +22,7 @@ public class MySQLData {
 		DATABASE = database;
 		TABLE_PREFIX = pTablePrefix;
 		USE_SSL = false;
+		CACHE = true;
 	}
 
 	public MySQLData(String host, String username, String password, int port, String database, String pTablePrefix, boolean pUseSSL) {
@@ -31,6 +33,19 @@ public class MySQLData {
 		DATABASE = database;
 		TABLE_PREFIX = pTablePrefix;
 		USE_SSL = pUseSSL;
+		CACHE = true;
 	}
+
+	public MySQLData(String host, String username, String password, int port, String database, String pTablePrefix, boolean pUseSSL, boolean pCache) {
+		HOST = host;
+		USERNAME = username;
+		PASSWORD = password;
+		PORT = port;
+		DATABASE = database;
+		TABLE_PREFIX = pTablePrefix;
+		USE_SSL = pUseSSL;
+		CACHE = pCache;
+	}
+
 
 }

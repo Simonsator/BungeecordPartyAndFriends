@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.communication.sql;
 
 import de.simonsator.partyandfriends.communication.sql.cache.LocalPlayerCache;
+import de.simonsator.partyandfriends.communication.sql.cache.NoCache;
 import de.simonsator.partyandfriends.communication.sql.cache.PlayerCache;
 import de.simonsator.partyandfriends.communication.sql.pool.PoolData;
 import de.simonsator.partyandfriends.communication.sql.pool.PoolSQLCommunication;
@@ -32,7 +33,9 @@ public class MySQL extends PoolSQLCommunication {
 		super(pMySQLData, pPoolData);
 		this.TABLE_PREFIX = pMySQLData.TABLE_PREFIX;
 		importDatabase();
-		cache = new LocalPlayerCache();
+		if (pMySQLData.CACHE)
+			cache = new LocalPlayerCache();
+		else cache = new NoCache();
 		Disabler.getInstance().registerDeactivated(this);
 	}
 
