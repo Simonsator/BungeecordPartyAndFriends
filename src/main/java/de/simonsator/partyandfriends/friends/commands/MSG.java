@@ -90,8 +90,13 @@ public class MSG extends OnlyTopCommand {
 
 	boolean messageGiven(OnlinePAFPlayer pPlayer, String[] args, int n) {
 		if (args.length <= n) {
-			pPlayer.sendMessage((getPrefix()
-					+ Main.getInstance().getMessages().getString("Friends.General.NoPlayerGiven")));
+			if (args.length != n) {
+				pPlayer.sendMessage((getPrefix()
+						+ Main.getInstance().getMessages().getString("Friends.General.NoPlayerGiven")));
+			} else {
+				pPlayer.sendMessage((getPrefix()
+						+ Main.getInstance().getMessages().getString("Friends.Command.MSG.MessageMissing")));
+			}
 			if (Main.getInstance().getConfig().getBoolean("Commands.Friends.General.PrintOutHelpOnError"))
 				pPlayer.sendMessage(
 						(Main.getInstance().getMessages().getString("Friends.CommandUsage.MSG")));

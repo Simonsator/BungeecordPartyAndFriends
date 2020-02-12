@@ -161,8 +161,8 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.List.TimeColor", "&7");
 		set("Friends.Command.MSG.CanNotWriteToHim", " &7You cannot message this player.");
 		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7No player ever messaged you.");
-		set("Friends.Command.MSG.PlayerAndMessageMissing", " &7You need to give a message.");
 		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7The player will receive the message when he goes online.");
+		set("Friends.Command.MSG.MessageMissing", " &7You need to give a message.");
 		set("Friends.Command.Remove.Removed", " &7You removed the friend &e[PLAYER]&7.");
 		set("Friends.Command.Remove.FriendRemovedYou", " &e[PLAYER]&7 removed you from his friend list.");
 	}
@@ -254,7 +254,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.MSG.CanNotWriteToHim", " &7Du kannst diesem Spieler nicht schreiben.");
 		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7Der Spieler erhält die Nachricht, sobald er online geht.");
 		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7Noch kein Spieler hat dich angeschrieben.");
-		set("Friends.Command.MSG.PlayerAndMessageMissing", " &7Du hast keine Nachricht und keinen Spieler angegeben.");
+		set("Friends.Command.MSG.MessageMissing", " &7Du hast keine Nachricht und keinen Spieler angegeben.");
 		set("Party.Command.Leader.SenderEqualsGivenPlayer", "&7Du kannst dich nicht selber zum neuen Party Leader machen.");
 		set("Party.General.ErrorGivenPlayerIsNotInTheParty", "&cDer Spieler &e[PLAYER] &7ist nicht in der Party.");
 		set("Party.CommandUsage.Join", "&8/&5Party join <Name> &8- &7Trete einer Party bei");
