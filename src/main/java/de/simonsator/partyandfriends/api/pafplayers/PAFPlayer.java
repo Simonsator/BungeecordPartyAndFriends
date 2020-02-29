@@ -23,7 +23,10 @@ public interface PAFPlayer {
 
 	void sendMessage(String pText);
 
+	@Deprecated
 	void sendPacket(Chat chat);
+
+	void sendPacket(TextComponent chat);
 
 	boolean doesExist();
 

@@ -1,12 +1,12 @@
 package de.simonsator.partyandfriends.main.listener;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -31,7 +31,7 @@ public class ServerSwitchListener implements Listener {
 	 * Initials the object
 	 */
 	public ServerSwitchListener() {
-		notJoinServers = Main.getInstance().getConfig().getStringList("General.PartyDoNotJoinTheseServers");
+		notJoinServers = Main.getInstance().getGeneralConfig().getStringList("General.PartyDoNotJoinTheseServers");
 		instance = this;
 	}
 
@@ -46,7 +46,7 @@ public class ServerSwitchListener implements Listener {
 	 */
 	@EventHandler
 	public void onServerSwitch(final ServerSwitchEvent pEvent) {
-		ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> moveParty(pEvent));
+		BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> moveParty(pEvent));
 	}
 
 	private void moveParty(ServerSwitchEvent pEvent) {

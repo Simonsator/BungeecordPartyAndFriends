@@ -18,7 +18,7 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 
 	public PlayerListElement(PAFPlayer pPlayer) {
 		PLAYER = pPlayer;
-		boolean isOnline = pPlayer.isOnline() && (!Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Offline.Enabled") || pPlayer.getSettingsWorth(3) == 0);
+		boolean isOnline = pPlayer.isOnline() && (!Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Offline.Enabled") || pPlayer.getSettingsWorth(3) == 0);
 		IS_ONLINE = isOnline;
 		DISPLAY_NAME = pPlayer.getDisplayName();
 		if (!isOnline) {

@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.command.FriendshipCommandEvent;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.RequestReactionsCommands;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
@@ -7,7 +8,6 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.List;
@@ -41,14 +41,14 @@ public class Accept extends RequestReactionsCommands {
 		if (hasNoRequest(pPlayer, playerQuery))
 			return;
 		FriendshipCommandEvent event = new FriendshipCommandEvent(pPlayer, playerQuery, args, this);
-		ProxyServer.getInstance().getPluginManager().callEvent(event);
+		BukkitBungeeAdapter.getInstance().callEvent(event);
 		if (event.isCancelled())
 			return;
 		pPlayer.addFriend(playerQuery);
 		pPlayer.denyRequest(playerQuery);
 		pPlayer.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance()
 				.getMessages().getString("Friends.Command.Accept.NowFriends")).replaceAll(Matcher.quoteReplacement(playerQuery.getDisplayName())));
-		if (!playerQuery.isOnline() || !Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Accept.SendTextIsNowOnline"))
+		if (!playerQuery.isOnline() || !Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Accept.SendTextIsNowOnline"))
 			return;
 		OnlinePAFPlayer friend = (OnlinePAFPlayer) playerQuery;
 		friend.sendMessage(PREFIX + PLAYER_PATTERN.matcher(getInstance().getMessages()

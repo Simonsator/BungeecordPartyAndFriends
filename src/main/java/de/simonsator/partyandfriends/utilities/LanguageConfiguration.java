@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.utilities;
 
+import de.simonsator.partyandfriends.api.PAFPluginBase;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.File;
@@ -19,6 +20,11 @@ public abstract class LanguageConfiguration extends ConfigurationCreator {
 		LANGUAGE = pLanguage;
 	}
 
+	protected LanguageConfiguration(Language pLanguage, File pFile, PAFPluginBase pPlugin) {
+		this(pLanguage, pFile, (Plugin) pPlugin);
+	}
+
+	@Deprecated
 	protected LanguageConfiguration(Language pLanguage, File pFile, Plugin pPlugin) {
 		super(pFile, pPlugin);
 		LANGUAGE = pLanguage;

@@ -47,7 +47,7 @@ public abstract class FriendSubCommand extends SubCommand implements Comparable<
 	@Override
 	public void sendError(OnlinePAFPlayer pPlayer, TextComponent pMessage) {
 		pPlayer.sendMessage(pMessage);
-		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.General.PrintOutHelpOnError"))
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.General.PrintOutHelpOnError"))
 			printOutHelp(pPlayer, Friends.getInstance().getName());
 	}
 }

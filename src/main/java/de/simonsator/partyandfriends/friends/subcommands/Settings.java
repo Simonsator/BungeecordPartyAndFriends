@@ -9,7 +9,7 @@ import de.simonsator.partyandfriends.friends.settings.OfflineSetting;
 import de.simonsator.partyandfriends.friends.settings.PMSetting;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.settings.InviteSetting;
-import net.md_5.bungee.config.Configuration;
+import de.simonsator.partyandfriends.utilities.ConfigurationCreator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,24 +28,24 @@ public class Settings extends FriendSubCommand {
 	public Settings(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
 		super(pCommands, pPriority, pHelp, pPermission);
 		instance = this;
-		Configuration config = Main.getInstance().getConfig();
-		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Enabled"))
+		ConfigurationCreator config = Main.getInstance().getGeneralConfig();
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Enabled"))
 			SETTINGS.add(new FriendRequestSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Names"),
 					config.getString("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Permission"),
 					config.getInt("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Priority")));
-		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Jump.Enabled"))
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Jump.Enabled"))
 			SETTINGS.add(new JumpSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.Jump.Names"),
 					config.getString("Commands.Friends.SubCommands.Settings.Settings.Jump.Permission"),
 					config.getInt("Commands.Friends.SubCommands.Settings.Settings.Jump.Priority")));
-		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Offline.Enabled"))
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Offline.Enabled"))
 			SETTINGS.add(new OfflineSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.Offline.Names"),
 					config.getString("Commands.Friends.SubCommands.Settings.Settings.Offline.Permission"),
 					config.getInt("Commands.Friends.SubCommands.Settings.Settings.Offline.Priority")));
-		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PM.Enabled"))
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PM.Enabled"))
 			SETTINGS.add(new PMSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.PM.Names"),
 					config.getString("Commands.Friends.SubCommands.Settings.Settings.PM.Permission"),
 					config.getInt("Commands.Friends.SubCommands.Settings.Settings.PM.Priority")));
-		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Enabled"))
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Enabled"))
 			SETTINGS.add(new InviteSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Names"),
 					config.getString("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Permission"),
 					config.getInt("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Priority")));

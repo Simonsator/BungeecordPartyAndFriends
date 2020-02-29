@@ -49,6 +49,7 @@ public abstract class SQLCommunication extends DBCommunication {
 		connectionProperties.setProperty("user", pMySQLData.USERNAME);
 		connectionProperties.setProperty("password", pMySQLData.PASSWORD);
 		connectionProperties.setProperty("useSSL", pMySQLData.USE_SSL + "");
+		connectionProperties.setProperty("allowPublicKeyRetrieval", !pMySQLData.USE_SSL + "");
 		Connection con = createConnection();
 		PreparedStatement prepStmt;
 		try {

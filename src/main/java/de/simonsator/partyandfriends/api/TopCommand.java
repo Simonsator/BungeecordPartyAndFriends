@@ -1,16 +1,15 @@
 package de.simonsator.partyandfriends.api;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.SubCommand;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.TabCompleteEvent;
 import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.Listener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +22,7 @@ import java.util.Collections;
  * @param <T> The type of subcommands this class should use
  *            {@link de.simonsator.partyandfriends.utilities.SubCommand}
  */
-public abstract class TopCommand<T extends SubCommand> extends Command implements Listener {
+public abstract class TopCommand<T extends SubCommand> extends Command {
 	/**
 	 * Contains all subcommands of the TopCommand
 	 */
@@ -72,17 +71,14 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	@Override
 	public void execute(final CommandSender pCommandSender, final String[] args) {
 		if (isPlayer(pCommandSender))
-			ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					if (!isDisabledServer((ProxiedPlayer) pCommandSender))
-						onCommand(PAFPlayerManager.getInstance().getPlayer((ProxiedPlayer) pCommandSender), args);
-				}
+			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> {
+				if (!isDisabledServer((ProxiedPlayer) pCommandSender))
+					onCommand(PAFPlayerManager.getInstance().getPlayer((ProxiedPlayer) pCommandSender), args);
 			});
 	}
 
 	private boolean isDisabledServer(ProxiedPlayer pPlayer) {
-		if (Main.getInstance().getConfig().getStringList("General.DisabledServers").contains(pPlayer.getServer().getInfo().getName())) {
+		if (Main.getInstance().getGeneralConfig().getStringList("General.DisabledServers").contains(pPlayer.getServer().getInfo().getName())) {
 			pPlayer.sendMessage((Main.getInstance().getMessages().getString("General.DisabledServer")));
 			return true;
 		}
@@ -137,6 +133,5 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	}
 
 	public void tabComplete(TabCompleteEvent pEvent) {
-
 	}
 }

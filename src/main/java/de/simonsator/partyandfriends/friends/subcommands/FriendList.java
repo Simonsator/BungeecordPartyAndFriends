@@ -24,16 +24,16 @@ import java.util.regex.Matcher;
  */
 public class FriendList extends FriendSubCommand implements PageCreator<PlayerListElement> {
 	private final String LAST_ONLINE_COLOR = Main.getInstance().getMessages().getString("Friends.Command.List.TimeColor");
-	private final int ENTRIES_PER_PAGE = Main.getInstance().getConfig().getInt("Commands.Friends.SubCommands.List.EntriesPerPage");
+	private final int ENTRIES_PER_PAGE = Main.getInstance().getGeneralConfig().getInt("Commands.Friends.SubCommands.List.EntriesPerPage");
 	private final boolean SORT_ELEMENTS;
-	private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(Main.getInstance().getConfig().getString("General.Time.Format"),
-			Locale.forLanguageTag(Main.getInstance().getConfig().getString("General.Time.LanguageTag")));
+	private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(Main.getInstance().getGeneralConfig().getString("General.Time.Format"),
+			Locale.forLanguageTag(Main.getInstance().getGeneralConfig().getString("General.Time.LanguageTag")));
 	private List<TextReplacer> replacerList = new ArrayList<>();
 
 	public FriendList(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
 		super(pCommands, pPriority, pHelp, pPermission);
-		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone(Main.getInstance().getConfig().getString("General.Time.TimeZone")));
-		SORT_ELEMENTS = Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.List.SortElements");
+		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone(Main.getInstance().getGeneralConfig().getString("General.Time.TimeZone")));
+		SORT_ELEMENTS = Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.List.SortElements");
 	}
 
 	@Override

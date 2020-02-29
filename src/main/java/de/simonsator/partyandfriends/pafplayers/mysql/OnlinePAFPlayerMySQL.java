@@ -4,7 +4,6 @@ import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.PAFAccountCreateEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -82,13 +81,18 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 	}
 
 	@Override
+	public void sendPacket(TextComponent chat) {
+		sendMessage(chat);
+	}
+
+	@Override
 	public String getDisplayName() {
 		return getDisplayNameProvider().getDisplayName(this);
 	}
 
 	@Override
 	public void update() {
-		if (ProxyServer.getInstance().getConfig().isOnlineMode()) {
+		if (BukkitBungeeAdapter.getInstance().isOnlineMode()) {
 			PAFPlayerManagerMySQL.getConnection().updatePlayerName(getPlayerID(), PLAYER.getName());
 		} else if (!PLAYER.getName().equals(PAFPlayerManagerMySQL.getConnection().getName(getPlayerID()))
 				&& !PLAYER.getUniqueId().equals(PAFPlayerManagerMySQL.getConnection().getUUID(getPlayerID())))

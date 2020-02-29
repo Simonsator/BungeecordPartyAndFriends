@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.pafplayers.mysql;
 
 import de.simonsator.partyandfriends.api.PermissionProvider;
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.PAFAccountDeleteEvent;
 import de.simonsator.partyandfriends.api.pafplayers.IDBasedPAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
@@ -8,7 +9,6 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
-import net.md_5.bungee.api.ProxyServer;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	@Override
 	public void denyRequest(PAFPlayer pPlayer) {
 		if (multiCoreEnhancement)
-			ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> denyRequestNoMultiCoreEnhancement(pPlayer));
+			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> denyRequestNoMultiCoreEnhancement(pPlayer));
 		else
 			denyRequestNoMultiCoreEnhancement(pPlayer);
 	}
@@ -108,7 +108,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	@Override
 	public void sendFriendRequest(PAFPlayer pPlayer) {
 		if (multiCoreEnhancement)
-			ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> sendFriendRequestNoMultiCoreEnhancement(pPlayer));
+			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> sendFriendRequestNoMultiCoreEnhancement(pPlayer));
 		else
 			sendFriendRequestNoMultiCoreEnhancement(pPlayer);
 	}
@@ -120,7 +120,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	@Override
 	public void addFriend(PAFPlayer pPlayer) {
 		if (multiCoreEnhancement)
-			ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> addFriendNoMultiCoreEnhancement(pPlayer));
+			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> addFriendNoMultiCoreEnhancement(pPlayer));
 		else
 			addFriendNoMultiCoreEnhancement(pPlayer);
 	}
@@ -137,7 +137,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	@Override
 	public void removeFriend(PAFPlayer pPlayer) {
 		if (multiCoreEnhancement)
-			ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> removeFriendNoMultiCoreEnhancement(pPlayer));
+			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> removeFriendNoMultiCoreEnhancement(pPlayer));
 		else
 			removeFriendNoMultiCoreEnhancement(pPlayer);
 	}
@@ -168,7 +168,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	@Override
 	public boolean deleteAccount() {
 		PAFAccountDeleteEvent event = new PAFAccountDeleteEvent(this);
-		ProxyServer.getInstance().getPluginManager().callEvent(event);
+		BukkitBungeeAdapter.getInstance().callEvent(event);
 		if (!event.isCancelled()) {
 			PAFPlayerManagerMySQL.getConnection().deletePlayerEntry(id);
 			return true;

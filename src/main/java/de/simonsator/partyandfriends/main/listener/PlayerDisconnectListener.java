@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.main.listener;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.OnlineStatusChangedMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
@@ -7,7 +8,6 @@ import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -35,7 +35,7 @@ public class PlayerDisconnectListener implements Listener {
 		if (pEvent.getPlayer().getServer() == null)
 			return;
 		final UUID uuid = pEvent.getPlayer().getUniqueId();
-		ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> playerDisconnected(pEvent, uuid));
+		BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> playerDisconnected(pEvent, uuid));
 	}
 
 	private void playerDisconnected(PlayerDisconnectEvent pEvent, UUID pUUID) {
@@ -49,7 +49,7 @@ public class PlayerDisconnectListener implements Listener {
 							.getString("Friends.General.PlayerIsNowOffline"))
 					.replaceAll(Matcher.quoteReplacement(player.getDisplayName()));
 			OnlineStatusChangedMessageEvent event = new OnlineStatusChangedMessageEvent(player, message, player.getFriends());
-			ProxyServer.getInstance().getPluginManager().callEvent(event);
+			BukkitBungeeAdapter.getInstance().callEvent(event);
 			if (!event.isCancelled())
 				for (PAFPlayer friend : event.getFriends())
 					friend.sendMessage((event.getMessage()));

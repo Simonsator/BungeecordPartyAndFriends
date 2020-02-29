@@ -5,8 +5,8 @@ import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubComma
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.friends.subcommands.*;
 import de.simonsator.partyandfriends.main.Main;
+import de.simonsator.partyandfriends.utilities.ConfigurationCreator;
 import net.md_5.bungee.api.event.TabCompleteEvent;
-import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
 
 import java.util.List;
@@ -27,9 +27,9 @@ public class Friends extends TopCommand<FriendSubCommand> {
 	 */
 	public Friends(List<String> pCommandNames, String pPrefix) {
 		super(pCommandNames.toArray(new String[0]),
-				Main.getInstance().getConfig().getString("Commands.Friends.TopCommands.Friend.Permissions"), pPrefix);
+				Main.getInstance().getGeneralConfig().getString("Commands.Friends.TopCommands.Friend.Permissions"), pPrefix);
 		instance = this;
-		Configuration config = Main.getInstance().getConfig();
+		ConfigurationCreator config = Main.getInstance().getGeneralConfig();
 		if (!config.getBoolean("Commands.Friends.SubCommands.List.Disabled"))
 			subCommands
 					.add(new FriendList(config.getStringList("Commands.Friends.SubCommands.List.Names"),

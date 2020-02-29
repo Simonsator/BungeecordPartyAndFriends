@@ -1,12 +1,12 @@
 package de.simonsator.partyandfriends.party.command;
 
 import de.simonsator.partyandfriends.api.OnlyTopCommand;
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.message.PartyMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.TabCompleteEvent;
 import net.md_5.bungee.event.EventHandler;
 
@@ -25,7 +25,7 @@ public class PartyChat extends OnlyTopCommand {
 	private static PartyChat instance;
 
 	public PartyChat(String[] pCommandNames, String pPrefix) {
-		super(pCommandNames, Main.getInstance().getConfig().getString("Permissions.PartyPermission"), pPrefix);
+		super(pCommandNames, Main.getInstance().getGeneralConfig().getString("Commands.Party.TopCommands.PartyChat.Permissions"), pPrefix);
 		instance = this;
 	}
 
@@ -52,7 +52,7 @@ public class PartyChat extends OnlyTopCommand {
 		}
 		String text = stringBuilder.toString();
 		PartyMessageEvent partyMessageEvent = new PartyMessageEvent(pPlayer, text, party);
-		ProxyServer.getInstance().getPluginManager().callEvent(partyMessageEvent);
+		BukkitBungeeAdapter.getInstance().callEvent(partyMessageEvent);
 		if (partyMessageEvent.isCancelled())
 			return;
 		sendMessage(text, pPlayer.getDisplayName(), party);

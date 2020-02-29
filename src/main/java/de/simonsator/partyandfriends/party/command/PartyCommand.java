@@ -8,9 +8,9 @@ import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.subcommand.*;
+import de.simonsator.partyandfriends.utilities.ConfigurationCreator;
 import de.simonsator.partyandfriends.utilities.LanguageConfiguration;
 import net.md_5.bungee.api.event.TabCompleteEvent;
-import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
 
 import java.util.Arrays;
@@ -30,9 +30,9 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 	 * @param pPrefix       The prefix for this command (e.g. [Party])
 	 */
 	public PartyCommand(String[] pCommandNames, String pPrefix) {
-		super(pCommandNames, Main.getInstance().getConfig().getString("Commands.Party.TopCommands.Party.Permissions"), pPrefix);
+		super(pCommandNames, Main.getInstance().getGeneralConfig().getString("Commands.Party.TopCommands.Party.Permissions"), pPrefix);
 		instance = this;
-		Configuration config = Main.getInstance().getConfig();
+		ConfigurationCreator config = Main.getInstance().getGeneralConfig();
 		LanguageConfiguration messages = Main.getInstance().getMessages();
 		subCommands.add(
 				new Join(config.getStringList("Commands.Party.SubCommands.Join.Names"),
@@ -86,7 +86,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 				else
 					permissionHeight = PartyAPI.PARTY_MEMBER_PERMISSION_HEIGHT;
 			for (PartySubCommand cmd : subCommands)
-				if (cmd.hasAccess(party, permissionHeight) || !Main.getInstance().getConfig().getBoolean("Commands.Party.General.PrintOnlyExecutableSubCommandsOut"))
+				if (cmd.hasAccess(party, permissionHeight) || !Main.getInstance().getGeneralConfig().getBoolean("Commands.Party.General.PrintOnlyExecutableSubCommandsOut"))
 					cmd.printOutHelp(pPlayer, getName());
 			pPlayer.sendMessage(
 					Main.getInstance().getMessages().getString("Party.General.HelpEnd"));

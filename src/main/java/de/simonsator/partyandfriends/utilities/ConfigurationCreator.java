@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.utilities;
 
 import com.google.common.base.Charsets;
 import de.simonsator.partyandfriends.api.PAFExtension;
+import de.simonsator.partyandfriends.api.PAFPluginBase;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -29,6 +30,11 @@ public abstract class ConfigurationCreator {
 		PLUGIN = null;
 	}
 
+	protected ConfigurationCreator(File file, PAFPluginBase pPlugin) {
+		this(file, (Plugin) pPlugin);
+	}
+
+	@Deprecated
 	protected ConfigurationCreator(File file, Plugin pPlugin) {
 		this.FILE = file;
 		PLUGIN = pPlugin;
@@ -42,6 +48,10 @@ public abstract class ConfigurationCreator {
 		File parent = FILE.getParentFile();
 		if (!parent.exists())
 			parent.mkdir();
+	}
+
+	protected void process() {
+		process(getCreatedConfiguration());
 	}
 
 	protected void readFile() throws IOException {
@@ -139,10 +149,6 @@ public abstract class ConfigurationCreator {
 		return true;
 	}
 
-	protected void process() {
-		process(getCreatedConfiguration());
-	}
-
 	public String getString(String pIdentifier) {
 		return configuration.getString(pIdentifier);
 	}
@@ -157,5 +163,9 @@ public abstract class ConfigurationCreator {
 
 	public List<String> getStringList(String pIdentifier) {
 		return configuration.getStringList(pIdentifier);
+	}
+
+	public Object get(String pIdentifier) {
+		return configuration.get(pIdentifier);
 	}
 }

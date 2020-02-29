@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.command.FriendshipCommandEvent;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
@@ -7,12 +8,10 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.protocol.packet.Chat;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
@@ -49,35 +48,32 @@ public class Add extends FriendSubCommand {
 					(PREFIX + PLAYER_PATTERN.matcher(Main.getInstance().getMessages()
 							.getString("Friends.Command.Add.FriendRequestFromReceiver")).replaceAll(Matcher.quoteReplacement(args[1]))));
 			pPlayer
-					.sendPacket(new Chat("{\"text\":\"" + PREFIX
+					.sendPacket(new TextComponent(ComponentSerializer.parse(("{\"text\":\"" + PREFIX
 							+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1]))
 							+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
 							+ Friends.getInstance().getName() + ACCEPT_COMMAND_NAME + args[1]
 							+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
 							+ Main.getInstance().getMessages().getString("Friends.Command.Add.ClickHere")
-							+ "\"}]}}}"));
+							+ "\"}]}}}"))));
 			return;
 		}
 		if (!allowsFriendRequests(pPlayer, playerQuery))
 			return;
 		sendFriendRequest(pPlayer, playerQuery, args);
-		if (Main.getInstance().getConfig().getInt("Commands.Friends.SubCommands.Add.FriendRequestTimeout") > 0) {
-			ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					if (playerQuery.getRequests().contains(pPlayer)) {
-						playerQuery.denyRequest(pPlayer);
-						playerQuery.sendMessage((PREFIX + PLAYER_PATTERN.matcher(Main.getInstance()
-								.getMessages().getString("Friends.Command.Add.FriendRequestTimedOut")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
-					}
+		if (Main.getInstance().getGeneralConfig().getInt("Commands.Friends.SubCommands.Add.FriendRequestTimeout") > 0) {
+			BukkitBungeeAdapter.getInstance().schedule(Main.getInstance(), () -> {
+				if (playerQuery.getRequests().contains(pPlayer)) {
+					playerQuery.denyRequest(pPlayer);
+					playerQuery.sendMessage((PREFIX + PLAYER_PATTERN.matcher(Main.getInstance()
+							.getMessages().getString("Friends.Command.Add.FriendRequestTimedOut")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 				}
-			}, Main.getInstance().getConfig().getInt("Commands.Friends.SubCommands.Add.FriendRequestTimeout"), TimeUnit.SECONDS);
+			}, Main.getInstance().getGeneralConfig().getInt("Commands.Friends.SubCommands.Add.FriendRequestTimeout"));
 		}
 	}
 
 	private void sendFriendRequest(OnlinePAFPlayer pSender, PAFPlayer pReceiver, String[] args) {
 		FriendshipCommandEvent event = new FriendshipCommandEvent(pSender, pReceiver, args, this);
-		ProxyServer.getInstance().getPluginManager().callEvent(event);
+		BukkitBungeeAdapter.getInstance().callEvent(event);
 		if (event.isCancelled())
 			return;
 		pReceiver.sendFriendRequest(pSender);
@@ -90,12 +86,12 @@ public class Add extends FriendSubCommand {
 		pPlayerQuery.sendMessage((PREFIX
 				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.FriendRequestReceived")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
 		pPlayerQuery
-				.sendPacket(new Chat("{\"text\":\"" + PREFIX
+				.sendPacket(new TextComponent(ComponentSerializer.parse("{\"text\":\"" + PREFIX
 						+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(pPlayer.getName()))
 						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/"
 						+ Friends.getInstance().getName() + ACCEPT_COMMAND_NAME + pPlayer.getName()
 						+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-						+ Main.getInstance().getMessages().getString("Friends.Command.Add.ClickHere") + "\"}]}}}"));
+						+ Main.getInstance().getMessages().getString("Friends.Command.Add.ClickHere") + "\"}]}}}")));
 	}
 
 	private boolean hasNoRequestFrom(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
@@ -132,7 +128,7 @@ public class Add extends FriendSubCommand {
 	}
 
 	private boolean allowsFriendRequests(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
-		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Enabled") && pGivenPlayer.getSettingsWorth(0) == 0) {
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Enabled") && pGivenPlayer.getSettingsWorth(0) == 0) {
 			sendError(pPlayer, new TextComponent(PREFIX + PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.CanNotSendThisPlayer")).replaceFirst(pGivenPlayer.getName())));
 			return false;
 		}

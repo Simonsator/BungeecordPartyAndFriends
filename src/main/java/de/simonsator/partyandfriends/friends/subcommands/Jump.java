@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.friends.subcommands;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.command.JumpToFriendEvent;
 import de.simonsator.partyandfriends.api.friends.ServerConnector;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
@@ -9,7 +10,6 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 
@@ -65,7 +65,7 @@ public class Jump extends FriendSubCommand {
 		if (isDisabled(pPlayer, toJoin))
 			return;
 		JumpToFriendEvent event = new JumpToFriendEvent(pPlayer, friend, args, this);
-		ProxyServer.getInstance().getPluginManager().callEvent(event);
+		BukkitBungeeAdapter.getInstance().callEvent(event);
 		if (event.isCancelled())
 			return;
 		if (!toJoin.equals(pPlayer.getServer()))
@@ -86,7 +86,7 @@ public class Jump extends FriendSubCommand {
 	}
 
 	private boolean allowsJumps(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pQueryPlayer) {
-		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Jump.Enabled") && pQueryPlayer.getSettingsWorth(4) == 1) {
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Jump.Enabled") && pQueryPlayer.getSettingsWorth(4) == 1) {
 			sendError(pPlayer, "Friends.Command.Jump.CanNotJump");
 			return false;
 		}
@@ -111,7 +111,7 @@ public class Jump extends FriendSubCommand {
 	}
 
 	private boolean isDisabled(OnlinePAFPlayer pPlayer, ServerInfo pToJoin) {
-		if (getInstance().getConfig().getStringList("Commands.Friends.SubCommands.Jump.DisabledServers").contains(pToJoin.getName())) {
+		if (getInstance().getGeneralConfig().getStringList("Commands.Friends.SubCommands.Jump.DisabledServers").contains(pToJoin.getName())) {
 			sendError(pPlayer, "Friends.Command.Jump.CanNotJump");
 			return true;
 		}

@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.party.playerpartys;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.party.PartyJoinEvent;
 import de.simonsator.partyandfriends.api.events.party.PartyLeaderChangedEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
@@ -9,7 +10,6 @@ import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
-import net.md_5.bungee.api.ProxyServer;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -103,7 +103,7 @@ public class LocalPlayerParty extends PlayerParty {
 		leader = player.getUniqueId();
 		PartyManager.getInstance().addPlayerToParty(player, this);
 		players.remove(player.getUniqueId());
-		ProxyServer.getInstance().getPluginManager().callEvent(new PartyLeaderChangedEvent(this, player));
+		BukkitBungeeAdapter.getInstance().callEvent(new PartyLeaderChangedEvent(this, player));
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class LocalPlayerParty extends PlayerParty {
 	public boolean addPlayer(OnlinePAFPlayer pPlayer) {
 		if ((!players.contains(pPlayer.getUniqueId()) && (invited.contains(pPlayer.getUniqueId()) || isLeader(pPlayer) || !privateParty)) && !isBanned(pPlayer)) {
 			PartyJoinEvent partyJoinEvent = new PartyJoinEvent(this, pPlayer);
-			ProxyServer.getInstance().getPluginManager().callEvent(partyJoinEvent);
+			BukkitBungeeAdapter.getInstance().callEvent(partyJoinEvent);
 			if (partyJoinEvent.isCancelled())
 				return false;
 			players.add(pPlayer.getUniqueId());

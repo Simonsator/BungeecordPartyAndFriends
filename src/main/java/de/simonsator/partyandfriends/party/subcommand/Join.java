@@ -56,7 +56,7 @@ public class Join extends PartySubCommand {
 							.matcher(Main.getInstance().getMessages()
 									.getString("Party.Command.Join.PlayerHasJoined"))
 							.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())));
-			if (Main.getInstance().getConfig().getBoolean("Commands.Party.SubCommands.Join.AutoJoinLeaderServer")) {
+			if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Party.SubCommands.Join.AutoJoinLeaderServer")) {
 				ServerInfo leaderServer = party.getLeader().getServer();
 				if (!leaderServer.equals(pPlayer.getServer()))
 					pPlayer.connect(leaderServer);

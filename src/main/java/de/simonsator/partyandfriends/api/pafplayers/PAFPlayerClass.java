@@ -1,10 +1,10 @@
 package de.simonsator.partyandfriends.api.pafplayers;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.DisplayNameProviderChangedEvent;
 import de.simonsator.partyandfriends.api.friends.ServerConnector;
 import de.simonsator.partyandfriends.utilities.StandardConnector;
 import de.simonsator.partyandfriends.utilities.StandardDisplayNameProvider;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
 
@@ -35,7 +35,7 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 
 	public static void setDisplayNameProvider(DisplayNameProvider pDisplayNameProvider) {
 		displayNameProvider = pDisplayNameProvider;
-		ProxyServer.getInstance().getPluginManager().callEvent(new DisplayNameProviderChangedEvent(pDisplayNameProvider));
+		BukkitBungeeAdapter.getInstance().callEvent(new DisplayNameProviderChangedEvent(pDisplayNameProvider));
 	}
 
 	@Override
@@ -57,6 +57,13 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 		/* If the player is offline no message needs to be send. This method should be overwritten
 		 * by a class which extends this class and implements OnlinePAFPlayer*/
 	}
+
+	@Override
+	public void sendPacket(TextComponent chat) {
+		/* If the player is offline no message needs to be send. This method should be overwritten
+		 * by a class which extends this class and implements OnlinePAFPlayer*/
+	}
+
 
 	@Override
 	public int hashCode() {

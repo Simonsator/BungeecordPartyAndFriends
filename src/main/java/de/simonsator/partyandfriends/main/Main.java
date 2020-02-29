@@ -1,6 +1,8 @@
 package de.simonsator.partyandfriends.main;
 
+import de.simonsator.partyandfriends.admin.commands.PAFAdminCommand;
 import de.simonsator.partyandfriends.api.PAFExtension;
+import de.simonsator.partyandfriends.api.PAFPluginBase;
 import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
@@ -26,7 +28,6 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import org.bstats.bungeecord.Metrics;
 
@@ -42,7 +43,7 @@ import java.util.List;
  * @author Simonsator
  * @version 1.0.0
  */
-public class Main extends Plugin implements ErrorReporter {
+public class Main extends PAFPluginBase implements ErrorReporter {
 	/**
 	 * The main instance of this plugin
 	 */
@@ -65,7 +66,6 @@ public class Main extends Plugin implements ErrorReporter {
 	private Language language;
 	private Friends friendCommand;
 	private List<PAFExtension> pafExtensions = new ArrayList<>();
-	private BukkitBungeeAdapter bukkitBungeeAdapter = new BukkitBungeeAdapter(this);
 
 	public static Main getInstance() {
 		return instance;
@@ -79,6 +79,10 @@ public class Main extends Plugin implements ErrorReporter {
 	@Deprecated
 	public static PAFPlayerManager getPlayerManager() {
 		return PAFPlayerManager.getInstance();
+	}
+
+	public ConfigurationCreator getGeneralConfig() {
+		return config;
 	}
 
 	/**
@@ -106,37 +110,37 @@ public class Main extends Plugin implements ErrorReporter {
 	}
 
 	private void initError(Exception e, BootErrorType pType) {
-		if (!getConfig().getBoolean("Commands.Party.TopCommands.Party.Disabled"))
-			ProxyServer.getInstance().getPluginManager().registerCommand(this, new BootErrorCommand(
-					(getConfig().getStringList("Commands.Party.TopCommands.Party.Names").toArray(new String[0])), pType));
+		if (!getGeneralConfig().getBoolean("Commands.Party.TopCommands.Party.Disabled"))
+			registerCommand(new BootErrorCommand(
+					(getGeneralConfig().getStringList("Commands.Party.TopCommands.Party.Names").toArray(new String[0])), pType));
 		Command partyChatCommand = new BootErrorCommand(
-				(getConfig().getStringList("Commands.Party.TopCommands.PartyChat.Names").toArray(new String[0])), pType);
-		if (!getConfig().getBoolean("Commands.Party.TopCommands.PartyChat.Disabled"))
-			ProxyServer.getInstance().getPluginManager().registerCommand(this, partyChatCommand);
-		if (!getConfig().getBoolean("Commands.Friends.TopCommands.Friend.Disabled"))
-			getProxy().getPluginManager().registerCommand(this, new BootErrorCommand(getConfig().getStringList("Commands.Friends.TopCommands.Friend.Names").toArray(new String[0]), pType));
+				(getGeneralConfig().getStringList("Commands.Party.TopCommands.PartyChat.Names").toArray(new String[0])), pType);
+		if (!getGeneralConfig().getBoolean("Commands.Party.TopCommands.PartyChat.Disabled"))
+			registerCommand(partyChatCommand);
+		if (!getGeneralConfig().getBoolean("Commands.Friends.TopCommands.Friend.Disabled"))
+			registerCommand(new BootErrorCommand(getGeneralConfig().getStringList("Commands.Friends.TopCommands.Friend.Names").toArray(new String[0]), pType));
 		BootErrorCommand msg = new BootErrorCommand(
-				(getConfig().getStringList("Commands.Friends.TopCommands.MSG.Names").toArray(new String[0])), pType);
-		if (!getConfig().getBoolean("Commands.Friends.TopCommands.MSG.Disabled"))
-			getProxy().getPluginManager().registerCommand(this, msg);
-		if (!getConfig().getBoolean("Commands.Friends.TopCommands.Reply.Disabled"))
-			getProxy().getPluginManager().registerCommand(this, new BootErrorCommand(
-					(getConfig().getStringList("Commands.Friends.TopCommands.Reply.Names").toArray(new String[0])), pType));
+				(getGeneralConfig().getStringList("Commands.Friends.TopCommands.MSG.Names").toArray(new String[0])), pType);
+		if (!getGeneralConfig().getBoolean("Commands.Friends.TopCommands.MSG.Disabled"))
+			registerCommand(msg);
+		if (!getGeneralConfig().getBoolean("Commands.Friends.TopCommands.Reply.Disabled"))
+			registerCommand(new BootErrorCommand(
+					(getGeneralConfig().getStringList("Commands.Friends.TopCommands.Reply.Names").toArray(new String[0])), pType));
 		CommandSender console = ProxyServer.getInstance().getConsole();
 		reportError(console, pType);
 		e.printStackTrace();
 	}
 
 	private void initPAFClasses() throws SQLException {
-		PoolData poolData = new PoolData(Main.getInstance().getConfig().getInt("MySQL.Pool.MinPoolSize"),
-				Main.getInstance().getConfig().getInt("MySQL.Pool.MaxPoolSize"),
-				Main.getInstance().getConfig().getInt("MySQL.Pool.InitialPoolSize"), Main.getInstance().getConfig().getInt("MySQL.Pool.IdleConnectionTestPeriod"), Main.getInstance().getConfig().getBoolean("MySQL.Pool.TestConnectionOnCheckin"));
-		MySQLData mySQLData = new MySQLData(getConfig().getString("MySQL.Host"),
-				getConfig().getString("MySQL.Username"), getConfig().get("MySQL.Password").toString(),
-				getConfig().getInt("MySQL.Port"), getConfig().getString("MySQL.Database"),
-				getConfig().getString("MySQL.TablePrefix"), getConfig().getBoolean("MySQL.UseSSL"),getConfig().getBoolean("MySQL.Cache"));
+		PoolData poolData = new PoolData(Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.MinPoolSize"),
+				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.MaxPoolSize"),
+				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.InitialPoolSize"), Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.IdleConnectionTestPeriod"), Main.getInstance().getGeneralConfig().getBoolean("MySQL.Pool.TestConnectionOnCheckin"));
+		MySQLData mySQLData = new MySQLData(getGeneralConfig().getString("MySQL.Host"),
+				getGeneralConfig().getString("MySQL.Username"), getGeneralConfig().get("MySQL.Password").toString(),
+				getGeneralConfig().getInt("MySQL.Port"), getGeneralConfig().getString("MySQL.Database"),
+				getGeneralConfig().getString("MySQL.TablePrefix"), getGeneralConfig().getBoolean("MySQL.UseSSL"), getGeneralConfig().getBoolean("MySQL.Cache"));
 		new PAFPlayerManagerMySQL(mySQLData, poolData);
-		if (getConfig().getBoolean("General.MultiCoreEnhancement")) {
+		if (getGeneralConfig().getBoolean("General.MultiCoreEnhancement")) {
 			PAFPlayerMySQL.setMultiCoreEnhancement(true);
 			getProxy().getConsole().sendMessage(new TextComponent("Multi Core Enhancement is activated."));
 		}
@@ -146,10 +150,10 @@ public class Main extends Plugin implements ErrorReporter {
 
 	@Override
 	public void onDisable() {
-		getProxy().getScheduler().cancel(this);
-		Disabler.getInstance().disableAll();
 		ProxyServer.getInstance().getPluginManager().unregisterListeners(this);
 		ProxyServer.getInstance().getPluginManager().unregisterCommands(this);
+		Disabler.getInstance().disableAll();
+		getProxy().getScheduler().cancel(this);
 	}
 
 	/**
@@ -162,15 +166,15 @@ public class Main extends Plugin implements ErrorReporter {
 			e.printStackTrace();
 		}
 		try {
-			language = Language.valueOf(getConfig().getString("General.Language").toUpperCase());
+			language = Language.valueOf(getGeneralConfig().getString("General.Language").toUpperCase());
 		} catch (IllegalArgumentException e) {
 			getProxy().getConsole().sendMessage(new TextComponent("&4The given language is not supported by Party and Friends. English will be used instead."));
 			language = Language.ENGLISH;
 			e.printStackTrace();
 		}
 		try {
-			messages = new MessagesLoader(language, getConfig().getBoolean("General.UseOwnLanguageFile"), new File(getDataFolder(), "messages.yml"), this);
-			if (getConfig().getBoolean("General.UseOwnLanguageFile"))
+			messages = new MessagesLoader(language, getGeneralConfig().getBoolean("General.UseOwnLanguageFile"), new File(getDataFolder(), "messages.yml"), this);
+			if (getGeneralConfig().getBoolean("General.UseOwnLanguageFile"))
 				language = Language.OWN;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -184,10 +188,10 @@ public class Main extends Plugin implements ErrorReporter {
 	 * Registers the listeners
 	 */
 	private void registerListeners() {
-		ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerDisconnectListener());
-		ProxyServer.getInstance().getPluginManager().registerListener(this, new ServerSwitchListener());
+		BukkitBungeeAdapter.getInstance().registerListener(new PlayerDisconnectListener(), this);
+		BukkitBungeeAdapter.getInstance().registerListener(new ServerSwitchListener(), this);
 		JoinEvent joinEventListener;
-		ProxyServer.getInstance().getPluginManager().registerListener(this, joinEventListener = new JoinEvent());
+		BukkitBungeeAdapter.getInstance().registerListener(joinEventListener = new JoinEvent(), this);
 		Exception e = joinEventListener.verify();
 		if (e != null)
 			initError(e, BootErrorType.TOO_OLD_VERSION);
@@ -199,23 +203,25 @@ public class Main extends Plugin implements ErrorReporter {
 	private void registerCommands() {
 		String friendsPrefix = (getMessages().getString("Friends.General.Prefix"));
 		new PartyCommand(
-				(getConfig().getStringList("Commands.Party.TopCommands.Party.Names").toArray(new String[0])), partyPrefix);
-		if (!getConfig().getBoolean("Commands.Party.TopCommands.Party.Disabled"))
-			ProxyServer.getInstance().getPluginManager().registerCommand(this, PartyCommand.getInstance());
+				(getGeneralConfig().getStringList("Commands.Party.TopCommands.Party.Names").toArray(new String[0])), partyPrefix);
+		if (!getGeneralConfig().getBoolean("Commands.Party.TopCommands.Party.Disabled"))
+			registerTopCommand(PartyCommand.getInstance());
 		PartyChat partyChatCommand = new PartyChat(
-				(getConfig().getStringList("Commands.Party.TopCommands.PartyChat.Names").toArray(new String[0])), partyPrefix);
-		if (!getConfig().getBoolean("Commands.Party.TopCommands.PartyChat.Disabled"))
-			ProxyServer.getInstance().getPluginManager().registerCommand(this, partyChatCommand);
-		friendCommand = new Friends(getConfig().getStringList("Commands.Friends.TopCommands.Friend.Names"), friendsPrefix);
-		if (!getConfig().getBoolean("Commands.Friends.TopCommands.Friend.Disabled"))
-			getProxy().getPluginManager().registerCommand(this, friendCommand);
+				(getGeneralConfig().getStringList("Commands.Party.TopCommands.PartyChat.Names").toArray(new String[0])), partyPrefix);
+		if (!getGeneralConfig().getBoolean("Commands.Party.TopCommands.PartyChat.Disabled"))
+			registerTopCommand(partyChatCommand);
+		friendCommand = new Friends(getGeneralConfig().getStringList("Commands.Friends.TopCommands.Friend.Names"), friendsPrefix);
+		if (!getGeneralConfig().getBoolean("Commands.Friends.TopCommands.Friend.Disabled"))
+			registerTopCommand(friendCommand);
 		MSG friendsMSGCommand = new MSG(
-				(getConfig().getStringList("Commands.Friends.TopCommands.MSG.Names").toArray(new String[0])), friendsPrefix);
-		if (!getConfig().getBoolean("Commands.Friends.TopCommands.MSG.Disabled"))
-			getProxy().getPluginManager().registerCommand(this, friendsMSGCommand);
-		if (!getConfig().getBoolean("Commands.Friends.TopCommands.Reply.Disabled"))
-			getProxy().getPluginManager().registerCommand(this, new Reply(
-					(getConfig().getStringList("Commands.Friends.TopCommands.Reply.Names").toArray(new String[0])), friendsPrefix));
+				(getGeneralConfig().getStringList("Commands.Friends.TopCommands.MSG.Names").toArray(new String[0])), friendsPrefix);
+		if (!getGeneralConfig().getBoolean("Commands.Friends.TopCommands.MSG.Disabled"))
+			registerTopCommand(friendsMSGCommand);
+		if (!getGeneralConfig().getBoolean("Commands.Friends.TopCommands.Reply.Disabled"))
+			registerTopCommand(new Reply(
+					(getGeneralConfig().getStringList("Commands.Friends.TopCommands.Reply.Names").toArray(new String[0])), friendsPrefix));
+		if (getGeneralConfig().getBoolean("Commands.PAFAdmin.Enabled"))
+			registerCommand(new PAFAdminCommand(getGeneralConfig().getStringList("Commands.PAFAdmin.Names").toArray(new String[0])));
 	}
 
 	@Deprecated
@@ -233,6 +239,11 @@ public class Main extends Plugin implements ErrorReporter {
 		return friendCommand;
 	}
 
+	/**
+	 * @return Returns the normal Main config on Bungeecord, but on Spigot it returns the GUI config.
+	 * For that reason it should not be used and instead getGeneralConfig() should be used.
+	 */
+	@Deprecated
 	public Configuration getConfig() {
 		return config.getCreatedConfiguration();
 	}
@@ -274,17 +285,11 @@ public class Main extends Plugin implements ErrorReporter {
 	}
 
 	public void reload() {
-		ProxyServer.getInstance().getPluginManager().unregisterCommands(this);
-		ProxyServer.getInstance().getPluginManager().unregisterListeners(this);
 		onDisable();
 		onEnable();
 		List<PAFExtension> toReload = new ArrayList<>(pafExtensions);
 		pafExtensions.clear();
 		for (PAFExtension extension : toReload)
 			extension.reload();
-	}
-
-	public BukkitBungeeAdapter getBukkitBungeeAdapter() {
-		return bukkitBungeeAdapter;
 	}
 }

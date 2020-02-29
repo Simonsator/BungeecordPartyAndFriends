@@ -1,13 +1,13 @@
 package de.simonsator.partyandfriends.friends.commands;
 
 import de.simonsator.partyandfriends.api.OnlyTopCommand;
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.message.FriendMessageEvent;
 import de.simonsator.partyandfriends.api.events.message.FriendOnlineMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.ProxyServer;
 
 import java.util.regex.Matcher;
 
@@ -28,7 +28,7 @@ public class MSG extends OnlyTopCommand {
 	 * @param friendsAliasMsg The aliases for the command /msg
 	 */
 	public MSG(String[] friendsAliasMsg, String pPrefix) {
-		super(friendsAliasMsg, Main.getInstance().getConfig().getString("Permissions.FriendPermission"), pPrefix);
+		super(friendsAliasMsg, Main.getInstance().getGeneralConfig().getString("Permissions.FriendPermission"), pPrefix);
 		instance = this;
 	}
 
@@ -78,10 +78,10 @@ public class MSG extends OnlyTopCommand {
 			return;
 		if (!allowsWriteTo(pPlayer, pWrittenTo))
 			return;
-		if (isOffline(pPlayer, pWrittenTo))
+		if (isOffline(pPlayer, pWrittenTo, args, n))
 			return;
 		FriendMessageEvent friendMessageEvent = new FriendOnlineMessageEvent((OnlinePAFPlayer) pWrittenTo, pPlayer, toMessageNoColor(args, n));
-		ProxyServer.getInstance().getPluginManager().callEvent(friendMessageEvent);
+		BukkitBungeeAdapter.getInstance().callEvent(friendMessageEvent);
 		if (friendMessageEvent.isCancelled())
 			return;
 		sendMessage(toMessage(args, n), (OnlinePAFPlayer) pWrittenTo, pPlayer);
@@ -97,7 +97,7 @@ public class MSG extends OnlyTopCommand {
 				pPlayer.sendMessage((getPrefix()
 						+ Main.getInstance().getMessages().getString("Friends.Command.MSG.MessageMissing")));
 			}
-			if (Main.getInstance().getConfig().getBoolean("Commands.Friends.General.PrintOutHelpOnError"))
+			if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.General.PrintOutHelpOnError"))
 				pPlayer.sendMessage(
 						(Main.getInstance().getMessages().getString("Friends.CommandUsage.MSG")));
 			return false;
@@ -105,7 +105,7 @@ public class MSG extends OnlyTopCommand {
 		return true;
 	}
 
-	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
+	private boolean isOffline(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer, String[] args, int n) {
 		if (!pQueryPlayer.isOnline()) {
 			pPlayer.sendMessage((getPrefix()
 					+ Main.getInstance().getMessages().getString("Friends.Command.MSG.CanNotWriteToHim")));
@@ -115,7 +115,7 @@ public class MSG extends OnlyTopCommand {
 	}
 
 	private boolean allowsWriteTo(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
-		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PM.Enabled") && pQueryPlayer.getSettingsWorth(2) == 1) {
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PM.Enabled") && pQueryPlayer.getSettingsWorth(2) == 1) {
 			pPlayer.sendMessage((getPrefix()
 					+ Main.getInstance().getMessages().getString("Friends.Command.MSG.CanNotWriteToHim")));
 			return false;
@@ -124,7 +124,7 @@ public class MSG extends OnlyTopCommand {
 	}
 
 	private boolean isFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
-		if (!pPlayer.isAFriendOf(pQueryPlayer) && !pPlayer.hasPermission(Main.getInstance().getConfig().getString("Commands.Friends.TopCommands.MSG.MSGNonFriendsPermission"))) {
+		if (!pPlayer.isAFriendOf(pQueryPlayer) && !pPlayer.hasPermission(Main.getInstance().getGeneralConfig().getString("Commands.Friends.TopCommands.MSG.MSGNonFriendsPermission"))) {
 			pPlayer.sendMessage((getPrefix()
 					+ Main.getInstance().getMessages().getString("Friends.Command.MSG.CanNotWriteToHim")));
 			return false;

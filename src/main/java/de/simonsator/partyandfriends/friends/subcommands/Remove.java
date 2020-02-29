@@ -33,7 +33,7 @@ public class Remove extends FriendSubCommand {
 		pPlayer.removeFriend(playerQuery);
 		pPlayer.sendMessage((PREFIX + PLAYER_PATTERN.matcher(Main.getInstance()
 				.getMessages().getString("Friends.Command.Remove.Removed")).replaceAll(Matcher.quoteReplacement(playerQuery.getDisplayName()))));
-		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Remove.UseFriendRemovedYouMessage")) {
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Remove.UseFriendRemovedYouMessage")) {
 			if (playerQuery.isOnline()) {
 				playerQuery.sendMessage(PREFIX + Main.getInstance().getMessages().getString("Friends.Command.Remove.FriendRemovedYou").replace("[PLAYER]", pPlayer.getDisplayName()));
 			}

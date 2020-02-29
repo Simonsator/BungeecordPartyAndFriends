@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.party.subcommand;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.command.party.InviteEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
@@ -9,7 +10,6 @@ import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.ProxyServer;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -65,7 +65,7 @@ public class Invite extends PartySubCommand {
 		if (!canInvite(pPlayer, party))
 			return;
 		InviteEvent event = new InviteEvent(pPlayer, toInvite, args, this);
-		ProxyServer.getInstance().getPluginManager().callEvent(event);
+		BukkitBungeeAdapter.getInstance().callEvent(event);
 		if (event.isCancelled())
 			return;
 		party.invite(toInvite);
@@ -119,15 +119,15 @@ public class Invite extends PartySubCommand {
 
 	private boolean canInvite(OnlinePAFPlayer pPlayer, PlayerParty pParty) {
 		if (!pPlayer.getPlayer()
-				.hasPermission(Main.getInstance().getConfig().getString("Permissions.NoPlayerLimitForParties")))
-			if (Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") > 1 &&
-					Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") < pParty.getAllPlayers().size()
+				.hasPermission(Main.getInstance().getGeneralConfig().getString("Permissions.NoPlayerLimitForParties")))
+			if (Main.getInstance().getGeneralConfig().getInt("General.MaxPlayersInParty") > 1 &&
+					Main.getInstance().getGeneralConfig().getInt("General.MaxPlayersInParty") < pParty.getAllPlayers().size()
 							+ pParty.getInviteListSize() + 1) {
 				pPlayer.sendMessage(PREFIX + MAX_PLAYERS_IN_PARTY_PATTERN
 						.matcher(Main.getInstance().getMessages()
 								.getString("Party.Command.Invite.MaxPlayersInPartyReached"))
 						.replaceAll(Matcher.quoteReplacement(
-								Main.getInstance().getConfig().getInt("General.MaxPlayersInParty") + "")));
+								Main.getInstance().getGeneralConfig().getInt("General.MaxPlayersInParty") + "")));
 				return false;
 			}
 		return true;
@@ -143,7 +143,7 @@ public class Invite extends PartySubCommand {
 	}
 
 	private boolean allowsInvitation(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pQueryPlayer) {
-		if (Main.getInstance().getConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Enabled") && pQueryPlayer.getSettingsWorth(1) == 1 && !pPlayer.isAFriendOf(pQueryPlayer)) {
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Enabled") && pQueryPlayer.getSettingsWorth(1) == 1 && !pPlayer.isAFriendOf(pQueryPlayer)) {
 			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessages().getString("Party.Command.Invite.CanNotInviteThisPlayer"));
 			return false;
 		}

@@ -15,7 +15,7 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class Reply extends OnlyTopCommand {
 	public Reply(String[] aliases, String pPrefix) {
-		super(aliases, Main.getInstance().getConfig().getString("Permissions.FriendPermission"), pPrefix);
+		super(aliases, Main.getInstance().getGeneralConfig().getString("Permissions.FriendPermission"), pPrefix);
 	}
 
 	@Override

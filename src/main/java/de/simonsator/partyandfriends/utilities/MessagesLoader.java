@@ -1,7 +1,7 @@
 package de.simonsator.partyandfriends.utilities;
 
+import de.simonsator.partyandfriends.api.PAFPluginBase;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.util.Collections;
 public class MessagesLoader extends LanguageConfiguration {
 	private final boolean USE_CUSTOM_MESSAGES;
 
-	public MessagesLoader(Language pLanguage, boolean useCustomMessages, File pFile, Plugin pPlugin) throws IOException {
+	public MessagesLoader(Language pLanguage, boolean useCustomMessages, File pFile, PAFPluginBase pPlugin) throws IOException {
 		super(pLanguage, pFile, pPlugin);
 		USE_CUSTOM_MESSAGES = useCustomMessages;
 		copyFromJar();
@@ -161,10 +161,12 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.List.TimeColor", "&7");
 		set("Friends.Command.MSG.CanNotWriteToHim", " &7You cannot message this player.");
 		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7No player ever messaged you.");
-		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7The player will receive the message when he goes online.");
 		set("Friends.Command.MSG.MessageMissing", " &7You need to give a message.");
+		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7The player will receive the message when he goes online.");
 		set("Friends.Command.Remove.Removed", " &7You removed the friend &e[PLAYER]&7.");
 		set("Friends.Command.Remove.FriendRemovedYou", " &e[PLAYER]&7 removed you from his friend list.");
+		set("PAFAdmin.Command.DeletePlayer.PlayerDeleted", " &7All data saved by Party and Friends of the player &e[PLAYER]&7 were deleted.");
+		set("PAFAdmin.Command.MustBeExecutedByConsole", "&cThis command needs to be executed by the console. This message can be changed in the messages.yml under \"AdminCommands.TopCommand.PlayerMessage\", if UseOwnLanguageFile is activated in the config.yml.");
 	}
 
 	private void loadGermanMessages() {
@@ -235,8 +237,6 @@ public class MessagesLoader extends LanguageConfiguration {
 				"&7Momentan &aerhälst &7du private Nachrichten. Um dies zu ändern nutze &6/friend settings message&7.");
 		set("Friends.Command.Settings.DoNotReceivePM",
 				"&7Momentan erhälst du &ckeine &7private Nachrichten. Um dies zu ändern nutze &6/friend settings message&7.");
-
-
 		set("Friends.Command.Settings.NotFound", " &7Die gegebene Einstellung konnte nicht gefunden werden oder du hast nicht die Rechte um diese zu benutzen.");
 		set("Friends.Command.Settings.ChangeThisSettingsHover", "&aHier klicken um die Einstellung zu ändern.");
 		set("Friends.Command.Settings.NowYouCanGetInvitedByEveryone", " &7Du kannst jetzt von &ajedem &7Spieler in eine Party eingeladen werden.");

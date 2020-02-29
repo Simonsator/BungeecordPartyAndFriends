@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.api.party;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.party.LeftPartyEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
@@ -7,13 +8,11 @@ import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.party.subcommand.Join;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.protocol.packet.Chat;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
@@ -130,7 +129,7 @@ public abstract class PlayerParty {
 	public void leaveParty(PAFPlayer pPlayer) {
 		removePlayer(pPlayer);
 		boolean needsNewLeader = needsNewLeader(pPlayer);
-		ProxyServer.getInstance().getPluginManager().callEvent(new LeftPartyEvent(this, pPlayer));
+		BukkitBungeeAdapter.getInstance().callEvent(new LeftPartyEvent(this, pPlayer));
 		if (deleteParty())
 			return;
 		if (needsNewLeader) {
@@ -158,18 +157,18 @@ public abstract class PlayerParty {
 		OnlinePAFPlayer lLeader = getLeader();
 		pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance().getMessages()
 				.getString("Party.Command.Invite.YouWereInvitedBY")).replaceAll(Matcher.quoteReplacement(lLeader.getDisplayName()))));
-		pPlayer.sendPacket(new Chat("{\"text\":\"" + PartyCommand.getInstance().getPrefix()
+		pPlayer.sendPacket(new TextComponent(ComponentSerializer.parse("{\"text\":\"" + PartyCommand.getInstance().getPrefix()
 				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE")).replaceAll(Matcher.quoteReplacement(lLeader.getName()))
 				+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
 				+ PartyCommand.getInstance().getName() + JOIN_COMMAND_NAME + lLeader.getName()
 				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
 				+ Main.getInstance().getMessages().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER")
-				+ "\"}]}}}"));
+				+ "\"}]}}}")));
 		if (!isPrivate())
 			return;
 		addToInvited(pPlayer);
 		final PlayerParty party = this;
-		ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), () -> {
+		BukkitBungeeAdapter.getInstance().schedule(Main.getInstance(), () -> {
 			if (isInvited(pPlayer)) {
 				removeFromInvited(pPlayer);
 				OnlinePAFPlayer lLeader1 = getLeader();
@@ -187,7 +186,7 @@ public abstract class PlayerParty {
 					PartyManager.getInstance().deleteParty(party);
 				}
 			}
-		}, 60L, TimeUnit.SECONDS);
+		}, 60L);
 	}
 
 	public abstract void removeFromInvited(PAFPlayer pPlayer);

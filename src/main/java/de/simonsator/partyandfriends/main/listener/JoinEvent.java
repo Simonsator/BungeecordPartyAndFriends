@@ -1,5 +1,6 @@
 package de.simonsator.partyandfriends.main.listener;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.OnlineStatusChangedMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
@@ -7,7 +8,6 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -43,7 +43,7 @@ public class JoinEvent implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPostLogin(final PostLoginEvent pEvent) {
 		if (pEvent.getPlayer().isConnected())
-			Main.getInstance().getProxy().getScheduler().runAsync(Main.getInstance(), () -> sbLoggedIn(pEvent));
+			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> sbLoggedIn(pEvent));
 	}
 
 	private void sbLoggedIn(PostLoginEvent pEvent) {
@@ -83,7 +83,7 @@ public class JoinEvent implements Listener {
 		String message = Friends.getInstance().getPrefix()
 				+ PatterCollection.PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.General.PlayerIsNowOnline")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()));
 		OnlineStatusChangedMessageEvent event = new OnlineStatusChangedMessageEvent(pPlayer, message, pFriends);
-		ProxyServer.getInstance().getPluginManager().callEvent(event);
+		BukkitBungeeAdapter.getInstance().callEvent(event);
 		if (!event.isCancelled())
 			for (PAFPlayer friend : event.getFriends())
 				friend.sendMessage((event.getMessage()));

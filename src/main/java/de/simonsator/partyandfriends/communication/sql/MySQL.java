@@ -1,12 +1,12 @@
 package de.simonsator.partyandfriends.communication.sql;
 
+import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.communication.sql.cache.LocalPlayerCache;
 import de.simonsator.partyandfriends.communication.sql.cache.NoCache;
 import de.simonsator.partyandfriends.communication.sql.cache.PlayerCache;
 import de.simonsator.partyandfriends.communication.sql.pool.PoolData;
 import de.simonsator.partyandfriends.communication.sql.pool.PoolSQLCommunication;
 import de.simonsator.partyandfriends.utilities.disable.Disabler;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.*;
@@ -128,7 +128,7 @@ public class MySQL extends PoolSQLCommunication {
 	}
 
 	public int getPlayerID(ProxiedPlayer pPlayer) {
-		if (ProxyServer.getInstance().getConfig().isOnlineMode())
+		if (BukkitBungeeAdapter.getInstance().isOnlineMode())
 			return getPlayerID(pPlayer.getUniqueId());
 		return getPlayerID(pPlayer.getName());
 	}
@@ -656,13 +656,14 @@ public class MySQL extends PoolSQLCommunication {
 		try {
 			prepStmt = con.prepareStatement(
 					"DELETE FROM " + TABLE_PREFIX + "friend_request_assignment WHERE requester_id = '"
-							+ pPlayerId + "' OR receiver_id='" + pPlayerId + "';\n" +
-							"DELETE FROM " + TABLE_PREFIX + "friend_request_assignment WHERE requester_id = '" + pPlayerId + "' OR receiver_id='" + pPlayerId + "';\n" +
-							"DELETE FROM " + TABLE_PREFIX
-							+ "friend_assignment WHERE friend1_id = '" + pPlayerId + "' OR friend2_id='" + pPlayerId
-							+ "';\n" +
-							"DELETE FROM " + TABLE_PREFIX + "settings WHERE player_id=+" + pPlayerId + ";\n" +
-							"DELETE FROM " + TABLE_PREFIX + "last_player_wrote_to WHERE player_id='" + pPlayerId + "' OR written_to_id=" + pPlayerId + "';");
+							+ pPlayerId + "' OR receiver_id='" + pPlayerId + "';");
+			prepStmt.execute();
+			prepStmt = con.prepareStatement("DELETE FROM " + TABLE_PREFIX
+					+ "friend_assignment WHERE friend1_id = '" + pPlayerId + "' OR friend2_id='" + pPlayerId + "';");
+			prepStmt.execute();
+			prepStmt = con.prepareStatement("DELETE FROM " + TABLE_PREFIX + "settings WHERE player_id='" + pPlayerId + "';");
+			prepStmt.execute();
+			prepStmt = con.prepareStatement("DELETE FROM " + TABLE_PREFIX + "last_player_wrote_to WHERE player_id='" + pPlayerId + "' OR written_to_id='" + pPlayerId + "';");
 			prepStmt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
