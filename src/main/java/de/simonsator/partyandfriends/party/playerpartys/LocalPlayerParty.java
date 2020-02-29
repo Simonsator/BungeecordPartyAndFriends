@@ -42,6 +42,11 @@ public class LocalPlayerParty extends PlayerParty {
 	}
 
 	@Override
+	public boolean isLeader(PAFPlayer player) {
+		return leader != null && player != null && this.leader.equals(player.getUniqueId());
+	}
+
+	@Override
 	public boolean isBanned(PAFPlayer pPlayer) {
 		return bannedPlayers.contains(pPlayer.getUniqueId());
 	}

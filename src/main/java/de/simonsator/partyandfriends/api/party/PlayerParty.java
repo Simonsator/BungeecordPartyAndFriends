@@ -35,9 +35,7 @@ public abstract class PlayerParty {
 	 * @return Returns a true if the given player is the leader of this party,
 	 * and it will returns false if he is not the leader, of this party
 	 */
-	public boolean isLeader(PAFPlayer player) {
-		return getLeader() != null && player != null && this.getLeader().getUniqueId().equals(player.getUniqueId());
-	}
+	public abstract boolean isLeader(PAFPlayer player);
 
 	public boolean isLeader(OnlinePAFPlayer player) {
 		return isLeader((PAFPlayer) player);
@@ -131,8 +129,8 @@ public abstract class PlayerParty {
 
 	public void leaveParty(PAFPlayer pPlayer) {
 		removePlayer(pPlayer);
-		ProxyServer.getInstance().getPluginManager().callEvent(new LeftPartyEvent(this, pPlayer));
 		boolean needsNewLeader = needsNewLeader(pPlayer);
+		ProxyServer.getInstance().getPluginManager().callEvent(new LeftPartyEvent(this, pPlayer));
 		if (deleteParty())
 			return;
 		if (needsNewLeader) {
