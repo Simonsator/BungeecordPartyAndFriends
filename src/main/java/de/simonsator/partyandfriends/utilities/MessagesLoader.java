@@ -254,7 +254,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.MSG.CanNotWriteToHim", " &7Du kannst diesem Spieler nicht schreiben.");
 		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7Der Spieler erhält die Nachricht, sobald er online geht.");
 		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7Noch kein Spieler hat dich angeschrieben.");
-		set("Friends.Command.MSG.MessageMissing", " &7Du hast keine Nachricht und keinen Spieler angegeben.");
+		set("Friends.Command.MSG.MessageMissing", " &7Du hast keine Nachricht angegeben.");
 		set("Party.Command.Leader.SenderEqualsGivenPlayer", "&7Du kannst dich nicht selber zum neuen Party Leader machen.");
 		set("Party.General.ErrorGivenPlayerIsNotInTheParty", "&cDer Spieler &e[PLAYER] &7ist nicht in der Party.");
 		set("Party.CommandUsage.Join", "&8/&5Party join <Name> &8- &7Trete einer Party bei");
