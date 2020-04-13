@@ -24,7 +24,12 @@ import java.util.regex.Matcher;
  * @version 1.0.0
  */
 public class JoinEvent implements Listener {
+	private final boolean FRIEND_REQUEST_NOTIFICATION;
 	private final int PLAYER_SPLIT_LENGTH = Main.getInstance().getMessages().getString("Friends.Command.List.PlayerSplit").length();
+
+	public JoinEvent() {
+		FRIEND_REQUEST_NOTIFICATION = Main.getInstance().getGeneralConfig().getBoolean("General.SendFriendRequestNotificationOnJoin");
+	}
 
 	public Exception verify() {
 		try {
@@ -58,7 +63,7 @@ public class JoinEvent implements Listener {
 		if (friends.isEmpty() && friendRequests.isEmpty())
 			return;
 		boolean noFriends = friends.isEmpty();
-		if (!friendRequests.isEmpty())
+		if (!friendRequests.isEmpty() && FRIEND_REQUEST_NOTIFICATION)
 			deliverFriendRequests(player, friendRequests);
 		if (player.getSettingsWorth(3) == 1)
 			noFriends = true;

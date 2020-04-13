@@ -46,6 +46,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("General.Time.Format", "dd/MM/yyyy HH:mm:ss");
 		set("General.PartyDoNotJoinTheseServers", "lobby", "lobby1", "lobby2");
 		set("General.DisabledServers", "login1", "login2");
+		set("General.SendFriendRequestNotificationOnJoin", true);
 		set("General.MaxPlayersInParty", 0);
 		set("Extensions.UseExtensionFolderAsConfigFolder", false);
 		set("Permissions.NoPlayerLimitForParties", "");
