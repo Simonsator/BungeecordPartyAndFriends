@@ -22,7 +22,6 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PA
  * @version 1.0.0
  */
 public class Join extends PartySubCommand {
-
 	public Join(List<String> pCommands, int pPriority, String pHelpText, String pPermission) {
 		super(pCommands, pPriority, pHelpText, pPermission);
 	}

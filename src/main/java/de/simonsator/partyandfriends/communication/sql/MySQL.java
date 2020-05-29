@@ -665,6 +665,7 @@ public class MySQL extends PoolSQLCommunication {
 			prepStmt.execute();
 			prepStmt = con.prepareStatement("DELETE FROM " + TABLE_PREFIX + "last_player_wrote_to WHERE player_id='" + pPlayerId + "' OR written_to_id='" + pPlayerId + "';");
 			prepStmt.execute();
+			cache.deletePlayer(pPlayerId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

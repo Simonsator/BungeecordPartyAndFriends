@@ -10,6 +10,7 @@ import de.simonsator.partyandfriends.api.pagesmanager.PageEntriesAsTextContainer
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import de.simonsator.partyandfriends.utilities.PlayerListElement;
+import de.simonsator.partyandfriends.utilities.ServerDisplayNameCollection;
 import net.md_5.bungee.api.config.ServerInfo;
 
 import java.text.SimpleDateFormat;
@@ -73,11 +74,7 @@ public class FriendList extends FriendSubCommand implements PageCreator<PlayerLi
 				color = Main.getInstance().getMessages().getString("Friends.Command.List.OfflineColor");
 			} else {
 				ServerInfo server = playerListElements.get(i).getServer();
-				String serverName;
-				if (server == null)
-					serverName = "?";
-				else
-					serverName = server.getName();
+				String serverName = ServerDisplayNameCollection.getInstance().getServerDisplayName(server);
 				additive = PatterCollection.SERVER_ON.matcher(Main.getInstance().getMessages().getString("Friends.Command.List.OnlineTitle")).
 						replaceAll(Matcher.quoteReplacement(serverName));
 				color = Main.getInstance().getMessages().getString("Friends.Command.List.OnlineColor");

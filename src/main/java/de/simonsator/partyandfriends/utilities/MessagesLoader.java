@@ -52,7 +52,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.General.ErrorGivenPlayerIsNotInTheParty", "&cThe player &e[PLAYER] &cis not in the party.");
 		set("Party.Command.General.ErrorNoPlayer", "&cYou need to specify a player.");
 		set("Party.Command.General.ErrorPlayerNotOnline", "&cThis player is not online.");
-		set("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers", "&5The party was dissolved because of too less players.");
+		set("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers", "&5The party was dissolved because there are not enough players.");
 		set("Party.Command.General.PlayerHasLeftTheParty", "&bThe player &6[PLAYER] &bhas left the party.");
 		set("Party.Command.General.ServerSwitched", "&bThe party has joined the Server &e[SERVER]&b.");
 		set("Party.Command.Chat.ErrorNoMessage", "&5You need to give in a message.");
@@ -76,7 +76,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.Join.ErrorNoInvitation", "&cYou cannot join this party.");
 		set("Party.Command.Kick.KickedPlayerOutOfThePartyOthers", "&bThe player &6[PLAYER] &bwas kicked out of the party.");
 		set("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer", "&bYou have been kicked out of the party.");
-		set("Party.Command.Leader.SenderEqualsGivenPlayer", "&7You cannot make yourself to the new party leader.");
+		set("Party.Command.Leader.SenderEqualsGivenPlayer", "&7You cannot make yourself the party leader.");
 		set("Party.Command.Leader.NewLeaderIs", "&7The new party leader is &6[NEWLEADER]");
 		set("Party.Command.Leave.NewLeaderIs", "&bThe leader has left the party. The new leader is &e[NEWLEADER].");
 		set("Party.Command.Leave.YouLeftTheParty", Collections.singletonList("&bYou left your party."));
@@ -86,8 +86,8 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.General.NotAFriendOfOrOffline", " &7The player &e[PLAYER] &7is not online or you are not his friend.");
 		set("Friends.General.NoFriendGiven", " &7You need to specify a friend.");
 		set("Friends.General.NoPlayerGiven", " &7You need to specify a player.");
-		set("Friends.General.PlayerIsNowOffline", " &7Your friend &e[PLAYER] &7is &coffline&7 now.");
-		set("Friends.General.PlayerIsNowOnline", " &7The friend &e[PLAYER] &7is &aonline&7 now.");
+		set("Friends.General.PlayerIsNowOffline", " &7Your friend &e[PLAYER] &7is &coffline &7now.");
+		set("Friends.General.PlayerIsNowOnline", " &7Your friend &e[PLAYER] &7is &aonline &7now.");
 		set("Friends.General.RequestInfoOnJoin", " &7You &7have &7friend &7requests &7from: [FRIENDREQUESTS]");
 		set("Friends.General.DoesNotExist", " &7The given player &7does not &7exist");
 		set("Friends.General.GivenPlayerEqualsSender", " &7You cannot specify yourself as player argument.");
@@ -100,7 +100,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.CommandUsage.Jump", "&8/&5friend jump [name of the friend]&r &8- &7Jump to a friend");
 		set("Friends.CommandUsage.Settings", "&8/&5friend settings &r&8- &7Change the settings");
 		set("Friends.Command.Accept.NowFriends", " &7You and &e[PLAYER] &7are now friends");
-		set("Friends.Command.Accept.ErrorNoFriendShipInvitation", " &7You did not receive a friend request from &e[PLAYER]&7.");
+		set("Friends.Command.Accept.ErrorNoFriendShipInvitation", " &7You have not receive a friend request from &e[PLAYER]&7.");
 		set("Friends.Command.Accept.ErrorSenderEqualsReceiver", " &7You cannot message yourself.");
 		set("Friends.Command.Accept.ErrorAlreadySend", " &7You already have sent the player &e[PLAYER] &7a friend request.");
 		set("Friends.Command.Add.SenderEqualsReceiver", " &7You cannot send yourself a friend request.");
@@ -114,8 +114,8 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Add.AlreadyFriends", " &7You and &e[PLAYER] &7are already friends.");
 		set("Friends.Command.Add.FriendRequestTimedOut", " &7The Friend request from &e[PLAYER] &7has timed out.");
 		set("Friends.Command.Deny.HasDenied", " &7You have denied &e[PLAYER]s&7 friend request.");
-		set("Friends.Command.Deny.NoFriendRequest", " &7You did not receive a friend request from &e[PLAYER]&7.");
-		set("Friends.Command.Settings.NowYouCanGetInvitedByEveryone", " &7Now you can get invited into a party by &aevery &7player.");
+		set("Friends.Command.Deny.NoFriendRequest", " &7You have not received a friend request from &e[PLAYER]&7.");
+		set("Friends.Command.Settings.NowYouCanGetInvitedByEveryone", " &7Now you can get invited into a party by &aeveryone.");
 		set("Friends.Command.Settings.NowYouCanGetInvitedByFriends", " &7Now you can &conly &7get invited into a party by your friends.");
 		set("Friends.Command.Settings.NowYouAreNotGoneReceiveFriendRequests", " &7Now you are &cnot going to &7receive friend requests anymore.");
 		set("Friends.Command.Settings.NowYouAreGoneReceiveFriendRequests", " &7Now you are &agoing to &7receive friend requests from everyone.");
@@ -152,7 +152,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Jump.AlreadyOnTheServer", " &7You are already on this server.");
 		set("Friends.Command.Jump.JoinedTheServer", " &7Now you are on the same server, like the player &e[PLAYER]&7.");
 		set("Friends.Command.Jump.CanNotJump", " &7You cannot jump to this person.");
-		set("Friends.Command.List.NoFriendsAdded", " &7Until now, you did not add friends.");
+		set("Friends.Command.List.NoFriendsAdded", " &7You currently do not have any friends.");
 		set("Friends.Command.List.FriendsList", " &7These are your friends:LINE_BREAK &7- ");
 		set("Friends.Command.List.PageDoesNotExist", " &7The given page does not exist.");
 		set("Friends.Command.List.NextPage", " &7To see more friends use /friend list [PAGE].");
@@ -160,7 +160,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.List.OfflineTitle", " &c(offline)&7, last seen at [LAST_ONLINE]");
 		set("Friends.Command.List.TimeColor", "&7");
 		set("Friends.Command.MSG.CanNotWriteToHim", " &7You cannot message this player.");
-		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7No player ever messaged you.");
+		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7You have not received any messages before.");
 		set("Friends.Command.MSG.MessageMissing", " &7You need to give a message.");
 		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7The player will receive the message when he goes online.");
 		set("Friends.Command.Remove.Removed", " &7You removed the friend &e[PLAYER]&7.");

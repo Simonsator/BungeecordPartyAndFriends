@@ -135,10 +135,10 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		PoolData poolData = new PoolData(Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.MinPoolSize"),
 				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.MaxPoolSize"),
 				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.InitialPoolSize"), Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.IdleConnectionTestPeriod"), Main.getInstance().getGeneralConfig().getBoolean("MySQL.Pool.TestConnectionOnCheckin"));
-		MySQLData mySQLData = new MySQLData(getGeneralConfig().getString("MySQL.Host"),
-				getGeneralConfig().getString("MySQL.Username"), getGeneralConfig().get("MySQL.Password").toString(),
-				getGeneralConfig().getInt("MySQL.Port"), getGeneralConfig().getString("MySQL.Database"),
-				getGeneralConfig().getString("MySQL.TablePrefix"), getGeneralConfig().getBoolean("MySQL.UseSSL"), getGeneralConfig().getBoolean("MySQL.Cache"));
+		MySQLData mySQLData = new MySQLData(getGeneralConfig().get("MySQL.Host").toString(),
+				getGeneralConfig().get("MySQL.Username").toString(), getGeneralConfig().get("MySQL.Password").toString(),
+				getGeneralConfig().getInt("MySQL.Port"), getGeneralConfig().get("MySQL.Database").toString(),
+				getGeneralConfig().get("MySQL.TablePrefix").toString(), getGeneralConfig().getBoolean("MySQL.UseSSL"), getGeneralConfig().getBoolean("MySQL.Cache"));
 		new PAFPlayerManagerMySQL(mySQLData, poolData);
 		if (getGeneralConfig().getBoolean("General.MultiCoreEnhancement")) {
 			PAFPlayerMySQL.setMultiCoreEnhancement(true);
@@ -146,6 +146,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		}
 		new LocalPartyManager();
 		new StandardPermissionProvider();
+		new ServerDisplayNameCollection(getGeneralConfig());
 	}
 
 	@Override

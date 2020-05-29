@@ -37,4 +37,9 @@ public class NoCache extends PlayerCache {
 	public void updateName(int pPlayerID, String pNewPlayerName) {
 
 	}
+
+	@Override
+	public void deletePlayer(int pPlayerID) {
+
+	}
 }

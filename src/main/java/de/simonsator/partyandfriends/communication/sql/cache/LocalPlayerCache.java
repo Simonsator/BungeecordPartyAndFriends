@@ -60,4 +60,14 @@ public class LocalPlayerCache extends PlayerCache {
 		playerIDName.put(pPlayerID, pNewPlayerName);
 	}
 
+	@Override
+	public void deletePlayer(int pPlayerID) {
+		String playerName = playerIDName.remove(pPlayerID);
+		UUID playerUUID = playerIDUUID.remove(pPlayerID);
+		if (playerName != null)
+			namePlayerID.remove(playerName);
+		if (playerUUID != null)
+			uuidPlayerID.remove(playerUUID);
+	}
+
 }

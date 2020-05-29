@@ -11,16 +11,15 @@ import net.md_5.bungee.api.config.ServerInfo;
  */
 public class PlayerListElement implements Comparable<PlayerListElement> {
 	private final boolean IS_ONLINE;
-	private final String DISPLAY_NAME;
 	private final Long LAST_ONLINE;
 	private final ServerInfo SERVER;
 	private final PAFPlayer PLAYER;
+	private String displayName = null;
 
 	public PlayerListElement(PAFPlayer pPlayer) {
 		PLAYER = pPlayer;
 		boolean isOnline = pPlayer.isOnline() && (!Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Offline.Enabled") || pPlayer.getSettingsWorth(3) == 0);
 		IS_ONLINE = isOnline;
-		DISPLAY_NAME = pPlayer.getDisplayName();
 		if (!isOnline) {
 			LAST_ONLINE = pPlayer.getLastOnline();
 			SERVER = null;
@@ -39,19 +38,20 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 		if (this.isOnline())
 			return -1;
 		switch (LAST_ONLINE.compareTo(pCompare.LAST_ONLINE)) {
-			case 0:
-				return 0;
 			case 1:
 				return -1;
 			case -1:
 				return 1;
+			case 0:
 			default:
 				return 0;
 		}
 	}
 
 	public String getDisplayName() {
-		return DISPLAY_NAME;
+		if (displayName == null)
+			return displayName = PLAYER.getDisplayName();
+		return displayName;
 	}
 
 	public boolean isOnline() {

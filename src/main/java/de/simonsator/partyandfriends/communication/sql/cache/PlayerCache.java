@@ -22,4 +22,5 @@ public abstract class PlayerCache {
 
 	public abstract void updateName(int pPlayerID, String pNewPlayerName);
 
+	public abstract void deletePlayer(int pPlayerID);
 }

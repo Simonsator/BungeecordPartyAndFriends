@@ -47,9 +47,22 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("General.PartyDoNotJoinTheseServers", "lobby", "lobby1", "lobby2");
 		set("General.DisabledServers", "login1", "login2");
 		set("General.SendFriendRequestNotificationOnJoin", true);
-		set("General.MaxPlayersInParty", 0);
+		set("ServerDisplayNames.Use", false);
+		if (getBoolean("ServerDisplayNames.Use") && get("ServerDisplayNames.Replace") == null) {
+			set("ServerDisplayNames.Replace.ExampleServer1.RealName", "lobby-server-21");
+			set("ServerDisplayNames.Replace.ExampleServer1.ReplacedName", "Premium Lobby");
+			set("ServerDisplayNames.Replace.ExampleServer2.RealName", "lobby-server-22");
+			set("ServerDisplayNames.Replace.ExampleServer2.ReplacedName", "Admin Lobby");
+		}
+		set("Party.MaxPlayersPerParty.Default", 0);
+		set("Party.MaxPlayersPerParty.NoLimitPermission", "");
+		if (get("Party.MaxPlayersPerParty.AddSlotsPermissions") == null) {
+			set("Party.MaxPlayersPerParty.AddSlotsPermissions.Premium.Permission", "de.simonsator.partyandfriends.party.addslots.premium");
+			set("Party.MaxPlayersPerParty.AddSlotsPermissions.Premium.SlotsToAdd", 5);
+			set("Party.MaxPlayersPerParty.AddSlotsPermissions.SuperPremium.Permission", "de.simonsator.partyandfriends.party.addslots.premium");
+			set("Party.MaxPlayersPerParty.AddSlotsPermissions.SuperPremium.SlotsToAdd", 10);
+		}
 		set("Extensions.UseExtensionFolderAsConfigFolder", false);
-		set("Permissions.NoPlayerLimitForParties", "");
 		set("Commands.Friends.General.PrintOutHelpOnError", true);
 		set("Commands.Friends.TopCommands.Friend.Names", "friend", "friends");
 		set("Commands.Friends.TopCommands.Friend.Permissions", "");

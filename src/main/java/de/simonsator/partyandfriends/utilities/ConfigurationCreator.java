@@ -10,10 +10,8 @@ import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * @author Simonsator
@@ -114,13 +112,30 @@ public abstract class ConfigurationCreator {
 		String[] split = pInput.split(" ");
 		StringBuilder composite = new StringBuilder();
 		String colorCode = "";
+		String formatCode = "";
+		Pattern formatPattern = Pattern.compile("(?i)§[K-OR]");
 		for (String input : split) {
 			if (!input.startsWith("§"))
-				input = colorCode + input;
-			int index = input.lastIndexOf('§');
-			if (index != -1)
-				if (input.length() > index)
-					colorCode = "§" + input.charAt(index + 1);
+				input = colorCode + formatCode + input;
+			int index;
+			String inputClone = input;
+			while ((index = inputClone.indexOf('§')) != -1) {
+				if (inputClone.length() > index) {
+					char colorFormatCharacter = inputClone.charAt(index + 1);
+					if (colorFormatCharacter == 'r') {
+						colorCode = "";
+						formatCode = "";
+					} else {
+						String temp = "§" + colorFormatCharacter;
+						if (formatPattern.matcher(temp).matches()) {
+							formatCode = temp;
+						} else {
+							colorCode = temp;
+						}
+					}
+				}
+				inputClone = inputClone.substring(index + 1);
+			}
 			composite.append(' ').append(input);
 		}
 		String composited = composite.toString();
@@ -167,5 +182,9 @@ public abstract class ConfigurationCreator {
 
 	public Object get(String pIdentifier) {
 		return configuration.get(pIdentifier);
+	}
+
+	public Collection<String> getSectionKeys(String pIdentifier) {
+		return getCreatedConfiguration().getSection(pIdentifier).getKeys();
 	}
 }

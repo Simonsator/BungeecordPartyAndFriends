@@ -7,6 +7,7 @@ import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
+import de.simonsator.partyandfriends.utilities.ServerDisplayNameCollection;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -55,12 +56,12 @@ public class ServerSwitchListener implements Listener {
 			return;
 		OnlinePAFPlayer player = PAFPlayerManager.getInstance().getPlayer(pEvent.getPlayer());
 		PlayerParty party = PartyManager.getInstance().getParty(player);
-		if (party != null && party.isLeader(player)) {
+		if (party != null && party.isLeader(player) && !party.getPlayers().isEmpty()) {
 			for (OnlinePAFPlayer p : party.getPlayers())
 				p.connect(server);
 			party.sendMessage((PartyCommand.getInstance().getPrefix()
 					+ Main.getInstance().getMessages().getString("Party.Command.General.ServerSwitched")
-					.replace("[SERVER]", server.getName())));
+					.replace("[SERVER]", ServerDisplayNameCollection.getInstance().getServerDisplayName(server))));
 		}
 	}
 }
