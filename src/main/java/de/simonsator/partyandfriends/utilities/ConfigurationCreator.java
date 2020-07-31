@@ -172,6 +172,10 @@ public abstract class ConfigurationCreator {
 		return configuration.getInt(pIdentifier);
 	}
 
+	public long getLong(String pIdentifier) {
+		return configuration.getLong(pIdentifier);
+	}
+
 	public boolean getBoolean(String pIdentifier) {
 		return configuration.getBoolean(pIdentifier);
 	}

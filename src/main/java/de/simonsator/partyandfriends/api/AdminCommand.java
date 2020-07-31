@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AdminCommand<T extends AdminSubCommand> extends Command {
-	private List<T> subCommands = new ArrayList<>();
+	private final List<T> subCommands = new ArrayList<>();
 
 	public AdminCommand(String... aliases) {
 		super(aliases[0], "dsioihusdugb", aliases);

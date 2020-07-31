@@ -65,7 +65,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	 */
 	private Language language;
 	private Friends friendCommand;
-	private List<PAFExtension> pafExtensions = new ArrayList<>();
+	private final List<PAFExtension> pafExtensions = new ArrayList<>();
 
 	public static Main getInstance() {
 		return instance;
@@ -144,7 +144,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 			PAFPlayerMySQL.setMultiCoreEnhancement(true);
 			getProxy().getConsole().sendMessage(new TextComponent("Multi Core Enhancement is activated."));
 		}
-		new LocalPartyManager();
+		new LocalPartyManager(Main.getInstance().getGeneralConfig().getInt("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.InvitationTimeOutTimeInSeconds"));
 		new StandardPermissionProvider();
 		new ServerDisplayNameCollection(getGeneralConfig());
 	}

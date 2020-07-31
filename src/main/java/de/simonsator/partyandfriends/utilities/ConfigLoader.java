@@ -127,6 +127,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Enabled", true);
 		set("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Permission", "");
 		set("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Priority", 4);
+		set("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.InvitationTimeOutTimeInSeconds", 60);
 		set("Commands.Party.General.PrintOutHelpOnError", true);
 		set("Commands.Party.General.PrintOnlyExecutableSubCommandsOut", true);
 		set("Commands.Party.TopCommands.Party.Names", "party", "parties");

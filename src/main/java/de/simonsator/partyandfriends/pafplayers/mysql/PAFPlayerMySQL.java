@@ -3,6 +3,8 @@ package de.simonsator.partyandfriends.pafplayers.mysql;
 import de.simonsator.partyandfriends.api.PermissionProvider;
 import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.PAFAccountDeleteEvent;
+import de.simonsator.partyandfriends.api.events.friends.FriendRemovedEvent;
+import de.simonsator.partyandfriends.api.events.friends.FriendRequestAcceptedEvent;
 import de.simonsator.partyandfriends.api.pafplayers.IDBasedPAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
@@ -119,6 +121,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public void addFriend(PAFPlayer pPlayer) {
+		BukkitBungeeAdapter.getInstance().callEvent(new FriendRequestAcceptedEvent(this, pPlayer));
 		if (multiCoreEnhancement)
 			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> addFriendNoMultiCoreEnhancement(pPlayer));
 		else
@@ -136,6 +139,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public void removeFriend(PAFPlayer pPlayer) {
+		BukkitBungeeAdapter.getInstance().callEvent(new FriendRemovedEvent(this, pPlayer));
 		if (multiCoreEnhancement)
 			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> removeFriendNoMultiCoreEnhancement(pPlayer));
 		else

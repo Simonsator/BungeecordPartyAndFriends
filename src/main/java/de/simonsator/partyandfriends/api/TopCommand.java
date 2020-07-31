@@ -11,8 +11,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.TabCompleteEvent;
 import net.md_5.bungee.api.plugin.Command;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * Represents a TopCommand like /friend, /party or /command.
@@ -31,6 +30,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command {
 	 * The prefix which gets returned by the method {@link #getPrefix()}
 	 */
 	private final String PREFIX;
+	private final Set<UUID> mutex = new HashSet<>();
 
 	/**
 	 * @param pCommandNames The command name and the different aliases of this command.
@@ -70,11 +70,23 @@ public abstract class TopCommand<T extends SubCommand> extends Command {
 	 */
 	@Override
 	public void execute(final CommandSender pCommandSender, final String[] args) {
-		if (isPlayer(pCommandSender))
+		if (isPlayer(pCommandSender)) {
+			ProxiedPlayer player = (ProxiedPlayer) pCommandSender;
+			UUID uuid = player.getUniqueId();
+			if (mutex.contains(uuid))
+				return;
+			mutex.add(uuid);
 			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> {
-				if (!isDisabledServer((ProxiedPlayer) pCommandSender))
-					onCommand(PAFPlayerManager.getInstance().getPlayer((ProxiedPlayer) pCommandSender), args);
+				try {
+					if (!isDisabledServer(player))
+						onCommand(PAFPlayerManager.getInstance().getPlayer((ProxiedPlayer) pCommandSender), args);
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					mutex.remove(uuid);
+				}
 			});
+		}
 	}
 
 	private boolean isDisabledServer(ProxiedPlayer pPlayer) {

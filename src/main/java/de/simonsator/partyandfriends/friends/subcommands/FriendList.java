@@ -29,7 +29,7 @@ public class FriendList extends FriendSubCommand implements PageCreator<PlayerLi
 	private final boolean SORT_ELEMENTS;
 	private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(Main.getInstance().getGeneralConfig().getString("General.Time.Format"),
 			Locale.forLanguageTag(Main.getInstance().getGeneralConfig().getString("General.Time.LanguageTag")));
-	private List<TextReplacer> replacerList = new ArrayList<>();
+	private final List<TextReplacer> replacerList = new ArrayList<>();
 
 	public FriendList(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
 		super(pCommands, pPriority, pHelp, pPermission);

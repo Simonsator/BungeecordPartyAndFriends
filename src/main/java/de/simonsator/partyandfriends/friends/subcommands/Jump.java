@@ -27,7 +27,7 @@ import static de.simonsator.partyandfriends.main.Main.getInstance;
  * @version 1.0.0
  */
 public class Jump extends FriendSubCommand {
-	private Set<ServerInfo> notCheckSameServer = new HashSet<>();
+	private final Set<ServerInfo> notCheckSameServer = new HashSet<>();
 
 	public Jump(List<String> pCommands, int pPriority, String pHelp, String pPermission) {
 		super(pCommands, pPriority, pHelp, pPermission);

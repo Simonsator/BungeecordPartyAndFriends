@@ -20,9 +20,8 @@ import java.util.UUID;
  * @version 2.0.0
  */
 public class MySQL extends PoolSQLCommunication {
-
 	private final String TABLE_PREFIX;
-	private PlayerCache cache;
+	private final PlayerCache cache;
 
 	/**
 	 * Connects to the MySQL server
@@ -205,12 +204,11 @@ public class MySQL extends PoolSQLCommunication {
 		int id = 0;
 		try {
 			prepStmt = con.prepareStatement(
-					"insert into  " + TABLE_PREFIX + "players values (?, ?, ?, ?)",
+					"insert into  " + TABLE_PREFIX + "players (player_name, player_uuid, last_online) values (?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
-			prepStmt.setNull(1, 1);
-			prepStmt.setString(2, pPlayer.getName());
-			prepStmt.setString(3, pPlayer.getUniqueId().toString());
-			prepStmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+			prepStmt.setString(1, pPlayer.getName());
+			prepStmt.setString(2, pPlayer.getUniqueId().toString());
+			prepStmt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
 			prepStmt.executeUpdate();
 			ResultSet rs = prepStmt.getGeneratedKeys();
 			if (rs.next()) {

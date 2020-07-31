@@ -9,10 +9,10 @@ import java.util.UUID;
  * @version 1.0.0 21.12.16
  */
 public class LocalPlayerCache extends PlayerCache {
-	private Map<String, Integer> namePlayerID = new HashMap<>();
-	private Map<UUID, Integer> uuidPlayerID = new HashMap<>();
-	private Map<Integer, String> playerIDName = new HashMap<>();
-	private Map<Integer, UUID> playerIDUUID = new HashMap<>();
+	private final Map<String, Integer> namePlayerID = new HashMap<>();
+	private final Map<UUID, Integer> uuidPlayerID = new HashMap<>();
+	private final Map<Integer, String> playerIDName = new HashMap<>();
+	private final Map<Integer, UUID> playerIDUUID = new HashMap<>();
 
 	@Override
 	public void add(String pName, UUID pUUID, int pPlayerID) {

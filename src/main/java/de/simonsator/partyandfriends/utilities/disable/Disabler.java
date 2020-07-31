@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Disabler {
 	private static Disabler instance = null;
-	private final List<Deactivated> deactivateds = new ArrayList<>();
+	private final List<Deactivated> toDisable = new ArrayList<>();
 
 	public static Disabler getInstance() {
 		if (instance != null) return instance;
@@ -17,12 +17,12 @@ public class Disabler {
 	}
 
 	public void disableAll() {
-		for (Deactivated toDeactivated : deactivateds)
+		for (Deactivated toDeactivated : toDisable)
 			toDeactivated.onDisable();
 	}
 
 	public void registerDeactivated(Deactivated pDeactivated) {
-		deactivateds.add(pDeactivated);
+		toDisable.add(pDeactivated);
 	}
 
 }

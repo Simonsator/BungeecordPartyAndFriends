@@ -30,7 +30,7 @@ public class LocalPlayerParty extends PlayerParty {
 	 */
 	private UUID leader;
 	private boolean privateParty = true;
-	private Set<UUID> bannedPlayers = new HashSet<>();
+	private final Set<UUID> bannedPlayers = new HashSet<>();
 
 	/**
 	 * Initials a new party

@@ -186,7 +186,7 @@ public abstract class PlayerParty {
 					PartyManager.getInstance().deleteParty(party);
 				}
 			}
-		}, 60L);
+		}, PartyManager.getInstance().INVITATION_TIMEOUT_TIME);
 	}
 
 	public abstract void removeFromInvited(PAFPlayer pPlayer);

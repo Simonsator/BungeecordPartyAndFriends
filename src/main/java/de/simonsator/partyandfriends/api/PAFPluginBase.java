@@ -6,7 +6,7 @@ import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public abstract class PAFPluginBase extends Plugin {
-	private BukkitBungeeAdapter adapter = new BukkitBungeeAdapter(this);
+	private final BukkitBungeeAdapter adapter = new BukkitBungeeAdapter(this);
 
 	public void registerCommand(Object pCommand) {
 		ProxyServer.getInstance().getPluginManager().registerCommand(this, (Command) pCommand);

@@ -18,7 +18,7 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 	private final MySQLData MYSQL_DATA;
 	private final PoolData POOL_DATA;
 	private final Properties connectionProperties;
-	private ComboPooledDataSource cpds;
+	private final ComboPooledDataSource cpds;
 
 	public PoolSQLCommunication(MySQLData pMySQLData, PoolData pPoolData) throws SQLException {
 		MYSQL_DATA = pMySQLData;

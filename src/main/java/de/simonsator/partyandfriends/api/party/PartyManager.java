@@ -16,8 +16,15 @@ import java.util.UUID;
  */
 public abstract class PartyManager implements Deactivated {
 	private static PartyManager instance;
+	public final long INVITATION_TIMEOUT_TIME;
 
+	@Deprecated
 	protected PartyManager() {
+		this(60);
+	}
+
+	protected PartyManager(long pInvitationTimeoutTime) {
+		INVITATION_TIMEOUT_TIME = pInvitationTimeoutTime;
 		Disabler.getInstance().registerDeactivated(this);
 		instance = this;
 	}
