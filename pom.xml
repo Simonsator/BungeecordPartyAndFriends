@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.simonsator</groupId>
 	<artifactId>BungeecordPartyAndFriends</artifactId>
-	<version>1.0.80</version>
+	<version>1.0.81</version>
 	<name>BungeecordPartyAndFriends</name>
 	<packaging>jar</packaging>
-	<description>BungeecordPartyAndFriends</description>
+	<description>Easy to use party and friends plugin for Bungeecord</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
