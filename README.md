@@ -8,7 +8,7 @@ Party and Friends for BungeeCord is one of the top 5 most downloaded BungeeCord 
 To download a compiled version of this project please visit its [spigot page](https://www.spigotmc.org/resources/party-and-friends-for-bungeecord.9531/).
 
 ## Installation
-### Installation Requirments
+### Installation Requirements
 
 * [Java 8](https://www.java.com/download/) or higher
 * A MySQL server
