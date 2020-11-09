@@ -183,6 +183,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		partyPrefix = (getMessages().getString("Party.General.PartyPrefix"));
 		System.setProperty("com.mchange.v2.log.MLog", "com.mchange.v2.log.FallbackMLog");
 		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
+		getAdapter().setForceUuidSupport(config.getBoolean("General.ForceUUIDSupportOnOfflineServers"));
 	}
 
 	/**

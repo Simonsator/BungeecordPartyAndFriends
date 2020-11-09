@@ -14,15 +14,16 @@ import java.util.concurrent.TimeUnit;
 public class BukkitBungeeAdapter {
 	private static BukkitBungeeAdapter instance;
 	private final Plugin PAF_EXTENSION;
+	private boolean forceUuidSupport = false;
 
 	public BukkitBungeeAdapter(PAFExtension pPlugin) {
-		PAF_EXTENSION = pPlugin;
-		instance = this;
+		this((PAFPluginBase) pPlugin);
 	}
 
 	public BukkitBungeeAdapter(PAFPluginBase pPlugin) {
 		PAF_EXTENSION = pPlugin;
-		instance = this;
+		if (instance == null)
+			instance = this;
 	}
 
 	public static BukkitBungeeAdapter getInstance() {
@@ -58,6 +59,10 @@ public class BukkitBungeeAdapter {
 	}
 
 	public boolean isOnlineMode() {
-		return ProxyServer.getInstance().getConfig().isOnlineMode();
+		return ProxyServer.getInstance().getConfig().isOnlineMode() || forceUuidSupport;
+	}
+
+	public void setForceUuidSupport(boolean forceUuidSupport) {
+		this.forceUuidSupport = forceUuidSupport;
 	}
 }

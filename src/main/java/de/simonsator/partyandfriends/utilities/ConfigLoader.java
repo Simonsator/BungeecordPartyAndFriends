@@ -47,6 +47,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("General.PartyDoNotJoinTheseServers", "lobby", "lobby1", "lobby2");
 		set("General.DisabledServers", "login1", "login2");
 		set("General.SendFriendRequestNotificationOnJoin", true);
+		set("General.ForceUUIDSupportOnOfflineServers", false);
 		set("ServerDisplayNames.Use", false);
 		if (getBoolean("ServerDisplayNames.Use") && get("ServerDisplayNames.Replace") == null) {
 			set("ServerDisplayNames.Replace.ExampleServer1.RealName", "lobby-server-21");
