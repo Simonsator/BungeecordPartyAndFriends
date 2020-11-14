@@ -8,6 +8,8 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.main.Main;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.regex.Matcher;
 
@@ -21,6 +23,8 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.*;
  */
 public class MSG extends OnlyTopCommand {
 	private static MSG instance;
+	private final String DEFAULT_MESSAGE_COLOR;
+	private final boolean ALLOW_PLAYER_CHAT_FORMATTING;
 
 	/**
 	 * Initials the command
@@ -28,8 +32,10 @@ public class MSG extends OnlyTopCommand {
 	 * @param friendsAliasMsg The aliases for the command /msg
 	 */
 	public MSG(String[] friendsAliasMsg, String pPrefix) {
-		super(friendsAliasMsg, Main.getInstance().getGeneralConfig().getString("Permissions.FriendPermission"), pPrefix);
+		super(friendsAliasMsg, Main.getInstance().getGeneralConfig().getString("Commands.Friends.TopCommands.MSG.Permission"), pPrefix);
 		instance = this;
+		DEFAULT_MESSAGE_COLOR = SPACE_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.MSG.ColorOfMessage")).replaceAll("");
+		ALLOW_PLAYER_CHAT_FORMATTING = Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.TopCommands.MSG.AllowPlayersToUseChatFormatting");
 	}
 
 	private static boolean playerExists(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
@@ -84,7 +90,7 @@ public class MSG extends OnlyTopCommand {
 		BukkitBungeeAdapter.getInstance().callEvent(friendMessageEvent);
 		if (friendMessageEvent.isCancelled())
 			return;
-		sendMessage(toMessage(args, n), (OnlinePAFPlayer) pWrittenTo, pPlayer);
+		sendMessage(friendMessageEvent.getMessage(), (OnlinePAFPlayer) pWrittenTo, pPlayer);
 		pPlayer.setLastPlayerWroteFrom(pWrittenTo);
 	}
 
@@ -133,30 +139,24 @@ public class MSG extends OnlyTopCommand {
 	}
 
 	private void sendMessage(String pContent, OnlinePAFPlayer pPlayer1, OnlinePAFPlayer pPlayer2) {
-		sendMessage(pContent, pPlayer1, pPlayer2.getDisplayName(), pPlayer1.getDisplayName(), pPlayer2.getName());
-		sendMessage(pContent, pPlayer2, pPlayer2.getDisplayName(), pPlayer1.getDisplayName(), pPlayer1.getName());
+		TextComponent formattedMessage = formatMessage(pContent, pPlayer2.getDisplayName(), pPlayer1.getDisplayName());
+		sendMessage(formattedMessage, pPlayer1, pPlayer2.getName());
+		sendMessage(formattedMessage, pPlayer2, pPlayer1.getName());
 	}
 
-	private void sendMessage(String pContent, OnlinePAFPlayer pReceiver, String pSenderDisplayName, String pReceiverName, String pSenderName) {
-		String message = (getPrefix() + CONTENT_PATTERN.matcher(PLAYER_PATTERN.matcher(SENDER_NAME_PATTERN.matcher(Main.getInstance()
-				.getMessages().getString("Friends.Command.MSG.SentMessage")).replaceAll(Matcher.quoteReplacement(pSenderDisplayName))).replaceAll(Matcher.quoteReplacement(pReceiverName))).replaceAll(Matcher.quoteReplacement(pContent)));
-		pReceiver.sendMessage(message);
+	private TextComponent formatMessage(String pContent, String pSenderDisplayName, String pReceiverName) {
+		if (ALLOW_PLAYER_CHAT_FORMATTING)
+			return new TextComponent(TextComponent.fromLegacyText(getPrefix() + CONTENT_PATTERN.matcher(PLAYER_PATTERN.matcher(SENDER_NAME_PATTERN.matcher(Main.getInstance()
+					.getMessages().getString("Friends.Command.MSG.SentMessage")).replaceAll(Matcher.quoteReplacement(pSenderDisplayName))).
+					replaceAll(Matcher.quoteReplacement(pReceiverName))).replaceAll(Matcher.quoteReplacement(DEFAULT_MESSAGE_COLOR + ChatColor.translateAlternateColorCodes('&', pContent) + " §r"))));
+		return new TextComponent(getPrefix() + CONTENT_PATTERN.matcher(PLAYER_PATTERN.matcher(SENDER_NAME_PATTERN.matcher(Main.getInstance()
+				.getMessages().getString("Friends.Command.MSG.SentMessage")).replaceAll(Matcher.quoteReplacement(pSenderDisplayName))).
+				replaceAll(Matcher.quoteReplacement(pReceiverName))).replaceAll(Matcher.quoteReplacement(SPACE_PATTERN.matcher(pContent).replaceAll(" " + DEFAULT_MESSAGE_COLOR))));
 	}
 
-	/**
-	 * Returns a styled message
-	 *
-	 * @param args The Arguments The Main.main class
-	 * @param n    At which argument the while loop should start
-	 * @return Returns a styled message
-	 */
-	private String toMessage(String[] args, int n) {
-		StringBuilder content;
-		for (content = new StringBuilder(); n < args.length; n++) {
-			content.append(Main.getInstance().getMessages().getString("Friends.Command.MSG.ColorOfMessage"));
-			content.append(args[n]);
-		}
-		return content.toString();
+
+	private void sendMessage(TextComponent pMessage, OnlinePAFPlayer pReceiver, String pSenderName) {
+		pReceiver.sendPacket(pMessage);
 	}
 
 	/**
