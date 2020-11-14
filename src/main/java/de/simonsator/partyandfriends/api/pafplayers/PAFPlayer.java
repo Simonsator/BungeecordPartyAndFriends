@@ -34,6 +34,8 @@ public interface PAFPlayer {
 
 	List<PAFPlayer> getRequests();
 
+	int getFriendRequestCount();
+
 	boolean hasRequestFrom(PAFPlayer pPlayer);
 
 	boolean hasPermission(String pPermission);

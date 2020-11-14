@@ -48,6 +48,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	 * The main instance of this plugin
 	 */
 	private static Main instance;
+	private final List<PAFExtension> pafExtensions = new ArrayList<>();
 	/**
 	 * The configuration
 	 */
@@ -65,7 +66,6 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	 */
 	private Language language;
 	private Friends friendCommand;
-	private final List<PAFExtension> pafExtensions = new ArrayList<>();
 
 	public static Main getInstance() {
 		return instance;
@@ -134,17 +134,19 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	private void initPAFClasses() throws SQLException {
 		PoolData poolData = new PoolData(Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.MinPoolSize"),
 				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.MaxPoolSize"),
-				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.InitialPoolSize"), Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.IdleConnectionTestPeriod"), Main.getInstance().getGeneralConfig().getBoolean("MySQL.Pool.TestConnectionOnCheckin"));
+				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.InitialPoolSize"), Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.IdleConnectionTestPeriod"),
+				Main.getInstance().getGeneralConfig().getBoolean("MySQL.Pool.TestConnectionOnCheckin"));
 		MySQLData mySQLData = new MySQLData(getGeneralConfig().get("MySQL.Host").toString(),
 				getGeneralConfig().get("MySQL.Username").toString(), getGeneralConfig().get("MySQL.Password").toString(),
 				getGeneralConfig().getInt("MySQL.Port"), getGeneralConfig().get("MySQL.Database").toString(),
-				getGeneralConfig().get("MySQL.TablePrefix").toString(), getGeneralConfig().getBoolean("MySQL.UseSSL"), getGeneralConfig().getBoolean("MySQL.Cache"));
+				getGeneralConfig().get("MySQL.TablePrefix").toString(), getGeneralConfig().getBoolean("MySQL.UseSSL"), getGeneralConfig().getBoolean("MySQL.Cache"),
+				false, 0);
 		new PAFPlayerManagerMySQL(mySQLData, poolData);
 		if (getGeneralConfig().getBoolean("General.MultiCoreEnhancement")) {
 			PAFPlayerMySQL.setMultiCoreEnhancement(true);
 			getProxy().getConsole().sendMessage(new TextComponent("Multi Core Enhancement is activated."));
 		}
-		new LocalPartyManager(Main.getInstance().getGeneralConfig().getInt("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.InvitationTimeOutTimeInSeconds"));
+		new LocalPartyManager(Main.getInstance().getGeneralConfig().getInt("Commands.Party.SubCommands.Invite.InvitationTimeOutTimeInSeconds"));
 		new StandardPermissionProvider();
 		new ServerDisplayNameCollection(getGeneralConfig());
 	}

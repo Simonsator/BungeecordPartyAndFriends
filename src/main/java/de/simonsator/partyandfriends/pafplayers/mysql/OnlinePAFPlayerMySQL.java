@@ -72,7 +72,7 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 
 	@Override
 	public int changeSettingsWorth(int pSettingsID) {
-		return PAFPlayerManagerMySQL.getConnection().changeSettingsWorth(PLAYER, pSettingsID);
+		return PAFPlayerManagerMySQL.getConnection().changeSettingsWorth(id, pSettingsID);
 	}
 
 	@Override

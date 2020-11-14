@@ -20,6 +20,8 @@ import java.util.UUID;
 public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	private static boolean multiCoreEnhancement = false;
 	protected int id;
+	private String name;
+	private UUID uuid;
 
 	public PAFPlayerMySQL(int pID) {
 		id = pID;
@@ -31,7 +33,9 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public String getName() {
-		return PAFPlayerManagerMySQL.getConnection().getName(id);
+		if (name != null)
+			return name;
+		return name = PAFPlayerManagerMySQL.getConnection().getName(id);
 	}
 
 	public int getPlayerID() {
@@ -45,7 +49,9 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public UUID getUniqueId() {
-		return PAFPlayerManagerMySQL.getConnection().getUUID(id);
+		if (uuid != null)
+			return uuid;
+		return uuid = PAFPlayerManagerMySQL.getConnection().getUUID(id);
 	}
 
 	@Override
@@ -66,6 +72,11 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	@Override
 	public List<PAFPlayer> getRequests() {
 		return idListToPAFPlayerList(PAFPlayerManagerMySQL.getConnection().getRequests(id));
+	}
+
+	@Override
+	public int getFriendRequestCount() {
+		return PAFPlayerManagerMySQL.getConnection().getFriendCount(id);
 	}
 
 	@Override
@@ -158,7 +169,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	@Override
 	public void setLastPlayerWroteFrom(PAFPlayer pLastWroteTo) {
 		PAFPlayerManagerMySQL.getConnection().setLastPlayerWroteTo(id, ((PAFPlayerMySQL) pLastWroteTo.getPAFPlayer())
-				.getPlayerID(), 0);
+				.getPlayerID());
 	}
 
 	@Override
