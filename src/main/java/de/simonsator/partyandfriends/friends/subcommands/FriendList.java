@@ -39,11 +39,11 @@ public class FriendList extends FriendSubCommand implements PageCreator<PlayerLi
 
 	@Override
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
-		List<PAFPlayer> friends = pPlayer.getFriends();
-		if (!hasFriends(pPlayer, friends))
+		PageEntriesAsTextContainer friendsCombined = getFriendsCombined(pPlayer, args);
+		if (!hasFriends(pPlayer, friendsCombined))
 			return;
-		PageEntriesAsTextContainer friendsCombined = getFriendsCombined(friends, args);
-		if (friendsCombined == null) {
+		assert friendsCombined != null;
+		if (friendsCombined.getLimitedTextList() == null) {
 			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessages().getString("Friends.Command.List.PageDoesNotExist"));
 			return;
 		}
@@ -54,14 +54,16 @@ public class FriendList extends FriendSubCommand implements PageCreator<PlayerLi
 			pPlayer.sendMessage(PREFIX + PatterCollection.PAGE_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.List.NextPage")).replaceFirst("" + (friendsCombined.getPage() + 1)));
 	}
 
-	private PageEntriesAsTextContainer getFriendsCombined(List<PAFPlayer> pFriends, String[] args) {
+	private PageEntriesAsTextContainer getFriendsCombined(OnlinePAFPlayer pCaller, String[] args) {
 		StringBuilder friendsCombined = new StringBuilder();
-		List<PlayerListElement> playerListElements = toList(pFriends);
+		List<PlayerListElement> playerListElements = PlayerListElement.getFriendsAsPlayerListElement(pCaller, 0);
+		if (playerListElements.isEmpty())
+			return null;
 		if (SORT_ELEMENTS)
 			Collections.sort(playerListElements);
 		PageAsListContainer<PlayerListElement> playerListElementsContainer = createPage(playerListElements, args, ENTRIES_PER_PAGE);
 		if (playerListElementsContainer == null)
-			return null;
+			return new PageEntriesAsTextContainer(false, null, 0);
 		playerListElements = playerListElementsContainer.getLimitedList();
 		for (int i = 0; i < playerListElements.size(); i++) {
 			StringBuilder builder = new StringBuilder();
@@ -90,8 +92,8 @@ public class FriendList extends FriendSubCommand implements PageCreator<PlayerLi
 		return new PageEntriesAsTextContainer(playerListElementsContainer.doesFurtherItemsExist(), friendsCombined.toString(), playerListElementsContainer.getPage());
 	}
 
-	private boolean hasFriends(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriends) {
-		if (pFriends.isEmpty()) {
+	private boolean hasFriends(OnlinePAFPlayer pPlayer, PageEntriesAsTextContainer pFriends) {
+		if (pFriends == null) {
 			pPlayer.sendMessage((PREFIX
 					+ Main.getInstance().getMessages().getString("Friends.Command.List.NoFriendsAdded")));
 			return false;
@@ -106,13 +108,6 @@ public class FriendList extends FriendSubCommand implements PageCreator<PlayerLi
 			stringBuilder.append(args);
 		}
 		return stringBuilder.toString();
-	}
-
-	private List<PlayerListElement> toList(List<PAFPlayer> pPlayers) {
-		List<PlayerListElement> playerListElements = new ArrayList<>(pPlayers.size());
-		for (PAFPlayer player : pPlayers)
-			playerListElements.add(new PlayerListElement(player));
-		return playerListElements;
 	}
 
 	private String process(PAFPlayer pPlayer, String pMessage) {
