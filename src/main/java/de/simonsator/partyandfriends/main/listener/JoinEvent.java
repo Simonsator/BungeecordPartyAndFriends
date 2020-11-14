@@ -6,6 +6,7 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.friends.commands.Friends;
+import de.simonsator.partyandfriends.friends.settings.OnlineStatusNotificationSetting;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -24,11 +25,13 @@ import java.util.regex.Matcher;
  * @version 1.0.0
  */
 public class JoinEvent implements Listener {
+	private final boolean ONLINE_STATUS_CHANGE_SETTING_ENABLED;
 	private final boolean FRIEND_REQUEST_NOTIFICATION;
 	private final int PLAYER_SPLIT_LENGTH = Main.getInstance().getMessages().getString("Friends.Command.List.PlayerSplit").length();
 
 	public JoinEvent() {
 		FRIEND_REQUEST_NOTIFICATION = Main.getInstance().getGeneralConfig().getBoolean("General.SendFriendRequestNotificationOnJoin");
+		ONLINE_STATUS_CHANGE_SETTING_ENABLED = Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.NotifyOnlineStatusChange.Enabled");
 	}
 
 	public Exception verify() {
@@ -91,6 +94,7 @@ public class JoinEvent implements Listener {
 		BukkitBungeeAdapter.getInstance().callEvent(event);
 		if (!event.isCancelled())
 			for (PAFPlayer friend : event.getFriends())
-				friend.sendMessage((event.getMessage()));
+				if (ONLINE_STATUS_CHANGE_SETTING_ENABLED && friend.getSettingsWorth(OnlineStatusNotificationSetting.SETTINGS_ID) == 0)
+					friend.sendMessage((event.getMessage()));
 	}
 }

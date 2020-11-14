@@ -32,7 +32,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		loadSharedMessages();
 		if (USE_CUSTOM_MESSAGES)
 			saveFile();
-		process(configuration);
+		process();
 	}
 
 	private void loadEnglishMessages() {
@@ -122,6 +122,8 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Settings.NowYouAreNotGoneReceiveMessages", " &7Now you are &cnot going to &7receive messages anymore.");
 		set("Friends.Command.Settings.NowYouWillBeShowAsOnline", " &7Now you will be shown as &aonline.");
 		set("Friends.Command.Settings.NowYouWilBeShownAsOffline", " &7Now you will be shown as &coffline.");
+		set("Friends.Command.Settings.NowYouWillReceiveOnlineStatusNotification", " &7Now you will &areceive a notification &7when a friend of yours goes online/offline.");
+		set("Friends.Command.Settings.NowYouWillNotReceiveOnlineStatusNotification", " &7Now you will &cnot receive a notification &7when a friend of yours goes online/offline.");
 		set("Friends.Command.Settings.NowNoMessages", " &7Now you are &cnot going to &7receive messages anymore.");
 		set("Friends.Command.Settings.NowMessages", " &7Now you are &agoing to &7receive messages from everyone.");
 		set("Friends.Command.Settings.NowYourFriendsCanJump", " &7Now your friends &acan jump &7to you.");
@@ -143,6 +145,10 @@ public class MessagesLoader extends LanguageConfiguration {
 				"&7At the moment you are shown as &aonline&7. To change this setting use &6/friend settings offline&7.");
 		set("Friends.Command.Settings.ShowAsOffline",
 				"&7At the moment you are shown as &coffline&7. To change this setting use &6/friend settings offline&7.");
+		set("Friends.Command.Settings.ShowOnlineStatusChangeNotification",
+				"&7At the moment you are &areceiving &7a notification if the online status of a friend changes. To change this setting use &6/friend settings notifyonline&7.");
+		set("Friends.Command.Settings.DoNotShowOnlineStatusChangeNotification",
+				"&7At the moment you are shown as &cnot receiving &7a notification if the online status of a friend changes. To change this setting use &6/friend settings notifyonline&7.");
 		set("Friends.Command.Settings.ReceivePM",
 				"&7At the moment you are able to &areceive &7private messages. To change this setting use &6/friend settings message&7.");
 		set("Friends.Command.Settings.DoNotReceivePM",
@@ -224,7 +230,6 @@ public class MessagesLoader extends LanguageConfiguration {
 				"&7Momentan können dir Partyeinladungen von &ajedem &7gesendet werden gesendet werden. Um dies zu ändern nutze &6/friend settings invite&7.");
 		set("Friends.Command.Settings.PartyInvitedByFriends",
 				"&7Momentan kannst du &cnur &7von deinen Freunden in eine Party eingeladen werden. Um dies zu ändern nutze &6/friend settings invite&7.");
-
 		set("Friends.Command.Settings.CanJump",
 				"&7Momentan &akönnen &7deine Freunde zu dir Springen. Um dies zu ändern nutze &6/friend settings jump&7.");
 		set("Friends.Command.Settings.CanNotJump",
@@ -233,6 +238,10 @@ public class MessagesLoader extends LanguageConfiguration {
 				"&7Momentan wirst du als &aOnline&7 angezeigt. Um dies zu ändern nutze &6/friend settings offline&7.");
 		set("Friends.Command.Settings.ShowAsOffline",
 				"&7Momentan wirst du als &cOffline&7 angezeigt. Um dies zu ändern nutze &6/friend settings offline&7.");
+		set("Friends.Command.Settings.ShowOnlineStatusChangeNotification",
+				"&7Momentan &aerhälst du eine Benachrichtigung&7, wenn ein Freund Online/Offline geht. Um dies zu ändern nutze &6/friend settings notifyonline&7.");
+		set("Friends.Command.Settings.DoNotShowOnlineStatusChangeNotification",
+				"&7Momentan &cerhälst du keine Benachrichtigung&7, wenn ein Freund Online/Offline geht. Um dies zu ändern nutze &6/friend settings notifyonline&7.");
 		set("Friends.Command.Settings.ReceivePM",
 				"&7Momentan &aerhälst &7du private Nachrichten. Um dies zu ändern nutze &6/friend settings message&7.");
 		set("Friends.Command.Settings.DoNotReceivePM",
@@ -247,6 +256,8 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Settings.NowYouAreNotGoneReceiveMessages", " &7Nun wirst du &ckeine &7Nachrichten mehr erhalten.");
 		set("Friends.Command.Settings.NowYouWillBeShowAsOnline", " &7Du wirst nun als &aonline &7angezeigt.");
 		set("Friends.Command.Settings.NowYouWilBeShownAsOffline", " &7Du wirst nun als &coffline &7angezeigt.");
+		set("Friends.Command.Settings.NowYouWillReceiveOnlineStatusNotification", " &7Du &aerhälst nun eine Benachrichtigung&7, wenn ein Freund Online/Offline geht.");
+		set("Friends.Command.Settings.NowYouWillNotReceiveOnlineStatusNotification", " &7Du &cerhälst nun keine Benachrichtigung mehr&7, wenn ein Freund Online/Offline geht.");
 		set("Friends.Command.Settings.NowNoMessages", " &7Du kannst jetzt &ckeine &7Nachrichten mehr erhalten.");
 		set("Friends.Command.Settings.NowMessages", " &7Du kannst jetzt von &ajedem &7Nachrichten erhalten.");
 		set("Friends.Command.Settings.NowYourFriendsCanJump", " &7Freunde können jetzt zu dir &aspringen&7.");

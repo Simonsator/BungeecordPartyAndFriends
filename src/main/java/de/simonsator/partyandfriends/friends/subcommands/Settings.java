@@ -3,10 +3,7 @@ package de.simonsator.partyandfriends.friends.subcommands;
 import de.simonsator.partyandfriends.api.Setting;
 import de.simonsator.partyandfriends.api.friends.abstractcommands.FriendSubCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.friends.settings.FriendRequestSetting;
-import de.simonsator.partyandfriends.friends.settings.JumpSetting;
-import de.simonsator.partyandfriends.friends.settings.OfflineSetting;
-import de.simonsator.partyandfriends.friends.settings.PMSetting;
+import de.simonsator.partyandfriends.friends.settings.*;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.settings.InviteSetting;
 import de.simonsator.partyandfriends.utilities.ConfigurationCreator;
@@ -41,6 +38,10 @@ public class Settings extends FriendSubCommand {
 			SETTINGS.add(new OfflineSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.Offline.Names"),
 					config.getString("Commands.Friends.SubCommands.Settings.Settings.Offline.Permission"),
 					config.getInt("Commands.Friends.SubCommands.Settings.Settings.Offline.Priority")));
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.NotifyOnlineStatusChange.Enabled"))
+			SETTINGS.add(new OnlineStatusNotificationSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.NotifyOnlineStatusChange.Names"),
+					config.getString("Commands.Friends.SubCommands.Settings.Settings.NotifyOnlineStatusChange.Permission"),
+					config.getInt("Commands.Friends.SubCommands.Settings.Settings.NotifyOnlineStatusChange.Priority")));
 		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PM.Enabled"))
 			SETTINGS.add(new PMSetting(config.getStringList("Commands.Friends.SubCommands.Settings.Settings.PM.Names"),
 					config.getString("Commands.Friends.SubCommands.Settings.Settings.PM.Permission"),

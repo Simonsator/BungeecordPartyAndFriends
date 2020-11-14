@@ -7,6 +7,7 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.friends.commands.Friends;
+import de.simonsator.partyandfriends.friends.settings.OnlineStatusNotificationSetting;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -24,6 +25,11 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PA
  * @version 1.0.0
  */
 public class PlayerDisconnectListener implements Listener {
+	private final boolean ONLINE_STATUS_CHANGE_SETTING_ENABLED;
+
+	public PlayerDisconnectListener() {
+		ONLINE_STATUS_CHANGE_SETTING_ENABLED = Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.NotifyOnlineStatusChange.Enabled");
+	}
 
 	/**
 	 * Will be executed on player disconnect
@@ -52,7 +58,8 @@ public class PlayerDisconnectListener implements Listener {
 			BukkitBungeeAdapter.getInstance().callEvent(event);
 			if (!event.isCancelled())
 				for (PAFPlayer friend : event.getFriends())
-					friend.sendMessage((event.getMessage()));
+					if (ONLINE_STATUS_CHANGE_SETTING_ENABLED && friend.getSettingsWorth(OnlineStatusNotificationSetting.SETTINGS_ID) == 0)
+						friend.sendMessage((event.getMessage()));
 			player.updateLastOnline();
 		}
 	}

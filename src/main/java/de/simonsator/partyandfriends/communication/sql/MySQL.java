@@ -71,58 +71,95 @@ public class MySQL extends PoolSQLCommunication {
 			prepStmt.executeUpdate();
 			prepStmt.close();
 			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + TABLE_PREFIX
-					+ "last_player_wrote_to` (`player_id` INT(8) NOT NULL, `written_to_id` INT(8) NOT NULL);");
+					+ "last_player_wrote_to` (`player_id` INT(8) NOT NULL, `written_to_id` INT(8) NOT NULL, FOREIGN KEY (`player_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), FOREIGN KEY (`written_to_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), PRIMARY KEY (`player_id`));");
 			prepStmt.executeUpdate();
 			prepStmt.close();
 			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + TABLE_PREFIX
-					+ "friend_assignment` (`friend1_id` INT(8) NOT NULL, `friend2_id` INT(8) NOT NULL);");
+					+ "friend_assignment` (`friend1_id` INT(8) NOT NULL, `friend2_id` INT(8) NOT NULL, FOREIGN KEY (`friend1_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), FOREIGN KEY (`friend2_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), CONSTRAINT `PK_" + TABLE_PREFIX
+					+ "friend_assignment` PRIMARY KEY (friend1_id,friend2_id));");
 			prepStmt.executeUpdate();
 			prepStmt.close();
 			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + TABLE_PREFIX
-					+ "settings` (`player_id` INT(8) NOT NULL, " + "`settings_id` TINYINT(2) NOT NULL, "
-					+ " `settings_worth` TINYINT(1) NOT NULL);");
+					+ "settings` (`player_id` INT(8) NOT NULL, `settings_id` TINYINT(2) NOT NULL, "
+					+ " `settings_worth` TINYINT(1) NOT NULL, FOREIGN KEY (`player_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), CONSTRAINT `PK_" + TABLE_PREFIX
+					+ "settings` PRIMARY KEY (player_id,settings_id));");
 			prepStmt.executeUpdate();
 			prepStmt.close();
 			prepStmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS `" + TABLE_PREFIX
 					+ "friend_request_assignment` (`requester_id` INT(8) NOT NULL, "
-					+ "`receiver_id` INT(8) NOT NULL);");
+					+ "`receiver_id` INT(8) NOT NULL, FOREIGN KEY (`requester_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), FOREIGN KEY (`receiver_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), CONSTRAINT `PK_" + TABLE_PREFIX
+					+ "friend_request_assignment` PRIMARY KEY (requester_id,receiver_id));");
 			prepStmt.executeUpdate();
+			prepStmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close(con, prepStmt);
 		}
 		addColumnLastOnline();
+		addForeignKeys();
 	}
 
-	private void addColumnLastOnline() {
+	private void addForeignKeys() {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("ALTER TABLE `" + TABLE_PREFIX + "players`" +
-					" ADD COLUMN `last_online` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `player_uuid`;");
+			prepStmt = con.prepareStatement("ALTER TABLE `" + TABLE_PREFIX + "last_player_wrote_to`" +
+					" ADD FOREIGN KEY (`player_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), ADD FOREIGN KEY (`written_to_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), ADD PRIMARY KEY (`player_id`);");
 			prepStmt.executeUpdate();
 			prepStmt.close();
-			fixLastOnline();
+			prepStmt = con.prepareStatement("ALTER TABLE `" + TABLE_PREFIX + "friend_assignment`" +
+					" ADD FOREIGN KEY (`friend1_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), ADD FOREIGN KEY (`friend2_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), ADD CONSTRAINT `PK_" + TABLE_PREFIX
+					+ "friend_assignment` PRIMARY KEY (friend1_id,friend2_id);");
+			prepStmt.executeUpdate();
+			prepStmt.close();
+			prepStmt = con.prepareStatement("ALTER TABLE `" + TABLE_PREFIX + "settings`" +
+					" ADD FOREIGN KEY (`player_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), ADD CONSTRAINT `PK_" + TABLE_PREFIX
+					+ "settings` PRIMARY KEY (player_id,settings_id);");
+			prepStmt.executeUpdate();
+			prepStmt.close();
+			prepStmt = con.prepareStatement("ALTER TABLE `" + TABLE_PREFIX + "friend_request_assignment`" +
+					" ADD FOREIGN KEY (`receiver_id`) REFERENCES `" + TABLE_PREFIX +
+					"players`(`player_id`), ADD CONSTRAINT `PK_" + TABLE_PREFIX
+					+ "friend_request_assignment` PRIMARY KEY (requester_id,receiver_id);");
+			prepStmt.executeUpdate();
+			prepStmt.close();
 		} catch (SQLException ignored) {
 		} finally {
 			close(con, prepStmt);
 		}
 	}
 
-	private void fixLastOnline() {
+	private void addColumnLastOnline() {
 		Connection con = getConnection();
+		PreparedStatement prepStmt = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select player_id from " + TABLE_PREFIX
-					+ "players ");
-			while (rs.next())
-				updateLastOnline(rs.getInt("player_id"));
+			rs = (stmt = con.createStatement()).executeQuery("SHOW COLUMNS from " + TABLE_PREFIX
+					+ "players LIKE 'last_online'");
+			if (!rs.next()) {
+				prepStmt = con.prepareStatement("ALTER TABLE `" + TABLE_PREFIX + "players`" +
+						" ADD COLUMN `last_online` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `player_uuid`");
+				prepStmt.executeUpdate();
+				prepStmt.close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(con, rs, stmt);
+			close(con, rs, stmt, prepStmt);
 		}
 	}
 
@@ -365,6 +402,23 @@ public class MySQL extends PoolSQLCommunication {
 		return requests;
 	}
 
+	public int getFriendCount(int pPlayerId) {
+		Connection con = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			rs = (stmt = con.createStatement()).executeQuery("select COUNT(requester_id) AS requestCount from "
+					+ TABLE_PREFIX + "friend_request_assignment WHERE receiver_id='" + pPlayerId + "' GROUP BY receiver_id");
+			if (rs.next())
+				return rs.getInt("requestCount");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(con, rs, stmt);
+		}
+		return 0;
+	}
+
 	/**
 	 * Adds a player to friends
 	 *
@@ -454,18 +508,17 @@ public class MySQL extends PoolSQLCommunication {
 	/**
 	 * Sets a setting
 	 *
-	 * @param pPlayer     The player
+	 * @param pPlayerID   The id of the player
 	 * @param pSettingsID The ID of the setting
 	 * @return Returns the new worth
 	 */
-	public int changeSettingsWorth(ProxiedPlayer pPlayer, int pSettingsID) {
-		int playerID = getPlayerID(pPlayer);
-		int worth = getSettingsWorth(playerID, pSettingsID);
+	public int changeSettingsWorth(int pPlayerID, int pSettingsID) {
+		int worth = getSettingsWorth(pPlayerID, pSettingsID);
 		if (worth == 1)
 			worth = 0;
 		else
 			worth = 1;
-		setSetting(playerID, pSettingsID, worth);
+		setSetting(pPlayerID, pSettingsID, worth);
 		return worth;
 	}
 
@@ -502,16 +555,18 @@ public class MySQL extends PoolSQLCommunication {
 	}
 
 	public void setSetting(int pPlayerID, int pSettingsID, int pNewWorth) {
-		removeSetting(pPlayerID, pSettingsID);
-		if (pNewWorth != 0) {
+		if (pNewWorth == 0)
+			removeSetting(pPlayerID, pSettingsID);
+		else {
 			Connection con = getConnection();
 			PreparedStatement prepStmt = null;
 			try {
 				prepStmt = con.prepareStatement(
-						"insert into  " + TABLE_PREFIX + "settings values (?, ?, ?)");
+						"insert into  " + TABLE_PREFIX + "settings values (?, ?, ?) ON DUPLICATE KEY UPDATE settings_worth=?");
 				prepStmt.setInt(1, pPlayerID);
 				prepStmt.setInt(2, pSettingsID);
 				prepStmt.setInt(3, pNewWorth);
+				prepStmt.setInt(4, pNewWorth);
 				prepStmt.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -583,34 +638,22 @@ public class MySQL extends PoolSQLCommunication {
 	/**
 	 * @param pPlayerID    The ID of the player
 	 * @param pLastWroteTo The ID of the player who wrote to
-	 * @param pI           The pass
 	 */
-	public void setLastPlayerWroteTo(int pPlayerID, int pLastWroteTo, int pI) {
-		removeLastPlayerWroteFrom(pPlayerID);
+	public void setLastPlayerWroteTo(int pPlayerID, int pLastWroteTo) {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
 			prepStmt = con.prepareStatement(
-					"insert into  " + TABLE_PREFIX + "last_player_wrote_to values (?, ?)");
+					"insert into " + TABLE_PREFIX + "last_player_wrote_to values (?, ?) ON DUPLICATE KEY UPDATE written_to_id=?;");
 			prepStmt.setInt(1, pPlayerID);
 			prepStmt.setInt(2, pLastWroteTo);
-			prepStmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(con, prepStmt);
-		}
-		if (pI == 0)
-			setLastPlayerWroteTo(pLastWroteTo, pPlayerID, 1);
-	}
-
-	private void removeLastPlayerWroteFrom(int pPlayerID) {
-		Connection con = getConnection();
-		PreparedStatement prepStmt = null;
-		try {
-			prepStmt = con.prepareStatement("DELETE FROM " + TABLE_PREFIX
-					+ "last_player_wrote_to WHERE player_id = '" + pPlayerID + "' Limit 1");
-			prepStmt.execute();
+			prepStmt.setInt(3, pLastWroteTo);
+			prepStmt.addBatch();
+			prepStmt.setInt(1, pLastWroteTo);
+			prepStmt.setInt(2, pPlayerID);
+			prepStmt.setInt(3, pPlayerID);
+			prepStmt.addBatch();
+			prepStmt.executeBatch();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -670,4 +713,5 @@ public class MySQL extends PoolSQLCommunication {
 			close(con, prepStmt);
 		}
 	}
+
 }
