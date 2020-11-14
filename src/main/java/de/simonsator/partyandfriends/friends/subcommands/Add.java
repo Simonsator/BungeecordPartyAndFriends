@@ -8,8 +8,10 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -23,11 +25,12 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PA
  * @version 1.0.1
  */
 public class Add extends FriendSubCommand {
-	private final String ACCEPT_COMMAND_NAME;
+	private final String FRIEND_ACCEPT_COMMAND_NAME;
+	private final BaseComponent[] CLICK_HERE_MESSAGE = new TextComponent(TextComponent.fromLegacyText(Main.getInstance().getMessages().getString("Friends.Command.Add.ClickHere"))).getExtra().toArray(new BaseComponent[0]);
 
 	public Add(List<String> pCommands, int pPriority, String pHelp, String pAcceptCommandName, String pPermission) {
 		super(pCommands, pPriority, pHelp, pPermission);
-		ACCEPT_COMMAND_NAME = " " + pAcceptCommandName + " ";
+		FRIEND_ACCEPT_COMMAND_NAME = "/" + Friends.getInstance().getName() + " " + pAcceptCommandName + " ";
 	}
 
 	@Override
@@ -47,14 +50,11 @@ public class Add extends FriendSubCommand {
 			pPlayer.sendMessage(
 					(PREFIX + PLAYER_PATTERN.matcher(Main.getInstance().getMessages()
 							.getString("Friends.Command.Add.FriendRequestFromReceiver")).replaceAll(Matcher.quoteReplacement(args[1]))));
-			pPlayer
-					.sendPacket(new TextComponent(ComponentSerializer.parse(("{\"text\":\"" + PREFIX
-							+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1]))
-							+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-							+ Friends.getInstance().getName() + ACCEPT_COMMAND_NAME + args[1]
-							+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-							+ Main.getInstance().getMessages().getString("Friends.Command.Add.ClickHere")
-							+ "\"}]}}}"))));
+			TextComponent packet = new TextComponent(PREFIX
+					+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1])));
+			packet.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, FRIEND_ACCEPT_COMMAND_NAME + args[1]));
+			packet.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, CLICK_HERE_MESSAGE));
+			pPlayer.sendPacket(packet);
 			return;
 		}
 		if (!allowsFriendRequests(pPlayer, playerQuery))
@@ -85,13 +85,11 @@ public class Add extends FriendSubCommand {
 	private void sendRequest(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
 		pPlayerQuery.sendMessage((PREFIX
 				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.FriendRequestReceived")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
-		pPlayerQuery
-				.sendPacket(new TextComponent(ComponentSerializer.parse("{\"text\":\"" + PREFIX
-						+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(pPlayer.getName()))
-						+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/"
-						+ Friends.getInstance().getName() + ACCEPT_COMMAND_NAME + pPlayer.getName()
-						+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-						+ Main.getInstance().getMessages().getString("Friends.Command.Add.ClickHere") + "\"}]}}}")));
+		TextComponent packet = new TextComponent(PREFIX
+				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(pPlayer.getName())));
+		packet.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, FRIEND_ACCEPT_COMMAND_NAME + pPlayer.getName()));
+		packet.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, CLICK_HERE_MESSAGE));
+		pPlayerQuery.sendPacket(packet);
 	}
 
 	private boolean hasNoRequestFrom(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {

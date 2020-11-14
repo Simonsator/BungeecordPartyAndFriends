@@ -41,11 +41,12 @@ public class Info extends PartySubCommand {
 		StringBuilder stringBuilder = new StringBuilder();
 		String players;
 		stringBuilder.append(Main.getInstance().getMessages().getString("Party.Command.Info.Players"));
-		if (party.getPlayers().isEmpty()) {
+		List<OnlinePAFPlayer> partyPlayers = party.getPlayers();
+		if (partyPlayers.isEmpty()) {
 			stringBuilder.append(Main.getInstance().getMessages().getString("Party.Command.Info.Empty"));
 			players = stringBuilder.toString();
 		} else {
-			for (OnlinePAFPlayer pp : party.getPlayers()) {
+			for (OnlinePAFPlayer pp : partyPlayers) {
 				stringBuilder.append(pp.getDisplayName());
 				stringBuilder.append(Main.getInstance().getMessages().getString("Party.Command.Info.PlayersCut"));
 			}
