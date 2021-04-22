@@ -4,12 +4,16 @@ import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.party.LeftPartyEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.party.subcommand.Join;
+import de.simonsator.partyandfriends.party.subcommand.PartyDenySubCommand;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +29,16 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PA
  */
 public abstract class PlayerParty {
 	private final String JOIN_COMMAND_NAME = " " + PartyCommand.getInstance().getSubCommand(Join.class).getCommandName() + " ";
+	private final String DENY_COMMAND_NAME;
+	private final Matcher acceptInviteMatcher = PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Party.Command.Invite.AcceptInvite"));
+	private final Matcher denyInviteMatcher = PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Party.Command.Invite.DeclineInvite"));
+
+	public PlayerParty() {
+		PartySubCommand denyCommand = PartyCommand.getInstance().getSubCommand(PartyDenySubCommand.class);
+		if (denyCommand != null)
+			DENY_COMMAND_NAME = " " + denyCommand.getCommandName() + " ";
+		else DENY_COMMAND_NAME = null;
+	}
 
 	/**
 	 * Returns true if the given player is the leader of this party, and it will
@@ -157,13 +171,20 @@ public abstract class PlayerParty {
 		OnlinePAFPlayer lLeader = getLeader();
 		pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance().getMessages()
 				.getString("Party.Command.Invite.YouWereInvitedBY")).replaceAll(Matcher.quoteReplacement(lLeader.getDisplayName()))));
-		pPlayer.sendPacket(new TextComponent(ComponentSerializer.parse("{\"text\":\"" + PartyCommand.getInstance().getPrefix()
-				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE")).replaceAll(Matcher.quoteReplacement(lLeader.getName()))
-				+ "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-				+ PartyCommand.getInstance().getName() + JOIN_COMMAND_NAME + lLeader.getName()
-				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-				+ Main.getInstance().getMessages().getString("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER")
-				+ "\"}]}}}")));
+		TextComponent acceptMessage = new TextComponent(acceptInviteMatcher.replaceAll(Matcher.quoteReplacement(lLeader.getName())));
+		acceptMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/"
+				+ PartyCommand.getInstance().getName() + JOIN_COMMAND_NAME + lLeader.getName()));
+		BaseComponent[] clickHereMessage = new TextComponent(TextComponent.fromLegacyText(Main.getInstance().getMessages().getString("Party.Command.Invite.AcceptInviteHOVER"))).getExtra().toArray(new BaseComponent[0]);
+		acceptMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, clickHereMessage));
+		pPlayer.sendPacket(acceptMessage);
+		if (DENY_COMMAND_NAME != null) {
+			TextComponent denyMessage = new TextComponent(denyInviteMatcher.replaceAll(Matcher.quoteReplacement(lLeader.getName())));
+			denyMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/"
+					+ PartyCommand.getInstance().getName() + DENY_COMMAND_NAME + lLeader.getName()));
+			clickHereMessage = new TextComponent(TextComponent.fromLegacyText(Main.getInstance().getMessages().getString("Party.Command.Invite.DeclineInviteHOVER"))).getExtra().toArray(new BaseComponent[0]);
+			denyMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, clickHereMessage));
+			pPlayer.sendPacket(denyMessage);
+		}
 		if (!isPrivate())
 			return;
 		addToInvited(pPlayer);
@@ -197,7 +218,7 @@ public abstract class PlayerParty {
 
 	protected abstract void addToInvited(OnlinePAFPlayer pPlayer);
 
-	private boolean isPartyEmpty() {
+	public boolean isPartyEmpty() {
 		return getPlayers().isEmpty() && isNobodyInvited();
 	}
 

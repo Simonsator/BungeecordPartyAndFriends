@@ -4,8 +4,10 @@ import de.simonsator.partyandfriends.api.OnlyTopCommand;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.event.TabCompleteEvent;
-import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.api.CommandSender;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Will be executed on /r
@@ -31,9 +33,8 @@ public class Reply extends OnlyTopCommand {
 		MSG.getInstance().send(pPlayer, args, queryPlayer, 0);
 	}
 
-	@EventHandler
-	public void onTabComplete(TabCompleteEvent pEvent) {
-		tabComplete(pEvent);
+	@Override
+	public List<String> onTabComplete(CommandSender commandSender, String[] strings) {
+		return Collections.emptyList();
 	}
-
 }

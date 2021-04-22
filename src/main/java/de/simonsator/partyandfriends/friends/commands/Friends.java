@@ -6,8 +6,6 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.friends.subcommands.*;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.ConfigurationCreator;
-import net.md_5.bungee.api.event.TabCompleteEvent;
-import net.md_5.bungee.event.EventHandler;
 
 import java.util.List;
 
@@ -94,10 +92,4 @@ public class Friends extends TopCommand<FriendSubCommand> {
 		}
 		pPlayer.sendMessage(Main.getInstance().getMessages().get(getPrefix(), "Friends.General.CommandNotFound"));
 	}
-
-	@EventHandler
-	public void onTabComplete(TabCompleteEvent pEvent) {
-		tabComplete(pEvent);
-	}
-
 }

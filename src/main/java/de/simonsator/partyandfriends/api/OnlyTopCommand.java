@@ -1,6 +1,9 @@
 package de.simonsator.partyandfriends.api;
 
-import net.md_5.bungee.api.event.TabCompleteEvent;
+import net.md_5.bungee.api.CommandSender;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Simonsator
@@ -20,8 +23,9 @@ public abstract class OnlyTopCommand extends TopCommand {
 	}
 
 	@Override
-	public void tabComplete(TabCompleteEvent pEvent) {
-// Only in the extended version
+	public List<String> onTabComplete(CommandSender commandSender, String[] strings) {
+		// Only in the extended version
+		return Collections.emptyList();
 	}
 
 }

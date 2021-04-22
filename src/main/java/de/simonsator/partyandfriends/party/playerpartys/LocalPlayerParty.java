@@ -25,12 +25,12 @@ public class LocalPlayerParty extends PlayerParty {
 	 * The players who are invited into this party
 	 */
 	private final List<UUID> invited = new ArrayList<>();
-	private final Set<UUID> bannedPlayers = new HashSet<>();
 	/**
 	 * The leader of the party
 	 */
 	private UUID leader;
 	private boolean privateParty = true;
+	private final Set<UUID> bannedPlayers = new HashSet<>();
 
 	/**
 	 * Initials a new party

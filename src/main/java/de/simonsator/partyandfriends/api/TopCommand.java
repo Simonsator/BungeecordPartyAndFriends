@@ -10,6 +10,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.TabCompleteEvent;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.TabExecutor;
 
 import java.util.*;
 
@@ -21,7 +22,7 @@ import java.util.*;
  * @param <T> The type of subcommands this class should use
  *            {@link de.simonsator.partyandfriends.utilities.SubCommand}
  */
-public abstract class TopCommand<T extends SubCommand> extends Command {
+public abstract class TopCommand<T extends SubCommand> extends Command implements TabExecutor {
 	/**
 	 * Contains all subcommands of the TopCommand
 	 */
@@ -144,6 +145,16 @@ public abstract class TopCommand<T extends SubCommand> extends Command {
 		return PREFIX;
 	}
 
+	@Deprecated
 	public void tabComplete(TabCompleteEvent pEvent) {
+	}
+
+	protected List<String> playerComplete(String[] input) {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender commandSender, String[] strings) {
+		return Collections.emptyList();
 	}
 }

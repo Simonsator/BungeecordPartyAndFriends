@@ -41,7 +41,9 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Error.CommandNotFound", "&cThis command does not exist!", "&cThis command does not exist!");
 		set("Party.Error.NoPermission", "&cYou don't have the permission to execute this command!");
 		set("Party.CommandUsage.Join", "&8/&5Party join  &8- &7Join a party");
+		set("Party.CommandUsage.Deny", "&8/&5Party deny  &8- &7Deny a party invitation");
 		set("Party.CommandUsage.Invite", "&8/&5Party invite  &8- &7Invite a player into your party");
+		set("Party.CommandUsage.InviteSetting", "&8/&5Party setting  &8- &7Enables/disables party invites");
 		set("Party.CommandUsage.List", "&8/&5Party list &8- &7List all players who are in the party");
 		set("Party.CommandUsage.Chat", "&8/&5Party chat  &8- &7Send all players in the party a message");
 		set("Party.CommandUsage.Leave", "&8/&5Party leave &8- &7Leave the party");
@@ -64,9 +66,12 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.Invite.MaxPlayersInPartyReached", "&cThe max size of a party is [MAXPLAYERSINPARTY].");
 		set("Party.Command.Invite.InvitedPlayer", "&6[PLAYER] &bwas invited to your party.");
 		set("Party.Command.Invite.YouWereInvitedBY", "&5You were invited into &6[PLAYER]'s &5party!");
-		set("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE",
-				"&5Join the party by using the command &6/Party &6join &6[PLAYER]&5!");
-		set("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER", "&aClick here to join the party");
+		set("Party.Command.Invite.AcceptInvite",
+				"&aJoin the party by using the command &6/Party &6join &6[PLAYER]&a!");
+		set("Party.Command.Invite.AcceptInviteHOVER", "&aClick here to join the party");
+		set("Party.Command.Invite.DeclineInvite",
+				"&cDecline the invitation by using the command &6/Party &6deny &6[PLAYER]&c!");
+		set("Party.Command.Invite.DeclineInviteHOVER", "&cClick here to decline the invitation");
 		set("Party.Command.Invite.InvitationTimedOutInvited", "&5The invitation of &6[PLAYER]'s &5party is timed out!");
 		set("Party.Command.Invite.InvitationTimedOutLeader", "&5The player &6[PLAYER] &5has not accepted your invitation!");
 		set("Party.Command.Join.PlayerHasNoParty", "&cThis player does not own a party.");
@@ -74,6 +79,11 @@ public class MessagesLoader extends LanguageConfiguration {
 				"&cYou are already in a party. Use &6/party leave &cto leave this party.");
 		set("Party.Command.Join.PlayerHasJoined", "&bThe player &6[PLAYER] &bjoined the party.");
 		set("Party.Command.Join.ErrorNoInvitation", "&cYou cannot join this party.");
+		set("Party.Command.Join.MaxPlayersInPartyReached", "&cThe max size of a party is [MAXPLAYERSINPARTY].");
+		set("Party.Command.Deny.PlayerHasNoParty", "&cThis player does not own a party.");
+		set("Party.Command.Deny.PlayerHasDeniedInvitation", "&bThe player &6[PLAYER] &bhas declined the invitation.");
+		set("Party.Command.Deny.DeniedInvitation", "&bYou denied the party invitation.");
+		set("Party.Command.Deny.ErrorNoInvitation", "&cYou are not invited into that party.");
 		set("Party.Command.Kick.KickedPlayerOutOfThePartyOthers", "&bThe player &6[PLAYER] &bwas kicked out of the party.");
 		set("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer", "&bYou have been kicked out of the party.");
 		set("Party.Command.Leader.SenderEqualsGivenPlayer", "&7You cannot make yourself the party leader.");
@@ -215,6 +225,8 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Jump.AlreadyOnTheServer", " &7Du bist bereits auf diesem Server.");
 		set("Friends.Command.Jump.JoinedTheServer", " &7Du bist jetzt auf dem gleichen Server wie der Spieler &e[PLAYER]&7.");
 		set("Friends.Command.List.FriendsList", " &7Dies sind deine Freunde:LINE_BREAK &7- ");
+		set("Friends.Command.List.PageDoesNotExist", " &7Diese Seite existiert nicht.");
+		set("Friends.Command.List.NextPage", " &7Um mehr Freunde zu sehen nutze /friend list [PAGE].");
 		set("Friends.Command.List.NoFriendsAdded", " &7Du hast noch keine Freunde hinzugefügt.");
 		set("Friends.Command.List.OnlineTitle", " &a(online)&7, spielt gerade auf [SERVER_ON]");
 		set("Friends.Command.List.OfflineTitle", " &c(offline)&7, zuletzt online [LAST_ONLINE]");
@@ -269,7 +281,9 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.Leader.SenderEqualsGivenPlayer", "&7Du kannst dich nicht selber zum neuen Party Leader machen.");
 		set("Party.General.ErrorGivenPlayerIsNotInTheParty", "&cDer Spieler &e[PLAYER] &7ist nicht in der Party.");
 		set("Party.CommandUsage.Join", "&8/&5Party join <Name> &8- &7Trete einer Party bei");
+		set("Party.CommandUsage.Deny", "&8/&5Party deny  &8- &7Lehne eine Einladung ab");
 		set("Party.CommandUsage.Invite", "&8/&5Party invite <Name> &8- &7Lade einen Spieler in deine Party ein");
+		set("Party.CommandUsage.InviteSetting", "&8/&5Party setting  &8- &7Aktiviert/deaktiviert Party Einladungen");
 		set("Party.CommandUsage.List", "&8/&5Party list &8- &7Listet alle Spieler in der Party auf");
 		set("Party.CommandUsage.Chat", "&8/&5Party chat <Nachricht> &8- &7Sendet allen Spieler in der Party eine Nachicht");
 		set("Party.CommandUsage.Leave", "&8/&5Party leave &8- &7Verlässt die Party");
@@ -299,15 +313,22 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.Command.Join.AlreadyInAPartyError", "&cDu bist bereits in einer Party. Nutze &6/party leave &cum diese Party zu verlassen.");
 		set("Party.Command.Join.PlayerHasJoined", "&bDer Spieler &6[PLAYER] &bist der Party beigetreten.");
 		set("Party.Command.Join.ErrorNoInvitation", "&cDu kannst der Party nicht beitreten.");
+		set("Party.Command.Deny.PlayerHasNoParty", "&cDieser Spieler hat keine Party.");
+		set("Party.Command.Deny.PlayerHasDeniedInvitation", "&bDer Spieler &6[PLAYER] &bhat die Einladung abgelehnt.");
+		set("Party.Command.Deny.DeniedInvitation", "&bDu hast die Party Einladung abgelehnt.");
+		set("Party.Command.Deny.ErrorNoInvitation", "&cDu kannst der Party nicht beitreten.");
 		set("Party.Command.Kick.KickedPlayerOutOfThePartyOthers", "&bDer Spieler &6[PLAYER] &bwurde aus der Party gekickt.");
 		set("Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer", "&bDu wurdest aus der Party gekickt.");
 		set("Party.Command.Kick.Party.Command.Leader.NewLeaderIs", "&7Der neue Party Leader ist &6[NEWLEADER].");
 		set("Party.Command.Leader.NewLeaderIs", "&7Der neue Party Leader ist &6[NEWLEADER].");
 		set("Party.Command.Leave.YouLeftTheParty", "&bDu hast deine Party verlassen.");
 		set("Party.Command.Leave.NewLeaderIs", "&bDer Leader hat die Party verlassen. Der neue Leader ist &e[NEWLEADER].");
-		set("Party.Command.Invite.YouWereInvitedBYJSONMESSAGE", "&5Tritt der Party mit &6/party join [PLAYER] &5bei!");
-		set("Party.Command.Invite.YouWereInvitedBYJSONMESSAGEHOVER",
-				"&aHier klicken um die Partyeinladung anzunehmen");
+		set("Party.Command.Invite.AcceptInvite",
+				"&aTritt der Party mit &6/party join [PLAYER] &abei!");
+		set("Party.Command.Invite.AcceptInviteHOVER", "&aHier klicken um die Partyeinladung anzunehmen");
+		set("Party.Command.Invite.DeclineInvite",
+				"&cLehne die Einladung mit &6/Party &6deny &6[PLAYER]&5 &cab!");
+		set("Party.Command.Invite.DeclineInviteHOVER", "&cHier klicken um die Partyeinladung abzulehnen");
 		set("Party.Command.Invite.YouWereInvitedBY",
 				"&5Du wurdest in die Party von &6[PLAYER] &5eingeladen!");
 	}

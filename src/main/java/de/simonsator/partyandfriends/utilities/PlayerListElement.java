@@ -18,11 +18,11 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 	private final Long LAST_ONLINE;
 	private final ServerInfo SERVER;
 	private final PAFPlayer PLAYER;
-	private final int SORT_TYPE;
-	private final OnlinePAFPlayer CALLER;
 	private String displayName = null;
 	private String name;
 	private UUID uuid;
+	private final int SORT_TYPE;
+	private final OnlinePAFPlayer CALLER;
 
 	public PlayerListElement(PAFPlayer pPlayer) {
 		this(pPlayer, 0, null);
@@ -46,19 +46,6 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 			SORT_TYPE = pSortingType;
 	}
 
-	/**
-	 * @param pCaller   The person for whom this list should be created
-	 * @param pSortType The sorting type. 0 is by last online, 1 is alphabetically, 2 is reverse alphabetic and 3 is by friendship duration
-	 * @return A list of PlayerListElements
-	 */
-	public static List<PlayerListElement> getFriendsAsPlayerListElement(OnlinePAFPlayer pCaller, int pSortType) {
-		List<PAFPlayer> friends = pCaller.getFriends();
-		List<PlayerListElement> playerListElements = new ArrayList<>(friends.size());
-		for (PAFPlayer player : friends)
-			playerListElements.add(new PlayerListElement(player, pSortType, pCaller));
-		return playerListElements;
-	}
-
 	@Override
 	public int compareTo(PlayerListElement pCompare) {
 		int sortType = 0;
@@ -66,9 +53,9 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 			sortType = SORT_TYPE;
 		switch (sortType) {
 			case 1:
-				return -pCompare.getName().compareTo(getName());
+				return -pCompare.getName().toLowerCase().compareTo(getName().toLowerCase());
 			case 2:
-				return pCompare.getName().compareTo(getName());
+				return pCompare.getName().toLowerCase().compareTo(getName().toLowerCase());
 			case 3:
 				return 0;
 			default:
@@ -126,5 +113,18 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 
 	public PAFPlayer getPlayer() {
 		return PLAYER;
+	}
+
+	/**
+	 * @param pCaller   The person for whom this list should be created
+	 * @param pSortType The sorting type. 0 is by last online, 1 is alphabetically, 2 is reverse alphabetic and 3 is by friendship duration
+	 * @return A list of PlayerListElements
+	 */
+	public static List<PlayerListElement> getFriendsAsPlayerListElement(OnlinePAFPlayer pCaller, int pSortType) {
+		List<PAFPlayer> friends = pCaller.getFriends();
+		List<PlayerListElement> playerListElements = new ArrayList<>(friends.size());
+		for (PAFPlayer player : friends)
+			playerListElements.add(new PlayerListElement(player, pSortType, pCaller));
+		return playerListElements;
 	}
 }

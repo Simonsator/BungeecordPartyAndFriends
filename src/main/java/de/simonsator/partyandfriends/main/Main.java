@@ -48,7 +48,6 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	 * The main instance of this plugin
 	 */
 	private static Main instance;
-	private final List<PAFExtension> pafExtensions = new ArrayList<>();
 	/**
 	 * The configuration
 	 */
@@ -66,6 +65,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	 */
 	private Language language;
 	private Friends friendCommand;
+	private final List<PAFExtension> pafExtensions = new ArrayList<>();
 
 	public static Main getInstance() {
 		return instance;

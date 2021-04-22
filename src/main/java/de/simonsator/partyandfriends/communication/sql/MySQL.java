@@ -251,9 +251,11 @@ public class MySQL extends PoolSQLCommunication {
 			if (rs.next()) {
 				id = rs.getInt(1);
 				cache.add(pPlayer.getName(), pPlayer.getUniqueId(), id);
+				rs.close();
+				close(con, prepStmt);
 				setStandardSettings(id);
-			}
-			rs.close();
+			} else
+				rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -706,12 +708,12 @@ public class MySQL extends PoolSQLCommunication {
 			prepStmt.execute();
 			prepStmt = con.prepareStatement("DELETE FROM " + TABLE_PREFIX + "last_player_wrote_to WHERE player_id='" + pPlayerId + "' OR written_to_id='" + pPlayerId + "';");
 			prepStmt.execute();
-			cache.deletePlayer(pPlayerId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close(con, prepStmt);
 		}
+		cache.deletePlayer(pPlayerId);
 	}
 
 }

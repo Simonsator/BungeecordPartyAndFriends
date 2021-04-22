@@ -10,8 +10,6 @@ import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.subcommand.*;
 import de.simonsator.partyandfriends.utilities.ConfigurationCreator;
 import de.simonsator.partyandfriends.utilities.LanguageConfiguration;
-import net.md_5.bungee.api.event.TabCompleteEvent;
-import net.md_5.bungee.event.EventHandler;
 
 import java.util.Arrays;
 import java.util.Vector;
@@ -40,6 +38,10 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		subCommands.add(new Invite(
 				config.getStringList("Commands.Party.SubCommands.Invite.Names"), config.getInt("Commands.Party.SubCommands.Invite.Priority"),
 				messages.getString("Party.CommandUsage.Invite"), config.getString("Commands.Party.SubCommands.Invite.Permissions")));
+		if (!config.getBoolean("Commands.Party.SubCommands.Deny.Disabled"))
+			subCommands.add(new PartyDenySubCommand(
+					config.getStringList("Commands.Party.SubCommands.Deny.Names"), config.getInt("Commands.Party.SubCommands.Deny.Priority"),
+					messages.getString("Party.CommandUsage.Deny"), config.getString("Commands.Party.SubCommands.Deny.Permissions")));
 		if (!config.getBoolean("Commands.Party.SubCommands.Kick.Disabled"))
 			subCommands.add(new Kick(
 					config.getStringList("Commands.Party.SubCommands.Kick.Names"), config.getInt("Commands.Party.SubCommands.Kick.Priority"),
@@ -59,6 +61,10 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 			subCommands.add(new Leader(
 					config.getStringList("Commands.Party.SubCommands.Leader.Names"), config.getInt("Commands.Party.SubCommands.Leader.Priority"),
 					messages.getString("Party.CommandUsage.Leader"), config.getString("Commands.Party.SubCommands.Leader.Permissions")));
+		if (!config.getBoolean("Commands.Party.SubCommands.InviteSetting.Disabled"))
+			subCommands.add(new PartyInviteSettingSubCommand(
+					config.getStringList("Commands.Party.SubCommands.InviteSetting.Names"), config.getInt("Commands.Party.SubCommands.InviteSetting.Priority"),
+					messages.getString("Party.CommandUsage.InviteSetting"), config.getString("Commands.Party.SubCommands.InviteSetting.Permissions")));
 	}
 
 	public static PartyCommand getInstance() {
@@ -106,10 +112,4 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		args = a.toArray(new String[a.size()]);
 		sc.onCommand(pPlayer, args);
 	}
-
-	@EventHandler
-	public void onTabComplete(TabCompleteEvent pEvent) {
-		tabComplete(pEvent);
-	}
-
 }

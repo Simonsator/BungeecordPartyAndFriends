@@ -6,9 +6,8 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyAPI;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
-import de.simonsator.partyandfriends.api.party.abstractcommands.PartyJoinInviteSubCommand;
+import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.config.ServerInfo;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -21,10 +20,9 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PA
  * @author Simonsator
  * @version 1.0.0
  */
-public class Join extends PartyJoinInviteSubCommand {
-	public Join(List<String> pCommands, int pPriority, String pHelpText, String pPermission) {
-		super(pCommands, pPriority, pHelpText, pPermission, Main.getInstance().getMessages()
-				.getString("Party.Command.Join.MaxPlayersInPartyReached"));
+public class PartyDenySubCommand extends PartySubCommand {
+	public PartyDenySubCommand(List<String> pCommands, int pPriority, String pHelpText, String pPermission) {
+		super(pCommands, pPriority, pHelpText, pPermission);
 	}
 
 	/**
@@ -37,38 +35,35 @@ public class Join extends PartyJoinInviteSubCommand {
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
 		if (!isPlayerGiven(pPlayer, args))
 			return;
-		if (isInParty(pPlayer))
-			return;
 		PAFPlayer pl = PAFPlayerManager.getInstance().getPlayer(args[0]);
 		if (!pl.isOnline()) {
 			pPlayer.sendMessage(PREFIX
-					+ Main.getInstance().getMessages().getString("Party.Command.Join.PlayerHasNoParty"));
+					+ Main.getInstance().getMessages().getString("Party.Command.Deny.PlayerHasNoParty"));
 			return;
 		}
 		OnlinePAFPlayer onlinePAFPlayer = (OnlinePAFPlayer) pl;
 		PlayerParty party = PartyManager.getInstance().getParty(onlinePAFPlayer);
 		if (hasNoParty(pPlayer, party))
 			return;
-		if (!party.isPrivate()) {
-			if (!canInvite(party.getLeader(), party, pPlayer)) {
-				return;
-			}
-		}
-		if (party.addPlayer(pPlayer)) {
+		if (party.isInvited(pPlayer)) {
+			party.removeFromInvited(pPlayer);
 			party.sendMessage(
-
 					PREFIX + PLAYER_PATTERN
 							.matcher(Main.getInstance().getMessages()
-									.getString("Party.Command.Join.PlayerHasJoined"))
+									.getString("Party.Command.Deny.PlayerHasDeniedInvitation"))
 							.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())));
-			if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Party.SubCommands.Join.AutoJoinLeaderServer")) {
-				ServerInfo leaderServer = party.getLeader().getServer();
-				if (!leaderServer.equals(pPlayer.getServer()))
-					pPlayer.connect(leaderServer);
+			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessages()
+					.getString("Party.Command.Deny.DeniedInvitation"));
+			if (party.isPartyEmpty()) {
+				party.sendMessage(
+						(PREFIX
+								+ Main.getInstance().getMessages().getString(
+								"Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers")));
+				PartyManager.getInstance().deleteParty(party);
 			}
 		} else
 			pPlayer.sendMessage(PREFIX
-					+ Main.getInstance().getMessages().getString("Party.Command.Join.ErrorNoInvitation"));
+					+ Main.getInstance().getMessages().getString("Party.Command.Deny.ErrorNoInvitation"));
 	}
 
 	@Override
@@ -79,16 +74,7 @@ public class Join extends PartyJoinInviteSubCommand {
 	private boolean hasNoParty(OnlinePAFPlayer pPlayer, PlayerParty pParty) {
 		if (pParty == null) {
 			pPlayer.sendMessage(PREFIX
-					+ Main.getInstance().getMessages().getString("Party.Command.Join.PlayerHasNoParty"));
-			return true;
-		}
-		return false;
-	}
-
-	private boolean isInParty(OnlinePAFPlayer pPlayer) {
-		if (PartyManager.getInstance().getParty(pPlayer) != null) {
-			pPlayer.sendMessage(PREFIX
-					+ Main.getInstance().getMessages().getString("Party.Command.Join.AlreadyInAPartyError"));
+					+ Main.getInstance().getMessages().getString("Party.Command.Deny.PlayerHasNoParty"));
 			return true;
 		}
 		return false;

@@ -7,8 +7,6 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
-import net.md_5.bungee.api.event.TabCompleteEvent;
-import net.md_5.bungee.event.EventHandler;
 
 import java.util.regex.Matcher;
 
@@ -86,10 +84,5 @@ public class PartyChat extends OnlyTopCommand {
 			return false;
 		}
 		return true;
-	}
-
-	@EventHandler
-	public void onTabComplete(TabCompleteEvent pEvent) {
-		tabComplete(pEvent);
 	}
 }

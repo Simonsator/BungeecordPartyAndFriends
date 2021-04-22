@@ -45,6 +45,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("General.Time.TimeZone", TimeZone.getDefault().getID());
 		set("General.Time.Format", "dd/MM/yyyy HH:mm:ss");
 		set("General.PartyDoNotJoinTheseServers", "lobby", "lobby1", "lobby2");
+		set("General.PartyJoinDelayInSeconds", 0);
 		set("General.DisabledServers", "login1", "login2");
 		set("General.SendFriendRequestNotificationOnJoin", true);
 		set("General.ForceUUIDSupportOnOfflineServers", false);
@@ -147,10 +148,18 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Party.SubCommands.Join.Permissions", "");
 		set("Commands.Party.SubCommands.Join.Priority", 0);
 		set("Commands.Party.SubCommands.Join.AutoJoinLeaderServer", true);
+		set("Commands.Party.SubCommands.Deny.Names", "deny", "decline");
+		set("Commands.Party.SubCommands.Deny.Permissions", "");
+		set("Commands.Party.SubCommands.Deny.Priority", 0);
+		set("Commands.Party.SubCommands.Deny.Disabled", true);
 		set("Commands.Party.SubCommands.Invite.Names", "invite", "add");
 		set("Commands.Party.SubCommands.Invite.Permissions", "");
 		set("Commands.Party.SubCommands.Invite.Priority", 1);
 		set("Commands.Party.SubCommands.Invite.InvitationTimeOutTimeInSeconds", 60);
+		set("Commands.Party.SubCommands.InviteSetting.Names", "settings", "setting", "invitesetting");
+		set("Commands.Party.SubCommands.InviteSetting.Permissions", "");
+		set("Commands.Party.SubCommands.InviteSetting.Priority", 2);
+		set("Commands.Party.SubCommands.InviteSetting.Disabled", true);
 		set("Commands.Party.SubCommands.Kick.Names", "kick", "forcedleave");
 		set("Commands.Party.SubCommands.Kick.Disabled", false);
 		set("Commands.Party.SubCommands.Kick.Permissions", "");

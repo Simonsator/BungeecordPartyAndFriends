@@ -27,12 +27,14 @@ public class ServerSwitchListener implements Listener {
 	 * The list of the servers which the party will not join.
 	 */
 	private final List<String> notJoinServers;
+	private final int CONNECT_DELAY;
 
 	/**
 	 * Initials the object
 	 */
 	public ServerSwitchListener() {
 		notJoinServers = Main.getInstance().getGeneralConfig().getStringList("General.PartyDoNotJoinTheseServers");
+		CONNECT_DELAY = Main.getInstance().getGeneralConfig().getInt("General.PartyJoinDelayInSeconds");
 		instance = this;
 	}
 
@@ -58,7 +60,10 @@ public class ServerSwitchListener implements Listener {
 		PlayerParty party = PartyManager.getInstance().getParty(player);
 		if (party != null && party.isLeader(player) && !party.getPlayers().isEmpty()) {
 			for (OnlinePAFPlayer p : party.getPlayers())
-				p.connect(server);
+				if (CONNECT_DELAY == 0)
+					p.connect(server);
+				else
+					BukkitBungeeAdapter.getInstance().schedule(Main.getInstance(), () -> p.connect(server), CONNECT_DELAY);
 			party.sendMessage((PartyCommand.getInstance().getPrefix()
 					+ Main.getInstance().getMessages().getString("Party.Command.General.ServerSwitched")
 					.replace("[SERVER]", ServerDisplayNameCollection.getInstance().getServerDisplayName(server))));
