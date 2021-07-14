@@ -26,6 +26,7 @@ public class ServerSwitchListener implements Listener {
 	/**
 	 * The list of the servers which the party will not join.
 	 */
+	private final boolean notJoinAny;
 	private final List<String> notJoinServers;
 	private final int CONNECT_DELAY;
 
@@ -33,6 +34,7 @@ public class ServerSwitchListener implements Listener {
 	 * Initials the object
 	 */
 	public ServerSwitchListener() {
+		notJoinAny = Main.getInstance().getGeneralConfig().getBoolean("General.PartyDoNotJoinAny");
 		notJoinServers = Main.getInstance().getGeneralConfig().getStringList("General.PartyDoNotJoinTheseServers");
 		CONNECT_DELAY = Main.getInstance().getGeneralConfig().getInt("General.PartyJoinDelayInSeconds");
 		instance = this;
@@ -54,7 +56,7 @@ public class ServerSwitchListener implements Listener {
 
 	private void moveParty(ServerSwitchEvent pEvent) {
 		ServerInfo server = pEvent.getPlayer().getServer().getInfo();
-		if (notJoinServers.contains(server.getName()))
+		if (notJoinAny || notJoinServers.contains(server.getName()))
 			return;
 		OnlinePAFPlayer player = PAFPlayerManager.getInstance().getPlayer(pEvent.getPlayer());
 		PlayerParty party = PartyManager.getInstance().getParty(player);

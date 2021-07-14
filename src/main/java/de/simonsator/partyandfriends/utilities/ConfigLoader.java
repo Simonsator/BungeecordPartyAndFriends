@@ -44,6 +44,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("General.Time.LanguageTag", "US");
 		set("General.Time.TimeZone", TimeZone.getDefault().getID());
 		set("General.Time.Format", "dd/MM/yyyy HH:mm:ss");
+		set("General.PartyDoNotJoinAny", false);
 		set("General.PartyDoNotJoinTheseServers", "lobby", "lobby1", "lobby2");
 		set("General.PartyJoinDelayInSeconds", 0);
 		set("General.DisabledServers", "login1", "login2");
