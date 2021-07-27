@@ -50,7 +50,7 @@ description = 'BungeecordPartyAndFriends'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 jar {
-    archiveBaseName.set("${rootProject.name}-${project.name}")
+    archiveBaseName.set("${rootProject.name}")
     archiveClassifier.set(isSnapshot ? "SNAPSHOT" : "")
 }
 
