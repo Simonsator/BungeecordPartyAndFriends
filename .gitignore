@@ -65,3 +65,24 @@ target/
 Party-and-Friends-For-Bungeecord-MySQL.iml
 BungeecordPartyAndFriends.iml
 BungeecordPartyAndFriends.iml
+
+
+.gradle
+build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Cache of project
+.gradletasknamecache
+
+**/build/
+
+# Common working directory
+run/
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+#Ignore local gradle properties
+secrets.properties
