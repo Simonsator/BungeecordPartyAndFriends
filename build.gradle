@@ -46,6 +46,11 @@ def details = versionDetails(prefix: 'version@')
 def branch = details.branchName
 def isSnapshot = (branch == null || branch == '' || branch == 'develop')
 
+if (details.getVersion() == "unspecified") {
+    version = "0.0.0"
+} else {
+    version = details.lastTag + (isSnapshot ? "-SNAPSHOT" : "")
+}
 description = 'BungeecordPartyAndFriends'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
