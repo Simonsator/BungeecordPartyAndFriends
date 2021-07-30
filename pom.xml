@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.simonsator</groupId>
 	<artifactId>BungeecordPartyAndFriends</artifactId>
-	<version>1.0.83</version>
+	<version>1.0.84</version>
 	<name>BungeecordPartyAndFriends</name>
 	<packaging>jar</packaging>
 	<description>Easy to use party and friends plugin for Bungeecord</description>
@@ -26,12 +26,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.3</version>
+				<version>3.2.4</version>
 				<configuration>
 					<artifactSet>
 						<includes>
 							<include>org.bstats:*</include>
 							<include>com.mchange:*</include>
+							<include>com.zaxxer:*</include>
 							<include>de.simonsator:*</include>
 						</includes>
 					</artifactSet>
@@ -39,6 +40,10 @@
 						<relocation>
 							<pattern>org.bstats</pattern>
 							<shadedPattern>de.simonsator.partyandfriends</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>com.zaxxer</pattern>
+							<shadedPattern>de.simonsator.partyandfriends.hikari</shadedPattern>
 						</relocation>
 						<relocation>
 							<pattern>com.mchange</pattern>
@@ -50,6 +55,18 @@
 						</relocation>
 					</relocations>
 					<createDependencyReducedPom>false</createDependencyReducedPom>
+					<minimizeJar>true</minimizeJar>
+					<filters>
+						<filter>
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>META-INF/*.SF</exclude>
+								<exclude>META-INF/*.DSA</exclude>
+								<exclude>META-INF/*.RSA</exclude>
+								<exclude>META-INF/*.MF</exclude>
+							</excludes>
+						</filter>
+					</filters>
 				</configuration>
 				<executions>
 					<execution>
@@ -111,6 +128,11 @@
 			<groupId>de.simonsator</groupId>
 			<artifactId>UpdateChecker</artifactId>
 			<version>1.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>4.0.3</version>
 		</dependency>
 	</dependencies>
 </project>

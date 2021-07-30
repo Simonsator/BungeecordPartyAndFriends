@@ -15,6 +15,7 @@ import java.util.TimeZone;
 public class ConfigLoader extends ConfigurationCreator {
 	public ConfigLoader(File file) throws IOException {
 		super(file, Main.getInstance());
+		copyFromJar("config_bungee.yml");
 		readFile();
 		loadDefaultValues();
 		saveFile();
@@ -32,6 +33,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("MySQL.Database", "friends");
 		set("MySQL.TablePrefix", "fr_");
 		set("MySQL.Cache", true);
+		set("MySQL.Pool.ConnectionPool", "C3P0");
 		set("MySQL.Pool.InitialPoolSize", 3);
 		set("MySQL.Pool.MinPoolSize", 3);
 		set("MySQL.Pool.MaxPoolSize", 15);
@@ -182,10 +184,5 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Party.SubCommands.Leader.Priority", 7);
 		set("Commands.PAFAdmin.Enabled", false);
 		set("Commands.PAFAdmin.Names", "pafadmin", "adminpaf");
-	}
-
-	@Override
-	public void reloadConfiguration() throws IOException {
-		configuration = (new ConfigLoader(FILE)).getCreatedConfiguration();
 	}
 }

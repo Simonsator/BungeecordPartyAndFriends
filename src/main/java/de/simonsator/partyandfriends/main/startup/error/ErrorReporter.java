@@ -14,7 +14,10 @@ public interface ErrorReporter {
 				pSender.sendMessage(TextComponent.fromLegacyText("§cYour BungeeCord is too old to run Party and Friends correctly. Please update your bungeecord, by downloading the newest version from https://ci.md-5.net/job/BungeeCord/ or if you need 1.7 support download this modified version of BungeeCord https://github.com/HexagonMC/BungeeCord/releases"));
 				break;
 			case SHA_ENCRYPTED_PASSWORD:
-				pSender.sendMessage(TextComponent.fromLegacyText("§cBungeecord does not support support SHA encrypted MySQL passwords till now, since it is using an old MySQL driver. Please use the command \"ALTER USER 'yourusername'@'localhost' IDENTIFIED WITH mysql_native_password BY 'youpassword';\" in MySQL to fix this issue."));
+				pSender.sendMessage(TextComponent.fromLegacyText("§cBungeecord does not support support SHA encrypted MySQL passwords till now, since it is using an old MySQL driver. Please use the command \"ALTER USER 'yourusername'@'localhost' IDENTIFIED WITH mysql_native_password BY 'youpassword';\" in MySQL to fix this issue. Or update your BungeeCord version."));
+				break;
+			case MISSING_PERMISSION_REFERENCE_COMMAND:
+				pSender.sendMessage(TextComponent.fromLegacyText("§cYour MySQL user does not have the permission to execute the reference Command which is required to create the tables for the plugin. If you need further help contact Simonsator via Skype (live:00pflaume), PM him (https://www.spigotmc.org/conversations/add?to=simonsator ) or write an email to him (support@simonsator.de). Please don't forget to send him the Proxy.Log.0 file (bungeecord log file). Also please don't write a bad review without giving him 24 hours time to fix the problem."));
 				break;
 			default:
 				pSender.sendMessage(TextComponent.fromLegacyText("§cParty and Friends was not able to boot up correctly."));

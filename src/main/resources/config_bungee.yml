@@ -1,0 +1,304 @@
+# All permissions can be self defined in the config. If a permission is set to '' everybody has that permission
+
+# MySQL is required. Most hosters provide a mysql database for free. If you are self hosting you can easily install mysql from mysql.com
+MySQL:
+  Host: localhost
+  Port: 3306
+  UseSSL: false
+  Username: root
+  Password: Password
+  Database: friends
+  TablePrefix: fr_
+  Cache: true
+  Pool:
+    # Available options are HikariCP and C3P0. HikariCP is faster. Use C3P0 if you are having problems with HikariCP
+    ConnectionPool: 'C3P0'
+    # You can tweak this settings to enhance the performance. The larger the pool is the more ram is used
+    # and the more cpu power is used to maintain the connections. If the pool is not large enough your
+    # players may experience lags when executing commands
+    #
+    # InitialPoolSize, IdleConnectionTestPeriod and TestConnectionOnCheckin are only used if C3P0 is used
+    InitialPoolSize: 3
+    MinPoolSize: 3
+    MaxPoolSize: 15
+    IdleConnectionTestPeriod: 290
+    # This wastes performance. Only activate it if your mysql server is configured incorrectly
+    # or you expect to have connetion dropouts towards your mysql server.
+    TestConnectionOnCheckin: false
+General:
+  # Activate this if you want to customize the messages in the messages.yml.
+  # The messages.yml will be generated in your under "Language" chosen language
+  UseOwnLanguageFile: false
+  CheckForUpdates: true
+  # Available languages are English and German
+  Language: English
+  # Activate this if you have more than a one core cpu to enhance performance
+  MultiCoreEnhancement: true
+  Time:
+    LanguageTag: US
+    # To find out which time zones are available check out https://garygregory.wordpress.com/2013/06/18/what-are-the-java-timezone-ids/
+    TimeZone: Europe/Berlin
+    # To find out which characters do what check out https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
+    Format: dd/MM/yyyy HH:mm:ss
+  # If enabled parties won't be moved to the server of the leader when he joins a new server
+  DisableAutomaticPartyServerSwitching: false
+  # A list of servers which should not be automatically be joined by the whole party if the party leader joins this server
+  PartyDoNotJoinTheseServers:
+    - lobby
+    - lobby1
+    - lobby2
+  # The delay between players in a party automatically joining the server of the leader. Only enable it if you have problems with certain minigame plugins
+  PartyJoinDelayInSeconds: 0
+  # If a party or friend command is executed on this server an error message will be displayed to the player. Useful for login servers
+  DisabledServers:
+    - login1
+    - login2
+  # If enabled players receive a notification about open friend requests on join
+  SendFriendRequestNotificationOnJoin: true
+  # If you are having a server where premium players and offline players can join
+  # and another plugin provides UUID injection for premium players you have to activate this.
+  ForceUUIDSupportOnOfflineServers: false
+# Set custom names for servers. For example you can rename bw1123 to plays Bedwars.
+ServerDisplayNames:
+  # When set to true more config options will be generated after a server restart
+  Use: false
+Party:
+  MaxPlayersPerParty:
+    # If the default value is set to 0 players can have unlimited many players in a party
+    Default: 0
+    NoLimitPermission: ''
+    AddSlotsPermissions:
+      # You can create as many slot permissions as you want, by adding new sections.
+      # All sections have to contain the key "Permission" and "SlotsToAdd". Just make sure to not use the same name twice
+      Premium:
+        Permission: de.simonsator.partyandfriends.party.addslots.premium
+        SlotsToAdd: 5
+      SuperPremium:
+        Permission: de.simonsator.partyandfriends.party.addslots.premium
+        SlotsToAdd: 10
+Extensions:
+  # If this option is activated supported extensions will have their config folder in the folder plugins/PartyAndFriends/extensions/EXTENSION_NAME
+  UseExtensionFolderAsConfigFolder: false
+Commands:
+  Friends:
+    General:
+      PrintOutHelpOnError: true
+    TopCommands:
+      Friend:
+        Names:
+          - friend
+          - friends
+        Permissions: ''
+        Disabled: false
+      Reply:
+        Names:
+          - reply
+          - r
+        Disabled: false
+        Permission: ''
+      MSG:
+        Names:
+          - msg
+          - fmsg
+        Disabled: false
+        Permission: ''
+        MSGNonFriendsPermission: de.simonsator.partyandfriends.msg.msgnonfriends
+        AllowPlayersToUseChatFormatting: true
+    SubCommands:
+      Accept:
+        Names:
+          - accept
+          - approve
+        Permission: ''
+        Priority: 3
+        SendTextIsNowOnline: true
+      Add:
+        Names:
+          - add
+          - addfriend
+        Permission: ''
+        Priority: 2
+        FriendRequestTimeout: 0
+      Deny:
+        Names:
+          - deny
+          - reject
+        Permission: ''
+        Priority: 4
+      Jump:
+        Names:
+          - jump
+          - jumpto
+        Disabled: false
+        Permission: ''
+        Priority: 6
+        DisabledServers:
+          - login1
+          - adminlobby1
+      List:
+        Names:
+          - list
+          - info
+        Disabled: false
+        Permission: ''
+        Priority: 0
+        SortElements: true
+        EntriesPerPage: 10
+      MSG:
+        Names:
+          - msg
+          - message
+        Disabled: false
+        Permission: ''
+        Priority: 1
+        ReplyCommand: /friend msg [PLAYER]
+      Remove:
+        Names:
+          - remove
+          - deleteAccount
+        Permission: ''
+        Priority: 5
+        # If activated a message is send to the person which was removed from the friend list
+        UseFriendRemovedYouMessage: false
+      Settings:
+        Names:
+          - setting
+          - settings
+        Disabled: false
+        Permission: ''
+        Priority: 7
+        Settings:
+          FriendRequest:
+            Names:
+              - friendrequest
+              - receivefriendrequests
+              - friendrequests
+            Enabled: true
+            Permission: ''
+            Priority: 0
+          Jump:
+            Names:
+              - jump
+              - allowjump
+            Enabled: true
+            Permission: ''
+            Priority: 1
+          Offline:
+            Names:
+              - offline
+              - alwaysoffline
+            Enabled: true
+            Permission: ''
+            Priority: 2
+          NotifyOnlineStatusChange:
+            Names:
+              - notifyonline
+              - notify
+            Enabled: true
+            Permission: ''
+            Priority: 3
+          PM:
+            Names:
+              - pm
+              - message
+              - messages
+            Enabled: true
+            Permission: ''
+            Priority: 4
+          PartyInvite:
+            Names:
+              - invite
+              - party
+            Enabled: true
+            Permission: ''
+            Priority: 5
+  Party:
+    General:
+      PrintOutHelpOnError: true
+      # If this option is activated the player will only see the commands he can currently execute when he executes /party
+      PrintOnlyExecutableSubCommandsOut: true
+    TopCommands:
+      Party:
+        Names:
+          - party
+          - parties
+        Permissions: ''
+        Disabled: false
+      PartyChat:
+        Names:
+          - partychat
+          - p
+        Permissions: ''
+        Disabled: false
+    SubCommands:
+      Join:
+        Names:
+          - join
+          - j
+        Permissions: ''
+        Priority: 0
+        AutoJoinLeaderServer: true
+      Deny:
+        Names:
+          - deny
+          - decline
+        Permissions: ''
+        Priority: 0
+        Disabled: true
+      Invite:
+        Names:
+          - invite
+          - add
+        Permissions: ''
+        Priority: 1
+        InvitationTimeOutTimeInSeconds: 60
+      InviteSetting:
+        Names:
+          - settings
+          - setting
+          - invitesetting
+        Permissions: ''
+        Priority: 2
+        Disabled: true
+      Kick:
+        Names:
+          - kick
+          - forcedleave
+        Disabled: false
+        Permissions: ''
+        Priority: 6
+      Info:
+        Names:
+          - info
+          - list
+        Disabled: false
+        Permissions: ''
+        Priority: 3
+      Leave:
+        Names:
+          - leave
+          - le
+        Permissions: ''
+        Priority: 5
+      Chat:
+        Names:
+          - chat
+          - message
+          - msg
+        ReplyCommand: chat
+        Disabled: false
+        Permissions: ''
+        Priority: 4
+      Leader:
+        Names:
+          - leader
+          - lead
+        Disabled: false
+        Permissions: ''
+        Priority: 7
+  # The pafadmin command can be only executed from the console
+  PAFAdmin:
+    Enabled: false
+    Names:
+      - pafadmin
+      - adminpaf

@@ -1,6 +1,8 @@
 package de.simonsator.partyandfriends.communication.sql.pool;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import de.simonsator.partyandfriends.communication.sql.DBCommunication;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
 import de.simonsator.partyandfriends.utilities.disable.Deactivated;
@@ -18,7 +20,8 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 	private final MySQLData MYSQL_DATA;
 	private final PoolData POOL_DATA;
 	private final Properties connectionProperties;
-	private final ComboPooledDataSource cpds;
+	private static ComboPooledDataSource cpds;
+	private static HikariDataSource hikariDataSource;
 
 	public PoolSQLCommunication(MySQLData pMySQLData, PoolData pPoolData) throws SQLException {
 		MYSQL_DATA = pMySQLData;
@@ -29,24 +32,19 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 		connectionProperties.setProperty("useSSL", pMySQLData.USE_SSL + "");
 		connectionProperties.setProperty("allowPublicKeyRetrieval", !pMySQLData.USE_SSL + "");
 		connectionProperties.setProperty("rewriteBatchedStatements", "true");
-		createDatabase();
-		cpds = createConnection();
+		connectionProperties.setProperty("createDatabaseIfNotExist", "true");
+		if (hikariDataSource == null && cpds == null)
+			if (pPoolData.CONNECTION_POOL.equals("HIKARICP")) {
+				hikariDataSource = createHikariConnection();
+				cpds = null;
+			} else {
+				cpds = createCPDSConnection();
+				hikariDataSource = null;
+			}
 		Disabler.getInstance().registerDeactivated(this);
 	}
 
-	private void createDatabase() throws SQLException {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://" + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT, connectionProperties);
-			PreparedStatement prepStmt = con.prepareStatement("CREATE DATABASE IF NOT EXISTS `" + getDatabase() + "`");
-			prepStmt.executeUpdate();
-			prepStmt.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private ComboPooledDataSource createConnection() {
+	private ComboPooledDataSource createCPDSConnection() {
 		try {
 			ComboPooledDataSource cpds = new ComboPooledDataSource();
 			cpds.setDriverClass("com.mysql.jdbc.Driver");
@@ -64,9 +62,21 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 		return null;
 	}
 
+	private HikariDataSource createHikariConnection() {
+		HikariConfig config = new HikariConfig();
+		config.setDriverClassName("com.mysql.jdbc.Driver");
+		config.setJdbcUrl("jdbc:mysql://" + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT + "/" + MYSQL_DATA.DATABASE);
+		config.setDataSourceProperties(connectionProperties);
+		config.setMinimumIdle(POOL_DATA.MIN_POOL_SIZE);
+		config.setMaximumPoolSize(POOL_DATA.MAX_POOL_SIZE);
+		return new HikariDataSource(config);
+	}
+
 	private void closeConnection() {
 		if (cpds != null)
 			cpds.close();
+		if (hikariDataSource != null)
+			hikariDataSource.close();
 	}
 
 	@Override
@@ -106,7 +116,9 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 
 	public Connection getConnection() {
 		try {
-			return cpds.getConnection();
+			if (hikariDataSource != null)
+				return hikariDataSource.getConnection();
+			else return cpds.getConnection();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

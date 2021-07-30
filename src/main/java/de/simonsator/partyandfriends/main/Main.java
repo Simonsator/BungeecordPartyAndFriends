@@ -104,12 +104,14 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		} catch (SQLException e) {
 			if (e.getMessage().contains("Unable to load authentication plugin 'caching_sha2_password'."))
 				initError(e, BootErrorType.SHA_ENCRYPTED_PASSWORD);
+			else if (e.getMessage().contains("REFERENCES command denied to user"))
+				initError(e, BootErrorType.MISSING_PERMISSION_REFERENCE_COMMAND);
 			else
 				initError(e, BootErrorType.MYSQL_CONNECTION_PROBLEM);
 		}
 	}
 
-	private void initError(Exception e, BootErrorType pType) {
+	private void initError(Throwable e, BootErrorType pType) {
 		if (!getGeneralConfig().getBoolean("Commands.Party.TopCommands.Party.Disabled"))
 			registerCommand(new BootErrorCommand(
 					(getGeneralConfig().getStringList("Commands.Party.TopCommands.Party.Names").toArray(new String[0])), pType));
@@ -135,7 +137,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		PoolData poolData = new PoolData(Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.MinPoolSize"),
 				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.MaxPoolSize"),
 				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.InitialPoolSize"), Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.IdleConnectionTestPeriod"),
-				Main.getInstance().getGeneralConfig().getBoolean("MySQL.Pool.TestConnectionOnCheckin"));
+				Main.getInstance().getGeneralConfig().getBoolean("MySQL.Pool.TestConnectionOnCheckin"), Main.getInstance().getGeneralConfig().getString("MySQL.Pool.ConnectionPool"));
 		MySQLData mySQLData = new MySQLData(getGeneralConfig().get("MySQL.Host").toString(),
 				getGeneralConfig().get("MySQL.Username").toString(), getGeneralConfig().get("MySQL.Password").toString(),
 				getGeneralConfig().getInt("MySQL.Port"), getGeneralConfig().get("MySQL.Database").toString(),
@@ -193,7 +195,9 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	 */
 	private void registerListeners() {
 		BukkitBungeeAdapter.getInstance().registerListener(new PlayerDisconnectListener(), this);
-		BukkitBungeeAdapter.getInstance().registerListener(new ServerSwitchListener(), this);
+		ServerSwitchListener serverSwitchListener = new ServerSwitchListener();
+		if (!getGeneralConfig().getBoolean("General.DisableAutomaticPartyServerSwitching"))
+			BukkitBungeeAdapter.getInstance().registerListener(serverSwitchListener, this);
 		JoinEvent joinEventListener;
 		BukkitBungeeAdapter.getInstance().registerListener(joinEventListener = new JoinEvent(), this);
 		Exception e = joinEventListener.verify();

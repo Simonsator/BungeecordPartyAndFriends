@@ -21,6 +21,7 @@ public abstract class ConfigurationCreator {
 	protected final File FILE;
 	private final Plugin PLUGIN;
 	protected Configuration configuration = new Configuration();
+	private boolean fileWasChanged = false;
 
 	@Deprecated
 	protected ConfigurationCreator(File file) {
@@ -73,8 +74,10 @@ public abstract class ConfigurationCreator {
 	}
 
 	protected void set(String pKey, Object pText) {
-		if (configuration.get(pKey) == null)
+		if (configuration.get(pKey) == null) {
 			configuration.set(pKey, pText);
+			fileWasChanged = true;
+		}
 	}
 
 	protected void set(String pKey, String... entries) {
@@ -82,9 +85,10 @@ public abstract class ConfigurationCreator {
 	}
 
 	protected void saveFile() throws IOException {
-		try (Writer writer = new OutputStreamWriter(new FileOutputStream(FILE), Charsets.UTF_8)) {
-			ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, writer);
-		}
+		if (fileWasChanged)
+			try (Writer writer = new OutputStreamWriter(new FileOutputStream(FILE), Charsets.UTF_8)) {
+				ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, writer);
+			}
 	}
 
 	protected void process(Configuration pMessagesYML) {
@@ -147,12 +151,16 @@ public abstract class ConfigurationCreator {
 	}
 
 	protected boolean copyFromJar() throws IOException {
+		return copyFromJar(FILE.getName());
+	}
+
+	protected boolean copyFromJar(String pFileNameInJar) throws IOException {
 		if (PLUGIN == null)
 			throw new UnsupportedOperationException("Deprecated constructor was used to initialise the Object.");
 		if (FILE.exists())
 			return false;
 		createParentFolder();
-		InputStream in = PLUGIN.getResourceAsStream(FILE.getName());
+		InputStream in = PLUGIN.getResourceAsStream(pFileNameInJar);
 		OutputStream out = new FileOutputStream(FILE);
 		byte[] buf = new byte[1024];
 		int len;
