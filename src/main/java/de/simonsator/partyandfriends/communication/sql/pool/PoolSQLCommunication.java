@@ -33,7 +33,8 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 		connectionProperties.setProperty("allowPublicKeyRetrieval", !pMySQLData.USE_SSL + "");
 		connectionProperties.setProperty("rewriteBatchedStatements", "true");
 		connectionProperties.setProperty("createDatabaseIfNotExist", "true");
-		if (hikariDataSource == null && cpds == null)
+		if (hikariDataSource == null && cpds == null) {
+			checkIfConnectionIsValid();
 			if (pPoolData.CONNECTION_POOL.equals("HIKARICP")) {
 				hikariDataSource = createHikariConnection();
 				cpds = null;
@@ -41,7 +42,22 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 				cpds = createCPDSConnection();
 				hikariDataSource = null;
 			}
+		}
 		Disabler.getInstance().registerDeactivated(this);
+	}
+
+	private void checkIfConnectionIsValid() throws SQLException {
+		Connection con = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://" + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT, connectionProperties);
+			con.isValid(15);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null)
+				con.close();
+		}
 	}
 
 	private ComboPooledDataSource createCPDSConnection() {
@@ -77,6 +93,8 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 			cpds.close();
 		if (hikariDataSource != null)
 			hikariDataSource.close();
+		hikariDataSource = null;
+		cpds = null;
 	}
 
 	@Override
