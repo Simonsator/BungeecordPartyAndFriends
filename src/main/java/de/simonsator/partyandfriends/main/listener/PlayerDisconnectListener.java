@@ -7,6 +7,7 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.friends.commands.Friends;
+import de.simonsator.partyandfriends.friends.settings.OfflineSetting;
 import de.simonsator.partyandfriends.friends.settings.OnlineStatusNotificationSetting;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -38,6 +39,8 @@ public class PlayerDisconnectListener implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerDisconnect(final PlayerDisconnectEvent pEvent) {
+		if (Main.getInstance().isShuttingDown())
+			return;
 		if (pEvent.getPlayer().getServer() == null)
 			return;
 		final UUID uuid = pEvent.getPlayer().getUniqueId();
@@ -49,7 +52,7 @@ public class PlayerDisconnectListener implements Listener {
 		PlayerParty party = PartyManager.getInstance().getParty(pUUID);
 		if (party != null)
 			party.leaveParty(player);
-		if (player.getSettingsWorth(3) != 1) {
+		if (player.getSettingsWorth(OfflineSetting.SETTINGS_ID) == OfflineSetting.FRIENDS_CAN_SEE_PLAYER_IS_ONLINE_STATE) {
 			String message = Friends.getInstance().getPrefix() + PLAYER_PATTERN
 					.matcher(Main.getInstance().getMessages()
 							.getString("Friends.General.PlayerIsNowOffline"))

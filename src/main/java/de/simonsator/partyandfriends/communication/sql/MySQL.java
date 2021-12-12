@@ -4,8 +4,10 @@ import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.communication.sql.cache.LocalPlayerCache;
 import de.simonsator.partyandfriends.communication.sql.cache.NoCache;
 import de.simonsator.partyandfriends.communication.sql.cache.PlayerCache;
+import de.simonsator.partyandfriends.communication.sql.data.PlayerDataSet;
 import de.simonsator.partyandfriends.communication.sql.pool.PoolData;
 import de.simonsator.partyandfriends.communication.sql.pool.PoolSQLCommunication;
+import de.simonsator.partyandfriends.friends.settings.OfflineSetting;
 import de.simonsator.partyandfriends.utilities.disable.Disabler;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -20,6 +22,7 @@ import java.util.UUID;
  * @version 2.0.0
  */
 public class MySQL extends PoolSQLCommunication {
+
 	private final String TABLE_PREFIX;
 	private final PlayerCache cache;
 
@@ -61,7 +64,7 @@ public class MySQL extends PoolSQLCommunication {
 		return null;
 	}
 
-	private void importDatabase() {
+	private void importDatabase() throws SQLException {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
@@ -98,8 +101,6 @@ public class MySQL extends PoolSQLCommunication {
 					+ "friend_request_assignment` PRIMARY KEY (requester_id,receiver_id));");
 			prepStmt.executeUpdate();
 			prepStmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
 		} finally {
 			close(con, prepStmt);
 		}
@@ -176,9 +177,13 @@ public class MySQL extends PoolSQLCommunication {
 	 * @return Returns the ID of a player
 	 */
 	public int getPlayerID(UUID pUUID) {
+		return getPlayerData(pUUID).ID;
+	}
+
+	public PlayerDataSet getPlayerData(UUID pUUID) {
 		Integer playerID = cache.getPlayerID(pUUID);
 		if (playerID != null)
-			return playerID;
+			return new PlayerDataSet(null, playerID, pUUID);
 		Connection con = getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -187,15 +192,44 @@ public class MySQL extends PoolSQLCommunication {
 					+ "players WHERE player_uuid='" + pUUID + "' LIMIT 1");
 			if (rs.next()) {
 				playerID = rs.getInt("player_id");
-				cache.add(rs.getString("player_name"), pUUID, playerID);
-				return playerID;
+				String playerName = rs.getString("player_name");
+				cache.add(playerName, pUUID, playerID);
+				return new PlayerDataSet(playerName, playerID, pUUID);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close(con, rs, stmt);
 		}
-		return -1;
+		return new PlayerDataSet(null, -1, pUUID);
+	}
+
+	/**
+	 * @param pPlayerId The id of the player
+	 * @return Returns a PlayerDataSet where at least ID and UUID are not null or if the player could not be found the ID -1, NAME null and UUID null
+	 */
+	public PlayerDataSet getPlayerData(int pPlayerId) {
+		UUID uuid = cache.getUUID(pPlayerId);
+		if (uuid != null)
+			return new PlayerDataSet(null, pPlayerId, uuid);
+		Connection con = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			rs = (stmt = con.createStatement()).executeQuery("select player_uuid, player_name from " + TABLE_PREFIX
+					+ "players WHERE player_id='" + pPlayerId + "' LIMIT 1");
+			if (rs.next()) {
+				String playerName = rs.getString("player_name");
+				uuid = UUID.fromString(rs.getString("player_uuid"));
+				cache.add(playerName, uuid, pPlayerId);
+				return new PlayerDataSet(playerName, pPlayerId, uuid);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(con, rs, stmt);
+		}
+		return new PlayerDataSet(null, -1, null);
 	}
 
 	/**
@@ -205,9 +239,13 @@ public class MySQL extends PoolSQLCommunication {
 	 * @return Returns the ID of a player
 	 */
 	public int getPlayerID(String pPlayerName) {
+		return getPlayerData(pPlayerName).ID;
+	}
+
+	public PlayerDataSet getPlayerData(String pPlayerName) {
 		Integer playerID = cache.getPlayerID(pPlayerName);
 		if (playerID != null)
-			return playerID;
+			return new PlayerDataSet(pPlayerName, playerID, null);
 		Connection con = getConnection();
 		ResultSet rs = null;
 		PreparedStatement prepStmt = null;
@@ -220,14 +258,14 @@ public class MySQL extends PoolSQLCommunication {
 				UUID uuid = UUID.fromString(rs.getString("player_uuid"));
 				playerID = rs.getInt("player_id");
 				cache.add(pPlayerName, uuid, playerID);
-				return playerID;
+				return new PlayerDataSet(pPlayerName, playerID, uuid);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close(con, rs, prepStmt);
 		}
-		return -1;
+		return new PlayerDataSet(pPlayerName, -1, null);
 	}
 
 	/**
@@ -288,6 +326,60 @@ public class MySQL extends PoolSQLCommunication {
 				if (friend1 == pPlayerID)
 					list.add(friend2);
 				else list.add(friend1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(con, rs, stmt);
+		}
+		return list;
+	}
+
+	public List<PlayerDataSet> getFriendsPlayerData(int pPlayerID) {
+		Connection con = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		List<PlayerDataSet> list = new LinkedList<>();
+		try {
+			rs = (stmt = con.createStatement()).executeQuery("select player_id, player_name, player_uuid from "
+					+ TABLE_PREFIX + "friend_assignment LEFT JOIN " + TABLE_PREFIX
+					+ "players ON (friend1_id = '" + pPlayerID + "' AND player_id = friend2_id) OR (friend2_id = '" + pPlayerID +
+					"' AND player_id = friend1_id) WHERE friend1_id='" + pPlayerID + "' OR friend2_id='" + pPlayerID + "'");
+			while (rs.next()) {
+				int friendId = rs.getInt("player_id");
+				String friendName = rs.getString("player_name");
+				UUID friendUUID = UUID.fromString(rs.getString("player_uuid"));
+				list.add(new PlayerDataSet(friendName, friendId, friendUUID));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(con, rs, stmt);
+		}
+		return list;
+	}
+
+	public List<PlayerDataSet> getFriendsPlayerDataForListing(int pPlayerID) {
+		Connection con = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		List<PlayerDataSet> list = new LinkedList<>();
+		try {
+			rs = (stmt = con.createStatement()).executeQuery("select " +
+					TABLE_PREFIX + "players.player_id, player_name, player_uuid, settings_worth, last_online from "
+					+ TABLE_PREFIX + "friend_assignment LEFT JOIN " + TABLE_PREFIX
+					+ "players ON (friend1_id = '" + pPlayerID + "' AND player_id = friend2_id) OR (friend2_id = '" +
+					pPlayerID + "' AND player_id = friend1_id) LEFT JOIN " + TABLE_PREFIX + "settings ON " +
+					TABLE_PREFIX + "players.player_id = " + TABLE_PREFIX + "settings.player_id AND settings_id = 3 WHERE friend1_id='" +
+					pPlayerID + "' OR friend2_id='" + pPlayerID + "'");
+			while (rs.next()) {
+				int friendId = rs.getInt("player_id");
+				String friendName = rs.getString("player_name");
+				UUID friendUUID = UUID.fromString(rs.getString("player_uuid"));
+				Timestamp lastOnline = rs.getTimestamp("last_online");
+				PlayerDataSet playerDataSet = new PlayerDataSet(friendName, friendId, friendUUID, lastOnline.getTime());
+				playerDataSet.setSetting(OfflineSetting.SETTINGS_ID, rs.getInt("settings_worth"));
+				list.add(playerDataSet);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -402,6 +494,27 @@ public class MySQL extends PoolSQLCommunication {
 			close(con, rs, stmt);
 		}
 		return requests;
+	}
+
+	public List<PlayerDataSet> getRequestsPlayerData(int pPlayerID) {
+		Connection con = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		List<PlayerDataSet> list = new LinkedList<>();
+		try {
+			rs = (stmt = con.createStatement()).executeQuery("select player_id, player_name, player_uuid from "
+					+ TABLE_PREFIX + "friend_request_assignment LEFT JOIN " + TABLE_PREFIX
+					+ "players ON  player_id = requester_id WHERE receiver_id='" + pPlayerID + "'");
+			while (rs.next()) {
+				list.add(new PlayerDataSet(rs.getString("player_name"), rs.getInt("player_id"),
+						UUID.fromString(rs.getString("player_uuid"))));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(con, rs, stmt);
+		}
+		return list;
 	}
 
 	public int getFriendCount(int pPlayerId) {

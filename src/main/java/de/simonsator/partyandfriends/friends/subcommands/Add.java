@@ -7,6 +7,7 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.friends.commands.Friends;
+import de.simonsator.partyandfriends.friends.settings.FriendRequestSetting;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -50,8 +51,8 @@ public class Add extends FriendSubCommand {
 			pPlayer.sendMessage(
 					(PREFIX + PLAYER_PATTERN.matcher(Main.getInstance().getMessages()
 							.getString("Friends.Command.Add.FriendRequestFromReceiver")).replaceAll(Matcher.quoteReplacement(args[1]))));
-			TextComponent packet = new TextComponent(PREFIX
-					+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1])));
+			TextComponent packet = new TextComponent(TextComponent.fromLegacyText(PREFIX
+					+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(args[1]))));
 			packet.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, FRIEND_ACCEPT_COMMAND_NAME + args[1]));
 			packet.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, CLICK_HERE_MESSAGE));
 			pPlayer.sendPacket(packet);
@@ -85,8 +86,8 @@ public class Add extends FriendSubCommand {
 	private void sendRequest(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
 		pPlayerQuery.sendMessage((PREFIX
 				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.FriendRequestReceived")).replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName()))));
-		TextComponent packet = new TextComponent(PREFIX
-				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(pPlayer.getName())));
+		TextComponent packet = new TextComponent(TextComponent.fromLegacyText(PREFIX
+				+ PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.HowToAccept")).replaceAll(Matcher.quoteReplacement(pPlayer.getName()))));
 		packet.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, FRIEND_ACCEPT_COMMAND_NAME + pPlayer.getName()));
 		packet.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, CLICK_HERE_MESSAGE));
 		pPlayerQuery.sendPacket(packet);
@@ -94,7 +95,7 @@ public class Add extends FriendSubCommand {
 
 	private boolean hasNoRequestFrom(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if (pQueryPlayer.hasRequestFrom(pPlayer)) {
-			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessages().getString("Friends.Command.Accept.ErrorAlreadySend").replace("[PLAYER]", pQueryPlayer.getDisplayName())));
+			sendError(pPlayer, new TextComponent(TextComponent.fromLegacyText(PREFIX + Main.getInstance().getMessages().getString("Friends.Command.Accept.ErrorAlreadySend").replace("[PLAYER]", pQueryPlayer.getDisplayName()))));
 			return false;
 		}
 		return true;
@@ -103,7 +104,7 @@ public class Add extends FriendSubCommand {
 	@Override
 	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (pPlayer.isAFriendOf(pGivenPlayer)) {
-			sendError(pPlayer, (new TextComponent(PREFIX + Main.getInstance().getMessages().getString("Friends.Command.Add.AlreadyFriends").replace("[PLAYER]", pGivenPlayer.getDisplayName()))));
+			sendError(pPlayer, (new TextComponent(TextComponent.fromLegacyText(PREFIX + Main.getInstance().getMessages().getString("Friends.Command.Add.AlreadyFriends").replace("[PLAYER]", pGivenPlayer.getDisplayName())))));
 			return true;
 		}
 		return false;
@@ -126,8 +127,8 @@ public class Add extends FriendSubCommand {
 	}
 
 	private boolean allowsFriendRequests(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
-		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Enabled") && pGivenPlayer.getSettingsWorth(0) == 0) {
-			sendError(pPlayer, new TextComponent(PREFIX + PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.CanNotSendThisPlayer")).replaceFirst(pGivenPlayer.getName())));
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Enabled") && pGivenPlayer.getSettingsWorth(FriendRequestSetting.SETTINGS_ID) == FriendRequestSetting.DOES_NOT_RECEIVE_FRIEND_REQUESTS_STATE) {
+			sendError(pPlayer, new TextComponent(TextComponent.fromLegacyText(PREFIX + PLAYER_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.Add.CanNotSendThisPlayer")).replaceFirst(pGivenPlayer.getName()))));
 			return false;
 		}
 		return true;

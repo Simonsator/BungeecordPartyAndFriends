@@ -9,22 +9,32 @@ import de.simonsator.partyandfriends.api.pafplayers.IDBasedPAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.communication.sql.data.PlayerDataSet;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	private static boolean multiCoreEnhancement = false;
+	private final Map<Integer, Integer> SETTINGS;
 	protected int id;
 	private String name;
 	private UUID uuid;
+	private Long lastOnline;
 
 	public PAFPlayerMySQL(int pID) {
 		id = pID;
+		SETTINGS = new HashMap<>();
+	}
+
+	public PAFPlayerMySQL(PlayerDataSet pData) {
+		id = pData.ID;
+		name = pData.NAME;
+		uuid = pData.UUID;
+		lastOnline = pData.LAST_ONLINE;
+		SETTINGS = pData.SETTINGS;
 	}
 
 	public static void setMultiCoreEnhancement(boolean pUseMultiCoreEnhancment) {
@@ -47,6 +57,13 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 		return idListToPAFPlayerList(PAFPlayerManagerMySQL.getConnection().getFriends(id));
 	}
 
+	private List<PAFPlayer> playerDataToPAFList(List<PlayerDataSet> playerDataSets) {
+		List<PAFPlayer> players = new ArrayList<>();
+		for (PlayerDataSet playerDataSet : playerDataSets)
+			players.add(PAFPlayerManager.getInstance().getPlayer(playerDataSet));
+		return players;
+	}
+
 	@Override
 	public UUID getUniqueId() {
 		if (uuid != null)
@@ -66,12 +83,15 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public int getSettingsWorth(int pSettingsID) {
+		Integer worth = SETTINGS.get(pSettingsID);
+		if (worth != null)
+			return worth;
 		return PAFPlayerManagerMySQL.getConnection().getSettingsWorth(id, pSettingsID);
 	}
 
 	@Override
 	public List<PAFPlayer> getRequests() {
-		return idListToPAFPlayerList(PAFPlayerManagerMySQL.getConnection().getRequests(id));
+		return playerDataToPAFList(PAFPlayerManagerMySQL.getConnection().getRequestsPlayerData(id));
 	}
 
 	@Override
@@ -163,6 +183,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public void setSetting(int pSettingsID, int pNewWorth) {
+		SETTINGS.put(pSettingsID, pNewWorth);
 		PAFPlayerManagerMySQL.getConnection().setSetting(id, pSettingsID, pNewWorth);
 	}
 
@@ -174,6 +195,8 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 
 	@Override
 	public long getLastOnline() {
+		if (lastOnline != null)
+			return lastOnline;
 		Timestamp time = PAFPlayerManagerMySQL.getConnection().getLastOnline(id);
 		if (time != null)
 			return time.getTime();

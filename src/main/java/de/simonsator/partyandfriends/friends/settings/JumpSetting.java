@@ -12,6 +12,10 @@ import java.util.List;
  * @version 1.0.0 28.03.17
  */
 public class JumpSetting extends SimpleSetting {
+	public static final int SETTINGS_ID = 4;
+	public static final int FRIENDS_CAN_JUMP_TO_PLAYER_STATE = 0;
+	public static final int FRIENDS_CAN_NOT_JUMP_TO_PLAYER_STATE = 1;
+
 	public JumpSetting(List<String> pSettingNames, String pPermission, int pPriority) {
 		super(pSettingNames, pPermission, pPriority);
 	}
@@ -19,7 +23,7 @@ public class JumpSetting extends SimpleSetting {
 	@Override
 	protected String getMessage(OnlinePAFPlayer pPlayer) {
 		String identifier;
-		if (pPlayer.getSettingsWorth(4) == 0) {
+		if (pPlayer.getSettingsWorth(SETTINGS_ID) == FRIENDS_CAN_JUMP_TO_PLAYER_STATE) {
 			identifier = "Friends.Command.Settings.CanJump";
 		} else {
 			identifier = "Friends.Command.Settings.CanNotJump";
@@ -29,8 +33,8 @@ public class JumpSetting extends SimpleSetting {
 
 	@Override
 	public void changeSetting(OnlinePAFPlayer pPlayer, String[] pArgs) {
-		int worthNow = pPlayer.changeSettingsWorth(4);
-		if (worthNow == 0) {
+		int worthNow = pPlayer.changeSettingsWorth(SETTINGS_ID);
+		if (worthNow == FRIENDS_CAN_JUMP_TO_PLAYER_STATE) {
 			pPlayer.sendMessage((Friends.getInstance().getPrefix() + Main.getInstance()
 					.getMessages().getString("Friends.Command.Settings.NowYourFriendsCanJump")));
 		} else {

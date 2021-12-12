@@ -14,7 +14,7 @@ import java.util.TimeZone;
  */
 public class ConfigLoader extends ConfigurationCreator {
 	public ConfigLoader(File file) throws IOException {
-		super(file, Main.getInstance());
+		super(file, Main.getInstance(), false);
 		copyFromJar("config_bungee.yml");
 		readFile();
 		loadDefaultValues();
@@ -44,8 +44,11 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("General.Language", "English");
 		set("General.MultiCoreEnhancement", true);
 		set("General.Time.LanguageTag", "US");
-		set("General.Time.TimeZone", TimeZone.getDefault().getID());
+		set("General.Time.TimeZone", "SYSTEM_DEFAULT");
+		if (getString("General.Time.TimeZone").equals("SYSTEM_DEFAULT"))
+			overwriteKeyTemp("General.Time.TimeZone", TimeZone.getDefault().getID());
 		set("General.Time.Format", "dd/MM/yyyy HH:mm:ss");
+		set("General.DisableAutomaticPartyServerSwitching", false);
 		set("General.PartyDoNotJoinTheseServers", "lobby", "lobby1", "lobby2");
 		set("General.PartyJoinDelayInSeconds", 0);
 		set("General.DisabledServers", "login1", "login2");

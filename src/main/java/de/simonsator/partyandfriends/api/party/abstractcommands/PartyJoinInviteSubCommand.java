@@ -12,9 +12,9 @@ import java.util.regex.Matcher;
 import static de.simonsator.partyandfriends.utilities.PatterCollection.MAX_PLAYERS_IN_PARTY_PATTERN;
 
 public abstract class PartyJoinInviteSubCommand extends PartySubCommand {
+	private static List<MaxPlayerPermissionCollection> maxPlayerPermissionCollections = null;
 	private final Matcher TOO_MANY_PLAYERS_IN_PARTY_MATCHER;
 	private final int DEFAULT_MAX_PLAYERS_PER_PARTY;
-	private static List<MaxPlayerPermissionCollection> maxPlayerPermissionCollections = null;
 
 	public PartyJoinInviteSubCommand(List<String> pCommands, int pPriority, String pHelpText, String pPermission, String pMaxPlayersInPartyMessage) {
 		super(pCommands, pPriority, pHelpText, pPermission);

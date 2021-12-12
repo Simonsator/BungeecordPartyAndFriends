@@ -24,6 +24,11 @@ public abstract class LanguageConfiguration extends ConfigurationCreator {
 		this(pLanguage, pFile, (Plugin) pPlugin);
 	}
 
+	protected LanguageConfiguration(Language pLanguage, File pFile, PAFPluginBase pPlugin, boolean supportHexColors) {
+		super(pFile, pPlugin, supportHexColors);
+		LANGUAGE = pLanguage;
+	}
+
 	@Deprecated
 	protected LanguageConfiguration(Language pLanguage, File pFile, Plugin pPlugin) {
 		super(pFile, pPlugin);

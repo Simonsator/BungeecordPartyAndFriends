@@ -35,7 +35,7 @@ public class Accept extends RequestReactionsCommands {
 			return;
 		PAFPlayer playerQuery = PAFPlayerManager.getInstance().getPlayer(args[1]);
 		if (!playerQuery.doesExist()) {
-			sendError(pPlayer, new TextComponent(Friends.getInstance().getPrefix() + PLAYER_MATCHER.replaceFirst(args[1])));
+			sendError(pPlayer, new TextComponent(TextComponent.fromLegacyText(Friends.getInstance().getPrefix() + PLAYER_MATCHER.replaceFirst(args[1]))));
 			return;
 		}
 		if (hasNoRequest(pPlayer, playerQuery))

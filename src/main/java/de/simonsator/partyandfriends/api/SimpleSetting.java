@@ -4,8 +4,10 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.friends.subcommands.Settings;
 import de.simonsator.partyandfriends.main.Main;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.util.List;
 
@@ -26,12 +28,13 @@ public abstract class SimpleSetting extends Setting {
 
 	@Override
 	public void outputMessage(OnlinePAFPlayer pPlayer) {
-		pPlayer.sendPacket(new TextComponent(ComponentSerializer.parse(("{\"text\":\""
-				+ getMessage(pPlayer) + "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + "/"
-				+ Friends.getInstance().getName() + " " + Settings.getInstance().getCommandName() + " " + getName()
-				+ "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-				+ Main.getInstance().getMessages().getString("Friends.Command.Settings.ChangeThisSettingsHover")
-				+ "\"}]}}}"))));
+		TextComponent message = new TextComponent(TextComponent.fromLegacyText(getMessage(pPlayer)));
+		message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/"
+				+ Friends.getInstance().getName() + " " + Settings.getInstance().getCommandName() + " " + getName()));
+		BaseComponent[] clickHereMessage = TextComponent.fromLegacyText(Main.getInstance().getMessages().getString("Friends.Command.Settings.ChangeThisSettingsHover"));
+		message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, clickHereMessage));
+		pPlayer.sendPacket(message);
+
 	}
 
 }

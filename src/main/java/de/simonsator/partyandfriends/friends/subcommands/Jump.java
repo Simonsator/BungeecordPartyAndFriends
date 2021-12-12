@@ -8,6 +8,7 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.friends.settings.JumpSetting;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -86,7 +87,7 @@ public class Jump extends FriendSubCommand {
 	}
 
 	private boolean allowsJumps(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pQueryPlayer) {
-		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Jump.Enabled") && pQueryPlayer.getSettingsWorth(4) == 1) {
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Jump.Enabled") && pQueryPlayer.getSettingsWorth(JumpSetting.SETTINGS_ID) == JumpSetting.FRIENDS_CAN_NOT_JUMP_TO_PLAYER_STATE) {
 			sendError(pPlayer, "Friends.Command.Jump.CanNotJump");
 			return false;
 		}
@@ -103,8 +104,8 @@ public class Jump extends FriendSubCommand {
 
 	private boolean isPlayerOnline(OnlinePAFPlayer pSender, PAFPlayer pQueryPlayer) {
 		if (!pQueryPlayer.isOnline()) {
-			sendError(pSender, new TextComponent(Main.getInstance().getMessages().getString("Friends.General.PlayerIsOffline").
-					replace("[PLAYER]", pQueryPlayer.getDisplayName())));
+			sendError(pSender, new TextComponent(TextComponent.fromLegacyText(Main.getInstance().getMessages().getString("Friends.General.PlayerIsOffline").
+					replace("[PLAYER]", pQueryPlayer.getDisplayName()))));
 			return false;
 		}
 		return true;

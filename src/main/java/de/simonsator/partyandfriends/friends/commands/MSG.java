@@ -7,8 +7,10 @@ import de.simonsator.partyandfriends.api.events.message.FriendOnlineMessageEvent
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.friends.settings.PMSetting;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.regex.Matcher;
@@ -121,7 +123,7 @@ public class MSG extends OnlyTopCommand {
 	}
 
 	private boolean allowsWriteTo(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
-		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PM.Enabled") && pQueryPlayer.getSettingsWorth(2) == 1) {
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PM.Enabled") && pQueryPlayer.getSettingsWorth(PMSetting.SETTINGS_ID) == PMSetting.PLAYER_DOES_NOT_RECEIVES_PM_STATE) {
 			pPlayer.sendMessage((getPrefix()
 					+ Main.getInstance().getMessages().getString("Friends.Command.MSG.CanNotWriteToHim")));
 			return false;
@@ -147,10 +149,10 @@ public class MSG extends OnlyTopCommand {
 	private TextComponent formatMessage(String pContent, String pSenderDisplayName, String pReceiverName) {
 		if (ALLOW_PLAYER_CHAT_FORMATTING)
 			return new TextComponent(TextComponent.fromLegacyText(getPrefix() + CONTENT_PATTERN.matcher(PLAYER_PATTERN.matcher(SENDER_NAME_PATTERN.matcher(Main.getInstance()
-					.getMessages().getString("Friends.Command.MSG.SentMessage")).replaceAll(Matcher.quoteReplacement(pSenderDisplayName))).
+							.getMessages().getString("Friends.Command.MSG.SentMessage")).replaceAll(Matcher.quoteReplacement(pSenderDisplayName))).
 					replaceAll(Matcher.quoteReplacement(pReceiverName))).replaceAll(Matcher.quoteReplacement(DEFAULT_MESSAGE_COLOR + ChatColor.translateAlternateColorCodes('&', pContent) + " §r"))));
 		return new TextComponent(getPrefix() + CONTENT_PATTERN.matcher(PLAYER_PATTERN.matcher(SENDER_NAME_PATTERN.matcher(Main.getInstance()
-				.getMessages().getString("Friends.Command.MSG.SentMessage")).replaceAll(Matcher.quoteReplacement(pSenderDisplayName))).
+						.getMessages().getString("Friends.Command.MSG.SentMessage")).replaceAll(Matcher.quoteReplacement(pSenderDisplayName))).
 				replaceAll(Matcher.quoteReplacement(pReceiverName))).replaceAll(Matcher.quoteReplacement(SPACE_PATTERN.matcher(pContent).replaceAll(" " + DEFAULT_MESSAGE_COLOR))));
 	}
 

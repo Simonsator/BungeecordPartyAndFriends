@@ -77,7 +77,7 @@ public abstract class SQLCommunication extends DBCommunication {
 	private Connection createConnection() {
 		try {
 			closeConnection();
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName(MYSQL_DRIVER_CLASS);
 			return DriverManager.getConnection(url, connectionProperties);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();

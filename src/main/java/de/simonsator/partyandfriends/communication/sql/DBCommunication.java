@@ -10,6 +10,18 @@ import java.sql.Statement;
  * @version 1.0.0 11.04.17
  */
 public class DBCommunication {
+	protected final String MYSQL_DRIVER_CLASS;
+
+	protected DBCommunication() {
+		String mysqlDriverClass = "com.mysql.cj.jdbc.Driver";
+		try {
+			Class.forName(mysqlDriverClass);
+		} catch (ClassNotFoundException e) {
+			mysqlDriverClass = "com.mysql.jdbc.Driver";
+		}
+		MYSQL_DRIVER_CLASS = mysqlDriverClass;
+	}
+
 	protected void close(PreparedStatement pPrepStmt) {
 		try {
 			if (pPrepStmt != null)

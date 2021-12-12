@@ -48,7 +48,7 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 	public void sendMessage(String pText) {
 		String[] spited = pText.split("LINE_BREAK");
 		for (String split : spited)
-			sendMessage(new TextComponent(split));
+			sendMessage(new TextComponent(TextComponent.fromLegacyText(split)));
 	}
 
 

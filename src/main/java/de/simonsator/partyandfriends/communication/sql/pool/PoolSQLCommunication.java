@@ -17,11 +17,11 @@ import java.util.Properties;
  * @version 1.0.0 11.04.17
  */
 public class PoolSQLCommunication extends DBCommunication implements Deactivated {
+	private static ComboPooledDataSource cpds;
+	private static HikariDataSource hikariDataSource;
 	private final MySQLData MYSQL_DATA;
 	private final PoolData POOL_DATA;
 	private final Properties connectionProperties;
-	private static ComboPooledDataSource cpds;
-	private static HikariDataSource hikariDataSource;
 
 	public PoolSQLCommunication(MySQLData pMySQLData, PoolData pPoolData) throws SQLException {
 		MYSQL_DATA = pMySQLData;
@@ -49,7 +49,7 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 	private void checkIfConnectionIsValid() throws SQLException {
 		Connection con = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName(MYSQL_DRIVER_CLASS);
 			con = DriverManager.getConnection("jdbc:mysql://" + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT, connectionProperties);
 			con.isValid(15);
 		} catch (ClassNotFoundException e) {
@@ -63,7 +63,7 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 	private ComboPooledDataSource createCPDSConnection() {
 		try {
 			ComboPooledDataSource cpds = new ComboPooledDataSource();
-			cpds.setDriverClass("com.mysql.jdbc.Driver");
+			cpds.setDriverClass(MYSQL_DRIVER_CLASS);
 			cpds.setJdbcUrl("jdbc:mysql://" + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT + "/" + MYSQL_DATA.DATABASE);
 			cpds.setProperties(connectionProperties);
 			cpds.setInitialPoolSize(POOL_DATA.INITIAL_POOL_SIZE);
@@ -80,7 +80,7 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 
 	private HikariDataSource createHikariConnection() {
 		HikariConfig config = new HikariConfig();
-		config.setDriverClassName("com.mysql.jdbc.Driver");
+		config.setDriverClassName(MYSQL_DRIVER_CLASS);
 		config.setJdbcUrl("jdbc:mysql://" + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT + "/" + MYSQL_DATA.DATABASE);
 		config.setDataSourceProperties(connectionProperties);
 		config.setMinimumIdle(POOL_DATA.MIN_POOL_SIZE);

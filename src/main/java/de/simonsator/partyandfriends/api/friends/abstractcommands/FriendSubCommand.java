@@ -29,7 +29,7 @@ public abstract class FriendSubCommand extends SubCommand implements Comparable<
 
 	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer, String[] args) {
 		if (!pPlayer.isAFriendOf(pGivenPlayer)) {
-			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessages().getString("Friends.General.PlayerIsOffline").replace("[PLAYER]", args[1])));
+			sendError(pPlayer, new TextComponent(TextComponent.fromLegacyText(PREFIX + Main.getInstance().getMessages().getString("Friends.General.PlayerIsOffline").replace("[PLAYER]", args[1]))));
 			return false;
 		}
 		return true;
@@ -38,7 +38,7 @@ public abstract class FriendSubCommand extends SubCommand implements Comparable<
 	@Deprecated
 	protected boolean isAFriendOf(OnlinePAFPlayer pPlayer, PAFPlayer pGivenPlayer) {
 		if (!pPlayer.isAFriendOf(pGivenPlayer)) {
-			sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessages().getString("Friends.General.PlayerIsOffline").replace("[PLAYER]", pGivenPlayer.getDisplayName())));
+			sendError(pPlayer, new TextComponent(TextComponent.fromLegacyText(PREFIX + Main.getInstance().getMessages().getString("Friends.General.PlayerIsOffline").replace("[PLAYER]", pGivenPlayer.getDisplayName()))));
 			return false;
 		}
 		return true;

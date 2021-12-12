@@ -10,6 +10,7 @@ import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartyJoinInviteSubCommand;
 import de.simonsator.partyandfriends.main.Main;
+import de.simonsator.partyandfriends.party.settings.InviteSetting;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -128,7 +129,7 @@ public class Invite extends PartyJoinInviteSubCommand {
 	}
 
 	private boolean allowsInvitation(OnlinePAFPlayer pPlayer, OnlinePAFPlayer pQueryPlayer) {
-		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Enabled") && pQueryPlayer.getSettingsWorth(1) == 1 && !pPlayer.isAFriendOf(pQueryPlayer)) {
+		if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.PartyInvite.Enabled") && pQueryPlayer.getSettingsWorth(InviteSetting.SETTINGS_ID) == InviteSetting.PLAYER_RECEIVES_INVITES_BY_FRIENDS_STATE && !pPlayer.isAFriendOf(pQueryPlayer)) {
 			pPlayer.sendMessage(PREFIX + Main.getInstance().getMessages().getString("Party.Command.Invite.CanNotInviteThisPlayer"));
 			return false;
 		}

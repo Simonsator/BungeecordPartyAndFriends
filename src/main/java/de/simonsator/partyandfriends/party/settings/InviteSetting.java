@@ -12,6 +12,10 @@ import java.util.List;
  * @version 1.0.0 28.03.17
  */
 public class InviteSetting extends SimpleSetting {
+	public static final int SETTINGS_ID = 1;
+	public static final int PLAYER_RECEIVES_INVITES_BY_EVERYONE_STATE = 0;
+	public static final int PLAYER_RECEIVES_INVITES_BY_FRIENDS_STATE = 1;
+
 	public InviteSetting(List<String> pSettingNames, String pPermission, int pPriority) {
 		super(pSettingNames, pPermission, pPriority);
 	}
@@ -19,7 +23,7 @@ public class InviteSetting extends SimpleSetting {
 	@Override
 	protected String getMessage(OnlinePAFPlayer pPlayer) {
 		String identifier;
-		if (pPlayer.getSettingsWorth(1) == 0) {
+		if (pPlayer.getSettingsWorth(SETTINGS_ID) == PLAYER_RECEIVES_INVITES_BY_EVERYONE_STATE) {
 			identifier = "Friends.Command.Settings.PartyInvitedByEveryone";
 		} else {
 			identifier = "Friends.Command.Settings.PartyInvitedByFriends";
@@ -29,8 +33,8 @@ public class InviteSetting extends SimpleSetting {
 
 	@Override
 	public void changeSetting(OnlinePAFPlayer pPlayer, String[] pArgs) {
-		int worthNow = pPlayer.changeSettingsWorth(1);
-		if (worthNow == 0) {
+		int worthNow = pPlayer.changeSettingsWorth(SETTINGS_ID);
+		if (worthNow == PLAYER_RECEIVES_INVITES_BY_EVERYONE_STATE) {
 			pPlayer.sendMessage((Friends.getInstance().getPrefix() + Main.getInstance()
 					.getMessages().getString("Friends.Command.Settings.NowYouCanGetInvitedByEveryone")));
 		} else {

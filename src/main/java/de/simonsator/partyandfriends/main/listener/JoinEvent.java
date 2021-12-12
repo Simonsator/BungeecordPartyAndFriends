@@ -6,6 +6,8 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.friends.commands.Friends;
+import de.simonsator.partyandfriends.friends.commands.MSG;
+import de.simonsator.partyandfriends.friends.settings.OfflineSetting;
 import de.simonsator.partyandfriends.friends.settings.OnlineStatusNotificationSetting;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.PatterCollection;
@@ -50,6 +52,8 @@ public class JoinEvent implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPostLogin(final PostLoginEvent pEvent) {
+		if (Main.getInstance().isShuttingDown())
+			return;
 		if (pEvent.getPlayer().isConnected())
 			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> sbLoggedIn(pEvent));
 	}
@@ -68,7 +72,7 @@ public class JoinEvent implements Listener {
 		boolean noFriends = friends.isEmpty();
 		if (!friendRequests.isEmpty() && FRIEND_REQUEST_NOTIFICATION)
 			deliverFriendRequests(player, friendRequests);
-		if (player.getSettingsWorth(3) == 1)
+		if (player.getSettingsWorth(OfflineSetting.SETTINGS_ID) == OfflineSetting.FRIENDS_ALWAYS_SEE_PLAYER_AS_OFFLINE_STATE)
 			noFriends = true;
 		if (!noFriends)
 			sendNowOnline(player, friends);
@@ -83,7 +87,7 @@ public class JoinEvent implements Listener {
 			content.append(Main.getInstance().getMessages().getString("Friends.Command.List.PlayerSplit"));
 		}
 		pPlayer.sendMessage(PatterCollection.FRIEND_REQUEST_COUNT_PATTERN.matcher(PatterCollection.FRIEND_REQUEST_PATTERN.matcher(Friends.getInstance().getPrefix() + Main.getInstance()
-				.getMessages().getString("Friends.General.RequestInfoOnJoin")).replaceAll(Matcher.quoteReplacement(content.substring(0, content.length() - PLAYER_SPLIT_LENGTH)))).
+						.getMessages().getString("Friends.General.RequestInfoOnJoin")).replaceAll(Matcher.quoteReplacement(content.substring(0, content.length() - PLAYER_SPLIT_LENGTH)))).
 				replaceAll(Matcher.quoteReplacement(pFriendRequests.size() + "")));
 	}
 
@@ -94,7 +98,7 @@ public class JoinEvent implements Listener {
 		BukkitBungeeAdapter.getInstance().callEvent(event);
 		if (!event.isCancelled())
 			for (PAFPlayer friend : event.getFriends())
-				if (ONLINE_STATUS_CHANGE_SETTING_ENABLED && friend.getSettingsWorth(OnlineStatusNotificationSetting.SETTINGS_ID) == 0)
+				if (!ONLINE_STATUS_CHANGE_SETTING_ENABLED || friend.getSettingsWorth(OnlineStatusNotificationSetting.SETTINGS_ID) == OnlineStatusNotificationSetting.SHOW_ONLINE_STATUS_CHANGE_NOTIFICATION_STATE)
 					friend.sendMessage((event.getMessage()));
 	}
 }

@@ -11,6 +11,7 @@ import net.md_5.bungee.config.YamlConfiguration;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -20,23 +21,33 @@ import java.util.regex.Pattern;
 public abstract class ConfigurationCreator {
 	protected final File FILE;
 	private final Plugin PLUGIN;
+	private final boolean SUPPORT_HEX_COLORS;
+	private final Pattern HEX_PATTERN = Pattern.compile("&#" + "([A-Fa-f0-9]{6})");
 	protected Configuration configuration = new Configuration();
 	private boolean fileWasChanged = false;
 
 	@Deprecated
 	protected ConfigurationCreator(File file) {
-		this.FILE = file;
-		PLUGIN = null;
+		this(file, null);
 	}
 
 	protected ConfigurationCreator(File file, PAFPluginBase pPlugin) {
 		this(file, (Plugin) pPlugin);
 	}
 
+	protected ConfigurationCreator(File file, PAFPluginBase pPlugin, boolean supportHexColors) {
+		this(file, (Plugin) pPlugin, supportHexColors);
+	}
+
 	@Deprecated
 	protected ConfigurationCreator(File file, Plugin pPlugin) {
+		this(file, pPlugin, true);
+	}
+
+	private ConfigurationCreator(File file, Plugin pPlugin, boolean supportHexColors) {
 		this.FILE = file;
 		PLUGIN = pPlugin;
+		SUPPORT_HEX_COLORS = supportHexColors;
 	}
 
 	protected ConfigurationCreator(File file, PAFExtension pPlugin) {
@@ -80,6 +91,10 @@ public abstract class ConfigurationCreator {
 		}
 	}
 
+	protected void overwriteKeyTemp(String pKey, Object pText) {
+		configuration.set(pKey, pText);
+	}
+
 	protected void set(String pKey, String... entries) {
 		set(pKey, new ArrayList<>(Arrays.asList(entries)));
 	}
@@ -109,9 +124,30 @@ public abstract class ConfigurationCreator {
 
 	private String process(String pMessage) {
 		pMessage = ChatColor.translateAlternateColorCodes('&', pMessage);
+		if (SUPPORT_HEX_COLORS)
+			return fixHexColors(pMessage);
 		return fixColors(pMessage);
 	}
 
+	private String fixHexColors(String pMessage) {
+		Matcher matcher = HEX_PATTERN.matcher(pMessage);
+		StringBuffer buffer = new StringBuffer(pMessage.length() + 4 * 8);
+		while (matcher.find()) {
+			String group = matcher.group(1);
+			String COLOR_CHAR = "§";
+			matcher.appendReplacement(buffer, COLOR_CHAR + "x"
+					+ COLOR_CHAR + group.charAt(0) + COLOR_CHAR + group.charAt(1)
+					+ COLOR_CHAR + group.charAt(2) + COLOR_CHAR + group.charAt(3)
+					+ COLOR_CHAR + group.charAt(4) + COLOR_CHAR + group.charAt(5)
+			);
+		}
+		return matcher.appendTail(buffer).toString();
+	}
+
+	/**
+	 * @param pInput The text message
+	 * @return Returns a string which is correctly read by client software without the use of TextComponent.fromLegacyText
+	 */
 	private String fixColors(String pInput) {
 		String[] split = pInput.split(" ");
 		StringBuilder composite = new StringBuilder();

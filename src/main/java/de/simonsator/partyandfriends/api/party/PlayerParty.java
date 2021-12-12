@@ -153,6 +153,7 @@ public abstract class PlayerParty {
 
 	public void kickPlayer(OnlinePAFPlayer pPlayer) {
 		removePlayerSilent(pPlayer);
+		BukkitBungeeAdapter.getInstance().callEvent(new LeftPartyEvent(this, pPlayer));
 		pPlayer.sendMessage(Main.getInstance().getMessages()
 				.get(PartyCommand.getInstance().getPrefix(), "Party.Command.Kick.KickedPlayerOutOfThePartyKickedPlayer"));
 		this.sendMessage((PartyCommand.getInstance().getPrefix()
@@ -171,17 +172,17 @@ public abstract class PlayerParty {
 		OnlinePAFPlayer lLeader = getLeader();
 		pPlayer.sendMessage((PartyCommand.getInstance().getPrefix() + PLAYER_PATTERN.matcher(Main.getInstance().getMessages()
 				.getString("Party.Command.Invite.YouWereInvitedBY")).replaceAll(Matcher.quoteReplacement(lLeader.getDisplayName()))));
-		TextComponent acceptMessage = new TextComponent(acceptInviteMatcher.replaceAll(Matcher.quoteReplacement(lLeader.getName())));
+		TextComponent acceptMessage = new TextComponent(TextComponent.fromLegacyText(acceptInviteMatcher.replaceAll(Matcher.quoteReplacement(lLeader.getName()))));
 		acceptMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/"
 				+ PartyCommand.getInstance().getName() + JOIN_COMMAND_NAME + lLeader.getName()));
-		BaseComponent[] clickHereMessage = new TextComponent(TextComponent.fromLegacyText(Main.getInstance().getMessages().getString("Party.Command.Invite.AcceptInviteHOVER"))).getExtra().toArray(new BaseComponent[0]);
+		BaseComponent[] clickHereMessage = TextComponent.fromLegacyText(Main.getInstance().getMessages().getString("Party.Command.Invite.AcceptInviteHOVER"));
 		acceptMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, clickHereMessage));
 		pPlayer.sendPacket(acceptMessage);
 		if (DENY_COMMAND_NAME != null) {
-			TextComponent denyMessage = new TextComponent(denyInviteMatcher.replaceAll(Matcher.quoteReplacement(lLeader.getName())));
+			TextComponent denyMessage = new TextComponent(TextComponent.fromLegacyText(denyInviteMatcher.replaceAll(Matcher.quoteReplacement(lLeader.getName()))));
 			denyMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/"
 					+ PartyCommand.getInstance().getName() + DENY_COMMAND_NAME + lLeader.getName()));
-			clickHereMessage = new TextComponent(TextComponent.fromLegacyText(Main.getInstance().getMessages().getString("Party.Command.Invite.DeclineInviteHOVER"))).getExtra().toArray(new BaseComponent[0]);
+			clickHereMessage = TextComponent.fromLegacyText(Main.getInstance().getMessages().getString("Party.Command.Invite.DeclineInviteHOVER"));
 			denyMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, clickHereMessage));
 			pPlayer.sendPacket(denyMessage);
 		}

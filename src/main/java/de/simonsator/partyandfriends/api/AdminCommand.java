@@ -11,6 +11,7 @@ import java.util.List;
 
 public abstract class AdminCommand<T extends AdminSubCommand> extends Command {
 	private final List<T> subCommands = new ArrayList<>();
+	private final TextComponent MUST_BE_EXECUTED_BY_CONSOLE = new TextComponent(TextComponent.fromLegacyText(Main.getInstance().getMessages().getString("PAFAdmin.Command.MustBeExecutedByConsole")));
 
 	public AdminCommand(String... aliases) {
 		super(aliases[0], "dsioihusdugb", aliases);
@@ -27,7 +28,7 @@ public abstract class AdminCommand<T extends AdminSubCommand> extends Command {
 	@Override
 	public void execute(CommandSender commandSender, String[] args) {
 		if (commandSender instanceof ProxiedPlayer) {
-			commandSender.sendMessage(new TextComponent(Main.getInstance().getMessages().getString("PAFAdmin.Command.MustBeExecutedByConsole")));
+			commandSender.sendMessage(MUST_BE_EXECUTED_BY_CONSOLE);
 			return;
 		}
 		executeCommand(commandSender, args);

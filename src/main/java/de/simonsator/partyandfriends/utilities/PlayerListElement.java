@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.utilities;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.friends.settings.OfflineSetting;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.config.ServerInfo;
 
@@ -18,11 +19,11 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 	private final Long LAST_ONLINE;
 	private final ServerInfo SERVER;
 	private final PAFPlayer PLAYER;
+	private final int SORT_TYPE;
+	private final OnlinePAFPlayer CALLER;
 	private String displayName = null;
 	private String name;
 	private UUID uuid;
-	private final int SORT_TYPE;
-	private final OnlinePAFPlayer CALLER;
 
 	public PlayerListElement(PAFPlayer pPlayer) {
 		this(pPlayer, 0, null);
@@ -30,7 +31,7 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 
 	private PlayerListElement(PAFPlayer pPlayer, int pSortingType, OnlinePAFPlayer pCaller) {
 		PLAYER = pPlayer;
-		boolean isOnline = pPlayer.isOnline() && (!Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Offline.Enabled") || pPlayer.getSettingsWorth(3) == 0);
+		boolean isOnline = pPlayer.isOnline() && (!Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Offline.Enabled") || pPlayer.getSettingsWorth(OfflineSetting.SETTINGS_ID) == OfflineSetting.FRIENDS_CAN_SEE_PLAYER_IS_ONLINE_STATE);
 		IS_ONLINE = isOnline;
 		if (!isOnline) {
 			LAST_ONLINE = pPlayer.getLastOnline();
@@ -44,6 +45,19 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 			SORT_TYPE = 0;
 		else
 			SORT_TYPE = pSortingType;
+	}
+
+	/**
+	 * @param pCaller   The person for whom this list should be created
+	 * @param pSortType The sorting type. 0 is by last online, 1 is alphabetically, 2 is reverse alphabetic and 3 is by friendship duration
+	 * @return A list of PlayerListElements
+	 */
+	public static List<PlayerListElement> getFriendsAsPlayerListElement(OnlinePAFPlayer pCaller, int pSortType) {
+		List<PAFPlayer> friends = pCaller.getFriends();
+		List<PlayerListElement> playerListElements = new ArrayList<>(friends.size());
+		for (PAFPlayer player : friends)
+			playerListElements.add(new PlayerListElement(player, pSortType, pCaller));
+		return playerListElements;
 	}
 
 	@Override
@@ -113,18 +127,5 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 
 	public PAFPlayer getPlayer() {
 		return PLAYER;
-	}
-
-	/**
-	 * @param pCaller   The person for whom this list should be created
-	 * @param pSortType The sorting type. 0 is by last online, 1 is alphabetically, 2 is reverse alphabetic and 3 is by friendship duration
-	 * @return A list of PlayerListElements
-	 */
-	public static List<PlayerListElement> getFriendsAsPlayerListElement(OnlinePAFPlayer pCaller, int pSortType) {
-		List<PAFPlayer> friends = pCaller.getFriends();
-		List<PlayerListElement> playerListElements = new ArrayList<>(friends.size());
-		for (PAFPlayer player : friends)
-			playerListElements.add(new PlayerListElement(player, pSortType, pCaller));
-		return playerListElements;
 	}
 }

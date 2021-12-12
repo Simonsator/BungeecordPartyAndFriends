@@ -17,7 +17,7 @@ public class MessagesLoader extends LanguageConfiguration {
 	private final boolean USE_CUSTOM_MESSAGES;
 
 	public MessagesLoader(Language pLanguage, boolean useCustomMessages, File pFile, PAFPluginBase pPlugin) throws IOException {
-		super(pLanguage, pFile, pPlugin);
+		super(pLanguage, pFile, pPlugin, true);
 		USE_CUSTOM_MESSAGES = useCustomMessages;
 		copyFromJar();
 		readFile();

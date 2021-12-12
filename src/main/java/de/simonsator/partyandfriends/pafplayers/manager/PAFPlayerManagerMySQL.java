@@ -5,6 +5,7 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.communication.sql.MySQL;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
+import de.simonsator.partyandfriends.communication.sql.data.PlayerDataSet;
 import de.simonsator.partyandfriends.communication.sql.pool.PoolData;
 import de.simonsator.partyandfriends.pafplayers.mysql.OnlinePAFPlayerMySQL;
 import de.simonsator.partyandfriends.pafplayers.mysql.PAFPlayerMySQL;
@@ -32,7 +33,7 @@ public class PAFPlayerManagerMySQL extends IDBasedPAFPlayerManager {
 	public PAFPlayer getPlayer(String pPlayer) {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(pPlayer);
 		if (player == null)
-			return new PAFPlayerMySQL(getConnection().getPlayerID(pPlayer));
+			return getPlayerNotOnlineOnBungeeCord(getConnection().getPlayerData(pPlayer));
 		else
 			return getPlayer(player);
 	}
@@ -46,12 +47,39 @@ public class PAFPlayerManagerMySQL extends IDBasedPAFPlayerManager {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(pPlayer);
 		if (player != null)
 			return getPlayer(player);
-		return getPlayer(getConnection().getPlayerID(pPlayer));
+		return getPlayerNotOnlineOnBungeeCord(getConnection().getPlayerData(pPlayer));
+	}
+
+	@Override
+	public PAFPlayer getPlayer(PlayerDataSet playerDataSet) {
+		ProxiedPlayer player;
+		if (playerDataSet.UUID != null)
+			player = ProxyServer.getInstance().getPlayer(playerDataSet.UUID);
+		else
+			player = ProxyServer.getInstance().getPlayer(playerDataSet.NAME);
+		if (player != null)
+			return new OnlinePAFPlayerMySQL(playerDataSet.ID, player);
+		return getPlayerNotOnlineOnBungeeCord(playerDataSet);
 	}
 
 	@Override
 	public PAFPlayer getPlayer(int pPlayerID) {
-		return getPlayer(getConnection().getName(pPlayerID));
+		PlayerDataSet playerDataSet = getConnection().getPlayerData(pPlayerID);
+		if (playerDataSet.UUID != null) {
+			ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerDataSet.UUID);
+			if (player != null)
+				return new OnlinePAFPlayerMySQL(playerDataSet.ID, player);
+		}
+		return getPlayerNotOnlineOnBungeeCord(playerDataSet);
 	}
 
+	/**
+	 * IMPORTANT!! only call after you have already checked that the player is not on this bungeecord
+	 *
+	 * @param pData The player data
+	 * @return The PAFPlayer which is linked to this data
+	 */
+	protected PAFPlayer getPlayerNotOnlineOnBungeeCord(PlayerDataSet pData) {
+		return new PAFPlayerMySQL(pData);
+	}
 }

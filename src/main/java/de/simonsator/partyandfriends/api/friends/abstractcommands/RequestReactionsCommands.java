@@ -25,7 +25,7 @@ public abstract class RequestReactionsCommands extends FriendSubCommand {
 
 	protected boolean hasNoRequest(OnlinePAFPlayer pPlayer, PAFPlayer pQueryPlayer) {
 		if ((!pPlayer.hasRequestFrom(pQueryPlayer))) {
-			sendError(pPlayer, new TextComponent(Friends.getInstance().getPrefix() + PLAYER_MATCHER.replaceFirst(pQueryPlayer.getName())));
+			sendError(pPlayer, new TextComponent(TextComponent.fromLegacyText(Friends.getInstance().getPrefix() + PLAYER_MATCHER.replaceFirst(pQueryPlayer.getName()))));
 			return true;
 		}
 		return false;

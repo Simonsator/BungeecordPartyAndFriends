@@ -30,7 +30,7 @@ public abstract class AdminSubCommand extends SubCommand {
 	}
 
 	public void sendError(CommandSender pCommandSender, String pIdentifier) {
-		sendError(pCommandSender, new TextComponent(PREFIX + Main.getInstance().getMessages().getString(pIdentifier)));
+		sendError(pCommandSender, new TextComponent(TextComponent.fromLegacyText(PREFIX + Main.getInstance().getMessages().getString(pIdentifier))));
 	}
 
 }

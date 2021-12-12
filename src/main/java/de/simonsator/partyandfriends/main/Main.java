@@ -48,6 +48,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	 * The main instance of this plugin
 	 */
 	private static Main instance;
+	private final List<PAFExtension> pafExtensions = new ArrayList<>();
 	/**
 	 * The configuration
 	 */
@@ -65,7 +66,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	 */
 	private Language language;
 	private Friends friendCommand;
-	private final List<PAFExtension> pafExtensions = new ArrayList<>();
+	private boolean shuttingDown = false;
 
 	public static Main getInstance() {
 		return instance;
@@ -146,7 +147,6 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		new PAFPlayerManagerMySQL(mySQLData, poolData);
 		if (getGeneralConfig().getBoolean("General.MultiCoreEnhancement")) {
 			PAFPlayerMySQL.setMultiCoreEnhancement(true);
-			getProxy().getConsole().sendMessage(new TextComponent("Multi Core Enhancement is activated."));
 		}
 		new LocalPartyManager(Main.getInstance().getGeneralConfig().getInt("Commands.Party.SubCommands.Invite.InvitationTimeOutTimeInSeconds"));
 		new StandardPermissionProvider();
@@ -155,6 +155,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 
 	@Override
 	public void onDisable() {
+		shuttingDown = true;
 		ProxyServer.getInstance().getPluginManager().unregisterListeners(this);
 		ProxyServer.getInstance().getPluginManager().unregisterCommands(this);
 		Disabler.getInstance().disableAll();
@@ -173,7 +174,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		try {
 			language = Language.valueOf(getGeneralConfig().getString("General.Language").toUpperCase());
 		} catch (IllegalArgumentException e) {
-			getProxy().getConsole().sendMessage(new TextComponent("&4The given language is not supported by Party and Friends. English will be used instead."));
+			getProxy().getConsole().sendMessage(new TextComponent(TextComponent.fromLegacyText("&4The given language is not supported by Party and Friends. English will be used instead.")));
 			language = Language.ENGLISH;
 			e.printStackTrace();
 		}
@@ -299,5 +300,9 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		pafExtensions.clear();
 		for (PAFExtension extension : toReload)
 			extension.reload();
+	}
+
+	public boolean isShuttingDown() {
+		return shuttingDown;
 	}
 }
