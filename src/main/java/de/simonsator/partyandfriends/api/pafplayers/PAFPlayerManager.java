@@ -16,10 +16,20 @@ public abstract class PAFPlayerManager {
 		return instance;
 	}
 
+	/**
+	 * @param pPlayer The name of the player
+	 * @return Returns either a PAFPlayer if the player is offline/does not exist
+	 * (check with {@link PAFPlayer#doesExist()}) or an {@link OnlinePAFPlayer} if the player is online
+	 */
 	public abstract PAFPlayer getPlayer(String pPlayer);
 
 	public abstract OnlinePAFPlayer getPlayer(ProxiedPlayer pPlayer);
 
+	/**
+	 * @param pPlayer The UUID of the player
+	 * @return Returns either a PAFPlayer if the player is offline/does not exist
+	 * (check with {@link PAFPlayer#doesExist()}) or an {@link OnlinePAFPlayer} if the player is online
+	 */
 	public abstract PAFPlayer getPlayer(UUID pPlayer);
 
 	/**
