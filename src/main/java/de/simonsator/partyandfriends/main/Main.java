@@ -12,6 +12,7 @@ import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.friends.commands.MSG;
 import de.simonsator.partyandfriends.friends.commands.Reply;
 import de.simonsator.partyandfriends.main.listener.JoinEvent;
+import de.simonsator.partyandfriends.main.listener.OnChatListener;
 import de.simonsator.partyandfriends.main.listener.PlayerDisconnectListener;
 import de.simonsator.partyandfriends.main.listener.ServerSwitchListener;
 import de.simonsator.partyandfriends.main.startup.error.BootErrorType;
@@ -92,6 +93,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	@Override
 	public void onEnable() {
 		instance = (this);
+		shuttingDown = false;
 		loadConfiguration();
 		try {
 			initPAFClasses();
@@ -137,18 +139,25 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	private void initPAFClasses() throws SQLException {
 		PoolData poolData = new PoolData(Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.MinPoolSize"),
 				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.MaxPoolSize"),
-				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.InitialPoolSize"), Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.IdleConnectionTestPeriod"),
-				Main.getInstance().getGeneralConfig().getBoolean("MySQL.Pool.TestConnectionOnCheckin"), Main.getInstance().getGeneralConfig().getString("MySQL.Pool.ConnectionPool"));
+				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.InitialPoolSize"),
+				Main.getInstance().getGeneralConfig().getInt("MySQL.Pool.IdleConnectionTestPeriod"),
+				Main.getInstance().getGeneralConfig().getBoolean("MySQL.Pool.TestConnectionOnCheckin"),
+				Main.getInstance().getGeneralConfig().getString("MySQL.Pool.ConnectionPool"));
 		MySQLData mySQLData = new MySQLData(getGeneralConfig().get("MySQL.Host").toString(),
-				getGeneralConfig().get("MySQL.Username").toString(), getGeneralConfig().get("MySQL.Password").toString(),
+				getGeneralConfig().get("MySQL.Username").toString(),
+				getGeneralConfig().get("MySQL.Password").toString(),
 				getGeneralConfig().getInt("MySQL.Port"), getGeneralConfig().get("MySQL.Database").toString(),
-				getGeneralConfig().get("MySQL.TablePrefix").toString(), getGeneralConfig().getBoolean("MySQL.UseSSL"), getGeneralConfig().getBoolean("MySQL.Cache"),
-				false, 0);
+				getGeneralConfig().get("MySQL.TablePrefix").toString(),
+				getGeneralConfig().getBoolean("MySQL.UseSSL"),
+				getGeneralConfig().getBoolean("MySQL.Cache"),
+				getGeneralConfig().getBoolean("MySQL.RedisCache.ExpirationActivated"),
+				getGeneralConfig().getInt("MySQL.RedisCache.ExpirationTimeInSeconds"));
 		new PAFPlayerManagerMySQL(mySQLData, poolData);
 		if (getGeneralConfig().getBoolean("General.MultiCoreEnhancement")) {
 			PAFPlayerMySQL.setMultiCoreEnhancement(true);
 		}
-		new LocalPartyManager(Main.getInstance().getGeneralConfig().getInt("Commands.Party.SubCommands.Invite.InvitationTimeOutTimeInSeconds"));
+		new LocalPartyManager(Main.getInstance().getGeneralConfig().getInt(
+				"Commands.Party.SubCommands.Invite.InvitationTimeOutTimeInSeconds"));
 		new StandardPermissionProvider();
 		new ServerDisplayNameCollection(getGeneralConfig());
 	}
@@ -174,12 +183,14 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		try {
 			language = Language.valueOf(getGeneralConfig().getString("General.Language").toUpperCase());
 		} catch (IllegalArgumentException e) {
-			getProxy().getConsole().sendMessage(new TextComponent(TextComponent.fromLegacyText("&4The given language is not supported by Party and Friends. English will be used instead.")));
+			getProxy().getConsole().sendMessage(new TextComponent(TextComponent.fromLegacyText(
+					"&4The given language is not supported by Party and Friends. English will be used instead.")));
 			language = Language.ENGLISH;
 			e.printStackTrace();
 		}
 		try {
-			messages = new MessagesLoader(language, getGeneralConfig().getBoolean("General.UseOwnLanguageFile"), new File(getDataFolder(), "messages.yml"), this);
+			messages = new MessagesLoader(language, getGeneralConfig().getBoolean("General.UseOwnLanguageFile"),
+					new File(getDataFolder(), "messages.yml"), this);
 			if (getGeneralConfig().getBoolean("General.UseOwnLanguageFile"))
 				language = Language.OWN;
 		} catch (IOException e) {
@@ -199,6 +210,9 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		ServerSwitchListener serverSwitchListener = new ServerSwitchListener();
 		if (!getGeneralConfig().getBoolean("General.DisableAutomaticPartyServerSwitching"))
 			BukkitBungeeAdapter.getInstance().registerListener(serverSwitchListener, this);
+		if (getGeneralConfig().getBoolean("Party.MiniGameStartingCommands.Enabled"))
+			BukkitBungeeAdapter.getInstance().registerListener(new OnChatListener(getGeneralConfig().getStringList(
+					"Party.MiniGameStartingCommands.Commands")), this);
 		JoinEvent joinEventListener;
 		BukkitBungeeAdapter.getInstance().registerListener(joinEventListener = new JoinEvent(), this);
 		Exception e = joinEventListener.verify();

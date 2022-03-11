@@ -64,11 +64,15 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Party.MaxPlayersPerParty.Default", 0);
 		set("Party.MaxPlayersPerParty.NoLimitPermission", "");
 		if (get("Party.MaxPlayersPerParty.AddSlotsPermissions") == null) {
-			set("Party.MaxPlayersPerParty.AddSlotsPermissions.Premium.Permission", "de.simonsator.partyandfriends.party.addslots.premium");
+			set("Party.MaxPlayersPerParty.AddSlotsPermissions.Premium.Permission",
+					"de.simonsator.partyandfriends.party.addslots.premium");
 			set("Party.MaxPlayersPerParty.AddSlotsPermissions.Premium.SlotsToAdd", 5);
-			set("Party.MaxPlayersPerParty.AddSlotsPermissions.SuperPremium.Permission", "de.simonsator.partyandfriends.party.addslots.premium");
+			set("Party.MaxPlayersPerParty.AddSlotsPermissions.SuperPremium.Permission",
+					"de.simonsator.partyandfriends.party.addslots.premium");
 			set("Party.MaxPlayersPerParty.AddSlotsPermissions.SuperPremium.SlotsToAdd", 10);
 		}
+		set("Party.MiniGameStartingCommands.Enabled", false);
+		set("Party.MiniGameStartingCommands.Commands", "/arena join blue", "/survivalgames arena");
 		set("Extensions.UseExtensionFolderAsConfigFolder", false);
 		set("Commands.Friends.General.PrintOutHelpOnError", true);
 		set("Commands.Friends.TopCommands.Friend.Names", "friend", "friends");
@@ -80,7 +84,8 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Friends.TopCommands.MSG.Names", "msg", "fmsg");
 		set("Commands.Friends.TopCommands.MSG.Disabled", false);
 		set("Commands.Friends.TopCommands.MSG.Permission", "");
-		set("Commands.Friends.TopCommands.MSG.MSGNonFriendsPermission", "de.simonsator.partyandfriends.msg.msgnonfriends");
+		set("Commands.Friends.TopCommands.MSG.MSGNonFriendsPermission",
+				"de.simonsator.partyandfriends.msg.msgnonfriends");
 		set("Commands.Friends.TopCommands.MSG.AllowPlayersToUseChatFormatting", true);
 		set("Commands.Friends.SubCommands.Accept.Names", "accept", "approve");
 		set("Commands.Friends.SubCommands.Accept.Permission", "");
@@ -117,7 +122,8 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Friends.SubCommands.Settings.Disabled", false);
 		set("Commands.Friends.SubCommands.Settings.Permission", "");
 		set("Commands.Friends.SubCommands.Settings.Priority", 7);
-		set("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Names", "friendrequest", "receivefriendrequests", "friendrequests");
+		set("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Names", "friendrequest",
+				"receivefriendrequests", "friendrequests");
 		set("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Enabled", true);
 		set("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Permission", "");
 		set("Commands.Friends.SubCommands.Settings.Settings.FriendRequest.Priority", 0);

@@ -76,6 +76,15 @@ Party:
       SuperPremium:
         Permission: de.simonsator.partyandfriends.party.addslots.premium
         SlotsToAdd: 10
+  # If this is activated all commands listed under Commands will be executed by everyone in the party when the leader
+  # executes the command, if they are on the same server as the party leader. This option only exists for mini-games
+  # which don't have a bungee/proxy mode. You should always prefer the bungee mode, as it uses less performance and
+  # everybody in the party joins the mini-game, even if they are not on the same server.
+  MiniGameStartingCommands:
+    Enabled: false
+    Commands:
+      - /arena join blue
+      - /survivalgames arena
 Extensions:
   # If this option is activated supported extensions will have their config folder in the folder plugins/PartyAndFriends/extensions/EXTENSION_NAME
   UseExtensionFolderAsConfigFolder: false
