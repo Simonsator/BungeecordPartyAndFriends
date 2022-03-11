@@ -18,7 +18,7 @@ public abstract class PAFPlayerManager {
 
 	/**
 	 * @param pPlayer The name of the player
-	 * @return Returns either a PAFPlayer if the player is offline/does not exist
+	 * @return Returns either a {@link PAFPlayer} if the player is offline/does not exist
 	 * (check with {@link PAFPlayer#doesExist()}) or an {@link OnlinePAFPlayer} if the player is online
 	 */
 	public abstract PAFPlayer getPlayer(String pPlayer);
@@ -27,14 +27,14 @@ public abstract class PAFPlayerManager {
 
 	/**
 	 * @param pPlayer The UUID of the player
-	 * @return Returns either a PAFPlayer if the player is offline/does not exist
+	 * @return Returns either a {@link PAFPlayer} if the player is offline/does not exist
 	 * (check with {@link PAFPlayer#doesExist()}) or an {@link OnlinePAFPlayer} if the player is online
 	 */
 	public abstract PAFPlayer getPlayer(UUID pPlayer);
 
 	/**
-	 * @param playerDataSet The PlayerDataSet. Please make sure that the data set is complete
-	 * @return The PAFPlayer linked to this dataset
+	 * @param playerDataSet The {@link PlayerDataSet}. Please make sure that the data set is complete
+	 * @return The {@link PAFPlayer} linked to this dataset
 	 */
 	public abstract PAFPlayer getPlayer(PlayerDataSet playerDataSet);
 }
