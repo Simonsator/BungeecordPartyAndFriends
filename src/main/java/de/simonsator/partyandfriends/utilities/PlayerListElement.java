@@ -31,7 +31,9 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 
 	private PlayerListElement(PAFPlayer pPlayer, int pSortingType, OnlinePAFPlayer pCaller) {
 		PLAYER = pPlayer;
-		boolean isOnline = pPlayer.isOnline() && (!Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.SubCommands.Settings.Settings.Offline.Enabled") || pPlayer.getSettingsWorth(OfflineSetting.SETTINGS_ID) == OfflineSetting.FRIENDS_CAN_SEE_PLAYER_IS_ONLINE_STATE);
+		boolean isOnline = pPlayer.isOnline() && (!Main.getInstance().getGeneralConfig().getBoolean(
+				"Commands.Friends.SubCommands.Settings.Settings.Offline.Enabled") ||
+				pPlayer.getSettingsWorth(OfflineSetting.SETTINGS_ID) == OfflineSetting.FRIENDS_CAN_SEE_PLAYER_IS_ONLINE_STATE);
 		IS_ONLINE = isOnline;
 		if (!isOnline) {
 			LAST_ONLINE = pPlayer.getLastOnline();
@@ -49,7 +51,8 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 
 	/**
 	 * @param pCaller   The person for whom this list should be created
-	 * @param pSortType The sorting type. 0 is by last online, 1 is alphabetically, 2 is reverse alphabetic and 3 is by friendship duration
+	 * @param pSortType The sorting type. 0 is by last online, 1 is alphabetically, 2 is reverse alphabetic and 3 is
+	 *                  by friendship duration
 	 * @return A list of PlayerListElements
 	 */
 	public static List<PlayerListElement> getFriendsAsPlayerListElement(OnlinePAFPlayer pCaller, int pSortType) {
@@ -123,6 +126,10 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 
 	public ServerInfo getServer() {
 		return SERVER;
+	}
+
+	public String getServerDisplayName() {
+		return ServerDisplayNameCollection.getInstance().getServerDisplayName(getServer());
 	}
 
 	public PAFPlayer getPlayer() {

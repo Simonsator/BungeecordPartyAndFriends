@@ -2,6 +2,7 @@ package de.simonsator.partyandfriends.api.pafplayers;
 
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
+import de.simonsator.partyandfriends.utilities.ServerDisplayNameCollection;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -14,6 +15,10 @@ public interface OnlinePAFPlayer extends PAFPlayer {
 	void connect(ServerInfo pInfo);
 
 	ServerInfo getServer();
+
+	default String getServerDisplayName() {
+		return ServerDisplayNameCollection.getInstance().getServerDisplayName(getServer());
+	}
 
 	boolean isOnline();
 
