@@ -5,6 +5,7 @@ import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.PAFAccountDeleteEvent;
 import de.simonsator.partyandfriends.api.events.friends.FriendRemovedEvent;
 import de.simonsator.partyandfriends.api.events.friends.FriendRequestAcceptedEvent;
+import de.simonsator.partyandfriends.api.events.friends.FriendRequestDeniedEvent;
 import de.simonsator.partyandfriends.api.pafplayers.IDBasedPAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
@@ -115,6 +116,7 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> denyRequestNoMultiCoreEnhancement(pPlayer));
 		else
 			denyRequestNoMultiCoreEnhancement(pPlayer);
+		BukkitBungeeAdapter.getInstance().callEvent(new FriendRequestDeniedEvent(this, pPlayer));
 	}
 
 	public void denyRequestNoMultiCoreEnhancement(PAFPlayer pPlayer) {
