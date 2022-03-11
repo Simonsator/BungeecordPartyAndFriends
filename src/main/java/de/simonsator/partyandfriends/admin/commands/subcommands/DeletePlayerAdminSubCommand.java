@@ -31,7 +31,10 @@ public class DeletePlayerAdminSubCommand extends AdminSubCommand {
 			} else
 				onlinePAFPlayer.getPlayer().disconnect(DISCONNECT_MESSAGE);
 		}
-		playerQuery.deleteAccount();
+		if (!playerQuery.deleteAccount()) {
+			sendError(sender, "PAFAdmin.Command.DeletePlayer.DeletionAborted");
+			return;
+		}
 		sender.sendMessage(new TextComponent(TextComponent.fromLegacyText(Main.getInstance().getMessages().getString("PAFAdmin.Command.DeletePlayer.PlayerDeleted").replace("[PLAYER]", args[1]))));
 	}
 
