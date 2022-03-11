@@ -182,6 +182,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Remove.Removed", " &7You removed the friend &e[PLAYER]&7.");
 		set("Friends.Command.Remove.FriendRemovedYou", " &e[PLAYER]&7 removed you from his friend list.");
 		set("PAFAdmin.Command.DeletePlayer.PlayerDeleted", " &7All data saved by Party and Friends of the player &e[PLAYER]&7 were deleted.");
+		set("PAFAdmin.Command.DeletePlayer.DeletionAborted", " &cAn extension has cancelled the deletion of the player.");
 		set("PAFAdmin.Command.MustBeExecutedByConsole", "&cThis command needs to be executed by the console. This message can be changed in the messages.yml under \"AdminCommands.TopCommand.PlayerMessage\", if UseOwnLanguageFile is activated in the config.yml.");
 	}
 
