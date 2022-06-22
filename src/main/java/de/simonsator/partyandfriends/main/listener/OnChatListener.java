@@ -36,7 +36,11 @@ public class OnChatListener implements Listener {
 						ServerInfo leaderServer = player.getServer();
 						for (OnlinePAFPlayer member : party.getPlayers()) {
 							if (leaderServer.equals(member.getServer()))
-								member.getPlayer().chat(pEvent.getMessage());
+								if (member.getPlayer().getPendingConnection().getVersion() >= 759) {
+									member.sendMessage("The party and friends function 'MiniGameStartingCommands' is not available on minecraft versions 1.19 and up");
+								} else {
+									member.getPlayer().chat(pEvent.getMessage());
+								}
 						}
 					}
 				}

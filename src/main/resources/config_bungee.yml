@@ -76,6 +76,10 @@ Party:
       SuperPremium:
         Permission: de.simonsator.partyandfriends.party.addslots.premium
         SlotsToAdd: 10
+  # WARNING: Due to changes in minecraft it is not possible to let players execute commands beginning with minecraft
+  #  version 1.19. Therefor this function is not available for minecraft versions  1.19 and up
+  #
+  #
   # If this is activated all commands listed under Commands will be executed by everyone in the party when the leader
   # executes the command, if they are on the same server as the party leader. This option only exists for mini-games
   # which don't have a bungee/proxy mode. You should always prefer the bungee mode, as it uses less performance and
