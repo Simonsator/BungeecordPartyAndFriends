@@ -77,7 +77,10 @@ Party:
         Permission: de.simonsator.partyandfriends.party.addslots.premium
         SlotsToAdd: 10
   # WARNING: Due to changes in minecraft it is not possible to let players execute commands beginning with minecraft
-  #  version 1.19. Therefor this function is not available for minecraft versions  1.19 and up
+  # version 1.19. Therefor this function is not available for minecraft versions  1.19 and up.
+  # If you want to use this feature on a server with minecraft 1.19 or later players please use the
+  # Extended version (https://www.spigotmc.org/resources/paf-extended.10123/). It fixes the problem by having the plugin
+  # installed on the bungeecord and spigot server.
   #
   #
   # If this is activated all commands listed under Commands will be executed by everyone in the party when the leader
