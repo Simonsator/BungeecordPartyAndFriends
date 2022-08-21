@@ -31,6 +31,6 @@ Party and Friends uses [Maven](https://maven.apache.org/) to handle dependencies
 
 ## Support
 
-If you found any bugs you may use the [issues page](https://github.com/Simonsator/BungeecordPartyAndFriends/issues) to report them.
+If you find any bugs please report them using the [issues page](https://github.com/Simonsator/BungeecordPartyAndFriends/issues).
 
 Are you having any other problems and want to contact me? If so please send me a [dm using spigot](https://www.spigotmc.org/conversations/add?to=simonsator), a message via Skype (live:00pflaume), discord private chat (my name is Simonsator and my tag is #5834) or [join my discord server](https://discord.gg/pFx9X2W).
