@@ -17,6 +17,14 @@ public interface PAFPlayer {
 
 	List<PAFPlayer> getFriends();
 
+	/**
+	 * @return Returns the friends of a player. Data used to list friends, like when somebody was last online,
+	 * or if they want to be shown as offline, is preloaded from the database server.
+	 */
+	default List<PAFPlayer> getFriendsOptimizedForListing() {
+		return getFriends();
+	}
+
 	UUID getUniqueId();
 
 	/**

@@ -41,15 +41,21 @@ public abstract class PlayerParty {
 	}
 
 	/**
-	 * Returns true if the given player is the leader of this party, and it will
-	 * returns false if he is not the leader, of this party
+	 * Returns true if the given player is the leader of this party, and false if he is not the leader, of this party.
 	 *
 	 * @param player The player
-	 * @return Returns a true if the given player is the leader of this party,
-	 * and it will returns false if he is not the leader, of this party
+	 * @return Returns true if the given player is the leader of this party,
+	 * and false if he is not the leader, of this party
 	 */
 	public abstract boolean isLeader(PAFPlayer player);
 
+	/**
+	 * Returns true if the given player is the leader of this party, and false if he is not the leader, of this party.
+	 *
+	 * @param player The player
+	 * @return Returns true if the given player is the leader of this party,
+	 * and false if he is not the leader, of this party
+	 */
 	public boolean isLeader(OnlinePAFPlayer player) {
 		return isLeader((PAFPlayer) player);
 	}
@@ -77,6 +83,10 @@ public abstract class PlayerParty {
 	protected abstract boolean isAMember(OnlinePAFPlayer pPlayer);
 
 	protected abstract List<UUID> getInvited();
+
+	/**
+	 * @return Returns true if currently nobody is invited into the party. Returns false if at least one person invited into this party.
+	 */
 
 	public boolean isNobodyInvited() {
 		return getInvited().isEmpty();
@@ -121,9 +131,9 @@ public abstract class PlayerParty {
 	protected abstract void removePlayerSilent(PAFPlayer pPlayer);
 
 	/**
-	 * Returns the "normal" players who are in the party.
+	 * Returns a list of all the players in this party who are not the party leader.
 	 *
-	 * @return Returns the "normal" players who are in the party.
+	 * @return Returns a list of all the players in this party who are not the party leader.
 	 */
 	public abstract List<OnlinePAFPlayer> getPlayers();
 
@@ -258,8 +268,10 @@ public abstract class PlayerParty {
 			sendMessage((PartyCommand.getInstance().getPrefix() + Main.getInstance().getMessages()
 					.getString("Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers")));
 			PartyManager.getInstance().deleteParty(this);
-			for (OnlinePAFPlayer player : getAllPlayers())
+			for (OnlinePAFPlayer player : getAllPlayers()) {
 				removePlayerSilent(player);
+				BukkitBungeeAdapter.getInstance().callEvent(new LeftPartyEvent(this, player));
+			}
 			return true;
 		}
 		return false;

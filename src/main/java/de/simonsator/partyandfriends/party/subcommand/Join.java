@@ -10,7 +10,9 @@ import de.simonsator.partyandfriends.api.party.abstractcommands.PartyJoinInviteS
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.config.ServerInfo;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PATTERN;
@@ -22,6 +24,9 @@ import static de.simonsator.partyandfriends.utilities.PatterCollection.PLAYER_PA
  * @version 1.0.0
  */
 public class Join extends PartyJoinInviteSubCommand {
+	private final Set<String>
+			notJoinServers = new HashSet<>(Main.getInstance().getGeneralConfig().getStringList("General.PartyDoNotJoinTheseServers"));
+
 	public Join(List<String> pCommands, int pPriority, String pHelpText, String pPermission) {
 		super(pCommands, pPriority, pHelpText, pPermission, Main.getInstance().getMessages()
 				.getString("Party.Command.Join.MaxPlayersInPartyReached"));
@@ -63,12 +68,13 @@ public class Join extends PartyJoinInviteSubCommand {
 							.replaceAll(Matcher.quoteReplacement(pPlayer.getDisplayName())));
 			if (Main.getInstance().getGeneralConfig().getBoolean("Commands.Party.SubCommands.Join.AutoJoinLeaderServer")) {
 				ServerInfo leaderServer = party.getLeader().getServer();
-				if (!leaderServer.equals(pPlayer.getServer()))
+				if (!leaderServer.equals(pPlayer.getServer()) && !notJoinServers.contains(leaderServer.getName()))
 					pPlayer.connect(leaderServer);
 			}
-		} else
+		} else {
 			pPlayer.sendMessage(PREFIX
 					+ Main.getInstance().getMessages().getString("Party.Command.Join.ErrorNoInvitation"));
+		}
 	}
 
 	@Override

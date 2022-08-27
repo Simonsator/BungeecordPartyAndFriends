@@ -110,7 +110,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.CommandUsage.Jump", "&8/&5friend jump [name of the friend]&r &8- &7Jump to a friend");
 		set("Friends.CommandUsage.Settings", "&8/&5friend settings &r&8- &7Change the settings");
 		set("Friends.Command.Accept.NowFriends", " &7You and &e[PLAYER] &7are now friends");
-		set("Friends.Command.Accept.ErrorNoFriendShipInvitation", " &7You have not receive a friend request from &e[PLAYER]&7.");
+		set("Friends.Command.Accept.ErrorNoFriendShipInvitation", " &7You have not received a friend request from &e[PLAYER]&7.");
 		set("Friends.Command.Accept.ErrorSenderEqualsReceiver", " &7You cannot message yourself.");
 		set("Friends.Command.Accept.ErrorAlreadySend", " &7You already have sent the player &e[PLAYER] &7a friend request.");
 		set("Friends.Command.Add.SenderEqualsReceiver", " &7You cannot send yourself a friend request.");
@@ -166,7 +166,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.Settings.ChangeThisSettingsHover", "&aClick here to change this setting.");
 		set("Friends.Command.Settings.NotFound", " &7The setting which was specified could not be found or you don't have the permission to use this setting.");
 		set("Friends.Command.Jump.AlreadyOnTheServer", " &7You are already on this server.");
-		set("Friends.Command.Jump.JoinedTheServer", " &7Now you are on the same server, like the player &e[PLAYER]&7.");
+		set("Friends.Command.Jump.JoinedTheServer", " &7Now you are on the same server, as &e[PLAYER]&7.");
 		set("Friends.Command.Jump.CanNotJump", " &7You cannot jump to this person.");
 		set("Friends.Command.List.NoFriendsAdded", " &7You currently do not have any friends.");
 		set("Friends.Command.List.FriendsList", " &7These are your friends:LINE_BREAK &7- ");
@@ -343,7 +343,6 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Party.General.HelpBegin",
 				"&8&m-------------------&r&8[&5&lParty&8]&m-------------------");
 		set("Party.General.HelpEnd", "&8&m---------------------------------------------");
-		set("Party.Command.Chat.Prefix", "&7[&5PartyChat&7] ");
 		set("Party.Command.Chat.ContentColor", "&7");
 		set("Party.Command.Chat.PartyChatOutput", "&e[SENDERNAME]&5:[MESSAGE_CONTENT]");
 		set("Party.Command.Info.PlayersCut", "&7, &b");

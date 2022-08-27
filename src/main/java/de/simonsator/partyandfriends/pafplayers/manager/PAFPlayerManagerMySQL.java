@@ -58,7 +58,7 @@ public class PAFPlayerManagerMySQL extends IDBasedPAFPlayerManager {
 		else
 			player = ProxyServer.getInstance().getPlayer(playerDataSet.NAME);
 		if (player != null)
-			return new OnlinePAFPlayerMySQL(playerDataSet.ID, player);
+			return new OnlinePAFPlayerMySQL(playerDataSet, player);
 		return getPlayerNotOnlineOnBungeeCord(playerDataSet);
 	}
 

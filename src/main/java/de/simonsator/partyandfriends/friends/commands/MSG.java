@@ -10,9 +10,11 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.friends.settings.PMSetting;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.config.ServerInfo;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 import static de.simonsator.partyandfriends.utilities.PatterCollection.*;
@@ -27,6 +29,7 @@ public class MSG extends OnlyTopCommand {
 	private static MSG instance;
 	private final String DEFAULT_MESSAGE_COLOR;
 	private final boolean ALLOW_PLAYER_CHAT_FORMATTING;
+	private final Set<String> DISABLE_MESSAGE_RECEIVING_ON_THESE_SERVERS = new HashSet<>();
 
 	/**
 	 * Initials the command
@@ -38,6 +41,7 @@ public class MSG extends OnlyTopCommand {
 		instance = this;
 		DEFAULT_MESSAGE_COLOR = SPACE_PATTERN.matcher(Main.getInstance().getMessages().getString("Friends.Command.MSG.ColorOfMessage")).replaceAll("");
 		ALLOW_PLAYER_CHAT_FORMATTING = Main.getInstance().getGeneralConfig().getBoolean("Commands.Friends.TopCommands.MSG.AllowPlayersToUseChatFormatting");
+		DISABLE_MESSAGE_RECEIVING_ON_THESE_SERVERS.addAll(Main.getInstance().getGeneralConfig().getStringList("Commands.Friends.TopCommands.MSG.DisableMessageReceivingServers"));
 	}
 
 	private static boolean playerExists(OnlinePAFPlayer pPlayer, PAFPlayer pPlayerQuery) {
@@ -76,6 +80,17 @@ public class MSG extends OnlyTopCommand {
 		PAFPlayer writtenTo = PAFPlayerManager.getInstance().getPlayer(args[begin]);
 		if (!playerExists(pPlayer, writtenTo))
 			return;
+		if (writtenTo instanceof OnlinePAFPlayer) {
+			OnlinePAFPlayer writtenToOnlinePAFPlayer = (OnlinePAFPlayer) writtenTo;
+			ServerInfo serverInfo = writtenToOnlinePAFPlayer.getServer();
+			if (serverInfo != null) {
+				if (DISABLE_MESSAGE_RECEIVING_ON_THESE_SERVERS.contains(serverInfo.getName())) {
+					pPlayer.sendMessage((getPrefix()
+							+ Main.getInstance().getMessages().getString("Friends.Command.MSG.CanNotWriteToHim")));
+					return;
+				}
+			}
+		}
 		int n = 2;
 		if (type == 1) n = 1;
 		send(pPlayer, args, writtenTo, n);

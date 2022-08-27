@@ -13,7 +13,8 @@ import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The class with the ServerSwitchEvent
@@ -26,14 +27,14 @@ public class ServerSwitchListener implements Listener {
 	/**
 	 * The list of the servers which the party will not join.
 	 */
-	private final List<String> notJoinServers;
+	private final Set<String> notJoinServers;
 	private final int CONNECT_DELAY;
 
 	/**
 	 * Initials the object
 	 */
 	public ServerSwitchListener() {
-		notJoinServers = Main.getInstance().getGeneralConfig().getStringList("General.PartyDoNotJoinTheseServers");
+		notJoinServers = new HashSet<>(Main.getInstance().getGeneralConfig().getStringList("General.PartyDoNotJoinTheseServers"));
 		CONNECT_DELAY = Main.getInstance().getGeneralConfig().getInt("General.PartyJoinDelayInSeconds");
 		instance = this;
 	}

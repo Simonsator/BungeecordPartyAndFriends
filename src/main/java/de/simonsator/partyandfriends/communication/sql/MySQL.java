@@ -365,13 +365,11 @@ public class MySQL extends PoolSQLCommunication {
 		ResultSet rs = null;
 		List<PlayerDataSet> list = new LinkedList<>();
 		try {
-			rs = (stmt = con.createStatement()).executeQuery("select " +
-					TABLE_PREFIX + "players.player_id, player_name, player_uuid, settings_worth, last_online from "
-					+ TABLE_PREFIX + "friend_assignment LEFT JOIN " + TABLE_PREFIX
-					+ "players ON (friend1_id = '" + pPlayerID + "' AND player_id = friend2_id) OR (friend2_id = '" +
-					pPlayerID + "' AND player_id = friend1_id) LEFT JOIN " + TABLE_PREFIX + "settings ON " +
-					TABLE_PREFIX + "players.player_id = " + TABLE_PREFIX + "settings.player_id AND settings_id = 3 WHERE friend1_id='" +
-					pPlayerID + "' OR friend2_id='" + pPlayerID + "'");
+			rs = (stmt = con.createStatement()).executeQuery("select players.player_id, player_name, player_uuid, last_online, settings_worth from " + TABLE_PREFIX
+					+ "friend_assignment INNER JOIN  " + TABLE_PREFIX +
+					"players AS players ON (friend1_id = player_id AND friend2_id = '" + pPlayerID +
+					"') OR (friend2_id = player_id AND friend1_id = '" + pPlayerID + "') LEFT JOIN " + TABLE_PREFIX +
+					"settings AS settings ON players.player_id =settings.player_id AND settings_id = " + OfflineSetting.SETTINGS_ID);
 			while (rs.next()) {
 				int friendId = rs.getInt("player_id");
 				String friendName = rs.getString("player_name");

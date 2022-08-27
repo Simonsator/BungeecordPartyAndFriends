@@ -10,10 +10,13 @@ MySQL:
   Database: friends
   TablePrefix: fr_
   Cache: true
+  # Allows the plugin to use more bandwidth for SQL requests. In most cases this will enhance performance, but in some
+  # cases (very limited bandwidth or on some MySQL forks), it will cause a much worse performance.
+  EnhancedDataLoading: false
   Pool:
     # Available options are HikariCP and C3P0. HikariCP is faster. Use C3P0 if you are having problems with HikariCP
-    ConnectionPool: 'C3P0'
-    # You can tweak this settings to enhance the performance. The larger the pool is the more ram is used
+    ConnectionPool: 'HikariCP'
+    # You can tweak these settings to enhance the performance. The larger the pool is the more ram is used
     # and the more cpu power is used to maintain the connections. If the pool is not large enough your
     # players may experience lags when executing commands
     #
@@ -23,7 +26,7 @@ MySQL:
     MaxPoolSize: 15
     IdleConnectionTestPeriod: 290
     # This wastes performance. Only activate it if your mysql server is configured incorrectly
-    # or you expect to have connetion dropouts towards your mysql server.
+    # or you expect to have connection dropouts towards your mysql server.
     TestConnectionOnCheckin: false
 General:
   # Activate this if you want to customize the messages in the messages.yml.
@@ -37,7 +40,7 @@ General:
   Time:
     LanguageTag: US
     # To find out which time zones are available check out https://garygregory.wordpress.com/2013/06/18/what-are-the-java-timezone-ids/
-    TimeZone: Europe/Berlin
+    TimeZone: 'SYSTEM_DEFAULT'
     # To find out which characters do what check out https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
     Format: dd/MM/yyyy HH:mm:ss
   # If enabled parties won't be moved to the server of the leader when he joins a new server
@@ -58,7 +61,7 @@ General:
   # If you are having a server where premium players and offline players can join
   # and another plugin provides UUID injection for premium players you have to activate this.
   ForceUUIDSupportOnOfflineServers: false
-# Set custom names for servers. For example you can rename bw1123 to plays Bedwars.
+# Set custom names for servers. For example, you can rename bw1123 to plays Bedwars.
 ServerDisplayNames:
   # When set to true more config options will be generated after a server restart
   Use: false
@@ -86,7 +89,8 @@ Party:
   # If this is activated all commands listed under Commands will be executed by everyone in the party when the leader
   # executes the command, if they are on the same server as the party leader. This option only exists for mini-games
   # which don't have a bungee/proxy mode. You should always prefer the bungee mode, as it uses less performance and
-  # everybody in the party joins the mini-game, even if they are not on the same server.
+  # everybody in the party joins the mini-game, even if they are not on the same server. Please notice that most command
+  # GUIs don't handle the simulating of command correctly, which causes them to not be recognised as commands
   MiniGameStartingCommands:
     Enabled: false
     Commands:
@@ -98,6 +102,7 @@ Extensions:
 Commands:
   Friends:
     General:
+      # Determines if the help message should be printed out when the user missuses a friend command after the error message
       PrintOutHelpOnError: true
     TopCommands:
       Friend:
@@ -120,6 +125,12 @@ Commands:
         Permission: ''
         MSGNonFriendsPermission: de.simonsator.partyandfriends.msg.msgnonfriends
         AllowPlayersToUseChatFormatting: true
+        # If a player is on a server listed here he won't be able to receive messages via /friend msg//msg from friends.
+        # If 'General.Deactivated.OfflineMessages' is not disabled the player will still receive the offline messages on
+        # this server when he goes online.
+        DisableMessageReceivingServers:
+          - login1
+          - login2
     SubCommands:
       Accept:
         Names:
@@ -192,6 +203,7 @@ Commands:
             Enabled: true
             Permission: ''
             Priority: 0
+          # This setting determines if a friend can use /friend jump to teleport to the server of the user who did set the setting
           Jump:
             Names:
               - jump
@@ -199,6 +211,7 @@ Commands:
             Enabled: true
             Permission: ''
             Priority: 1
+          # This setting determines if a friend can see the online status of the user who did set the setting
           Offline:
             Names:
               - offline
@@ -206,6 +219,7 @@ Commands:
             Enabled: true
             Permission: ''
             Priority: 2
+          # This setting determines if the user who set this setting, receives a notification when a friend of his goes online
           NotifyOnlineStatusChange:
             Names:
               - notifyonline
@@ -213,6 +227,7 @@ Commands:
             Enabled: true
             Permission: ''
             Priority: 3
+          # This setting determines if friends of the user who set this setting are able to send him a private message using /friend msg
           PM:
             Names:
               - pm
@@ -221,6 +236,7 @@ Commands:
             Enabled: true
             Permission: ''
             Priority: 4
+          # This setting determines if other users are able to send the user who set this setting party invitations
           PartyInvite:
             Names:
               - invite
@@ -230,8 +246,9 @@ Commands:
             Priority: 5
   Party:
     General:
+      # Determines if the help message should be printed out when the user missuses a party command after the error message
       PrintOutHelpOnError: true
-      # If this option is activated the player will only see the commands he can currently execute when he executes /party
+      # If this option is activated the player will only see the commands they can currently execute when they execute /party
       PrintOnlyExecutableSubCommandsOut: true
     TopCommands:
       Party:

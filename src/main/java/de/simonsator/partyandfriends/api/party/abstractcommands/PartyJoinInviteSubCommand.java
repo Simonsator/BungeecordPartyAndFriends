@@ -32,7 +32,7 @@ public abstract class PartyJoinInviteSubCommand extends PartySubCommand {
 	}
 
 	protected boolean canInvite(OnlinePAFPlayer pPartyLeader, PlayerParty pParty, OnlinePAFPlayer pMessageReceiver) {
-		if (!pPartyLeader.getPlayer()
+		if (!pPartyLeader
 				.hasPermission(Main.getInstance().getGeneralConfig().getString("Party.MaxPlayersPerParty.NoLimitPermission")))
 			if (DEFAULT_MAX_PLAYERS_PER_PARTY > 1) {
 				int maxPlayersForThisParty = calculateMaxPlayersForParty(pPartyLeader, pParty);

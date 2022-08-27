@@ -12,7 +12,7 @@ import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.friends.commands.MSG;
 import de.simonsator.partyandfriends.friends.commands.Reply;
 import de.simonsator.partyandfriends.main.listener.JoinEvent;
-import de.simonsator.partyandfriends.main.listener.OnChatListener;
+import de.simonsator.partyandfriends.main.listener.PAFMiniGameCommandHandler;
 import de.simonsator.partyandfriends.main.listener.PlayerDisconnectListener;
 import de.simonsator.partyandfriends.main.listener.ServerSwitchListener;
 import de.simonsator.partyandfriends.main.startup.error.BootErrorType;
@@ -153,11 +153,13 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 				getGeneralConfig().getBoolean("MySQL.RedisCache.ExpirationActivated"),
 				getGeneralConfig().getInt("MySQL.RedisCache.ExpirationTimeInSeconds"));
 		new PAFPlayerManagerMySQL(mySQLData, poolData);
+		new LocalPartyManager(Main.getInstance().getGeneralConfig().getInt("Commands.Party.SubCommands.Invite.InvitationTimeOutTimeInSeconds"));
 		if (getGeneralConfig().getBoolean("General.MultiCoreEnhancement")) {
 			PAFPlayerMySQL.setMultiCoreEnhancement(true);
 		}
-		new LocalPartyManager(Main.getInstance().getGeneralConfig().getInt(
-				"Commands.Party.SubCommands.Invite.InvitationTimeOutTimeInSeconds"));
+		if (getGeneralConfig().getBoolean("MySQL.EnhancedDataLoading")) {
+			PAFPlayerMySQL.setEnhancedFriendListLoading(true);
+		}
 		new StandardPermissionProvider();
 		new ServerDisplayNameCollection(getGeneralConfig());
 	}
@@ -211,7 +213,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		if (!getGeneralConfig().getBoolean("General.DisableAutomaticPartyServerSwitching"))
 			BukkitBungeeAdapter.getInstance().registerListener(serverSwitchListener, this);
 		if (getGeneralConfig().getBoolean("Party.MiniGameStartingCommands.Enabled"))
-			BukkitBungeeAdapter.getInstance().registerListener(new OnChatListener(getGeneralConfig().getStringList(
+			BukkitBungeeAdapter.getInstance().registerListener(new PAFMiniGameCommandHandler(getGeneralConfig().getStringList(
 					"Party.MiniGameStartingCommands.Commands")), this);
 		JoinEvent joinEventListener;
 		BukkitBungeeAdapter.getInstance().registerListener(joinEventListener = new JoinEvent(), this);

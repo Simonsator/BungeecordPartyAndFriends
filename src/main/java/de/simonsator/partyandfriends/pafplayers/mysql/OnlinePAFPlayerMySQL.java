@@ -3,13 +3,13 @@ package de.simonsator.partyandfriends.pafplayers.mysql;
 import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.events.PAFAccountCreateEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.communication.sql.data.PlayerDataSet;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Chat;
 
-import java.util.List;
 import java.util.UUID;
 
 public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPlayer {
@@ -17,6 +17,11 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 
 	public OnlinePAFPlayerMySQL(int pID, ProxiedPlayer pPlayer) {
 		super(pID);
+		PLAYER = pPlayer;
+	}
+
+	public OnlinePAFPlayerMySQL(PlayerDataSet pPlayerDataSet, ProxiedPlayer pPlayer) {
+		super(pPlayerDataSet);
 		PLAYER = pPlayer;
 	}
 

@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-public class OnChatListener implements Listener {
+public class PAFMiniGameCommandHandler implements Listener {
 	private final Set<String> COMMANDS = new HashSet<>();
 
-	public OnChatListener(List<String> pCommands) {
+	public PAFMiniGameCommandHandler(List<String> pCommands) {
 		for (String command : pCommands)
 			COMMANDS.add(command.toLowerCase(Locale.ROOT));
 	}
@@ -47,4 +47,5 @@ public class OnChatListener implements Listener {
 			}
 		});
 	}
+
 }

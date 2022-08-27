@@ -22,10 +22,20 @@ public abstract class PartySubCommand extends SubCommand {
 		super(pCommands, pPriority, pHelpText, PartyCommand.getInstance().getPrefix(), pPermission);
 	}
 
+	/**
+	 * @param pCommands The names of the subcommand (The first one in the array is the main name of the subcommand. The others are its aliases)
+	 * @param pPriority The priority of the subcommand. The lower the priority the earlier the subcommand will be listed in the help menu.
+	 * @param pHelp     The help message of the subcommand. This is displayed in the help menu and when you execute {@link #sendError(OnlinePAFPlayer pPlayer, TextComponent pMessage)}
+	 */
 	public PartySubCommand(String[] pCommands, int pPriority, TextComponent pHelp) {
 		super(pCommands, pPriority, pHelp, PartyCommand.getInstance().getPrefix());
 	}
 
+	/**
+	 * @param pCommands The names of the subcommand (The first one in the array is the main name of the subcommand. The others are its aliases)
+	 * @param pPriority The priority of the subcommand. The lower the priority the earlier the subcommand will be listed in the help menu.
+	 * @param pHelp     The help message of the subcommand. This is displayed in the help menu and when you execute {@link #sendError(OnlinePAFPlayer pPlayer, TextComponent pMessage)}
+	 */
 	public PartySubCommand(String[] pCommands, int pPriority, String pHelp) {
 		super(pCommands, pPriority, pHelp, PartyCommand.getInstance().getPrefix());
 	}

@@ -19,6 +19,7 @@ import java.util.*;
 
 public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	private static boolean multiCoreEnhancement = false;
+	private static boolean enhancedFriendListLoading = false;
 	private final Map<Integer, Integer> SETTINGS;
 	protected int id;
 	private String name;
@@ -42,6 +43,10 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 		multiCoreEnhancement = pUseMultiCoreEnhancment;
 	}
 
+	public static void setEnhancedFriendListLoading(boolean pUseEnhancedFriendListLoading) {
+		enhancedFriendListLoading = pUseEnhancedFriendListLoading;
+	}
+
 	@Override
 	public String getName() {
 		if (name != null)
@@ -56,6 +61,17 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	@Override
 	public List<PAFPlayer> getFriends() {
 		return idListToPAFPlayerList(PAFPlayerManagerMySQL.getConnection().getFriends(id));
+	}
+
+	@Override
+	public List<PAFPlayer> getFriendsOptimizedForListing() {
+		if (!enhancedFriendListLoading)
+			return idListToPAFPlayerList(PAFPlayerManagerMySQL.getConnection().getFriends(id));
+		List<PlayerDataSet> playerDataSetList = PAFPlayerManagerMySQL.getConnection().getFriendsPlayerDataForListing(id);
+		List<PAFPlayer> list = new ArrayList<>(playerDataSetList.size());
+		for (PlayerDataSet playerDataSet : playerDataSetList)
+			list.add(PAFPlayerManager.getInstance().getPlayer(playerDataSet));
+		return list;
 	}
 
 	private List<PAFPlayer> playerDataToPAFList(List<PlayerDataSet> playerDataSets) {

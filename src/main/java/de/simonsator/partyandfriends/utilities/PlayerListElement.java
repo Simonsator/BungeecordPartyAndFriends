@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 public class PlayerListElement implements Comparable<PlayerListElement> {
 	private final boolean IS_ONLINE;
-	private final Long LAST_ONLINE;
+	private Long lastOnline;
 	private final ServerInfo SERVER;
 	private final PAFPlayer PLAYER;
 	private final int SORT_TYPE;
@@ -36,10 +36,9 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 				pPlayer.getSettingsWorth(OfflineSetting.SETTINGS_ID) == OfflineSetting.FRIENDS_CAN_SEE_PLAYER_IS_ONLINE_STATE);
 		IS_ONLINE = isOnline;
 		if (!isOnline) {
-			LAST_ONLINE = pPlayer.getLastOnline();
 			SERVER = null;
 		} else {
-			LAST_ONLINE = null;
+			lastOnline = null;
 			SERVER = ((OnlinePAFPlayer) pPlayer).getServer();
 		}
 		CALLER = pCaller;
@@ -56,7 +55,7 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 	 * @return A list of PlayerListElements
 	 */
 	public static List<PlayerListElement> getFriendsAsPlayerListElement(OnlinePAFPlayer pCaller, int pSortType) {
-		List<PAFPlayer> friends = pCaller.getFriends();
+		List<PAFPlayer> friends = pCaller.getFriendsOptimizedForListing();
 		List<PlayerListElement> playerListElements = new ArrayList<>(friends.size());
 		for (PAFPlayer player : friends)
 			playerListElements.add(new PlayerListElement(player, pSortType, pCaller));
@@ -87,7 +86,7 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 			return 1;
 		if (this.isOnline())
 			return -1;
-		switch (LAST_ONLINE.compareTo(pCompare.LAST_ONLINE)) {
+		switch (getLastOnline().compareTo(pCompare.getLastOnline())) {
 			case 1:
 				return -1;
 			case -1:
@@ -121,7 +120,11 @@ public class PlayerListElement implements Comparable<PlayerListElement> {
 	}
 
 	public Long getLastOnline() {
-		return LAST_ONLINE;
+		if (IS_ONLINE)
+			return null;
+		if (lastOnline == null)
+			return lastOnline = PLAYER.getLastOnline();
+		return lastOnline;
 	}
 
 	public ServerInfo getServer() {

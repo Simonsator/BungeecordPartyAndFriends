@@ -33,7 +33,8 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("MySQL.Database", "friends");
 		set("MySQL.TablePrefix", "fr_");
 		set("MySQL.Cache", true);
-		set("MySQL.Pool.ConnectionPool", "C3P0");
+		set("MySQL.EnhancedDataLoading", false);
+		set("MySQL.Pool.ConnectionPool", "HikariCP");
 		set("MySQL.Pool.InitialPoolSize", 3);
 		set("MySQL.Pool.MinPoolSize", 3);
 		set("MySQL.Pool.MaxPoolSize", 15);
@@ -87,6 +88,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Friends.TopCommands.MSG.MSGNonFriendsPermission",
 				"de.simonsator.partyandfriends.msg.msgnonfriends");
 		set("Commands.Friends.TopCommands.MSG.AllowPlayersToUseChatFormatting", true);
+		set("Commands.Friends.TopCommands.MSG.DisableMessageReceivingServers", "login1", "login2");
 		set("Commands.Friends.SubCommands.Accept.Names", "accept", "approve");
 		set("Commands.Friends.SubCommands.Accept.Permission", "");
 		set("Commands.Friends.SubCommands.Accept.Priority", 3);
