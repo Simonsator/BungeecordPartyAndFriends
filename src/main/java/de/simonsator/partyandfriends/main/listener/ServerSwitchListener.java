@@ -5,6 +5,7 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
+import de.simonsator.partyandfriends.api.system.WaitForTasksToFinish;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.party.command.PartyCommand;
 import de.simonsator.partyandfriends.utilities.ServerDisplayNameCollection;
@@ -22,7 +23,7 @@ import java.util.Set;
  * @author Simonsator
  * @version 1.0.0
  */
-public class ServerSwitchListener implements Listener {
+public class ServerSwitchListener extends WaitForTasksToFinish implements Listener {
 	private static ServerSwitchListener instance;
 	/**
 	 * The list of the servers which the party will not join.
@@ -54,20 +55,25 @@ public class ServerSwitchListener implements Listener {
 	}
 
 	private void moveParty(ServerSwitchEvent pEvent) {
-		ServerInfo server = pEvent.getPlayer().getServer().getInfo();
-		if (notJoinServers.contains(server.getName()))
-			return;
-		OnlinePAFPlayer player = PAFPlayerManager.getInstance().getPlayer(pEvent.getPlayer());
-		PlayerParty party = PartyManager.getInstance().getParty(player);
-		if (party != null && party.isLeader(player) && !party.getPlayers().isEmpty()) {
-			for (OnlinePAFPlayer p : party.getPlayers())
-				if (CONNECT_DELAY == 0)
-					p.connect(server);
-				else
-					BukkitBungeeAdapter.getInstance().schedule(Main.getInstance(), () -> p.connect(server), CONNECT_DELAY);
-			party.sendMessage((PartyCommand.getInstance().getPrefix()
-					+ Main.getInstance().getMessages().getString("Party.Command.General.ServerSwitched")
-					.replace("[SERVER]", ServerDisplayNameCollection.getInstance().getServerDisplayName(server))));
+		try {
+			taskStarts();
+			ServerInfo server = pEvent.getPlayer().getServer().getInfo();
+			if (notJoinServers.contains(server.getName()))
+				return;
+			OnlinePAFPlayer player = PAFPlayerManager.getInstance().getPlayer(pEvent.getPlayer());
+			PlayerParty party = PartyManager.getInstance().getParty(player);
+			if (party != null && party.isLeader(player) && !party.getPlayers().isEmpty()) {
+				for (OnlinePAFPlayer p : party.getPlayers())
+					if (CONNECT_DELAY == 0)
+						p.connect(server);
+					else
+						BukkitBungeeAdapter.getInstance().schedule(Main.getInstance(), () -> p.connect(server), CONNECT_DELAY);
+				party.sendMessage((PartyCommand.getInstance().getPrefix()
+						+ Main.getInstance().getMessages().getString("Party.Command.General.ServerSwitched")
+						.replace("[SERVER]", ServerDisplayNameCollection.getInstance().getServerDisplayName(server))));
+			}
+		} finally {
+			taskFinished();
 		}
 	}
 }

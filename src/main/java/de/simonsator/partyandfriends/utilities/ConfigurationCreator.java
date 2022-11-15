@@ -84,12 +84,35 @@ public abstract class ConfigurationCreator {
 		return configuration;
 	}
 
-	protected void set(String pKey, Object pText) {
-		if (configuration.get(pKey) == null) {
-			configuration.set(pKey, pText);
+	/**
+	 * Sets the value of the given key to the given value, if the config key does not have any value yet (meaning it is null).
+	 * If it already has a value nothing is done
+	 *
+	 * @param pKey      The config key of the value which should be added to the config (e.g. "MyConfig.MyValue")
+	 * @param pNewValue The value which should be set
+	 */
+	protected void set(String pKey, Object pNewValue) {
+		Object valueInConfig = configuration.get(pKey);
+		if (valueInConfig == null) {
+			configuration.set(pKey, pNewValue);
 			fileWasChanged = true;
 		}
 	}
+
+	/**
+	 * Sets the value of the given key to the given value, even if already a diffrent value for this key has been set.
+	 *
+	 * @param pKey      The config key of the value which should be overwritten (e.g. "MyConfig.MyValue")
+	 * @param pNewValue The value which should be set
+	 */
+	public void setOverwrite(String pKey, Object pNewValue) {
+		Object valueInConfig = configuration.get(pKey);
+		if (valueInConfig == null || !valueInConfig.equals(pNewValue)) {
+			configuration.set(pKey, pNewValue);
+			fileWasChanged = true;
+		}
+	}
+
 
 	protected void overwriteKeyTemp(String pKey, Object pText) {
 		configuration.set(pKey, pText);

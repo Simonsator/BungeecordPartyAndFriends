@@ -41,6 +41,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("MySQL.Pool.IdleConnectionTestPeriod", 290);
 		set("MySQL.Pool.TestConnectionOnCheckin", false);
 		set("General.UseOwnLanguageFile", false);
+		set("General.SendBlankLines", true);
 		set("General.CheckForUpdates", true);
 		set("General.Language", "English");
 		set("General.MultiCoreEnhancement", true);

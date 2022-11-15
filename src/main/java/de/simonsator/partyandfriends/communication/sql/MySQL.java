@@ -501,7 +501,7 @@ public class MySQL extends PoolSQLCommunication {
 		List<PlayerDataSet> list = new LinkedList<>();
 		try {
 			rs = (stmt = con.createStatement()).executeQuery("select player_id, player_name, player_uuid from "
-					+ TABLE_PREFIX + "friend_request_assignment LEFT JOIN " + TABLE_PREFIX
+					+ TABLE_PREFIX + "friend_request_assignment INNER JOIN " + TABLE_PREFIX
 					+ "players ON  player_id = requester_id WHERE receiver_id='" + pPlayerID + "'");
 			while (rs.next()) {
 				list.add(new PlayerDataSet(rs.getString("player_name"), rs.getInt("player_id"),
@@ -812,13 +812,17 @@ public class MySQL extends PoolSQLCommunication {
 					"DELETE FROM " + TABLE_PREFIX + "friend_request_assignment WHERE requester_id = '"
 							+ pPlayerId + "' OR receiver_id='" + pPlayerId + "';");
 			prepStmt.execute();
+			prepStmt.close();
 			prepStmt = con.prepareStatement("DELETE FROM " + TABLE_PREFIX
 					+ "friend_assignment WHERE friend1_id = '" + pPlayerId + "' OR friend2_id='" + pPlayerId + "';");
 			prepStmt.execute();
+			prepStmt.close();
 			prepStmt = con.prepareStatement("DELETE FROM " + TABLE_PREFIX + "settings WHERE player_id='" + pPlayerId + "';");
 			prepStmt.execute();
+			prepStmt.close();
 			prepStmt = con.prepareStatement("DELETE FROM " + TABLE_PREFIX + "last_player_wrote_to WHERE player_id='" + pPlayerId + "' OR written_to_id='" + pPlayerId + "';");
 			prepStmt.execute();
+			prepStmt.close();
 			prepStmt = con.prepareStatement("DELETE FROM " + TABLE_PREFIX + "players WHERE player_id='" + pPlayerId + "';");
 			prepStmt.execute();
 		} catch (SQLException e) {

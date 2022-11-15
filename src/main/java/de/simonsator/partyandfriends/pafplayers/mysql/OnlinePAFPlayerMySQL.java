@@ -48,6 +48,8 @@ public class OnlinePAFPlayerMySQL extends PAFPlayerMySQL implements OnlinePAFPla
 
 	@Override
 	public void sendMessage(TextComponent pTextComponent) {
+		if (!shouldSendEmptyLines() && isTextComponentEmpty(pTextComponent))
+			return;
 		PLAYER.sendMessage(pTextComponent);
 	}
 

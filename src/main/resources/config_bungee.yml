@@ -32,6 +32,9 @@ General:
   # Activate this if you want to customize the messages in the messages.yml.
   # The messages.yml will be generated in your under "Language" chosen language
   UseOwnLanguageFile: false
+  # If activated empty messages will appear as blank lines in the chat of the player
+  # If disabled empty messages aren't sent to the player.
+  SendBlankLines: true
   CheckForUpdates: true
   # Available languages are English and German
   Language: English

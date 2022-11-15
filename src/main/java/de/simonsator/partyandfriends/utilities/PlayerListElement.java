@@ -16,11 +16,11 @@ import java.util.UUID;
  */
 public class PlayerListElement implements Comparable<PlayerListElement> {
 	private final boolean IS_ONLINE;
-	private Long lastOnline;
 	private final ServerInfo SERVER;
 	private final PAFPlayer PLAYER;
 	private final int SORT_TYPE;
 	private final OnlinePAFPlayer CALLER;
+	private Long lastOnline;
 	private String displayName = null;
 	private String name;
 	private UUID uuid;

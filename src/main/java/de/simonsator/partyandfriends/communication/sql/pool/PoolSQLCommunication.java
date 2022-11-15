@@ -46,6 +46,21 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 		Disabler.getInstance().registerDeactivated(this);
 	}
 
+	/**
+	 * This method should only be used if you know that another object extending this class has already called {@link #PoolSQLCommunication(MySQLData, PoolData)} to initialize the connection pool.
+	 *
+	 * @throws IllegalStateException If the connection has not yet been initialized by {@link #PoolSQLCommunication(MySQLData, PoolData)} by another object extending this class (probably Party and Friends)
+	 */
+	public PoolSQLCommunication() throws IllegalStateException {
+		MYSQL_DATA = null;
+		POOL_DATA = null;
+		connectionProperties = null;
+	}
+
+	public static boolean hasBeenInitialized() {
+		return hikariDataSource != null || cpds != null;
+	}
+
 	private void checkIfConnectionIsValid() throws SQLException {
 		Connection con = null;
 		try {

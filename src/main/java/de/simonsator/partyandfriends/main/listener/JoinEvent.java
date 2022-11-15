@@ -5,8 +5,8 @@ import de.simonsator.partyandfriends.api.events.OnlineStatusChangedMessageEvent;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.api.system.WaitForTasksToFinish;
 import de.simonsator.partyandfriends.friends.commands.Friends;
-import de.simonsator.partyandfriends.friends.commands.MSG;
 import de.simonsator.partyandfriends.friends.settings.OfflineSetting;
 import de.simonsator.partyandfriends.friends.settings.OnlineStatusNotificationSetting;
 import de.simonsator.partyandfriends.main.Main;
@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
  * @author Simonsator
  * @version 1.0.0
  */
-public class JoinEvent implements Listener {
+public class JoinEvent extends WaitForTasksToFinish implements Listener {
 	private final boolean ONLINE_STATUS_CHANGE_SETTING_ENABLED;
 	private final boolean FRIEND_REQUEST_NOTIFICATION;
 	private final int PLAYER_SPLIT_LENGTH = Main.getInstance().getMessages().getString("Friends.Command.List.PlayerSplit").length();
@@ -46,7 +46,7 @@ public class JoinEvent implements Listener {
 	}
 
 	/**
-	 * Will be execute if somebody logs in into server
+	 * Will be executed if somebody logs in into server
 	 *
 	 * @param pEvent The pEvent
 	 */
@@ -59,23 +59,28 @@ public class JoinEvent implements Listener {
 	}
 
 	private void sbLoggedIn(PostLoginEvent pEvent) {
-		OnlinePAFPlayer player = PAFPlayerManager.getInstance().getPlayer(pEvent.getPlayer());
-		if (!player.doesExist()) {
-			player.createEntry();
-			return;
-		} else
-			player.update();
-		List<PAFPlayer> friends = player.getFriends();
-		List<PAFPlayer> friendRequests = player.getRequests();
-		if (friends.isEmpty() && friendRequests.isEmpty())
-			return;
-		boolean noFriends = friends.isEmpty();
-		if (!friendRequests.isEmpty() && FRIEND_REQUEST_NOTIFICATION)
-			deliverFriendRequests(player, friendRequests);
-		if (player.getSettingsWorth(OfflineSetting.SETTINGS_ID) == OfflineSetting.FRIENDS_ALWAYS_SEE_PLAYER_AS_OFFLINE_STATE)
-			noFriends = true;
-		if (!noFriends)
-			sendNowOnline(player, friends);
+		try {
+			taskStarts();
+			OnlinePAFPlayer player = PAFPlayerManager.getInstance().getPlayer(pEvent.getPlayer());
+			if (!player.doesExist()) {
+				player.createEntry();
+				return;
+			} else
+				player.update();
+			List<PAFPlayer> friends = player.getFriends();
+			List<PAFPlayer> friendRequests = player.getRequests();
+			if (friends.isEmpty() && friendRequests.isEmpty())
+				return;
+			boolean noFriends = friends.isEmpty();
+			if (!friendRequests.isEmpty() && FRIEND_REQUEST_NOTIFICATION)
+				deliverFriendRequests(player, friendRequests);
+			if (player.getSettingsWorth(OfflineSetting.SETTINGS_ID) == OfflineSetting.FRIENDS_ALWAYS_SEE_PLAYER_AS_OFFLINE_STATE)
+				noFriends = true;
+			if (!noFriends)
+				sendNowOnline(player, friends);
+		} finally {
+			taskFinished();
+		}
 	}
 
 	private void deliverFriendRequests(OnlinePAFPlayer pPlayer, List<PAFPlayer> pFriendRequests) {

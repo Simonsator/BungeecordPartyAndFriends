@@ -7,6 +7,8 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.main.Main;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.regex.Matcher;
 
@@ -57,20 +59,20 @@ public class PartyChat extends OnlyTopCommand {
 	}
 
 	private void sendMessage(String pContent, String pSenderDisplayName, PlayerParty pParty) {
-		String message = Main.getInstance().getMessages().getString("Party.Command.Chat.Prefix") + MESSAGE_CONTENT_PATTERN
+		TextComponent message = new TextComponent(TextComponent.fromLegacyText(getPrefix() + MESSAGE_CONTENT_PATTERN
 				.matcher(SENDER_NAME_PATTERN
 						.matcher(Main.getInstance().getMessages()
 								.getString("Party.Command.Chat.PartyChatOutput"))
 						.replaceAll(Matcher.quoteReplacement(pSenderDisplayName)))
-				.replaceAll(Matcher.quoteReplacement(pContent));
+				.replaceAll(Matcher.quoteReplacement(pContent))));
 		for (OnlinePAFPlayer receiver : pParty.getAllPlayers())
-			receiver.sendMessage(message);
+			receiver.sendPacket(message);
 	}
 
 	private boolean messageGiven(OnlinePAFPlayer pPlayer, String[] args) {
 		if (args.length == 0) {
 			pPlayer.sendMessage(
-					Main.getInstance().getMessages().getString("Party.Command.Chat.Prefix")
+					getPrefix()
 							+ Main.getInstance().getMessages().getString("Party.Command.Chat.ErrorNoMessage"));
 			return false;
 		}
@@ -79,7 +81,7 @@ public class PartyChat extends OnlyTopCommand {
 
 	private boolean isInParty(OnlinePAFPlayer pPlayer, PlayerParty pParty) {
 		if (pParty == null) {
-			pPlayer.sendMessage(PartyCommand.getInstance().getPrefix()
+			pPlayer.sendMessage(getPrefix()
 					+ Main.getInstance().getMessages().getString("Party.Command.General.ErrorNoParty"));
 			return false;
 		}

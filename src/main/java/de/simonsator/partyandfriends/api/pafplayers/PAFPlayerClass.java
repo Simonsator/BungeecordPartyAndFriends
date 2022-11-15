@@ -5,6 +5,7 @@ import de.simonsator.partyandfriends.api.events.DisplayNameProviderChangedEvent;
 import de.simonsator.partyandfriends.api.friends.ServerConnector;
 import de.simonsator.partyandfriends.utilities.StandardConnector;
 import de.simonsator.partyandfriends.utilities.StandardDisplayNameProvider;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.protocol.packet.Chat;
 
@@ -14,6 +15,7 @@ import java.util.Random;
 public abstract class PAFPlayerClass implements PAFPlayer {
 	private static DisplayNameProvider displayNameProvider = new StandardDisplayNameProvider();
 	private static ServerConnector serverConnector = new StandardConnector();
+	private static boolean SEND_EMPTY_LINES = true;
 	private final Random RANDOM_GENERATOR = new Random();
 
 	public static ServerConnector getServerConnector() {
@@ -29,6 +31,14 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 		serverConnector = pServerConnector;
 	}
 
+	protected static boolean shouldSendEmptyLines() {
+		return SEND_EMPTY_LINES;
+	}
+
+	public static void setSendEmptyLines(boolean sendEmptyLines) {
+		SEND_EMPTY_LINES = sendEmptyLines;
+	}
+
 	public static DisplayNameProvider getDisplayNameProvider() {
 		return displayNameProvider;
 	}
@@ -36,6 +46,18 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 	public static void setDisplayNameProvider(DisplayNameProvider pDisplayNameProvider) {
 		displayNameProvider = pDisplayNameProvider;
 		BukkitBungeeAdapter.getInstance().callEvent(new DisplayNameProviderChangedEvent(pDisplayNameProvider));
+	}
+
+	protected boolean isTextComponentEmpty(BaseComponent pTextComponent) {
+		if (pTextComponent instanceof TextComponent && !((TextComponent) pTextComponent).getText().isEmpty())
+			return false;
+		if (pTextComponent.getExtra() == null)
+			return true;
+		for (BaseComponent textComponent : pTextComponent.getExtra()) {
+			if (!isTextComponentEmpty(textComponent))
+				return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -46,6 +68,8 @@ public abstract class PAFPlayerClass implements PAFPlayer {
 
 	@Override
 	public void sendMessage(String pText) {
+		if (!shouldSendEmptyLines() && pText.isEmpty())
+			return;
 		String[] spited = pText.split("LINE_BREAK");
 		for (String split : spited)
 			sendMessage(new TextComponent(TextComponent.fromLegacyText(split)));

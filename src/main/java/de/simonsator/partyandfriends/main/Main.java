@@ -4,8 +4,10 @@ import de.simonsator.partyandfriends.admin.commands.PAFAdminCommand;
 import de.simonsator.partyandfriends.api.PAFExtension;
 import de.simonsator.partyandfriends.api.PAFPluginBase;
 import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
+import de.simonsator.partyandfriends.api.system.WaitForTasksToFinish;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
 import de.simonsator.partyandfriends.communication.sql.pool.PoolData;
 import de.simonsator.partyandfriends.friends.commands.Friends;
@@ -154,6 +156,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 				getGeneralConfig().getInt("MySQL.RedisCache.ExpirationTimeInSeconds"));
 		new PAFPlayerManagerMySQL(mySQLData, poolData);
 		new LocalPartyManager(Main.getInstance().getGeneralConfig().getInt("Commands.Party.SubCommands.Invite.InvitationTimeOutTimeInSeconds"));
+		PAFPlayerClass.setSendEmptyLines(getGeneralConfig().getBoolean("General.SendBlankLines"));
 		if (getGeneralConfig().getBoolean("General.MultiCoreEnhancement")) {
 			PAFPlayerMySQL.setMultiCoreEnhancement(true);
 		}
@@ -169,8 +172,10 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		shuttingDown = true;
 		ProxyServer.getInstance().getPluginManager().unregisterListeners(this);
 		ProxyServer.getInstance().getPluginManager().unregisterCommands(this);
-		Disabler.getInstance().disableAll();
+		WaitForTasksToFinish.waitForTasksToFinish();
+		WaitForTasksToFinish.reset();
 		getProxy().getScheduler().cancel(this);
+		Disabler.getInstance().disableAll();
 	}
 
 	/**

@@ -3,6 +3,7 @@ package de.simonsator.partyandfriends.api;
 import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.api.system.WaitForTasksToFinish;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.SubCommand;
@@ -32,6 +33,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	 */
 	private final String PREFIX;
 	private final Set<UUID> mutex = new HashSet<>();
+	private final WaitForTasksToFinish TASK_COUNTER = new WaitForTasksToFinish();
 
 	/**
 	 * @param pCommandNames The command name and the different aliases of this command.
@@ -79,12 +81,14 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 			mutex.add(uuid);
 			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> {
 				try {
+					TASK_COUNTER.taskStarts();
 					if (!isDisabledServer(player))
 						onCommand(PAFPlayerManager.getInstance().getPlayer((ProxiedPlayer) pCommandSender), args);
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
 					mutex.remove(uuid);
+					TASK_COUNTER.taskFinished();
 				}
 			});
 		}
