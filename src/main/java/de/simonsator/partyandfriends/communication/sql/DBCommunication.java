@@ -24,7 +24,7 @@ public class DBCommunication {
 
 	protected void close(PreparedStatement pPrepStmt) {
 		try {
-			if (pPrepStmt != null)
+			if (pPrepStmt != null && !pPrepStmt.isClosed())
 				pPrepStmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -33,9 +33,9 @@ public class DBCommunication {
 
 	protected void close(ResultSet rs, Statement stmt) {
 		try {
-			if (rs != null)
+			if (rs != null && !rs.isClosed())
 				rs.close();
-			if (stmt != null)
+			if (stmt != null && !stmt.isClosed())
 				stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -43,15 +43,7 @@ public class DBCommunication {
 	}
 
 	protected void close(ResultSet rs, Statement stmt, PreparedStatement prepStmt) {
-		try {
-			if (rs != null)
-				rs.close();
-			if (stmt != null)
-				stmt.close();
-			if (prepStmt != null)
-				prepStmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		close(rs, stmt);
+		close(prepStmt);
 	}
 }

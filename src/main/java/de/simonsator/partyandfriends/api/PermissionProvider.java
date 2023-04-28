@@ -30,7 +30,7 @@ public abstract class PermissionProvider {
 	/**
 	 * @param pPlayer     The player for whom the permission is asked
 	 * @param pPermission The permission which is asked for
-	 * @return Returns true if the given player has the given permission and returns false if he has not.
+	 * @return Returns true if the given player has the given permission and returns false if they have not.
 	 */
 	public abstract boolean hasPermission(PAFPlayer pPlayer, String pPermission);
 

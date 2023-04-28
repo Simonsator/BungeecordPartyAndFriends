@@ -75,6 +75,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		}
 		set("Party.MiniGameStartingCommands.Enabled", false);
 		set("Party.MiniGameStartingCommands.Commands", "/arena join blue", "/survivalgames arena");
+		set("Friends.SendMessageToFriendsOnServerSwitch", false);
 		set("Extensions.UseExtensionFolderAsConfigFolder", false);
 		set("Commands.Friends.General.PrintOutHelpOnError", true);
 		set("Commands.Friends.TopCommands.Friend.Names", "friend", "friends");

@@ -34,7 +34,7 @@ public interface OnlinePAFPlayer extends PAFPlayer {
 	void update();
 
 	/**
-	 * @return Returns the player if he is on this Bungeecord. If he is on
+	 * @return Returns the player if he is on this Bungeecord. If they are on
 	 * another Bungeecord (RedisBungee) it returns null.
 	 */
 	ProxiedPlayer getPlayer();

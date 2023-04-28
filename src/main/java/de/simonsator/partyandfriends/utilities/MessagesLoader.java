@@ -101,6 +101,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.General.RequestInfoOnJoin", " &7You &7have &7friend &7requests &7from: [FRIENDREQUESTS]");
 		set("Friends.General.DoesNotExist", " &7The given player &7does not &7exist");
 		set("Friends.General.GivenPlayerEqualsSender", " &7You cannot specify yourself as player argument.");
+		set("Friends.General.ServerSwitched", " &7Your friend &e[PLAYER] &7has joined the server &e[SERVER]&7.");
 		set("Friends.CommandUsage.List", "&8/&5friend list &8- &7Lists all your friends");
 		set("Friends.CommandUsage.MSG", "&8/&5friend msg [name of the friend] [message]&r &8- &7Send a message to a friend");
 		set("Friends.CommandUsage.ADD", "&8/&5friend add [name of the player]&r &8- &7Add a friend");
@@ -178,7 +179,7 @@ public class MessagesLoader extends LanguageConfiguration {
 		set("Friends.Command.MSG.CanNotWriteToHim", " &7You cannot message this player.");
 		set("Friends.Command.MSG.NoOneEverWroteToYou", " &7You have not received any messages before.");
 		set("Friends.Command.MSG.MessageMissing", " &7You need to give a message.");
-		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7The player will receive the message when he goes online.");
+		set("Friends.Command.MSG.PlayerWillReceiveMessageOnJoin", " &7The player will receive the message when they go online.");
 		set("Friends.Command.Remove.Removed", " &7You removed the friend &e[PLAYER]&7.");
 		set("Friends.Command.Remove.FriendRemovedYou", " &e[PLAYER]&7 removed you from his friend list.");
 		set("PAFAdmin.Command.DeletePlayer.PlayerDeleted", " &7All data saved by Party and Friends of the player &e[PLAYER]&7 were deleted.");

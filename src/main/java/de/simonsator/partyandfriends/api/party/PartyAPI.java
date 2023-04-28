@@ -14,12 +14,12 @@ public class PartyAPI {
 	public static final int NO_PARTY_PERMISSION_HEIGHT = 0;
 
 	/**
-	 * Returns the party, if the given player is in a party or null if he is not
+	 * Returns the party, if the given player is in a party or null if they are not
 	 * in a party
 	 *
 	 * @param player The player
 	 * @return Returns the party, if the given player is in a party or null if
-	 * he is not in a party
+	 * they are not in a party
 	 */
 	public static PlayerParty getParty(OnlinePAFPlayer player) {
 		return PartyManager.getInstance().getParty(player);

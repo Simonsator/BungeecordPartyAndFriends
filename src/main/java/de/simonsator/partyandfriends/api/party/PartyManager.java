@@ -37,7 +37,7 @@ public abstract class PartyManager implements Deactivated {
 	 * Returns the party in which a player is
 	 *
 	 * @param player The player
-	 * @return Returns the party in which a player is or null if he isn't in a
+	 * @return Returns the party in which a player is or null if they aren't in a
 	 * party.
 	 */
 	public PlayerParty getParty(OnlinePAFPlayer player) {
@@ -45,10 +45,10 @@ public abstract class PartyManager implements Deactivated {
 	}
 
 	/**
-	 * A player cannot have an party when he is offline. This is only for the case that the player has left the server before the async disconnect was executed
+	 * A player cannot have an party when they are offline. This is only for the case that the player has left the server before the async disconnect was executed
 	 *
 	 * @param pUUID The uuid of the player
-	 * @return Returns the party of the player, if he has one, else it is returning null.
+	 * @return Returns the party of the player, if they have one, else it is returning null.
 	 */
 	public abstract PlayerParty getParty(UUID pUUID);
 

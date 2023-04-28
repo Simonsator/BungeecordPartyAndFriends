@@ -8,7 +8,7 @@ public interface PageCreator<T> {
 		int page = 1;
 		if (args.length > 1) {
 			try {
-				page = Integer.valueOf(args[1]);
+				page = Integer.parseInt(args[1]);
 				if (page < 1)
 					page = 1;
 			} catch (NumberFormatException ignored) {

@@ -41,20 +41,20 @@ public abstract class PlayerParty {
 	}
 
 	/**
-	 * Returns true if the given player is the leader of this party, and false if he is not the leader, of this party.
+	 * Returns true if the given player is the leader of this party, and false if they are not the leader, of this party.
 	 *
 	 * @param player The player
 	 * @return Returns true if the given player is the leader of this party,
-	 * and false if he is not the leader, of this party
+	 * and false if they are not the leader, of this party
 	 */
 	public abstract boolean isLeader(PAFPlayer player);
 
 	/**
-	 * Returns true if the given player is the leader of this party, and false if he is not the leader, of this party.
+	 * Returns true if the given player is the leader of this party, and false if they are not the leader, of this party.
 	 *
 	 * @param player The player
 	 * @return Returns true if the given player is the leader of this party,
-	 * and false if he is not the leader, of this party
+	 * and false if they are not the leader, of this party
 	 */
 	public boolean isLeader(OnlinePAFPlayer player) {
 		return isLeader((PAFPlayer) player);
@@ -215,6 +215,7 @@ public abstract class PlayerParty {
 							(PartyCommand.getInstance().getPrefix()
 									+ Main.getInstance().getMessages().getString(
 									"Party.Command.General.DissolvedPartyCauseOfNotEnoughPlayers")));
+					BukkitBungeeAdapter.getInstance().callEvent(new LeftPartyEvent(this, lLeader1));
 					PartyManager.getInstance().deleteParty(party);
 				}
 			}
@@ -229,6 +230,10 @@ public abstract class PlayerParty {
 
 	protected abstract void addToInvited(OnlinePAFPlayer pPlayer);
 
+	/**
+	 *
+	 * @return Returns true if there are no party members and nobody is invited into the party. The party might have a party leader.
+	 */
 	public boolean isPartyEmpty() {
 		return getPlayers().isEmpty() && isNobodyInvited();
 	}
@@ -271,6 +276,10 @@ public abstract class PlayerParty {
 			for (OnlinePAFPlayer player : getAllPlayers()) {
 				removePlayerSilent(player);
 				BukkitBungeeAdapter.getInstance().callEvent(new LeftPartyEvent(this, player));
+			}
+			OnlinePAFPlayer leader = getLeader();
+			if (leader != null) {
+				BukkitBungeeAdapter.getInstance().callEvent(new LeftPartyEvent(this, leader));
 			}
 			return true;
 		}

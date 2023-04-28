@@ -28,7 +28,7 @@ public interface PAFPlayer {
 	UUID getUniqueId();
 
 	/**
-	 * Sends a message to a player if he is online
+	 * Sends a message to a player if they are online
 	 *
 	 * @param pMessage The message which should be sent. Can either be a string or a list of messages
 	 *                 (a random one from the list will be sent)
@@ -36,21 +36,21 @@ public interface PAFPlayer {
 	void sendMessage(Object pMessage);
 
 	/**
-	 * Sends a random message from the list to the player if he is online
+	 * Sends a random message from the list to the player if they are online
 	 *
 	 * @param pMessages A list of messages
 	 */
 	void sendMessage(List<String> pMessages);
 
 	/**
-	 * Sends a message to the player if he is online
+	 * Sends a message to the player if they are online
 	 *
 	 * @param pTextComponent The message
 	 */
 	void sendMessage(TextComponent pTextComponent);
 
 	/**
-	 * Sends a message to a player if he is online. The message will be broken into two messages if LINE_BREAK is used
+	 * Sends a message to a player if they are online. The message will be broken into two messages if LINE_BREAK is used
 	 * in the message
 	 *
 	 * @param pText The message which should be sent
