@@ -46,7 +46,7 @@ General:
     TimeZone: 'SYSTEM_DEFAULT'
     # To find out which characters do what check out https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
     Format: dd/MM/yyyy HH:mm:ss
-  # If enabled parties won't be moved to the server of the leader when he joins a new server
+  # If enabled parties won't be moved to the server of the leader when they join a new server
   DisableAutomaticPartyServerSwitching: false
   # A list of servers which should not be automatically be joined by the whole party if the party leader joins this server
   PartyDoNotJoinTheseServers:
@@ -99,6 +99,9 @@ Party:
     Commands:
       - /arena join blue
       - /survivalgames arena
+Friends:
+  # If this option is activated a player will receive a message when a friend switches to a different spigot server
+  SendMessageToFriendsOnServerSwitch: false
 Extensions:
   # If this option is activated supported extensions will have their config folder in the folder plugins/PartyAndFriends/extensions/EXTENSION_NAME
   UseExtensionFolderAsConfigFolder: false
@@ -128,9 +131,9 @@ Commands:
         Permission: ''
         MSGNonFriendsPermission: de.simonsator.partyandfriends.msg.msgnonfriends
         AllowPlayersToUseChatFormatting: true
-        # If a player is on a server listed here he won't be able to receive messages via /friend msg//msg from friends.
+        # If a player is on a server listed here they won't be able to receive messages via /friend msg//msg from friends.
         # If 'General.Deactivated.OfflineMessages' is not disabled the player will still receive the offline messages on
-        # this server when he goes online.
+        # this server when they go online.
         DisableMessageReceivingServers:
           - login1
           - login2
