@@ -1,5 +1,7 @@
 package de.simonsator.partyandfriends.communication.sql;
 
+import de.simonsator.partyandfriends.main.Main;
+
 /**
  * @author Simonsator
  * @version 1.0.0 on 19.07.16.
@@ -15,6 +17,7 @@ public class MySQLData {
 	public final boolean CACHE;
 	public final int EXPIRATION_TIME;
 	public final boolean EXPIRATION_ACTIVATED;
+	public final boolean USE_MARIA_DB_DRIVER = Main.getInstance().getGeneralConfig().getBoolean("MySQL.UseMariaDBConnector");
 
 	public MySQLData(String host, String username, String password, int port, String database, String pTablePrefix) {
 		HOST = host;

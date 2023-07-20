@@ -34,6 +34,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("MySQL.TablePrefix", "fr_");
 		set("MySQL.Cache", true);
 		set("MySQL.EnhancedDataLoading", false);
+		set("MySQL.UseMariaDBConnector", false);
 		set("MySQL.Pool.ConnectionPool", "HikariCP");
 		set("MySQL.Pool.InitialPoolSize", 3);
 		set("MySQL.Pool.MinPoolSize", 3);

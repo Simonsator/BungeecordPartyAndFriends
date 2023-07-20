@@ -13,6 +13,12 @@ MySQL:
   # Allows the plugin to use more bandwidth for SQL requests. In most cases this will enhance performance, but in some
   # cases (very limited bandwidth or on some MySQL forks), it will cause a much worse performance.
   EnhancedDataLoading: false
+  # If you are using MariaDB or Pterodactyl should activate this option. This will download the MariaDB connector.
+  #
+  # If your server does not have an internet connection you can download the connector from
+  # https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/3.1.4/mariadb-java-client-3.1.4.jar
+  # and put it into the Party And Friends plugin folder under the name "MariaDB-JDBC-Connector.jar".
+  UseMariaDBConnector: false
   Pool:
     # Available options are HikariCP and C3P0. HikariCP is faster. Use C3P0 if you are having problems with HikariCP
     ConnectionPool: 'HikariCP'
@@ -132,8 +138,6 @@ Commands:
         MSGNonFriendsPermission: de.simonsator.partyandfriends.msg.msgnonfriends
         AllowPlayersToUseChatFormatting: true
         # If a player is on a server listed here they won't be able to receive messages via /friend msg//msg from friends.
-        # If 'General.Deactivated.OfflineMessages' is not disabled the player will still receive the offline messages on
-        # this server when they go online.
         DisableMessageReceivingServers:
           - login1
           - login2

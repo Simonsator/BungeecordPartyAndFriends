@@ -22,7 +22,9 @@ public abstract class SQLCommunication extends DBCommunication {
 	private String url;
 	private Connection connection;
 
+	@Deprecated
 	protected SQLCommunication(String pDatabase, String pURL, String pUserName, String pPassword, boolean pUseSSL) {
+		super(false);
 		this.DATABASE = pDatabase;
 		this.url = pURL;
 		connectionProperties = new Properties();
@@ -34,6 +36,7 @@ public abstract class SQLCommunication extends DBCommunication {
 
 	@Deprecated
 	protected SQLCommunication(String pDatabase, String pURL, String pUserName, String pPassword) {
+		super(false);
 		this.DATABASE = pDatabase;
 		this.url = pURL;
 		connectionProperties = new Properties();
@@ -43,8 +46,15 @@ public abstract class SQLCommunication extends DBCommunication {
 	}
 
 	protected SQLCommunication(MySQLData pMySQLData) {
+		super(pMySQLData.USE_MARIA_DB_DRIVER);
 		this.DATABASE = pMySQLData.DATABASE;
-		this.url = "jdbc:mysql://" + pMySQLData.HOST + ":" + pMySQLData.PORT + "/";
+		String driverUrl;
+		if (pMySQLData.USE_MARIA_DB_DRIVER) {
+			driverUrl = "jdbc:mariadb://";
+		} else {
+			driverUrl = "jdbc:mysql://";
+		}
+		this.url = driverUrl + pMySQLData.HOST + ":" + pMySQLData.PORT + "/";
 		connectionProperties = new Properties();
 		connectionProperties.setProperty("user", pMySQLData.USERNAME);
 		connectionProperties.setProperty("password", pMySQLData.PASSWORD);

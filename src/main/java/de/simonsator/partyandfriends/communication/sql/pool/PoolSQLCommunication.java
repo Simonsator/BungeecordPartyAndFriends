@@ -22,15 +22,22 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 	private final MySQLData MYSQL_DATA;
 	private final PoolData POOL_DATA;
 	private final Properties connectionProperties;
+	private final String DRIVER_URL;
 
 	public PoolSQLCommunication(MySQLData pMySQLData, PoolData pPoolData) throws SQLException {
+		super(pMySQLData.USE_MARIA_DB_DRIVER);
 		MYSQL_DATA = pMySQLData;
 		POOL_DATA = pPoolData;
+		if (pMySQLData.USE_MARIA_DB_DRIVER) {
+			DRIVER_URL = "jdbc:mariadb://";
+		} else {
+			DRIVER_URL = "jdbc:mysql://";
+		}
 		connectionProperties = new Properties();
 		connectionProperties.setProperty("user", MYSQL_DATA.USERNAME);
 		connectionProperties.setProperty("password", MYSQL_DATA.PASSWORD);
-		connectionProperties.setProperty("useSSL", pMySQLData.USE_SSL + "");
-		connectionProperties.setProperty("allowPublicKeyRetrieval", !pMySQLData.USE_SSL + "");
+		connectionProperties.setProperty("useSSL", String.valueOf(pMySQLData.USE_SSL));
+		connectionProperties.setProperty("allowPublicKeyRetrieval", String.valueOf(!pMySQLData.USE_SSL));
 		connectionProperties.setProperty("rewriteBatchedStatements", "true");
 		connectionProperties.setProperty("createDatabaseIfNotExist", "true");
 		if (hikariDataSource == null && cpds == null) {
@@ -52,9 +59,11 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 	 * @throws IllegalStateException If the connection has not yet been initialized by {@link #PoolSQLCommunication(MySQLData, PoolData)} by another object extending this class (probably Party and Friends)
 	 */
 	public PoolSQLCommunication() throws IllegalStateException {
+		super(false);
 		MYSQL_DATA = null;
 		POOL_DATA = null;
 		connectionProperties = null;
+		DRIVER_URL = null;
 	}
 
 	public static boolean hasBeenInitialized() {
@@ -62,41 +71,26 @@ public class PoolSQLCommunication extends DBCommunication implements Deactivated
 	}
 
 	private void checkIfConnectionIsValid() throws SQLException {
-		Connection con = null;
-		try {
-			Class.forName(MYSQL_DRIVER_CLASS);
-			con = DriverManager.getConnection("jdbc:mysql://" + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT, connectionProperties);
+		try (Connection con = DriverManager.getConnection(DRIVER_URL + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT, connectionProperties)) {
 			con.isValid(15);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} finally {
-			if (con != null)
-				con.close();
 		}
 	}
 
 	private ComboPooledDataSource createCPDSConnection() {
-		try {
-			ComboPooledDataSource cpds = new ComboPooledDataSource();
-			cpds.setDriverClass(MYSQL_DRIVER_CLASS);
-			cpds.setJdbcUrl("jdbc:mysql://" + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT + "/" + MYSQL_DATA.DATABASE);
-			cpds.setProperties(connectionProperties);
-			cpds.setInitialPoolSize(POOL_DATA.INITIAL_POOL_SIZE);
-			cpds.setMinPoolSize(POOL_DATA.MIN_POOL_SIZE);
-			cpds.setMaxPoolSize(POOL_DATA.MAX_POOL_SIZE);
-			cpds.setTestConnectionOnCheckin(POOL_DATA.TEST_CONNECTION_ON_CHECKIN);
-			cpds.setIdleConnectionTestPeriod(POOL_DATA.IDLE_CONNECTION_TEST_PERIOD);
-			return cpds;
-		} catch (PropertyVetoException e) {
-			e.printStackTrace();
-		}
-		return null;
+		ComboPooledDataSource cpds = new ComboPooledDataSource();
+		cpds.setJdbcUrl(DRIVER_URL + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT + "/" + MYSQL_DATA.DATABASE);
+		cpds.setProperties(connectionProperties);
+		cpds.setInitialPoolSize(POOL_DATA.INITIAL_POOL_SIZE);
+		cpds.setMinPoolSize(POOL_DATA.MIN_POOL_SIZE);
+		cpds.setMaxPoolSize(POOL_DATA.MAX_POOL_SIZE);
+		cpds.setTestConnectionOnCheckin(POOL_DATA.TEST_CONNECTION_ON_CHECKIN);
+		cpds.setIdleConnectionTestPeriod(POOL_DATA.IDLE_CONNECTION_TEST_PERIOD);
+		return cpds;
 	}
 
 	private HikariDataSource createHikariConnection() {
 		HikariConfig config = new HikariConfig();
-		config.setDriverClassName(MYSQL_DRIVER_CLASS);
-		config.setJdbcUrl("jdbc:mysql://" + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT + "/" + MYSQL_DATA.DATABASE);
+		config.setJdbcUrl(DRIVER_URL + MYSQL_DATA.HOST + ":" + MYSQL_DATA.PORT + "/" + MYSQL_DATA.DATABASE);
 		config.setDataSourceProperties(connectionProperties);
 		config.setMinimumIdle(POOL_DATA.MIN_POOL_SIZE);
 		config.setMaximumPoolSize(POOL_DATA.MAX_POOL_SIZE);

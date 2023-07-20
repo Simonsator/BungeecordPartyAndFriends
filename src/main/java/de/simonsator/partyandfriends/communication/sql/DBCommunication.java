@@ -12,14 +12,18 @@ import java.sql.Statement;
 public class DBCommunication {
 	protected final String MYSQL_DRIVER_CLASS;
 
-	protected DBCommunication() {
-		String mysqlDriverClass = "com.mysql.cj.jdbc.Driver";
-		try {
-			Class.forName(mysqlDriverClass);
-		} catch (ClassNotFoundException e) {
-			mysqlDriverClass = "com.mysql.jdbc.Driver";
+	protected DBCommunication(boolean pUseMariaDBDriver) {
+		if (pUseMariaDBDriver) {
+			MYSQL_DRIVER_CLASS = "org.mariadb.jdbc.Driver";
+		} else {
+			String mysqlDriverClass = "com.mysql.cj.jdbc.Driver";
+			try {
+				Class.forName(mysqlDriverClass);
+			} catch (ClassNotFoundException e) {
+				mysqlDriverClass = "com.mysql.jdbc.Driver";
+			}
+			MYSQL_DRIVER_CLASS = mysqlDriverClass;
 		}
-		MYSQL_DRIVER_CLASS = mysqlDriverClass;
 	}
 
 	protected void close(PreparedStatement pPrepStmt) {

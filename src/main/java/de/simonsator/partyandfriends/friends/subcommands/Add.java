@@ -112,7 +112,7 @@ public class Add extends FriendSubCommand {
 
 	private boolean givenPlayerEqualsSender(OnlinePAFPlayer pPlayer, String pGivenPlayer) {
 		if (pPlayer.getName().equalsIgnoreCase(pGivenPlayer)) {
-			sendError(pPlayer, "Friends.Command.Accept.ErrorSenderEqualsReceiver");
+			sendError(pPlayer, "Friends.Command.Add.SenderEqualsReceiver");
 			return true;
 		}
 		return false;

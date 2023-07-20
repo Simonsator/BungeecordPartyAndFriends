@@ -8,6 +8,7 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerClass;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.api.party.PartyManager;
 import de.simonsator.partyandfriends.api.system.WaitForTasksToFinish;
+import de.simonsator.partyandfriends.communication.sql.DriverShim;
 import de.simonsator.partyandfriends.communication.sql.MySQLData;
 import de.simonsator.partyandfriends.communication.sql.pool.PoolData;
 import de.simonsator.partyandfriends.friends.commands.Friends;
@@ -35,7 +36,16 @@ import net.md_5.bungee.config.Configuration;
 import org.bstats.bungeecord.Metrics;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +80,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	private Language language;
 	private Friends friendCommand;
 	private boolean shuttingDown = false;
+	public static final String MARIADB_DRIVER_DOWNLOAD_URL = "https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/3.1.4/mariadb-java-client-3.1.4.jar";
 
 	public static Main getInstance() {
 		return instance;
@@ -207,6 +218,35 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 		System.setProperty("com.mchange.v2.log.MLog", "com.mchange.v2.log.FallbackMLog");
 		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
 		getAdapter().setForceUuidSupport(config.getBoolean("General.ForceUUIDSupportOnOfflineServers"));
+		if (getGeneralConfig().getBoolean("MySQL.UseMariaDBConnector")) {
+			loadMariaDBConnector();
+		}
+	}
+
+	private void loadMariaDBConnector() {
+		File mariadbConnector = new File(getDataFolder(), "MariaDB-JDBC-Connector.jar");
+		if (!mariadbConnector.exists()) {
+			System.out.println("Downloading MariaDB-JDBC-Connector.jar...");
+			try (FileOutputStream fos = new FileOutputStream(mariadbConnector)) {
+				URL website = new URL(MARIADB_DRIVER_DOWNLOAD_URL);
+				ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+			} catch (IOException e) {
+				initError(e, BootErrorType.MARIA_DB_DOWNLOAD_FAILED);
+				getGeneralConfig().setOverwrite("MySQL.UseMariaDBConnector", false);
+			}
+		}
+		if (mariadbConnector.exists()) {
+			try {
+				URL jarUrl = mariadbConnector.toURI().toURL();
+				URLClassLoader loader = new URLClassLoader(new URL[]{jarUrl}, ClassLoader.getSystemClassLoader());
+				DriverManager.registerDriver(new DriverShim((Driver) Class.forName("org.mariadb.jdbc.Driver", true, loader).getDeclaredConstructor().newInstance()));
+			} catch (MalformedURLException | ClassNotFoundException | SQLException | InvocationTargetException |
+			         InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+				initError(e, BootErrorType.MARIA_DB_DRIVER_LOADING_FAILED);
+				getGeneralConfig().setOverwrite("MySQL.UseMariaDBConnector", false);
+			}
+		}
 	}
 
 	/**
