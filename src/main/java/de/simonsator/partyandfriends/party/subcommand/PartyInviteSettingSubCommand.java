@@ -4,6 +4,7 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.party.settings.InviteSetting;
 
+import java.util.Collections;
 import java.util.List;
 
 public class PartyInviteSettingSubCommand extends PartySubCommand {
@@ -11,7 +12,7 @@ public class PartyInviteSettingSubCommand extends PartySubCommand {
 
 	public PartyInviteSettingSubCommand(List<String> pCommands, int pPriority, String pHelpText, String pPermission) {
 		super(pCommands, pPriority, pHelpText, pPermission);
-		SETTING = new InviteSetting(null, null, 0);
+		SETTING = new InviteSetting(PREFIX, Collections.emptyList(), null, 0);
 	}
 
 	@Override

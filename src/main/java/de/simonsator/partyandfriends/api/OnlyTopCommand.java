@@ -23,9 +23,10 @@ public abstract class OnlyTopCommand extends TopCommand {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender commandSender, String[] strings) {
+	public List<String> onTabCompleteNoLimit(CommandSender commandSender, String[] strings) {
 		// Only in the extended version
 		return Collections.emptyList();
 	}
+
 
 }

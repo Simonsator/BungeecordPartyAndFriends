@@ -11,7 +11,9 @@ import de.simonsator.partyandfriends.party.subcommand.*;
 import de.simonsator.partyandfriends.utilities.ConfigurationCreator;
 import de.simonsator.partyandfriends.utilities.LanguageConfiguration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -32,6 +34,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		instance = this;
 		ConfigurationCreator config = Main.getInstance().getGeneralConfig();
 		LanguageConfiguration messages = Main.getInstance().getMessages();
+		List<PartySubCommand> subCommands = new ArrayList<>(9);
 		subCommands.add(
 				new Join(config.getStringList("Commands.Party.SubCommands.Join.Names"),
 						config.getInt("Commands.Party.SubCommands.Join.Priority"), messages.getString("Party.CommandUsage.Join"), config.getString("Commands.Party.SubCommands.Join.Permissions")));
@@ -65,18 +68,11 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 			subCommands.add(new PartyInviteSettingSubCommand(
 					config.getStringList("Commands.Party.SubCommands.InviteSetting.Names"), config.getInt("Commands.Party.SubCommands.InviteSetting.Priority"),
 					messages.getString("Party.CommandUsage.InviteSetting"), config.getString("Commands.Party.SubCommands.InviteSetting.Permissions")));
+		addCommands(subCommands);
 	}
 
 	public static PartyCommand getInstance() {
 		return instance;
-	}
-
-	private PartySubCommand getCommand(String name) {
-		for (PartySubCommand c : subCommands) {
-			if (c.isApplicable(name))
-				return c;
-		}
-		return null;
 	}
 
 	@Override
@@ -86,19 +82,25 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 			pPlayer.sendMessage(
 					Main.getInstance().getMessages().getString("Party.General.HelpBegin"));
 			int permissionHeight = PartyAPI.NO_PARTY_PERMISSION_HEIGHT;
-			if (party != null)
-				if (party.isLeader(pPlayer))
+			if (party != null) {
+				if (party.isLeader(pPlayer)) {
 					permissionHeight = PartyAPI.LEADER_PERMISSION_HEIGHT;
-				else
+				} else {
 					permissionHeight = PartyAPI.PARTY_MEMBER_PERMISSION_HEIGHT;
-			for (PartySubCommand cmd : subCommands)
-				if (cmd.hasAccess(party, permissionHeight) || !Main.getInstance().getGeneralConfig().getBoolean("Commands.Party.General.PrintOnlyExecutableSubCommandsOut"))
-					cmd.printOutHelp(pPlayer, getName());
+				}
+			}
+			final int finalPermissionHeight = permissionHeight;
+			forEachSubCommand(partySubCommand -> {
+				if (partySubCommand.hasAccess(party, finalPermissionHeight) ||
+						!Main.getInstance().getGeneralConfig().getBoolean("Commands.Party.General.PrintOnlyExecutableSubCommandsOut")) {
+					partySubCommand.printOutHelp(pPlayer, getName());
+				}
+			});
 			pPlayer.sendMessage(
 					Main.getInstance().getMessages().getString("Party.General.HelpEnd"));
 			return;
 		}
-		PartySubCommand sc = getCommand(args[0]);
+		PartySubCommand sc = getSubCommand(args[0]);
 		if (sc == null) {
 			pPlayer.sendMessage(Main.getInstance().getMessages().get(getPrefix(), "Party.Error.CommandNotFound"));
 			return;
@@ -109,7 +111,7 @@ public class PartyCommand extends TopCommand<PartySubCommand> {
 		}
 		Vector<String> a = new Vector<>(Arrays.asList(args));
 		a.remove(0);
-		args = a.toArray(new String[a.size()]);
+		args = a.toArray(new String[0]);
 		sc.onCommand(pPlayer, args);
 	}
 }

@@ -5,6 +5,7 @@ import de.simonsator.partyandfriends.api.party.PartyAPI;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.party.command.PartyChat;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,5 +28,10 @@ public class Chat extends PartySubCommand {
 	@Override
 	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
 		PartyChat.getInstance().send(pPlayer, args);
+	}
+
+	@Override
+	public List<String> tabCompleteArgument(String[] input) {
+		return Collections.emptyList();
 	}
 }

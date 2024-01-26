@@ -7,6 +7,7 @@ import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,5 +40,10 @@ public class Leave extends PartySubCommand {
 	@Override
 	public boolean hasAccess(int pPermissionHeight) {
 		return pPermissionHeight >= PartyAPI.PARTY_MEMBER_PERMISSION_HEIGHT;
+	}
+
+	@Override
+	public List<String> tabCompleteArgument(String[] input) {
+		return Collections.emptyList();
 	}
 }

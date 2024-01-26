@@ -16,8 +16,8 @@ public class InviteSetting extends SimpleSetting {
 	public static final int PLAYER_RECEIVES_INVITES_BY_EVERYONE_STATE = 0;
 	public static final int PLAYER_RECEIVES_INVITES_BY_FRIENDS_STATE = 1;
 
-	public InviteSetting(List<String> pSettingNames, String pPermission, int pPriority) {
-		super(pSettingNames, pPermission, pPriority);
+	public InviteSetting(String pPrefix, List<String> pSettingNames, String pPermission, int pPriority) {
+		super(pPrefix, pSettingNames, pPermission, pPriority);
 	}
 
 	@Override

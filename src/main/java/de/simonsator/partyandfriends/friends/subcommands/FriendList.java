@@ -124,4 +124,9 @@ public class FriendList extends FriendSubCommand implements PageCreator<PlayerLi
 	public void unregisterTextReplacer(TextReplacer pTextReplacer) {
 		replacerList.remove(pTextReplacer);
 	}
+
+	@Override
+	public List<String> tabCompleteArgument(String[] input) {
+		return Collections.emptyList();
+	}
 }

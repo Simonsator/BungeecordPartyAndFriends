@@ -3,17 +3,21 @@ package de.simonsator.partyandfriends.api;
 import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.api.subcommands.SubCommandManager;
 import de.simonsator.partyandfriends.api.system.WaitForTasksToFinish;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.SubCommand;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.TabCompleteEvent;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Represents a TopCommand like /friend, /party or /command.
@@ -24,10 +28,7 @@ import java.util.*;
  *            {@link de.simonsator.partyandfriends.utilities.SubCommand}
  */
 public abstract class TopCommand<T extends SubCommand> extends Command implements TabExecutor {
-	/**
-	 * Contains all subcommands of the TopCommand
-	 */
-	protected final ArrayList<T> subCommands = new ArrayList<>();
+	private final SubCommandManager<T> SUB_COMMAND_MANAGER;
 	/**
 	 * The prefix which gets returned by the method {@link #getPrefix()}
 	 */
@@ -46,6 +47,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	protected TopCommand(String[] pCommandNames, String pPermission, String pPrefix) {
 		super(pCommandNames[0], pPermission, pCommandNames);
 		PREFIX = pPrefix;
+		SUB_COMMAND_MANAGER = new SubCommandManager<>(false);
 	}
 
 	/**
@@ -55,9 +57,9 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	public static boolean isPlayer(CommandSender pCommandSender) {
 		if (!(pCommandSender instanceof ProxiedPlayer)) {
 			Main.getInstance().reload();
-			pCommandSender.sendMessage((Friends.getInstance().getPrefix() + "Party and Friends was reloaded. " +
+			pCommandSender.sendMessage(new TextComponent(TextComponent.fromLegacyText(Friends.getInstance().getPrefix() + "Party and Friends was reloaded. " +
 					"Anyway it is recommended to restart the bungeecord completely because it can be that " +
-					"not all features were reloaded/were right reloaded."));
+					"not all features were reloaded/were right reloaded.")));
 			return false;
 		}
 		return true;
@@ -96,7 +98,7 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 
 	private boolean isDisabledServer(ProxiedPlayer pPlayer) {
 		if (Main.getInstance().getGeneralConfig().getStringList("General.DisabledServers").contains(pPlayer.getServer().getInfo().getName())) {
-			pPlayer.sendMessage((Main.getInstance().getMessages().getString("General.DisabledServer")));
+			pPlayer.sendMessage(new TextComponent(TextComponent.fromLegacyText(Main.getInstance().getMessages().getString("General.DisabledServer"))));
 			return true;
 		}
 		return false;
@@ -112,14 +114,25 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	protected abstract void onCommand(OnlinePAFPlayer pPlayer, String[] args);
 
 	/**
-	 * Adds a subcommand to the {@link #subCommands} list
-	 * and after the subcommand was added it sorts the list again.
+	 * Adds a subcommand to this top command and after the subcommand was added it sorts the list again.
 	 *
 	 * @param pCommand The subcommand which should be added.
 	 */
 	public void addCommand(T pCommand) {
-		subCommands.add(pCommand);
-		sort();
+		SUB_COMMAND_MANAGER.addSubCommand(pCommand);
+	}
+
+	/**
+	 * Adds multiple subcommands to this top command and after all subcommands were added it sorts the list again.
+	 *
+	 * @param pCommands The subcommands which should be added.
+	 */
+	public void addCommands(List<T> pCommands) {
+		SUB_COMMAND_MANAGER.addSubCommands(pCommands);
+	}
+
+	public void forEachSubCommand(Consumer<T> pConsumer) {
+		SUB_COMMAND_MANAGER.forEach(pConsumer);
 	}
 
 	/**
@@ -128,18 +141,23 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	 * and the one with the highest priority the last one after the list was sorted.
 	 */
 	protected void sort() {
-		Collections.sort(subCommands);
+		SUB_COMMAND_MANAGER.sort();
 	}
 
 	/**
 	 * @param pClass The type of the subcommand object which is searched
-	 * @return Returns a subcommand of the {@link #subCommands} list, which has an equal type.
+	 * @return Returns a subcommand which was added to this command, which has an equal type.
 	 */
 	public T getSubCommand(Class<? extends SubCommand> pClass) {
-		for (T subCommand : subCommands)
-			if (subCommand.getClass().equals(pClass))
-				return subCommand;
-		return null;
+		return SUB_COMMAND_MANAGER.getSubCommand(pClass);
+	}
+
+	/**
+	 * @param pCommandName The name of the command which is searched
+	 * @return Returns a subcommand which was added to this command, which has the given name (case ignored).
+	 */
+	public T getSubCommand(String pCommandName) {
+		return SUB_COMMAND_MANAGER.getSubCommand(pCommandName);
 	}
 
 	/**
@@ -150,15 +168,16 @@ public abstract class TopCommand<T extends SubCommand> extends Command implement
 	}
 
 	@Deprecated
-	public void tabComplete(TabCompleteEvent pEvent) {
-	}
-
-	protected List<String> playerComplete(String[] input) {
-		return Collections.emptyList();
+	public void tabComplete(TabCompleteEvent ignore) {
+		// Method was replaced by the method onTabComplete(CommandSender, String[])
 	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender commandSender, String[] strings) {
+		return onTabCompleteNoLimit(commandSender, strings).stream().limit(10).collect(Collectors.toList());
+	}
+
+	public List<String> onTabCompleteNoLimit(CommandSender commandSender, String[] strings) {
 		return Collections.emptyList();
 	}
 }

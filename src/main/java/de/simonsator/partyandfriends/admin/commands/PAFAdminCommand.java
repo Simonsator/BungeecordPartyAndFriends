@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.admin.commands;
 
 import de.simonsator.partyandfriends.admin.commands.subcommands.DeletePlayerAdminSubCommand;
+import de.simonsator.partyandfriends.admin.commands.subcommands.VersionAdminSubCommand;
 import de.simonsator.partyandfriends.api.AdminCommand;
 import de.simonsator.partyandfriends.api.AdminSubCommand;
 import net.md_5.bungee.api.CommandSender;
@@ -18,6 +19,7 @@ public class PAFAdminCommand extends AdminCommand<AdminSubCommand> {
 	public PAFAdminCommand(String... aliases) {
 		super(aliases);
 		addSubcommand(new DeletePlayerAdminSubCommand(PREFIX));
+		addSubcommand(new VersionAdminSubCommand(PREFIX));
 	}
 
 	@Override

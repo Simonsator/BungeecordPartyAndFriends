@@ -4,13 +4,13 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.main.Main;
 import net.md_5.bungee.api.chat.TextComponent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public abstract class SubCommand implements Comparable<SubCommand> {
 	public final TextComponent HELP;
 	protected final String PREFIX;
 	private final ArrayList<String> commands;
+	private final Set<String> commandSet;
 	private final int PRIORITY;
 	private final String PERMISSION;
 
@@ -22,16 +22,11 @@ public abstract class SubCommand implements Comparable<SubCommand> {
 		commands = new ArrayList<>(pCommands.length);
 		for (String command : pCommands)
 			commands.add(command.toLowerCase());
+		commandSet = new HashSet<>(commands);
 	}
 
 	protected SubCommand(String[] pCommands, int pPriority, String pHelp, String pPrefix) {
-		HELP = new TextComponent(pHelp);
-		PRIORITY = pPriority;
-		PREFIX = pPrefix;
-		PERMISSION = null;
-		commands = new ArrayList<>(pCommands.length);
-		for (String command : pCommands)
-			commands.add(command.toLowerCase());
+		this(pCommands, pPriority, new TextComponent(TextComponent.fromLegacyText(pHelp)), pPrefix);
 	}
 
 	/**
@@ -42,17 +37,18 @@ public abstract class SubCommand implements Comparable<SubCommand> {
 	 * @param pPermission The permission which is needed to execute this command. If no Permission is needed set it to null.
 	 */
 	protected SubCommand(List<String> pCommands, int pPriority, String pHelp, String pPrefix, String pPermission) {
-		HELP = new TextComponent(pHelp);
+		HELP = new TextComponent(TextComponent.fromLegacyText(pHelp));
 		PRIORITY = pPriority;
 		PREFIX = pPrefix;
 		PERMISSION = pPermission;
 		commands = new ArrayList<>(pCommands.size());
 		for (String command : pCommands)
 			commands.add(command.toLowerCase());
+		commandSet = new HashSet<>(commands);
 	}
 
 	public boolean isApplicable(String pCommand) {
-		return commands.contains(pCommand.toLowerCase());
+		return commandSet.contains(pCommand.toLowerCase());
 	}
 
 	public boolean isApplicable(OnlinePAFPlayer pPlayer, String pCommand) {
@@ -65,7 +61,7 @@ public abstract class SubCommand implements Comparable<SubCommand> {
 	}
 
 	public void sendError(OnlinePAFPlayer pPlayer, String pIdentifier) {
-		sendError(pPlayer, new TextComponent(PREFIX + Main.getInstance().getMessages().getString(pIdentifier)));
+		sendError(pPlayer, new TextComponent(TextComponent.fromLegacyText(PREFIX + Main.getInstance().getMessages().getString(pIdentifier))));
 	}
 
 	public abstract void onCommand(OnlinePAFPlayer pPlayer, String[] args);
@@ -84,10 +80,14 @@ public abstract class SubCommand implements Comparable<SubCommand> {
 	}
 
 	public void printOutHelp(OnlinePAFPlayer pPlayer, String pCommandName) {
-		pPlayer.sendMessage(HELP.getText());
+		pPlayer.sendMessage(HELP);
 	}
 
 	public boolean hasPermission(OnlinePAFPlayer pPlayer) {
 		return pPlayer.hasPermission(PERMISSION);
+	}
+
+	public List<String> tabCompleteArgument(String[] input) {
+		return Collections.emptyList();
 	}
 }

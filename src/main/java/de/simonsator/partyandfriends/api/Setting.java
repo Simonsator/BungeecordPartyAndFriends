@@ -1,36 +1,25 @@
 package de.simonsator.partyandfriends.api;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
+import de.simonsator.partyandfriends.utilities.SubCommand;
 
 import java.util.List;
 
-/**
- * @author Simonsator
- * @version 1.0.0 28.03.17
- */
-public abstract class Setting implements Comparable<Setting> {
-	private final List<String> SETTING_NAMES;
-	private final Integer PRIORITY;
-	private final String PERMISSION;
-
+public abstract class Setting extends SubCommand {
 	public Setting(List<String> pSettingNames, String pPermission, int pPriority) {
-		SETTING_NAMES = pSettingNames;
-		PRIORITY = pPriority;
-		PERMISSION = pPermission;
+		this("", pSettingNames, pPermission, pPriority);
+	}
+
+	public Setting(String pPrefix, List<String> pSettingNames, String pPermission, int pPriority) {
+		super(pSettingNames, pPriority, "", pPrefix, pPermission);
 	}
 
 	public Setting(List<String> pSettingNames, String pPermission, int pPriority, String pIdentifier) {
-		SETTING_NAMES = pSettingNames;
-		PRIORITY = pPriority;
-		PERMISSION = pPermission;
+		this("", pSettingNames, pPermission, pPriority, pIdentifier);
 	}
 
-	public boolean isApplicable(OnlinePAFPlayer pPlayer, String pSettingName) {
-		return SETTING_NAMES.contains(pSettingName.toLowerCase()) && pPlayer.hasPermission(PERMISSION);
-	}
-
-	protected String getName() {
-		return SETTING_NAMES.get(0);
+	public Setting(String pPrefix, List<String> pSettingNames, String pPermission, int pPriority, String pIdentifier) {
+		this(pPrefix, pSettingNames, pPermission, pPriority);
 	}
 
 	public abstract void changeSetting(OnlinePAFPlayer pPlayer, String[] pArgs);
@@ -38,7 +27,7 @@ public abstract class Setting implements Comparable<Setting> {
 	public abstract void outputMessage(OnlinePAFPlayer pPlayer);
 
 	@Override
-	public int compareTo(Setting pToCompare) {
-		return pToCompare.PRIORITY.compareTo(PRIORITY);
+	public void onCommand(OnlinePAFPlayer pPlayer, String[] args) {
+
 	}
 }

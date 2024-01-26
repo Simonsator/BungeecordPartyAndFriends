@@ -7,6 +7,7 @@ import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.api.party.abstractcommands.PartySubCommand;
 import de.simonsator.partyandfriends.main.Main;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -63,5 +64,10 @@ public class Info extends PartySubCommand {
 	@Override
 	public boolean hasAccess(int pPermissionHeight) {
 		return PartyAPI.PARTY_MEMBER_PERMISSION_HEIGHT <= pPermissionHeight;
+	}
+
+	@Override
+	public List<String> tabCompleteArgument(String[] input) {
+		return Collections.emptyList();
 	}
 }

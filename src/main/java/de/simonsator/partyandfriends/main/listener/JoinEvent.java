@@ -54,12 +54,16 @@ public class JoinEvent extends WaitForTasksToFinish implements Listener {
 	public void onPostLogin(final PostLoginEvent pEvent) {
 		if (Main.getInstance().isShuttingDown())
 			return;
-		if (pEvent.getPlayer().isConnected())
+		if (pEvent.getPlayer().isConnected()) {
 			BukkitBungeeAdapter.getInstance().runAsync(Main.getInstance(), () -> sbLoggedIn(pEvent));
+		}
 	}
 
 	private void sbLoggedIn(PostLoginEvent pEvent) {
 		try {
+			if (!pEvent.getPlayer().isConnected()) {
+				return;
+			}
 			taskStarts();
 			OnlinePAFPlayer player = PAFPlayerManager.getInstance().getPlayer(pEvent.getPlayer());
 			if (!player.doesExist()) {
@@ -69,13 +73,14 @@ public class JoinEvent extends WaitForTasksToFinish implements Listener {
 				player.update();
 			List<PAFPlayer> friends = player.getFriends();
 			List<PAFPlayer> friendRequests = player.getRequests();
+			boolean noFriends = friends.isEmpty();
+			if (player.getSettingsWorth(OfflineSetting.SETTINGS_ID) == OfflineSetting.FRIENDS_ALWAYS_SEE_PLAYER_AS_OFFLINE_STATE) {
+				noFriends = true;
+			}
 			if (friends.isEmpty() && friendRequests.isEmpty())
 				return;
-			boolean noFriends = friends.isEmpty();
 			if (!friendRequests.isEmpty() && FRIEND_REQUEST_NOTIFICATION)
 				deliverFriendRequests(player, friendRequests);
-			if (player.getSettingsWorth(OfflineSetting.SETTINGS_ID) == OfflineSetting.FRIENDS_ALWAYS_SEE_PLAYER_AS_OFFLINE_STATE)
-				noFriends = true;
 			if (!noFriends)
 				sendNowOnline(player, friends);
 		} finally {

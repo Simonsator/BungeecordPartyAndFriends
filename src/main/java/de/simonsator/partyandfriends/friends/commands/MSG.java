@@ -157,8 +157,9 @@ public class MSG extends OnlyTopCommand {
 
 	private void sendMessage(String pContent, OnlinePAFPlayer pPlayer1, OnlinePAFPlayer pPlayer2) {
 		TextComponent formattedMessage = formatMessage(pContent, pPlayer2.getDisplayName(), pPlayer1.getDisplayName());
+		TextComponent formattedMessage2 = formattedMessage.duplicate();
 		sendMessage(formattedMessage, pPlayer1, pPlayer2.getName());
-		sendMessage(formattedMessage, pPlayer2, pPlayer1.getName());
+		sendMessage(formattedMessage2, pPlayer2, pPlayer1.getName());
 	}
 
 	private TextComponent formatMessage(String pContent, String pSenderDisplayName, String pReceiverName) {

@@ -7,6 +7,7 @@ import de.simonsator.partyandfriends.friends.subcommands.*;
 import de.simonsator.partyandfriends.main.Main;
 import de.simonsator.partyandfriends.utilities.ConfigurationCreator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,10 +29,10 @@ public class Friends extends TopCommand<FriendSubCommand> {
 				Main.getInstance().getGeneralConfig().getString("Commands.Friends.TopCommands.Friend.Permissions"), pPrefix);
 		instance = this;
 		ConfigurationCreator config = Main.getInstance().getGeneralConfig();
+		List<FriendSubCommand> subCommands = new ArrayList<>(8);
 		if (!config.getBoolean("Commands.Friends.SubCommands.List.Disabled"))
-			subCommands
-					.add(new FriendList(config.getStringList("Commands.Friends.SubCommands.List.Names"),
-							config.getInt("Commands.Friends.SubCommands.List.Priority"), Main.getInstance().getMessages().getString("Friends.CommandUsage.List"), config.getString("Commands.Friends.SubCommands.List.Permission")));
+			subCommands.add(new FriendList(config.getStringList("Commands.Friends.SubCommands.List.Names"),
+					config.getInt("Commands.Friends.SubCommands.List.Priority"), Main.getInstance().getMessages().getString("Friends.CommandUsage.List"), config.getString("Commands.Friends.SubCommands.List.Permission")));
 		if (!config.getBoolean("Commands.Friends.SubCommands.MSG.Disabled"))
 			subCommands.add(new Message(
 					config.getStringList("Commands.Friends.SubCommands.MSG.Names"),
@@ -56,7 +57,7 @@ public class Friends extends TopCommand<FriendSubCommand> {
 			subCommands.add(new Settings(
 					config.getStringList("Commands.Friends.SubCommands.Settings.Names"),
 					config.getInt("Commands.Friends.SubCommands.Jump.Priority"), Main.getInstance().getMessages().getString("Friends.CommandUsage.Settings"), config.getString("Commands.Friends.SubCommands.Settings.Permission")));
-		sort();
+		addCommands(subCommands);
 	}
 
 	public static Friends getInstance() {
@@ -74,21 +75,22 @@ public class Friends extends TopCommand<FriendSubCommand> {
 		if (args.length == 0) {
 			pPlayer.sendMessage(
 					(Main.getInstance().getMessages().getString("Friends.General.HelpBegin")));
-			for (FriendSubCommand command : subCommands)
+			forEachSubCommand(command -> {
 				if (command.hasPermission(pPlayer))
 					command.printOutHelp(pPlayer, getName());
+			});
 			pPlayer.sendMessage(
 					(Main.getInstance().getMessages().getString("Friends.General.HelpEnd")));
 			return;
 		}
-		for (FriendSubCommand command : subCommands) {
-			if (command.isApplicable(args[0])) {
-				if (command.hasPermission(pPlayer))
-					command.onCommand(pPlayer, args);
-				else
-					pPlayer.sendMessage(getPrefix() + Main.getInstance().getMessages().getString("Friends.General.NoPermission"));
-				return;
+		FriendSubCommand command = getSubCommand(args[0]);
+		if (command != null) {
+			if (command.hasPermission(pPlayer)) {
+				command.onCommand(pPlayer, args);
+			} else {
+				pPlayer.sendMessage(getPrefix() + Main.getInstance().getMessages().getString("Friends.General.NoPermission"));
 			}
+			return;
 		}
 		pPlayer.sendMessage(Main.getInstance().getMessages().get(getPrefix(), "Friends.General.CommandNotFound"));
 	}

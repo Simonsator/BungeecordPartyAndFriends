@@ -1,6 +1,7 @@
 package de.simonsator.partyandfriends.communication.sql;
 
 import de.simonsator.partyandfriends.api.adapter.BukkitBungeeAdapter;
+import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.communication.sql.cache.LocalPlayerCache;
 import de.simonsator.partyandfriends.communication.sql.cache.NoCache;
 import de.simonsator.partyandfriends.communication.sql.cache.PlayerCache;
@@ -112,6 +113,16 @@ public class MySQL extends PoolSQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
+			prepStmt = con.prepareStatement("CREATE INDEX `idx_" + TABLE_PREFIX + "players_player_name`" +
+					" ON `" + TABLE_PREFIX +
+					"players`(`player_name`);");
+			prepStmt.executeUpdate();
+			prepStmt.close();
+			prepStmt = con.prepareStatement("CREATE INDEX `idx_" + TABLE_PREFIX + "players_player_uuid`" +
+					" ON `" + TABLE_PREFIX +
+					"players`(`player_uuid`);");
+			prepStmt.executeUpdate();
+			prepStmt.close();
 			prepStmt = con.prepareStatement("ALTER TABLE `" + TABLE_PREFIX + "last_player_wrote_to`" +
 					" ADD FOREIGN KEY (`player_id`) REFERENCES `" + TABLE_PREFIX +
 					"players`(`player_id`), ADD FOREIGN KEY (`written_to_id`) REFERENCES `" + TABLE_PREFIX +
