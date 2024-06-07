@@ -14,10 +14,7 @@ import de.simonsator.partyandfriends.communication.sql.pool.PoolData;
 import de.simonsator.partyandfriends.friends.commands.Friends;
 import de.simonsator.partyandfriends.friends.commands.MSG;
 import de.simonsator.partyandfriends.friends.commands.Reply;
-import de.simonsator.partyandfriends.main.listener.JoinEvent;
-import de.simonsator.partyandfriends.main.listener.PAFMiniGameCommandHandler;
-import de.simonsator.partyandfriends.main.listener.PlayerDisconnectListener;
-import de.simonsator.partyandfriends.main.listener.ServerSwitchListener;
+import de.simonsator.partyandfriends.main.listener.*;
 import de.simonsator.partyandfriends.main.startup.error.BootErrorType;
 import de.simonsator.partyandfriends.main.startup.error.ErrorReporter;
 import de.simonsator.partyandfriends.pafplayers.manager.PAFPlayerManagerMySQL;
@@ -80,7 +77,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 	private Language language;
 	private Friends friendCommand;
 	private boolean shuttingDown = false;
-	public static final String MARIADB_DRIVER_DOWNLOAD_URL = "https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/3.1.4/mariadb-java-client-3.1.4.jar";
+	public static final String MARIADB_DRIVER_DOWNLOAD_URL = "https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/3.4.0/mariadb-java-client-3.4.0.jar";
 
 	public static Main getInstance() {
 		return instance;
@@ -162,9 +159,7 @@ public class Main extends PAFPluginBase implements ErrorReporter {
 				getGeneralConfig().getInt("MySQL.Port"), getGeneralConfig().get("MySQL.Database").toString(),
 				getGeneralConfig().get("MySQL.TablePrefix").toString(),
 				getGeneralConfig().getBoolean("MySQL.UseSSL"),
-				getGeneralConfig().getBoolean("MySQL.Cache"),
-				getGeneralConfig().getBoolean("MySQL.RedisCache.ExpirationActivated"),
-				getGeneralConfig().getInt("MySQL.RedisCache.ExpirationTimeInSeconds"));
+				getGeneralConfig().getBoolean("MySQL.Cache"));
 		new PAFPlayerManagerMySQL(mySQLData, poolData);
 		new LocalPartyManager(Main.getInstance().getGeneralConfig().getInt("Commands.Party.SubCommands.Invite.InvitationTimeOutTimeInSeconds"));
 		PAFPlayerClass.setSendEmptyLines(getGeneralConfig().getBoolean("General.SendBlankLines"));

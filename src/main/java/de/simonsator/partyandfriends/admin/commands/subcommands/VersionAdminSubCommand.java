@@ -8,7 +8,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class VersionAdminSubCommand extends AdminSubCommand {
 	public VersionAdminSubCommand(String pPrefix) {
-		super(new String[]{"version"}, 2, "§5pafadmin version §8- §7Displays the version of Party And Friends used", pPrefix);
+		super(new String[]{"version", "info"}, 2, "§5pafadmin version §8- §7Displays the version of Party And Friends used", pPrefix);
 	}
 
 	@Override

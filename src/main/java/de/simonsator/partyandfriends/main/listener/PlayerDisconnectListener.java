@@ -68,6 +68,8 @@ public class PlayerDisconnectListener extends WaitForTasksToFinish implements Li
 							friend.sendMessage((event.getMessage()));
 				player.updateLastOnline();
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
 		} finally {
 			taskFinished();
 		}

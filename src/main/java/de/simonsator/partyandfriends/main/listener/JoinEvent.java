@@ -83,6 +83,8 @@ public class JoinEvent extends WaitForTasksToFinish implements Listener {
 				deliverFriendRequests(player, friendRequests);
 			if (!noFriends)
 				sendNowOnline(player, friends);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
 		} finally {
 			taskFinished();
 		}

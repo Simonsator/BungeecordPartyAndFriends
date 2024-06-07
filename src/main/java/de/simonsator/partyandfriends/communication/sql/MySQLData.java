@@ -20,45 +20,21 @@ public class MySQLData {
 	public final boolean USE_MARIA_DB_DRIVER = Main.getInstance().getGeneralConfig().getBoolean("MySQL.UseMariaDBConnector");
 
 	public MySQLData(String host, String username, String password, int port, String database, String pTablePrefix) {
-		HOST = host;
-		USERNAME = username;
-		PASSWORD = password;
-		PORT = port;
-		DATABASE = database;
-		TABLE_PREFIX = pTablePrefix;
-		USE_SSL = false;
-		CACHE = true;
-		EXPIRATION_ACTIVATED = false;
-		EXPIRATION_TIME = 0;
+		this(host, username, password, port, database, pTablePrefix, false);
 	}
 
 	public MySQLData(String host, String username, String password, int port, String database, String pTablePrefix, boolean pUseSSL) {
-		HOST = host;
-		USERNAME = username;
-		PASSWORD = password;
-		PORT = port;
-		DATABASE = database;
-		TABLE_PREFIX = pTablePrefix;
-		USE_SSL = pUseSSL;
-		CACHE = true;
-		EXPIRATION_ACTIVATED = false;
-		EXPIRATION_TIME = 0;
+		this(host, username, password, port, database, pTablePrefix, pUseSSL, true);
 	}
 
 	public MySQLData(String host, String username, String password, int port, String database, String pTablePrefix, boolean pUseSSL, boolean pCache) {
-		HOST = host;
-		USERNAME = username;
-		PASSWORD = password;
-		PORT = port;
-		DATABASE = database;
-		TABLE_PREFIX = pTablePrefix;
-		USE_SSL = pUseSSL;
-		CACHE = pCache;
-		EXPIRATION_ACTIVATED = false;
-		EXPIRATION_TIME = 0;
+		this(host, username, password, port, database, pTablePrefix, pUseSSL, pCache, false, 0);
 	}
 
 	public MySQLData(String host, String username, String password, int port, String database, String pTablePrefix, boolean pUseSSL, boolean pCache, boolean pExpirationActivated, int pExpirationTime) {
+		if (host.endsWith(":3306")) {
+			host = host.substring(0, host.length() - 5);
+		}
 		HOST = host;
 		USERNAME = username;
 		PASSWORD = password;

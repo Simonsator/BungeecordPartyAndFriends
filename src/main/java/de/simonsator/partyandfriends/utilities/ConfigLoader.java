@@ -196,7 +196,7 @@ public class ConfigLoader extends ConfigurationCreator {
 		set("Commands.Party.SubCommands.Leader.Disabled", false);
 		set("Commands.Party.SubCommands.Leader.Permissions", "");
 		set("Commands.Party.SubCommands.Leader.Priority", 7);
-		set("Commands.PAFAdmin.Enabled", false);
+		set("Commands.PAFAdmin.Enabled", true);
 		set("Commands.PAFAdmin.Names", "pafadmin", "adminpaf");
 	}
 }
