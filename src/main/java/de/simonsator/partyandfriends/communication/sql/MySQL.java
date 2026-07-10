@@ -289,6 +289,7 @@ public class MySQL extends PoolSQLCommunication {
 		PreparedStatement prepStmt = null;
 		int id = 0;
 		try {
+			preventDoublePlayerName(con, pPlayer.getName());
 			prepStmt = con.prepareStatement(
 					"insert into  " + TABLE_PREFIX + "players (player_name, player_uuid, last_online) values (?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
@@ -427,6 +428,12 @@ public class MySQL extends PoolSQLCommunication {
 		return "";
 	}
 
+	private void preventDoublePlayerName(Connection con, String pPlayerName) throws SQLException {
+		PreparedStatement prepStmt = con.prepareStatement("UPDATE " + TABLE_PREFIX + "players set player_name=SUBSTRING(REPLACE(player_uuid, '-', ''), 1, 16)  WHERE player_name=? LIMIT 1");
+		prepStmt.setString(1, pPlayerName);
+		prepStmt.executeUpdate();
+	}
+
 	/**
 	 * Updates the name of a player
 	 *
@@ -437,10 +444,14 @@ public class MySQL extends PoolSQLCommunication {
 		Connection con = getConnection();
 		PreparedStatement prepStmt = null;
 		try {
-			prepStmt = con.prepareStatement("UPDATE " + TABLE_PREFIX + "players set player_name=? WHERE player_id='" + pPlayerID + "' LIMIT 1");
-			prepStmt.setString(1, pNewPlayerName);
-			prepStmt.executeUpdate();
-			cache.updateName(pPlayerID, pNewPlayerName);
+			String oldName = getName(pPlayerID);
+			if (!pNewPlayerName.equals(oldName)) {
+				preventDoublePlayerName(con, pNewPlayerName);
+				prepStmt = con.prepareStatement("UPDATE " + TABLE_PREFIX + "players set player_name=? WHERE player_id='" + pPlayerID + "' LIMIT 1");
+				prepStmt.setString(1, pNewPlayerName);
+				prepStmt.executeUpdate();
+				cache.updateName(pPlayerID, pNewPlayerName);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -514,6 +525,27 @@ public class MySQL extends PoolSQLCommunication {
 			rs = (stmt = con.createStatement()).executeQuery("select player_id, player_name, player_uuid from "
 					+ TABLE_PREFIX + "friend_request_assignment INNER JOIN " + TABLE_PREFIX
 					+ "players ON  player_id = requester_id WHERE receiver_id='" + pPlayerID + "'");
+			while (rs.next()) {
+				list.add(new PlayerDataSet(rs.getString("player_name"), rs.getInt("player_id"),
+						UUID.fromString(rs.getString("player_uuid"))));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(con, rs, stmt);
+		}
+		return list;
+	}
+
+	public List<PlayerDataSet> getOpenFriendRequestsSentPlayerData(int pPlayerID) {
+		Connection con = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		List<PlayerDataSet> list = new LinkedList<>();
+		try {
+			rs = (stmt = con.createStatement()).executeQuery("select player_id, player_name, player_uuid from "
+					+ TABLE_PREFIX + "friend_request_assignment INNER JOIN " + TABLE_PREFIX
+					+ "players ON receiver_id = player_id WHERE requester_id = '" + pPlayerID + "'");
 			while (rs.next()) {
 				list.add(new PlayerDataSet(rs.getString("player_name"), rs.getInt("player_id"),
 						UUID.fromString(rs.getString("player_uuid"))));

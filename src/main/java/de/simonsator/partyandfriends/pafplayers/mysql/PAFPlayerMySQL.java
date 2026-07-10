@@ -117,6 +117,11 @@ public class PAFPlayerMySQL extends PAFPlayerClass implements IDBasedPAFPlayer {
 	}
 
 	@Override
+	public List<PAFPlayer> getOpenFriendRequestsSent(){
+		return playerDataToPAFList(PAFPlayerManagerMySQL.getConnection().getOpenFriendRequestsSentPlayerData(id));
+	}
+
+	@Override
 	public boolean hasRequestFrom(PAFPlayer pPlayer) {
 		return PAFPlayerManagerMySQL.getConnection().hasRequestFrom(id, ((PAFPlayerMySQL) pPlayer.getPAFPlayer()).getPlayerID());
 	}
